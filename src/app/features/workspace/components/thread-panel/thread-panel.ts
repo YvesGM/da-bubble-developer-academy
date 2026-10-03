@@ -30,6 +30,7 @@ export class ThreadPanel {
   readonly recentEmojis = input<string[]>([]);
   readonly profile = toSignal(this.usersService.observeCurrentProfile());
   @Output() readonly closeRequested = new EventEmitter<void>();
+  @Output() readonly userRequested = new EventEmitter<string>();
 
   readonly context = computed(() => ({ target: this.target(), messageId: this.parent().id }));
   readonly replies = toSignal(
