@@ -6,6 +6,7 @@ export interface Channel {
   description: string;
   creatorId: string;
   memberIds: string[];
+  guestAccess: boolean;
   createdAt?: unknown;
   updatedAt?: unknown;
 }
@@ -14,6 +15,7 @@ export interface CreateChannelInput {
   name: string;
   description: string;
   memberIds: string[];
+  guestAccess: boolean;
 }
 
 export interface UpdateChannelInput {
