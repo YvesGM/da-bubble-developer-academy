@@ -1,16 +1,20 @@
-import { inject } from '@angular/core';
+import { EnvironmentInjector, inject, runInInjectionContext } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { CanActivateFn, Router } from '@angular/router';
 
 export const channelAccessGuard: CanActivateFn = async (route) => {
+  const auth = inject(Auth);
   const firestore = inject(Firestore);
+  const injector = inject(EnvironmentInjector);
   const router = inject(Router);
+  await auth.authStateReady();
   const channelId = route.paramMap.get('channelId') ?? '';
   if (!channelId) return router.createUrlTree(['/workspace']);
 
   try {
-    const reference = doc(firestore, 'channels', channelId);
-    const snapshot = await getDoc(reference);
+    const reference = runInInjectionContext(injector, () => doc(firestore, 'channels', channelId));
+    const snapshot = await runInInjectionContext(injector, () => getDoc(reference));
     return snapshot.exists() ? true : router.createUrlTree(['/workspace']);
   } catch {
     return router.createUrlTree(['/workspace']);
