@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth.guard';
+import { channelAccessGuard } from './core/guards/channel-access.guard';
 import { directMessageGuard } from './core/guards/direct-message.guard';
 import { registeredUserGuard } from './core/guards/registered-user.guard';
 
@@ -37,6 +38,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'channel/:channelId',
+        canActivate: [channelAccessGuard],
         loadComponent: () =>
           import('./features/workspace/channel-view/channel-view').then(
             (module) => module.ChannelView,
