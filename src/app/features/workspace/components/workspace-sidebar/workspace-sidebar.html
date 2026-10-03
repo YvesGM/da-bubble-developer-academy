@@ -1,0 +1,26 @@
+<aside class="sidebar">
+  <div class="section-heading">
+    <h2>Channels</h2>
+    <button type="button" aria-label="Channel erstellen" (click)="createRequested.emit()">+</button>
+  </div>
+
+  <nav aria-label="Channels">
+    @for (channel of channels; track channel.id) {
+      <a
+        [routerLink]="['/workspace/channel', channel.id]"
+        routerLinkActive="active"
+        class="channel-link"
+      >
+        <span>#</span>
+        {{ channel.name }}
+      </a>
+    } @empty {
+      <p class="empty">Noch keine Channels.</p>
+    }
+  </nav>
+
+  <div class="direct-messages">
+    <h2>Direktnachrichten</h2>
+    <p class="empty">Werden als Nächstes angebunden.</p>
+  </div>
+</aside>

@@ -1,0 +1,28 @@
+.workspace-home {
+  display: grid;
+  min-height: 100%;
+  padding: 48px;
+  place-content: center;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #444df2;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 8px 0;
+}
+
+p:last-child {
+  margin: 0;
+  color: #686868;
+}
+
+@media (max-width: 600px) {
+  .workspace-home {
+    padding: 24px;
+  }
+}

@@ -1,0 +1,71 @@
+.sidebar {
+  height: 100%;
+  min-width: 260px;
+  padding: 24px 18px;
+  border-radius: 24px;
+  background: #fff;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: transparent;
+  color: #444df2;
+  font-size: 24px;
+}
+
+button:hover,
+.channel-link:hover,
+.channel-link.active {
+  background: #eceefe;
+}
+
+nav {
+  display: grid;
+  margin-top: 12px;
+  gap: 4px;
+}
+
+.channel-link {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 12px;
+  gap: 8px;
+  border-radius: 20px;
+  color: #000;
+  text-decoration: none;
+}
+
+.empty {
+  margin: 12px;
+  color: #686868;
+  font-size: 14px;
+}
+
+.direct-messages {
+  margin-top: 28px;
+}
+
+@media (max-width: 820px) {
+  .sidebar {
+    min-width: 220px;
+  }
+}

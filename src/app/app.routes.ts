@@ -18,6 +18,23 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./features/workspace/workspace').then((module) => module.Workspace),
+    children: [
+      {
+        path: 'channel/:channelId',
+        loadComponent: () =>
+          import('./features/workspace/channel-view/channel-view').then(
+            (module) => module.ChannelView,
+          ),
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./features/workspace/workspace-home/workspace-home').then(
+            (module) => module.WorkspaceHome,
+          ),
+      },
+    ],
   },
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', redirectTo: 'login' },

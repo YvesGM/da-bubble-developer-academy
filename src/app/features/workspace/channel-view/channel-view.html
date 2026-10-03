@@ -1,0 +1,95 @@
+@if (channel(); as currentChannel) {
+  <section class="channel-view">
+    <header class="channel-header">
+      <div>
+        <p class="eyebrow">Channel</p>
+        <h1># {{ currentChannel.name }}</h1>
+        @if (currentChannel.description) {
+          <p class="description">{{ currentChannel.description }}</p>
+        }
+      </div>
+      <div class="header-actions">
+        <button type="button" class="secondary" (click)="startEditing()">Bearbeiten</button>
+        <button type="button" class="danger" (click)="leaveChannel()">Verlassen</button>
+      </div>
+    </header>
+
+    @if (editing()) {
+      <form class="edit-form" [formGroup]="form" (ngSubmit)="saveChannel()" novalidate>
+        <label>
+          Channelname
+          <input type="text" formControlName="name" />
+        </label>
+        @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+          <p class="field-error">Bitte gib einen Channelnamen ein.</p>
+        }
+        <label>
+          Beschreibung
+          <textarea rows="3" formControlName="description"></textarea>
+        </label>
+        @if (errorMessage()) {
+          <p class="field-error">{{ errorMessage() }}</p>
+        }
+        <div class="form-actions">
+          <button type="button" class="secondary" (click)="cancelEditing()">Abbrechen</button>
+          <button type="submit" class="primary" [disabled]="saving()">
+            {{ saving() ? 'Speichert…' : 'Speichern' }}
+          </button>
+        </div>
+      </form>
+    }
+
+    <div class="content-grid">
+      <section class="panel">
+        <h2>Mitglieder</h2>
+        <div class="member-list">
+          @for (member of members(); track member.uid) {
+            <div class="member">
+              <span class="avatar">{{ member.displayName.charAt(0).toUpperCase() }}</span>
+              <div>
+                <strong>{{ member.displayName }}</strong>
+                @if (member.uid === currentUserId()) {
+                  <span>Du</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Mitglieder hinzufügen</h2>
+        @for (user of availableUsers(); track user.uid) {
+          <label class="user-option">
+            <input
+              type="checkbox"
+              [checked]="isSelected(user.uid)"
+              (change)="toggleMember(user.uid)"
+            />
+            <span>{{ user.displayName }}</span>
+          </label>
+        } @empty {
+          <p class="empty">Alle Benutzer sind bereits Mitglied.</p>
+        }
+        <button
+          type="button"
+          class="primary add-button"
+          [disabled]="selectedMemberIds().size === 0"
+          (click)="addMembers()"
+        >
+          Hinzufügen
+        </button>
+      </section>
+    </div>
+
+    <section class="message-placeholder">
+      <h2>Nachrichten</h2>
+      <p>Der Channel ist bereit. Als Nächstes wird hier das Echtzeit-Messaging angebunden.</p>
+    </section>
+  </section>
+} @else {
+  <section class="missing-channel">
+    <h1>Channel nicht gefunden</h1>
+    <p>Der Channel existiert nicht oder konnte nicht geladen werden.</p>
+  </section>
+}

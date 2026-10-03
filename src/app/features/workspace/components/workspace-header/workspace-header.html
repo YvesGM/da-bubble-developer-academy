@@ -1,0 +1,11 @@
+<header class="workspace-header">
+  <a class="brand" routerLink="/workspace" aria-label="DABubble Startseite">
+    <span class="brand-mark">D</span>
+    <span>DABubble</span>
+  </a>
+
+  <div class="user-area">
+    <span>{{ displayName }}</span>
+    <button type="button" (click)="logoutRequested.emit()">Abmelden</button>
+  </div>
+</header>

@@ -1,0 +1,63 @@
+<div class="backdrop" (click)="closeRequested.emit()">
+  <section
+    class="dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="create-channel-title"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="dialog-heading">
+      <div>
+        <p class="eyebrow">DABubble</p>
+        <h2 id="create-channel-title">Channel erstellen</h2>
+      </div>
+      <button class="close" type="button" aria-label="Dialog schließen" (click)="closeRequested.emit()">
+        ×
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label>
+        Channelname
+        <input type="text" formControlName="name" placeholder="z. B. Entwicklerteam" />
+      </label>
+      @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+        <p class="field-error">Bitte gib einen Channelnamen ein.</p>
+      }
+
+      <label>
+        Beschreibung
+        <textarea formControlName="description" rows="3" placeholder="Worum geht es in diesem Channel?"></textarea>
+      </label>
+
+      <fieldset>
+        <legend>Mitglieder</legend>
+        <div class="user-list">
+          @for (user of users(); track user.uid) {
+            <label class="user-option">
+              <input
+                type="checkbox"
+                [checked]="isSelected(user.uid)"
+                [disabled]="user.uid === auth.currentUser?.uid"
+                (change)="toggleMember(user.uid)"
+              />
+              <span class="avatar">{{ user.displayName.charAt(0).toUpperCase() }}</span>
+              <span>{{ user.displayName }}</span>
+            </label>
+          }
+        </div>
+      </fieldset>
+
+      @if (errorMessage()) {
+        <p class="form-error">{{ errorMessage() }}</p>
+      }
+
+      <div class="actions">
+        <button class="secondary" type="button" (click)="closeRequested.emit()">Abbrechen</button>
+        <button class="primary" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Wird erstellt…' : 'Erstellen' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

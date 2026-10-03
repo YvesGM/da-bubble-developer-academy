@@ -11,6 +11,23 @@ service cloud.firestore {
         && request.auth.uid in get(/databases/$(database)/documents/channels/$(channelId)).data.memberIds;
     }
 
+    function validChannel() {
+      return request.resource.data.keys().hasOnly([
+          'name',
+          'normalizedName',
+          'description',
+          'creatorId',
+          'memberIds',
+          'createdAt',
+          'updatedAt'
+        ])
+        && request.resource.data.name is string
+        && request.resource.data.normalizedName is string
+        && request.resource.data.description is string
+        && request.resource.data.creatorId is string
+        && request.resource.data.memberIds is list;
+    }
+
     function directMessageMember(dmId) {
       return signedIn()
         && request.auth.uid in get(/databases/$(database)/documents/directMessages/$(dmId)).data.participantIds;
@@ -22,11 +39,16 @@ service cloud.firestore {
     }
 
     match /channels/{channelId} {
-      allow read: if signedIn() && request.auth.uid in resource.data.memberIds;
+      allow read: if signedIn();
       allow create: if signedIn()
+        && validChannel()
         && request.auth.uid == request.resource.data.creatorId
         && request.auth.uid in request.resource.data.memberIds;
-      allow update, delete: if channelMember(channelId);
+      allow update: if channelMember(channelId)
+        && validChannel()
+        && request.resource.data.creatorId == resource.data.creatorId
+        && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if false;
 
       match /messages/{messageId} {
         allow read, create, update, delete: if channelMember(channelId);
