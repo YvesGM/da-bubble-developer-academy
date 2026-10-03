@@ -94,6 +94,7 @@ export class MessageItem {
       emoji,
       context.replyId,
     );
+    await this.usersService.rememberEmoji(emoji);
     this.showEmojiPicker.set(false);
   }
 
