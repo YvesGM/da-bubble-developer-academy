@@ -4,18 +4,22 @@
     <span>DABubble</span>
   </a>
 
-  <app-search-box />
+  <app-search-box (userSelected)="userSelected.emit($event)" />
 
   <div class="user-area">
-    <button
-      type="button"
-      class="profile-button"
-      [disabled]="!profileEnabled"
-      (click)="profileRequested.emit()"
-    >
+    <button type="button" class="profile-button" (click)="menuOpen.set(!menuOpen())">
       <app-avatar [avatarId]="avatarId" [name]="displayName" size="small" />
       <span>{{ displayName }}</span>
+      <span aria-hidden="true">⌄</span>
     </button>
-    <button type="button" (click)="logoutRequested.emit()">Log out</button>
+
+    @if (menuOpen()) {
+      <div class="user-menu">
+        @if (profileEnabled) {
+          <button type="button" (click)="openProfile()">Profile</button>
+        }
+        <button type="button" (click)="logout()">Log out</button>
+      </div>
+    }
   </div>
 </header>
