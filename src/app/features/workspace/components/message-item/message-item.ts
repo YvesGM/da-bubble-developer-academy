@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  HostListener,
   Output,
   computed,
   inject,
@@ -45,6 +46,7 @@ export class MessageItem {
   readonly editing = signal(false);
   readonly editText = signal('');
   readonly showEmojiPicker = signal(false);
+  readonly mobileViewport = signal(window.innerWidth <= 640);
   readonly reactionContext = computed(() => ({
     target: this.target(),
     messageId: this.parentMessageId() || this.message().id,
@@ -59,8 +61,13 @@ export class MessageItem {
     { initialValue: [] as ReactionGroup[] },
   );
   readonly visibleReactions = computed(() =>
-    this.reactions().slice(0, this.compactReactions() ? 7 : 20),
+    this.reactions().slice(0, this.reactionLimit()),
   );
+
+  @HostListener('window:resize')
+  updateViewport(): void {
+    this.mobileViewport.set(window.innerWidth <= 640);
+  }
 
   isOwnMessage(): boolean {
     return this.auth.currentUser?.uid === this.message().authorId;
@@ -105,6 +112,10 @@ export class MessageItem {
 
   hiddenReactionCount(): number {
     return Math.max(0, this.reactions().length - this.visibleReactions().length);
+  }
+
+  private reactionLimit(): number {
+    return this.compactReactions() || this.mobileViewport() ? 7 : 20;
   }
 
   private userName(uid: string): string {
