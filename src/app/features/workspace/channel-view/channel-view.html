@@ -7,7 +7,7 @@
         type="button"
         class="channel-title"
         [disabled]="!canManageChannel()"
-        (click)="showDetails.set(true)"
+        (click)="openDetails()"
       >
         # {{ currentChannel.name }} <span aria-hidden="true">⌄</span>
       </button>
@@ -48,6 +48,7 @@
     <app-channel-details-dialog
       [channel]="currentChannel"
       [creatorName]="creatorName()"
+      [errorMessage]="channelError()"
       (closeRequested)="showDetails.set(false)"
       (saveRequested)="saveChannel($event)"
       (leaveRequested)="leaveChannel()"
