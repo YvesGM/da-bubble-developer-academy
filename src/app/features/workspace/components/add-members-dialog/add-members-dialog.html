@@ -1,0 +1,45 @@
+<div class="backdrop" (click)="closeRequested.emit()">
+  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <header>
+      <h2>Add people</h2>
+      <button type="button" aria-label="Close" (click)="closeRequested.emit()">×</button>
+    </header>
+
+    <input
+      type="search"
+      placeholder="Enter a name"
+      [value]="query()"
+      (input)="query.set($any($event.target).value)"
+    />
+
+    <div class="users">
+      @if (guestAvailable) {
+        <label>
+          <input
+            type="checkbox"
+            [checked]="guestSelected()"
+            (change)="guestSelected.set(!guestSelected())"
+          />
+          Guest
+        </label>
+      }
+
+      @for (user of filteredUsers(); track user.uid) {
+        <label>
+          <input
+            type="checkbox"
+            [checked]="selectedIds().has(user.uid)"
+            (change)="toggleUser(user.uid)"
+          />
+          {{ user.displayName }}
+        </label>
+      } @empty {
+        <p>No matching users.</p>
+      }
+    </div>
+
+    <button type="button" class="primary" [disabled]="!canSubmit()" (click)="submit()">
+      Add
+    </button>
+  </section>
+</div>
