@@ -198,3 +198,34 @@ textarea:focus {
     padding: 20px;
   }
 }
+
+.mobile-back {
+  display: none;
+  color: #444df2;
+  text-decoration: none;
+  font-size: 24px;
+}
+
+@media (max-width: 640px) {
+  .mobile-back {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .channel-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+  }
+
+  .header-actions {
+    grid-column: 1 / -1;
+  }
+
+  .content-grid {
+    margin-top: 16px;
+  }
+
+  .message-placeholder {
+    padding: 8px;
+  }
+}
