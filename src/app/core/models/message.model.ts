@@ -5,6 +5,7 @@ export interface Message {
   authorAvatarId: string;
   authorIsGuest: boolean;
   text: string;
+  deleted: boolean;
   createdAt?: unknown;
   updatedAt?: unknown;
 }
