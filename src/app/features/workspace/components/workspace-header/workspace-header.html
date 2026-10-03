@@ -5,7 +5,9 @@
   </a>
 
   <div class="user-area">
-    <span>{{ displayName }}</span>
+    <button type="button" class="profile-button" (click)="profileRequested.emit()">
+      {{ displayName }}
+    </button>
     <button type="button" (click)="logoutRequested.emit()">Log out</button>
   </div>
 </header>
