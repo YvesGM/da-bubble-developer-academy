@@ -10,3 +10,27 @@
   color: #686868;
   text-align: center;
 }
+
+.date-separator {
+  display: flex;
+  align-items: center;
+  margin: 12px 0;
+  gap: 12px;
+  color: #686868;
+  font-size: 13px;
+}
+
+.date-separator::before,
+.date-separator::after {
+  height: 1px;
+  flex: 1;
+  content: '';
+  background: #adb0d9;
+}
+
+.date-separator span {
+  border: 1px solid #adb0d9;
+  border-radius: 14px;
+  padding: 4px 12px;
+  background: #fff;
+}
