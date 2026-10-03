@@ -84,3 +84,14 @@ a {
     padding: 24px;
   }
 }
+
+.auth-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.auth-links a {
+  margin-top: 24px;
+}
