@@ -1,0 +1,20 @@
+<section class="dm-view">
+  <header>
+    @if (partner(); as currentPartner) {
+      <div class="avatar">{{ currentPartner.displayName.charAt(0).toUpperCase() }}</div>
+      <div>
+        <span>Direct message</span>
+        <h1>{{ currentPartner.displayName }}</h1>
+      </div>
+    } @else {
+      <h1>Direct message</h1>
+    }
+  </header>
+
+  <div class="chat-area">
+    <app-chat-panel
+      [target]="target()"
+      [inputPlaceholder]="'Message ' + (partner()?.displayName ?? '')"
+    />
+  </div>
+</section>
