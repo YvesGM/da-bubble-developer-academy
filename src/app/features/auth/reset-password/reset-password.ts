@@ -19,10 +19,12 @@ export class ResetPassword {
   readonly email = signal('');
   readonly message = signal('');
   readonly errorMessage = signal('');
+  readonly passwordMismatch = signal(false);
   readonly ready = signal(false);
   readonly submitting = signal(false);
   readonly form = this.formBuilder.nonNullable.group({
     password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', Validators.required],
   });
 
   constructor() {
@@ -31,6 +33,7 @@ export class ResetPassword {
 
   async submit(): Promise<void> {
     if (this.form.invalid) return this.markInvalid();
+    if (!this.passwordsMatch()) return this.markMismatch();
     this.startSubmit();
     await this.confirmReset();
   }
@@ -58,17 +61,27 @@ export class ResetPassword {
     }
   }
 
+  private passwordsMatch(): boolean {
+    return this.form.controls.password.value === this.form.controls.confirmPassword.value;
+  }
+
+  private markMismatch(): void {
+    this.passwordMismatch.set(true);
+    this.errorMessage.set('');
+  }
+
   private resetCode(): string {
     return this.route.snapshot.queryParamMap.get('oobCode') ?? '';
   }
 
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('The password must be at least 6 characters long.');
+    this.errorMessage.set('Please check your password entries.');
   }
 
   private startSubmit(): void {
     this.submitting.set(true);
+    this.passwordMismatch.set(false);
     this.errorMessage.set('');
   }
 }
