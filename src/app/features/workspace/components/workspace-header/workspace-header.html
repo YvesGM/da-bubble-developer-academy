@@ -13,7 +13,8 @@
       [disabled]="!profileEnabled"
       (click)="profileRequested.emit()"
     >
-      {{ displayName }}
+      <app-avatar [avatarId]="avatarId" [name]="displayName" size="small" />
+      <span>{{ displayName }}</span>
     </button>
     <button type="button" (click)="logoutRequested.emit()">Log out</button>
   </div>
