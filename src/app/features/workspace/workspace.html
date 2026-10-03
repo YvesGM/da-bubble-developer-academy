@@ -21,7 +21,7 @@
       [collapsed]="sidebarCollapsed()"
       (createRequested)="showCreateChannel.set(true)"
       (newMessageRequested)="showNewMessage.set(true)"
-      (collapseRequested)="sidebarCollapsed.update(value => !value)"
+      (collapseRequested)="toggleSidebar()"
     />
 
     <section class="workspace-content">
