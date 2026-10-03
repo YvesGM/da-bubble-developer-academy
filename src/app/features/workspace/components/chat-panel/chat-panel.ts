@@ -29,6 +29,8 @@ export class ChatPanel {
   readonly target = input.required<ConversationTarget>();
   @Output() readonly userRequested = new EventEmitter<string>();
   readonly inputPlaceholder = input('Write a message');
+  readonly emptyTitle = input('No messages yet.');
+  readonly emptyText = input('Start the conversation below.');
   readonly mentionUsers = input<UserProfile[] | null>(null);
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
