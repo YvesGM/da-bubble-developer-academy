@@ -1,1 +1,31 @@
 @use '../login/login.scss';
+
+.avatar-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.avatar-fieldset legend {
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.avatar-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.avatar-choice {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: #eceefe;
+  color: #444df2;
+}
+
+.avatar-choice.selected {
+  outline: 3px solid #444df2;
+}
