@@ -5,7 +5,7 @@ import { Observable, combineLatest, map, of, switchMap } from 'rxjs';
 import { Channel } from '../models/channel.model';
 import { ConversationTarget } from '../models/conversation.model';
 import { DirectMessage } from '../models/direct-message.model';
-import { MessageSearchResult } from '../models/search-result.model';
+import { SearchResult } from '../models/search-result.model';
 import { UserProfile } from '../models/user-profile.model';
 import { ChannelService } from './channel.service';
 import { DirectMessageService } from './direct-message.service';
@@ -20,63 +20,86 @@ export class SearchService {
   private readonly messages = inject(MessageService);
   private readonly users = inject(UserService);
 
-  searchMessages(searchText: string): Observable<MessageSearchResult[]> {
-    const query = searchText.trim().toLowerCase();
+  search(searchText: string): Observable<SearchResult[]> {
+    const query = searchText.trim().replace(/^@/, '').toLowerCase();
     if (!query) return of([]);
     return combineLatest([
       this.channels.observeCurrentUserChannels(),
       this.directMessages.observeCurrentUserConversations(),
       this.users.observeUsers(),
     ]).pipe(
-      switchMap(([channels, dms, users]) => this.searchConversations(query, channels, dms, users)),
+      switchMap(([channels, dms, users]) => this.collectResults(query, channels, dms, users)),
     );
   }
 
-  private searchConversations(
+  private collectResults(
     query: string,
     channels: Channel[],
     dms: DirectMessage[],
     users: UserProfile[],
-  ): Observable<MessageSearchResult[]> {
+  ): Observable<SearchResult[]> {
+    const immediate = [...this.userResults(query, users), ...this.channelResults(query, channels)];
     const contexts = this.contexts(channels, dms, users);
-    if (!contexts.length) return of([]);
-    return combineLatest(contexts.map((context) => this.searchContext(query, context))).pipe(
-      map((results) => results.flat()),
+    if (!contexts.length) return of(immediate);
+    return combineLatest(contexts.map((context) => this.messageResults(query, context))).pipe(
+      map((messages) => [...immediate, ...messages.flat()]),
     );
   }
 
-  private searchContext(query: string, context: SearchContext): Observable<MessageSearchResult[]> {
+  private userResults(query: string, users: UserProfile[]): SearchResult[] {
+    return users
+      .filter((user) => this.userMatches(user, query))
+      .map((user) => ({ type: 'user', id: user.uid, label: user.displayName, user }));
+  }
+
+  private channelResults(query: string, channels: Channel[]): SearchResult[] {
+    return channels
+      .filter((channel) => channel.name.toLowerCase().includes(query))
+      .map((channel) => ({
+        type: 'channel',
+        id: channel.id,
+        label: `# ${channel.name}`,
+        channelId: channel.id,
+      }));
+  }
+
+  private userMatches(user: UserProfile, query: string): boolean {
+    return user.displayName.toLowerCase().includes(query)
+      || user.email?.toLowerCase().includes(query) === true;
+  }
+
+  private messageResults(query: string, context: SearchContext): Observable<SearchResult[]> {
     return this.messages.observeMessages(context.target).pipe(
-      map((messages) =>
-        messages
-          .filter((message) => !message.deleted && message.text.toLowerCase().includes(query))
-          .map((message) => ({ ...context, message })),
-      ),
+      map((messages) => messages
+        .filter((message) => !message.deleted && message.text.toLowerCase().includes(query))
+        .map((message) => ({
+          type: 'message' as const,
+          id: `${context.target.type}-${context.target.id}-${message.id}`,
+          label: context.label,
+          target: context.target,
+          message,
+        }))),
     );
   }
 
   private contexts(channels: Channel[], dms: DirectMessage[], users: UserProfile[]): SearchContext[] {
     return [
-      ...channels.map((channel) => this.channelContext(channel)),
+      ...channels.map((channel) => ({
+        target: { type: 'channel' as const, id: channel.id },
+        label: `# ${channel.name}`,
+      })),
       ...dms.map((dm) => this.dmContext(dm, users)),
     ];
-  }
-
-  private channelContext(channel: Channel): SearchContext {
-    return {
-      target: { type: 'channel', id: channel.id },
-      conversationLabel: `# ${channel.name}`,
-    };
   }
 
   private dmContext(dm: DirectMessage, users: UserProfile[]): SearchContext {
     const partnerId = dm.participantIds.find((uid) => uid !== this.auth.currentUser?.uid);
     const name = users.find((user) => user.uid === partnerId)?.displayName ?? 'Direct message';
-    return { target: { type: 'directMessage', id: dm.id }, conversationLabel: name };
+    return { target: { type: 'directMessage', id: dm.id }, label: name };
   }
 }
 
 interface SearchContext {
   target: ConversationTarget;
-  conversationLabel: string;
+  label: string;
 }
