@@ -1,0 +1,78 @@
+.backdrop {
+  position: fixed;
+  z-index: 35;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #00000040;
+}
+
+.dialog {
+  width: min(520px, 100%);
+  padding: 24px;
+  border-radius: 24px;
+  background: #fff;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header button {
+  border: 0;
+  background: transparent;
+  font-size: 26px;
+}
+
+input {
+  width: 100%;
+  margin: 16px 0;
+  border: 0;
+  border-radius: 18px;
+  padding: 12px 16px;
+  outline: 1px solid #adb0d9;
+}
+
+.user-list {
+  display: grid;
+  max-height: 360px;
+  overflow: auto;
+  gap: 6px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 0;
+  border-radius: 16px;
+  padding: 10px;
+  gap: 10px;
+  text-align: left;
+  background: transparent;
+}
+
+.user:hover {
+  background: #eceefe;
+}
+
+.user > span {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eceefe;
+  color: #444df2;
+}
+
+.user div {
+  display: grid;
+}
+
+small {
+  color: #686868;
+}
