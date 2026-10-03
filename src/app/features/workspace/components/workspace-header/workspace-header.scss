@@ -16,6 +16,7 @@
 }
 
 .brand {
+  flex: 0 0 auto;
   color: #000;
   font-size: 20px;
   font-weight: 700;
@@ -32,26 +33,46 @@
   color: #fff;
 }
 
-.user-area span {
-  font-weight: 700;
+.user-area {
+  flex: 0 0 auto;
 }
 
-button {
+.user-area button {
   border: 0;
   border-radius: 24px;
   padding: 10px 16px;
-  cursor: pointer;
   background: #444df2;
   color: #fff;
   font-weight: 700;
 }
 
-@media (max-width: 600px) {
+.user-area .profile-button {
+  background: transparent;
+  color: #000;
+}
+
+@media (max-width: 760px) {
   .workspace-header {
+    flex-wrap: wrap;
     padding: 10px 16px;
+    gap: 10px;
   }
 
-  .user-area span {
+  app-search-box {
+    order: 3;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand span:last-child {
     display: none;
+  }
+
+  .user-area .profile-button {
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
