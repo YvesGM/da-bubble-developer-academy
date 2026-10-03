@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 
 @Component({
   selector: 'app-register',
@@ -35,15 +36,19 @@ export class Register {
   }
 
   private async runRegistration(name: string, email: string, password: string): Promise<void> {
-    this.submitting.set(true);
-    this.errorMessage.set('');
+    this.startSubmit();
     try {
       await this.auth.register(name, email, password);
       await this.router.navigateByUrl('/workspace');
-    } catch {
-      this.errorMessage.set('Registrierung fehlgeschlagen. Bitte versuche es erneut.');
+    } catch (error) {
+      this.errorMessage.set(firebaseErrorMessage(error, 'Registrierung fehlgeschlagen.'));
     } finally {
       this.submitting.set(false);
     }
+  }
+
+  private startSubmit(): void {
+    this.submitting.set(true);
+    this.errorMessage.set('');
   }
 }
