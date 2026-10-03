@@ -9,7 +9,7 @@
 
     <app-message-input
       [channels]="channels()"
-      [users]="users()"
+      [users]="availableMentionUsers()"
       [recentEmojis]="recentEmojis()"
       [placeholder]="inputPlaceholder()"
       [focusKey]="target().id"
@@ -23,7 +23,7 @@
       [target]="target()"
       [parent]="parent"
       [channels]="channels()"
-      [users]="users()"
+      [users]="availableMentionUsers()"
       [recentEmojis]="recentEmojis()"
       (closeRequested)="threadMessage.set(null)"
     />
