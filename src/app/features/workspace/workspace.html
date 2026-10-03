@@ -54,6 +54,7 @@
     <app-profile-card
       [user]="user"
       [ownProfile]="user.uid === currentUserId"
+      [messageEnabled]="!isGuest"
       (closeRequested)="selectedUser.set(null)"
       (editRequested)="openProfileEditor()"
       (messageRequested)="startDirectMessage($event)"
