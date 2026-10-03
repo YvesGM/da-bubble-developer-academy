@@ -33,6 +33,17 @@
       <fieldset>
         <legend>Members</legend>
         <div class="user-list">
+          <label class="user-option">
+            <input
+              type="checkbox"
+              [checked]="guestAccess()"
+              [disabled]="isGuestCurrentUser()"
+              (change)="toggleGuest()"
+            />
+            <span class="avatar">G</span>
+            <span>Guest</span>
+          </label>
+
           @for (user of users(); track user.uid) {
             <label class="user-option">
               <input
