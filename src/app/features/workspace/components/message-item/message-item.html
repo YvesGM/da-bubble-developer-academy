@@ -9,7 +9,9 @@
       }
     </div>
 
-    @if (editing()) {
+    @if (message().deleted) {
+      <p class="deleted-message">Message deleted</p>
+    } @else if (editing()) {
       <div class="edit-row">
         <input [ngModel]="editText()" (ngModelChange)="editText.set($event)" />
         <button type="button" (click)="saveEdit()">Save</button>
@@ -19,6 +21,7 @@
       <p>{{ message().text }}</p>
     }
 
+    @if (canInteract()) {
     <div class="actions">
       @for (emoji of recentEmojis().slice(0, 2); track emoji) {
         <button type="button" class="icon-action" (click)="toggleReaction(emoji)">{{ emoji }}</button>
@@ -42,8 +45,9 @@
         <button type="button" (click)="removeMessage()">Delete</button>
       }
     </div>
+    }
 
-    @if (showEmojiPicker()) {
+    @if (showEmojiPicker() && canInteract()) {
       <app-emoji-picker [recent]="recentEmojis()" (emojiSelected)="toggleReaction($event)" />
     }
 
