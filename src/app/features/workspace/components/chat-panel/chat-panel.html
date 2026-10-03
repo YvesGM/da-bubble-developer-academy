@@ -4,6 +4,8 @@
       [target]="target()"
       [messages]="messages()"
       [recentEmojis]="recentEmojis()"
+      [emptyTitle]="emptyTitle()"
+      [emptyText]="emptyText()"
       (threadRequested)="threadMessage.set($event)"
       (userRequested)="userRequested.emit($event)"
     />
