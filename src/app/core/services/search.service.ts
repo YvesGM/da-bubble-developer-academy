@@ -21,14 +21,18 @@ export class SearchService {
   private readonly users = inject(UserService);
 
   search(searchText: string): Observable<SearchResult[]> {
-    const query = searchText.trim().replace(/^[@#]/, '').toLowerCase();
-    if (!query) return of([]);
+    const value = searchText.trim();
+    const query = value.replace(/^[@#]/, '').toLowerCase();
+    if (!query && !value.startsWith('@') && !value.startsWith('#')) return of([]);
+    const mode = this.searchMode(value);
     return combineLatest([
       this.channels.observeCurrentUserChannels(),
       this.directMessages.observeCurrentUserConversations(),
       this.users.observeUsers(),
     ]).pipe(
-      switchMap(([channels, dms, users]) => this.collectResults(query, channels, dms, users)),
+      switchMap(([channels, dms, users]) =>
+        this.collectResults(query, channels, dms, users, mode),
+      ),
     );
   }
 
@@ -37,13 +41,32 @@ export class SearchService {
     channels: Channel[],
     dms: DirectMessage[],
     users: UserProfile[],
+    mode: SearchMode,
   ): Observable<SearchResult[]> {
+    if (mode === 'users') return of(this.userResults(query, users));
+    if (mode === 'channels') return of(this.channelResults(query, channels));
     const immediate = [...this.userResults(query, users), ...this.channelResults(query, channels)];
+    return this.withMessageResults(query, channels, dms, users, immediate);
+  }
+
+  private withMessageResults(
+    query: string,
+    channels: Channel[],
+    dms: DirectMessage[],
+    users: UserProfile[],
+    immediate: SearchResult[],
+  ): Observable<SearchResult[]> {
     const contexts = this.contexts(channels, dms, users);
     if (!contexts.length) return of(immediate);
     return combineLatest(contexts.map((context) => this.messageResults(query, context))).pipe(
       map((messages) => [...immediate, ...messages.flat()]),
     );
+  }
+
+  private searchMode(value: string): SearchMode {
+    if (value.startsWith('@')) return 'users';
+    if (value.startsWith('#')) return 'channels';
+    return 'all';
   }
 
   private userResults(query: string, users: UserProfile[]): SearchResult[] {
@@ -103,3 +126,5 @@ interface SearchContext {
   target: ConversationTarget;
   label: string;
 }
+
+type SearchMode = 'all' | 'users' | 'channels';
