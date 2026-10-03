@@ -24,7 +24,8 @@ export class ChannelCreateDialog {
   @Output() readonly channelCreated = new EventEmitter<string>();
 
   readonly users = toSignal(this.userService.observeUsers(), { initialValue: [] });
-  readonly selectedMemberIds = signal(new Set<string>([this.currentUserId()]));
+  readonly selectedMemberIds = signal(new Set<string>(this.initialMembers()));
+  readonly guestAccess = signal(this.isGuestCurrentUser());
   readonly errorMessage = signal('');
   readonly submitting = signal(false);
   readonly form = this.formBuilder.nonNullable.group({
@@ -37,10 +38,19 @@ export class ChannelCreateDialog {
   }
 
   toggleMember(uid: string): void {
-    if (uid === this.currentUserId()) return;
+    if (uid === this.currentRegisteredUserId()) return;
     const selected = new Set(this.selectedMemberIds());
     selected.has(uid) ? selected.delete(uid) : selected.add(uid);
     this.selectedMemberIds.set(selected);
+  }
+
+  toggleGuest(): void {
+    if (this.isGuestCurrentUser()) return;
+    this.guestAccess.update((value) => !value);
+  }
+
+  isGuestCurrentUser(): boolean {
+    return this.auth.currentUser?.isAnonymous ?? false;
   }
 
   async submit(): Promise<void> {
@@ -62,7 +72,11 @@ export class ChannelCreateDialog {
 
   private channelInput() {
     const value = this.form.getRawValue();
-    return { ...value, memberIds: [...this.selectedMemberIds()] };
+    return {
+      ...value,
+      memberIds: [...this.selectedMemberIds()],
+      guestAccess: this.guestAccess(),
+    };
   }
 
   private channelError(error: unknown): string {
@@ -80,7 +94,13 @@ export class ChannelCreateDialog {
     this.errorMessage.set('');
   }
 
-  private currentUserId(): string {
+  private initialMembers(): string[] {
+    const uid = this.currentRegisteredUserId();
+    return uid ? [uid] : [];
+  }
+
+  private currentRegisteredUserId(): string {
+    if (this.isGuestCurrentUser()) return '';
     return this.auth.currentUser?.uid ?? '';
   }
 }
