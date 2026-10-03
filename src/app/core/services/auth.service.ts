@@ -8,12 +8,15 @@ import {
   Auth,
   GoogleAuthProvider,
   UserCredential,
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInAnonymously,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   updateProfile,
+  verifyPasswordResetCode,
 } from '@angular/fire/auth';
 
 import { UserService } from './user.service';
@@ -30,10 +33,15 @@ export class AuthService {
     return credential;
   }
 
-  async register(name: string, email: string, password: string): Promise<UserCredential> {
+  async register(
+    name: string,
+    email: string,
+    password: string,
+    avatarId: string,
+  ): Promise<UserCredential> {
     const credential = await this.run(() => createUserWithEmailAndPassword(this.auth, email, password));
     await this.run(() => updateProfile(credential.user, { displayName: name }));
-    await this.users.createProfile(credential.user, name);
+    await this.users.createProfile(credential.user, name, avatarId);
     return credential;
   }
 
@@ -46,6 +54,18 @@ export class AuthService {
     const credential = await this.run(() => signInWithPopup(this.auth, provider));
     await this.users.ensureProfile(credential.user);
     return credential;
+  }
+
+  async sendPasswordReset(email: string): Promise<void> {
+    await this.run(() => sendPasswordResetEmail(this.auth, email));
+  }
+
+  async verifyResetCode(code: string): Promise<string> {
+    return this.run(() => verifyPasswordResetCode(this.auth, code));
+  }
+
+  async resetPassword(code: string, password: string): Promise<void> {
+    await this.run(() => confirmPasswordReset(this.auth, code, password));
   }
 
   async logout(): Promise<void> {
