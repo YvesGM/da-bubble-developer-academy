@@ -1,3 +1,6 @@
+@use 'styles/tokens' as tokens;
+@use 'styles/auth';
+
 * {
   box-sizing: border-box;
 }
@@ -11,13 +14,14 @@ body {
 
 body {
   min-height: 100dvh;
-  background: #eceefe;
-  color: #000;
+  background: tokens.$background;
+  color: tokens.$text;
   font-family: 'Nunito', Arial, sans-serif;
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
 }
 
