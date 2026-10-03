@@ -5,154 +5,173 @@
   display: block;
 }
 
-.auth-shell {
-  position: relative;
-  min-height: 100dvh;
-  overflow: hidden;
-  background: tokens.$background;
-}
+.auth {
+  &-shell {
+    position: relative;
+    min-height: 100dvh;
+    overflow: hidden;
+    background: tokens.$background;
 
-.auth-shell-header {
-  position: absolute;
-  z-index: 2;
-  top: 42px;
-  right: 48px;
-  left: 48px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
+    &-header {
+      position: absolute;
+      z-index: 2;
+      top: 42px;
+      right: 48px;
+      left: 48px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
 
-.auth-brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  cursor: default;
-  text-decoration: none;
-  transform: translateY(-12px);
-}
+    .auth-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: default;
+      text-decoration: none;
+      transform: translateY(-12px);
+    }
 
-.auth-brand-mark {
-  width: 56px;
-  height: 56px;
-}
+    &-stage {
+      display: grid;
+      min-height: 100dvh;
+      padding: 110px 24px 90px;
+      place-items: center;
+    }
 
-.auth-brand-name {
-  width: 145px;
-  height: auto;
-}
+    &-footer {
+      position: absolute;
+      right: 0;
+      bottom: 38px;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      font-size: 18px;
+    }
+  }
 
-.auth-signup-prompt {
-  display: grid;
-  justify-items: end;
-  gap: 8px;
-  font-size: 18px;
-}
+  &-brand {
+    &-mark {
+      width: 56px;
+      height: 56px;
+    }
 
-.auth-signup-prompt a,
-.auth-footer-link {
-  border: 1px solid transparent;
-  border-radius: 25px;
-  color: tokens.$purple-2;
-  text-decoration: none;
-}
+    -name {
+      width: 145px;
+      height: auto;
+    }
+  }
 
-.auth-signup-prompt a {
-  padding: 9px 14px;
-}
+  &-signup-prompt {
+    display: grid;
+    justify-items: end;
+    gap: 8px;
+    font-size: 18px;
 
-.auth-signup-prompt a:hover,
-.auth-footer-link:hover {
-  border-color: tokens.$purple-2;
-  color: tokens.$purple-1;
-}
+    a {
+      border: 1px solid transparent;
+      border-radius: 25px;
+      color: tokens.$purple-2;
+      text-decoration: none;
+    }
+  }
 
-.auth-shell-stage {
-  display: grid;
-  min-height: 100dvh;
-  padding: 110px 24px 90px;
-  place-items: center;
-}
+  &-footer-link {
+    padding: 8px 14px;
 
-.auth-shell-footer {
-  position: absolute;
-  right: 0;
-  bottom: 38px;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  font-size: 18px;
-}
+    color: tokens.$purple-2;
+    border: 1px solid transparent;
+    border-radius: 25px;
 
-.auth-footer-link {
-  padding: 8px 14px;
-  cursor: pointer;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      border-color: tokens.$purple-2;
+      color: tokens.$purple-1;
+    }
+  }
+
+  &-signup-prompt a {
+    padding: 9px 14px;
+
+    &:hover {
+      border-color: tokens.$purple-2;
+      color: tokens.$purple-1;
+    }
+  }
 }
 
 @include bp.mobile {
-  .auth-shell {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    overflow: auto;
-  }
+  .auth {
+    &-shell {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: auto;
 
-  .auth-shell-header {
-    position: static;
-    padding: 24px 20px 12px;
-  }
+      &-header {
+        position: static;
+        padding: 24px 20px 12px;
+      }
 
-  .auth-brand {
-    transform: none;
-  }
+      &-stage {
+        min-height: auto;
+        padding: 18px 0 32px;
+      }
 
-  .auth-brand-mark {
-    width: 48px;
-    height: 48px;
-  }
+      &-footer {
+        position: static;
+        padding: 0 16px 24px;
+        gap: 8px;
+        font-size: 16px;
+      }
+    }
 
-  .auth-brand-name {
-    width: 126px;
-  }
+    &-brand {
+      transform: none;
 
-  .auth-signup-prompt {
-    display: none;
-  }
+      &-mark {
+        width: 48px;
+        height: 48px;
+      }
 
-  .auth-shell-stage {
-    min-height: auto;
-    padding: 18px 0 32px;
-  }
+      &-name {
+        width: 126px;
+      }
+    }
 
-  .auth-shell-footer {
-    position: static;
-    padding: 0 16px 24px;
-    gap: 8px;
-    font-size: 16px;
+    &-signup-prompt {
+      display: none;
+    }
   }
 }
 
 @include bp.widescreen {
-  .auth-shell-header {
-    top: 75px;
-    right: 75px;
-    left: 75px;
-  }
+  .auth {
+    &-shell {
+      &-header {
+        top: 75px;
+        right: 75px;
+        left: 75px;
+      }
 
-  .auth-brand {
-    transform: translateY(-18px);
-  }
+      &-footer {
+        bottom: 60px;
+      }
+    }
 
-  .auth-brand-mark {
-    width: 70px;
-    height: 70px;
-  }
+    &-brand {
+      transform: translateY(-18px);
 
-  .auth-brand-name {
-    width: 157px;
-  }
+      &-mark {
+        width: 70px;
+        height: 70px;
+      }
 
-  .auth-shell-footer {
-    bottom: 60px;
+      &-name {
+        width: 157px;
+      }
+    }
   }
 }
