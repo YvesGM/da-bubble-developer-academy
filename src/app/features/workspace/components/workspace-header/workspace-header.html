@@ -7,7 +7,12 @@
   <app-search-box />
 
   <div class="user-area">
-    <button type="button" class="profile-button" (click)="profileRequested.emit()">
+    <button
+      type="button"
+      class="profile-button"
+      [disabled]="!profileEnabled"
+      (click)="profileRequested.emit()"
+    >
       {{ displayName }}
     </button>
     <button type="button" (click)="logoutRequested.emit()">Log out</button>
