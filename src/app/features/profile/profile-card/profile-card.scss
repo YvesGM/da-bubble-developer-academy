@@ -1,0 +1,72 @@
+.backdrop {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #00000040;
+}
+
+.card {
+  display: grid;
+  width: min(460px, 100%);
+  padding: 28px;
+  gap: 22px;
+  border-radius: 24px;
+  background: #fff;
+}
+
+header,
+.name-row,
+.status {
+  display: flex;
+  align-items: center;
+}
+
+header,
+.name-row {
+  justify-content: space-between;
+}
+
+header button,
+.link-button {
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+}
+
+h2,
+h3 {
+  margin: 0;
+}
+
+h3 {
+  font-size: 28px;
+}
+
+.status {
+  gap: 10px;
+  color: #686868;
+}
+
+.email {
+  display: grid;
+  gap: 6px;
+}
+
+.email span,
+.link-button {
+  color: #444df2;
+}
+
+.primary {
+  justify-self: start;
+  border: 0;
+  border-radius: 24px;
+  padding: 12px 22px;
+  cursor: pointer;
+  background: #444df2;
+  color: #fff;
+  font-weight: 700;
+}
