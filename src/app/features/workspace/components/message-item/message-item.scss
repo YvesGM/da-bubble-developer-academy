@@ -87,3 +87,17 @@ button {
   color: #686868;
   font-style: italic;
 }
+
+.author-button {
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+}
+
+.author-button:disabled {
+  cursor: default;
+}
