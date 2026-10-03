@@ -1,6 +1,7 @@
 <main class="workspace">
   <app-workspace-header
     [displayName]="displayName"
+    [avatarId]="avatarId"
     [profileEnabled]="!isGuest"
     (profileRequested)="showProfile.set(true)"
     (logoutRequested)="logout()"
