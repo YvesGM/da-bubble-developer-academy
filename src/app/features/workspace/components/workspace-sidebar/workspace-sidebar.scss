@@ -82,3 +82,22 @@ nav {
     min-height: 220px;
   }
 }
+
+.workspace-name {
+  width: auto;
+  max-width: 190px;
+  height: auto;
+  padding: 6px 8px;
+  border-radius: 10px;
+  overflow: hidden;
+  color: #000;
+  font-size: 18px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-name:disabled {
+  cursor: default;
+  opacity: 1;
+}
