@@ -21,14 +21,23 @@ export class ReactionService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
-  observeReactions(target: ConversationTarget, messageId: string): Observable<ReactionGroup[]> {
-    const reference = this.reactionsCollection(target, messageId);
+  observeReactions(
+    target: ConversationTarget,
+    messageId: string,
+    replyId?: string,
+  ): Observable<ReactionGroup[]> {
+    const reference = this.reactionsCollection(target, messageId, replyId);
     const items = this.runSync(() => collectionData(reference, { idField: 'id' }));
-    return (items as Observable<MessageReaction[]>).pipe(map((reactions) => this.groupReactions(reactions)));
+    return (items as Observable<MessageReaction[]>).pipe(map((items) => this.groupReactions(items)));
   }
 
-  async toggleReaction(target: ConversationTarget, messageId: string, emoji: string): Promise<void> {
-    const reference = this.reactionReference(target, messageId, emoji);
+  async toggleReaction(
+    target: ConversationTarget,
+    messageId: string,
+    emoji: string,
+    replyId?: string,
+  ): Promise<void> {
+    const reference = this.reactionReference(target, messageId, emoji, replyId);
     const snapshot = await this.run(() => getDoc(reference));
     if (snapshot.exists()) return this.run(() => deleteDoc(reference));
     await this.run(() => setDoc(reference, this.reactionData(emoji)));
@@ -46,22 +55,26 @@ export class ReactionService {
   }
 
   private reactionData(emoji: string) {
-    const uid = this.currentUserId();
-    return { emoji, userId: uid, createdAt: serverTimestamp() };
+    return { emoji, userId: this.currentUserId(), createdAt: serverTimestamp() };
   }
 
-  private reactionReference(target: ConversationTarget, messageId: string, emoji: string) {
+  private reactionReference(
+    target: ConversationTarget,
+    messageId: string,
+    emoji: string,
+    replyId?: string,
+  ) {
     const id = `${this.currentUserId()}__${encodeURIComponent(emoji)}`;
-    const path = `${this.reactionsPath(target, messageId)}/${id}`;
-    return this.runSync(() => doc(this.firestore, path));
+    return this.runSync(() => doc(this.firestore, `${this.reactionsPath(target, messageId, replyId)}/${id}`));
   }
 
-  private reactionsCollection(target: ConversationTarget, messageId: string) {
-    return this.runSync(() => collection(this.firestore, this.reactionsPath(target, messageId)));
+  private reactionsCollection(target: ConversationTarget, messageId: string, replyId?: string) {
+    return this.runSync(() => collection(this.firestore, this.reactionsPath(target, messageId, replyId)));
   }
 
-  private reactionsPath(target: ConversationTarget, messageId: string): string {
-    return `${conversationDocumentPath(target)}/messages/${messageId}/reactions`;
+  private reactionsPath(target: ConversationTarget, messageId: string, replyId?: string): string {
+    const base = `${conversationDocumentPath(target)}/messages/${messageId}`;
+    return replyId ? `${base}/replies/${replyId}/reactions` : `${base}/reactions`;
   }
 
   private currentUserId(): string {
