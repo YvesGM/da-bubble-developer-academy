@@ -18,6 +18,8 @@
       }
     </div>
 
-    <button type="button" class="add" (click)="addRequested.emit()">＋ Add members</button>
+    @if (canAdd) {
+      <button type="button" class="add" (click)="addRequested.emit()">＋ Add members</button>
+    }
   </section>
 </div>
