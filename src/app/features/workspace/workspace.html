@@ -1,6 +1,7 @@
 <main class="workspace">
   <app-workspace-header
     [displayName]="displayName"
+    [profileEnabled]="!isGuest"
     (profileRequested)="showProfile.set(true)"
     (logoutRequested)="logout()"
   />
@@ -14,7 +15,6 @@
       [channels]="channels()"
       [directMessages]="directMessages()"
       [users]="users()"
-      [channels]="channels()"
       [currentUserId]="currentUserId"
       [guest]="isGuest"
       [collapsed]="sidebarCollapsed()"
@@ -38,6 +38,7 @@
   @if (showNewMessage()) {
     <app-new-message-dialog
       [users]="users()"
+      [channels]="channels()"
       [currentUserId]="currentUserId"
       (closeRequested)="showNewMessage.set(false)"
       (userSelected)="startDirectMessage($event)"
