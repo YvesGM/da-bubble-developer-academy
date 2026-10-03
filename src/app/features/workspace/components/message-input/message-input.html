@@ -25,7 +25,7 @@
     [placeholder]="placeholder"
     [ngModel]="text()"
     (ngModelChange)="updateText($event)"
-    (keydown.enter)="$event.shiftKey ? null : ($event.preventDefault(), submit())"
+    (keydown.enter)="handleEnter($event)"
   ></textarea>
 
   <div class="composer-actions">
