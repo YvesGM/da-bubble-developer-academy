@@ -63,6 +63,10 @@ export class Workspace {
     return /\/workspace\/(channel|dm)\//.test(this.router.url);
   }
 
+  toggleSidebar(): void {
+    this.sidebarCollapsed.update((value) => !value);
+  }
+
   async selectCreatedChannel(channelId: string): Promise<void> {
     this.showCreateChannel.set(false);
     await this.router.navigate(['/workspace/channel', channelId]);
