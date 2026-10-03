@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 
 @Component({
   selector: 'app-login',
@@ -42,15 +43,19 @@ export class Login {
   }
 
   private async runLogin(action: () => Promise<unknown>): Promise<void> {
-    this.submitting.set(true);
-    this.errorMessage.set('');
+    this.startSubmit();
     try {
       await action();
       await this.router.navigateByUrl('/workspace');
-    } catch {
-      this.errorMessage.set('Anmeldung fehlgeschlagen. Bitte prüfe deine Daten.');
+    } catch (error) {
+      this.errorMessage.set(firebaseErrorMessage(error, 'Anmeldung fehlgeschlagen.'));
     } finally {
       this.submitting.set(false);
     }
+  }
+
+  private startSubmit(): void {
+    this.submitting.set(true);
+    this.errorMessage.set('');
   }
 }
