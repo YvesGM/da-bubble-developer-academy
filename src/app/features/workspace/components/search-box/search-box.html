@@ -6,18 +6,24 @@
     (input)="query.set($any($event.target).value)"
     (focus)="focused.set(true)"
     (blur)="focused.set(false)"
-    aria-label="Search messages"
+    aria-label="Search users, channels and messages"
   />
 
   @if (focused() && query().trim()) {
     <div class="results">
-      @for (result of results(); track result.target.type + result.target.id + result.message.id) {
+      @for (result of results(); track result.type + result.id) {
         <button type="button" (mousedown)="$event.preventDefault()" (click)="openResult(result)">
-          <strong>{{ result.conversationLabel }}</strong>
-          <span>{{ result.message.authorName }}: {{ result.message.text }}</span>
+          <strong>{{ result.label }}</strong>
+          @if (result.type === 'user') {
+            <span>{{ result.user.email }}</span>
+          } @else if (result.type === 'channel') {
+            <span>Channel</span>
+          } @else {
+            <span>{{ result.message.authorName }}: {{ result.message.text }}</span>
+          }
         </button>
       } @empty {
-        <p>No matching messages.</p>
+        <p>No matching results.</p>
       }
     </div>
   }
