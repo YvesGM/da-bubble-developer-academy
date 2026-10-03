@@ -1,13 +1,21 @@
 <main class="workspace">
   <app-workspace-header
     [displayName]="displayName"
+    (profileRequested)="showProfile.set(true)"
     (logoutRequested)="logout()"
   />
 
-  <div class="workspace-body">
+  <div class="workspace-body" [class.collapsed]="sidebarCollapsed()">
     <app-workspace-sidebar
       [channels]="channels()"
-      (createRequested)="openChannelDialog()"
+      [directMessages]="directMessages()"
+      [users]="users()"
+      [currentUserId]="currentUserId"
+      [guest]="isGuest"
+      [collapsed]="sidebarCollapsed()"
+      (createRequested)="showCreateChannel.set(true)"
+      (newMessageRequested)="showNewMessage.set(true)"
+      (collapseRequested)="sidebarCollapsed.update(value => !value)"
     />
 
     <section class="workspace-content">
@@ -17,8 +25,21 @@
 
   @if (showCreateChannel()) {
     <app-channel-create-dialog
-      (closeRequested)="closeChannelDialog()"
+      (closeRequested)="showCreateChannel.set(false)"
       (channelCreated)="selectCreatedChannel($event)"
     />
+  }
+
+  @if (showNewMessage()) {
+    <app-new-message-dialog
+      [users]="users()"
+      [currentUserId]="currentUserId"
+      (closeRequested)="showNewMessage.set(false)"
+      (userSelected)="startDirectMessage($event)"
+    />
+  }
+
+  @if (showProfile() && !isGuest) {
+    <app-profile-dialog (closeRequested)="showProfile.set(false)" />
   }
 </main>
