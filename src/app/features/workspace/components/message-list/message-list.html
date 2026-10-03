@@ -1,6 +1,6 @@
 <section class="message-list" aria-live="polite">
   @for (message of messages; track message.id; let index = $index) {
-    @if (showDateSeparator(index)) {
+    @if (showDateSeparator(index) && dateLabel(message)) {
       <div class="date-separator"><span>{{ dateLabel(message) }}</span></div>
     }
 
