@@ -1,0 +1,12 @@
+.message-list {
+  min-height: 240px;
+  overflow: auto;
+}
+
+.empty-state {
+  display: grid;
+  place-content: center;
+  min-height: 240px;
+  color: #686868;
+  text-align: center;
+}
