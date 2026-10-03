@@ -12,7 +12,6 @@ import { UserService } from '../../core/services/user.service';
 import { ProfileCard } from '../profile/profile-card/profile-card';
 import { ProfileDialog } from '../profile/profile-dialog/profile-dialog';
 import { ChannelCreateDialog } from './components/channel-create-dialog/channel-create-dialog';
-import { NewMessageDialog } from './components/new-message-dialog/new-message-dialog';
 import { WorkspaceHeader } from './components/workspace-header/workspace-header';
 import { WorkspaceNameDialog } from './components/workspace-name-dialog/workspace-name-dialog';
 import { WorkspaceSidebar } from './components/workspace-sidebar/workspace-sidebar';
@@ -22,7 +21,6 @@ import { WorkspaceSidebar } from './components/workspace-sidebar/workspace-sideb
   imports: [
     RouterOutlet,
     ChannelCreateDialog,
-    NewMessageDialog,
     ProfileCard,
     ProfileDialog,
     WorkspaceHeader,
@@ -46,7 +44,6 @@ export class Workspace {
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly profile = toSignal(this.usersService.observeCurrentProfile());
   readonly showCreateChannel = signal(false);
-  readonly showNewMessage = signal(false);
   readonly showProfileEditor = signal(false);
   readonly showWorkspaceEditor = signal(false);
   readonly selectedUser = signal<UserProfile | null>(null);
@@ -77,7 +74,7 @@ export class Workspace {
   }
 
   get conversationOpen(): boolean {
-    return /\/workspace\/(channel|dm)\//.test(this.router.url);
+    return /\/workspace\/(channel|dm)\/|\/workspace\/new-message/.test(this.router.url);
   }
 
   toggleSidebar(): void {
@@ -103,15 +100,17 @@ export class Workspace {
     await this.router.navigate(['/workspace/channel', channelId]);
   }
 
+  async openNewMessage(): Promise<void> {
+    await this.router.navigate(['/workspace/new-message']);
+  }
+
   async openChannel(channelId: string): Promise<void> {
-    this.showNewMessage.set(false);
     await this.router.navigate(['/workspace/channel', channelId]);
   }
 
   async startDirectMessage(userId: string): Promise<void> {
     const dmId = await this.directMessagesService.openConversation(userId);
     this.selectedUser.set(null);
-    this.showNewMessage.set(false);
     await this.router.navigate(['/workspace/dm', dmId]);
   }
 
