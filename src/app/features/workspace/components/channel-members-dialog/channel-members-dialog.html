@@ -1,0 +1,23 @@
+<div class="backdrop" (click)="closeRequested.emit()">
+  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <header>
+      <h2>Members</h2>
+      <button type="button" aria-label="Close" (click)="closeRequested.emit()">×</button>
+    </header>
+
+    <div class="members">
+      @for (member of members; track member.uid) {
+        <button type="button" class="member" (click)="userSelected.emit(member)">
+          <app-avatar [avatarId]="member.avatarId" [name]="member.displayName" size="small" />
+          <span>{{ member.displayName }}{{ member.uid === currentUserId ? ' (You)' : '' }}</span>
+          <app-presence-indicator [userId]="member.uid" />
+        </button>
+      }
+      @if (guestAccess) {
+        <div class="member guest"><span>G</span><span>Guest</span></div>
+      }
+    </div>
+
+    <button type="button" class="add" (click)="addRequested.emit()">＋ Add members</button>
+  </section>
+</div>
