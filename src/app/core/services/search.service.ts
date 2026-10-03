@@ -40,7 +40,9 @@ export class SearchService {
   ): Observable<MessageSearchResult[]> {
     const contexts = this.contexts(channels, dms, users);
     if (!contexts.length) return of([]);
-    return combineLatest(contexts.map((context) => this.searchContext(query, context)));
+    return combineLatest(contexts.map((context) => this.searchContext(query, context))).pipe(
+      map((results) => results.flat()),
+    );
   }
 
   private searchContext(query: string, context: SearchContext): Observable<MessageSearchResult[]> {
