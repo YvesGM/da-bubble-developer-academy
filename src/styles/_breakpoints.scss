@@ -1,0 +1,14 @@
+$mobile-max: 640px;
+$widescreen-min: 1600px;
+
+@mixin mobile {
+  @media (max-width: $mobile-max) {
+    @content;
+  }
+}
+
+@mixin widescreen {
+  @media (min-width: $widescreen-min) {
+    @content;
+  }
+}
