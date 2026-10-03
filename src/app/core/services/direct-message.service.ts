@@ -5,6 +5,7 @@ import {
   collection,
   collectionData,
   doc,
+  getDoc,
   query,
   serverTimestamp,
   setDoc,
@@ -37,7 +38,10 @@ export class DirectMessageService {
     if (!currentUserId) throw new Error('guest-direct-message-not-available');
     const id = this.conversationId(currentUserId, otherUserId);
     const reference = this.runSync(() => doc(this.firestore, 'directMessages', id));
-    await this.run(() => setDoc(reference, this.directMessageData(currentUserId, otherUserId), { merge: true }));
+    const snapshot = await this.run(() => getDoc(reference));
+    if (!snapshot.exists()) {
+      await this.run(() => setDoc(reference, this.directMessageData(currentUserId, otherUserId)));
+    }
     return id;
   }
 
