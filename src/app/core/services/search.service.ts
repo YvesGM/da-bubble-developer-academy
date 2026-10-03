@@ -21,7 +21,7 @@ export class SearchService {
   private readonly users = inject(UserService);
 
   search(searchText: string): Observable<SearchResult[]> {
-    const query = searchText.trim().replace(/^@/, '').toLowerCase();
+    const query = searchText.trim().replace(/^[@#]/, '').toLowerCase();
     if (!query) return of([]);
     return combineLatest([
       this.channels.observeCurrentUserChannels(),
