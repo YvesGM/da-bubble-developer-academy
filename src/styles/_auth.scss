@@ -6,7 +6,7 @@
   border-radius: 30px;
   padding: 42px 53px;
   background: tokens.$white;
-  box-shadow: 0 2px 10px #00000014;
+  box-shadow: 0 2px 10px #0000000a;
 }
 
 .auth-card-header {
@@ -205,7 +205,9 @@
 }
 
 .auth-button--secondary:hover:not(:disabled) {
-  background: tokens.$background;
+  box-shadow: none;
+  background: tokens.$purple-2;
+  color: tokens.$white;
 }
 
 .auth-button:disabled {

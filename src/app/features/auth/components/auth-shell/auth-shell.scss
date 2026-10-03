@@ -27,7 +27,9 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  cursor: default;
   text-decoration: none;
+  transform: translateY(-12px);
 }
 
 .auth-brand-mark {
@@ -47,14 +49,22 @@
   font-size: 18px;
 }
 
-.auth-signup-prompt a {
+.auth-signup-prompt a,
+.auth-footer-link {
+  border: 1px solid transparent;
+  border-radius: 25px;
   color: tokens.$purple-2;
   text-decoration: none;
 }
 
-.auth-signup-prompt a:hover {
+.auth-signup-prompt a {
+  padding: 9px 14px;
+}
+
+.auth-signup-prompt a:hover,
+.auth-footer-link:hover {
+  border-color: tokens.$purple-2;
   color: tokens.$purple-1;
-  font-weight: 700;
 }
 
 .auth-shell-stage {
@@ -71,9 +81,13 @@
   left: 0;
   display: flex;
   justify-content: center;
-  gap: 42px;
-  color: tokens.$purple-2;
+  gap: 16px;
   font-size: 18px;
+}
+
+.auth-footer-link {
+  padding: 8px 14px;
+  cursor: pointer;
 }
 
 @include bp.mobile {
@@ -86,6 +100,10 @@
   .auth-shell-header {
     position: static;
     padding: 24px 20px 12px;
+  }
+
+  .auth-brand {
+    transform: none;
   }
 
   .auth-brand-mark {
@@ -109,7 +127,7 @@
   .auth-shell-footer {
     position: static;
     padding: 0 16px 24px;
-    gap: 28px;
+    gap: 8px;
     font-size: 16px;
   }
 }
@@ -119,6 +137,10 @@
     top: 75px;
     right: 75px;
     left: 75px;
+  }
+
+  .auth-brand {
+    transform: translateY(-18px);
   }
 
   .auth-brand-mark {

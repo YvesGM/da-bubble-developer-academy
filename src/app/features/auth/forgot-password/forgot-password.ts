@@ -32,9 +32,9 @@ export class ForgotPassword {
   private async sendReset(): Promise<void> {
     try {
       await this.auth.sendPasswordReset(this.form.controls.email.value);
-      this.message.set('Password reset instructions were sent to your email address.');
+      this.message.set('Die E-Mail zum Zurücksetzen deines Passworts wurde versendet.');
     } catch (error) {
-      this.errorMessage.set(firebaseErrorMessage(error, 'Password reset could not be started.'));
+      this.errorMessage.set(firebaseErrorMessage(error, 'Das Zurücksetzen konnte nicht gestartet werden.'));
     } finally {
       this.submitting.set(false);
     }
@@ -42,7 +42,7 @@ export class ForgotPassword {
 
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Please enter a valid email address.');
+    this.errorMessage.set('Bitte gib eine gültige E-Mail-Adresse ein.');
   }
 
   private startSubmit(): void {

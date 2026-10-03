@@ -73,7 +73,7 @@ export class Register {
       await this.auth.register(name, email, password, avatarId);
       await this.router.navigateByUrl('/workspace');
     } catch (error) {
-      this.errorMessage.set(firebaseErrorMessage(error, 'Registration failed.'));
+      this.errorMessage.set(firebaseErrorMessage(error, 'Registrierung fehlgeschlagen.'));
     } finally {
       this.submitting.set(false);
     }
@@ -88,7 +88,7 @@ export class Register {
 
   private markAvatarInvalid(): void {
     this.form.controls.avatarId.markAsTouched();
-    this.errorMessage.set('Please choose an avatar.');
+    this.errorMessage.set('Bitte wähle einen Avatar aus.');
   }
 
   private startSubmit(): void {

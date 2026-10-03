@@ -41,22 +41,22 @@ export class ResetPassword {
 
   private async loadResetRequest(): Promise<void> {
     const code = this.resetCode();
-    if (!code) return this.errorMessage.set('The reset link is invalid.');
+    if (!code) return this.errorMessage.set('Der Link zum Zurücksetzen ist ungültig.');
     try {
       this.email.set(await this.auth.verifyResetCode(code));
       this.ready.set(true);
     } catch (error) {
-      this.errorMessage.set(firebaseErrorMessage(error, 'The reset link is invalid or expired.'));
+      this.errorMessage.set(firebaseErrorMessage(error, 'Der Link ist ungültig oder abgelaufen.'));
     }
   }
 
   private async confirmReset(): Promise<void> {
     try {
       await this.auth.resetPassword(this.resetCode(), this.form.controls.password.value);
-      this.message.set('Your password has been changed. You can now log in.');
+      this.message.set('Dein Passwort wurde geändert. Du kannst dich jetzt anmelden.');
       this.ready.set(false);
     } catch (error) {
-      this.errorMessage.set(firebaseErrorMessage(error, 'The password could not be changed.'));
+      this.errorMessage.set(firebaseErrorMessage(error, 'Das Passwort konnte nicht geändert werden.'));
     } finally {
       this.submitting.set(false);
     }
@@ -77,7 +77,7 @@ export class ResetPassword {
 
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Please check your password entries.');
+    this.errorMessage.set('Bitte überprüfe deine Passworteingaben.');
   }
 
   private startSubmit(): void {

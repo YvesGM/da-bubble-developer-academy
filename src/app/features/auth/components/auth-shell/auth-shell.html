@@ -1,14 +1,14 @@
 <main class="auth-shell">
   <header class="auth-shell-header">
-    <a class="auth-brand" routerLink="/login" aria-label="DABubble login">
+    <a class="auth-brand" routerLink="/login" aria-label="DABubble Anmeldung">
       <img class="auth-brand-mark" src="/assets/logo.svg" alt="" />
       <img class="auth-brand-name" src="/assets/logo-name.svg" alt="DABubble" />
     </a>
 
     @if (showSignup) {
       <div class="auth-signup-prompt">
-        <span>New to DABubble?</span>
-        <a routerLink="/register">Create account</a>
+        <span>Neu bei DABubble?</span>
+        <a routerLink="/register">Konto erstellen</a>
       </div>
     }
   </header>
@@ -17,8 +17,8 @@
     <ng-content />
   </section>
 
-  <footer class="auth-shell-footer" aria-label="Legal information">
-    <span>Legal notice</span>
-    <span>Privacy policy</span>
+  <footer class="auth-shell-footer" aria-label="Rechtliche Informationen">
+    <span class="auth-footer-link">Impressum</span>
+    <span class="auth-footer-link">Datenschutz</span>
   </footer>
 </main>

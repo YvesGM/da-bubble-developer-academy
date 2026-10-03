@@ -41,7 +41,7 @@ export class Login {
 
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Please check your input.');
+    this.errorMessage.set('Bitte überprüfe deine Eingaben.');
   }
 
   private async runLogin(action: () => Promise<unknown>, credentialFlow = false): Promise<void> {
@@ -57,7 +57,7 @@ export class Login {
   }
 
   private setLoginError(error: unknown, credentialFlow: boolean): void {
-    const message = firebaseErrorMessage(error, 'Login failed.');
+    const message = firebaseErrorMessage(error, 'Anmeldung fehlgeschlagen.');
     credentialFlow ? this.credentialError.set(message) : this.errorMessage.set(message);
   }
 
