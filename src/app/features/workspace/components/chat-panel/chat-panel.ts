@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, EventEmitter, Output, computed, inject, input, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { switchMap } from 'rxjs';
@@ -27,6 +27,7 @@ export class ChatPanel {
   private readonly usersService = inject(UserService);
 
   readonly target = input.required<ConversationTarget>();
+  @Output() readonly userRequested = new EventEmitter<string>();
   readonly inputPlaceholder = input('Write a message');
   readonly mentionUsers = input<UserProfile[] | null>(null);
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
