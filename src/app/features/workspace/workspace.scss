@@ -1,0 +1,49 @@
+.workspace {
+  min-height: 100dvh;
+  padding: 32px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #444df2;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 4px 0 0;
+}
+
+button {
+  border: 0;
+  border-radius: 24px;
+  padding: 12px 18px;
+  background: #444df2;
+  color: #fff;
+  font-weight: 700;
+}
+
+.panel {
+  margin-top: 32px;
+  padding: 32px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 2px 10px #00000014;
+}
+
+@media (max-width: 600px) {
+  .workspace {
+    padding: 20px;
+  }
+
+  header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
