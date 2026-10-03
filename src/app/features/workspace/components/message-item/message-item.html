@@ -1,10 +1,10 @@
 <article class="message">
-  <div class="avatar">{{ message.authorName.charAt(0).toUpperCase() }}</div>
+  <div class="avatar">{{ message().authorName.charAt(0).toUpperCase() }}</div>
 
   <div class="message-body">
     <div class="meta">
-      <strong>{{ message.authorName }}</strong>
-      @if (message.authorIsGuest) {
+      <strong>{{ message().authorName }}</strong>
+      @if (message().authorIsGuest) {
         <span>Guest</span>
       }
     </div>
@@ -16,11 +16,11 @@
         <button type="button" (click)="editing.set(false)">Cancel</button>
       </div>
     } @else {
-      <p>{{ message.text }}</p>
+      <p>{{ message().text }}</p>
     }
 
     <div class="actions">
-      @for (emoji of recentEmojis.slice(0, 2); track emoji) {
+      @for (emoji of recentEmojis().slice(0, 2); track emoji) {
         <button type="button" class="icon-action" (click)="toggleReaction(emoji)">{{ emoji }}</button>
       }
 
@@ -33,18 +33,18 @@
         +
       </button>
 
-      @if (!parentMessageId) {
-        <button type="button" (click)="threadRequested.emit(message)">Thread</button>
+      @if (!parentMessageId()) {
+        <button type="button" (click)="threadRequested.emit(message())">Thread</button>
       }
 
-      @if (isOwnMessage() && !parentMessageId) {
+      @if (isOwnMessage() && !parentMessageId()) {
         <button type="button" (click)="startEditing()">Edit</button>
         <button type="button" (click)="removeMessage()">Delete</button>
       }
     </div>
 
     @if (showEmojiPicker()) {
-      <app-emoji-picker [recent]="recentEmojis" (emojiSelected)="toggleReaction($event)" />
+      <app-emoji-picker [recent]="recentEmojis()" (emojiSelected)="toggleReaction($event)" />
     }
 
     @if (reactions().length) {
