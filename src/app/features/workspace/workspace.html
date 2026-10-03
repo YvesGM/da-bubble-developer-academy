@@ -3,7 +3,8 @@
     [displayName]="displayName"
     [avatarId]="avatarId"
     [profileEnabled]="!isGuest"
-    (profileRequested)="showProfile.set(true)"
+    (profileRequested)="openOwnProfile()"
+    (userSelected)="selectedUser.set($event)"
     (logoutRequested)="logout()"
   />
 
@@ -17,10 +18,12 @@
       [directMessages]="directMessages()"
       [users]="users()"
       [currentUserId]="currentUserId"
+      [workspaceName]="workspaceName"
       [guest]="isGuest"
       [collapsed]="sidebarCollapsed()"
       (createRequested)="showCreateChannel.set(true)"
       (newMessageRequested)="showNewMessage.set(true)"
+      (workspaceEditRequested)="showWorkspaceEditor.set(true)"
       (collapseRequested)="toggleSidebar()"
     />
 
@@ -47,7 +50,25 @@
     />
   }
 
-  @if (showProfile() && !isGuest) {
-    <app-profile-dialog (closeRequested)="showProfile.set(false)" />
+  @if (selectedUser(); as user) {
+    <app-profile-card
+      [user]="user"
+      [ownProfile]="user.uid === currentUserId"
+      (closeRequested)="selectedUser.set(null)"
+      (editRequested)="openProfileEditor()"
+      (messageRequested)="startDirectMessage($event)"
+    />
+  }
+
+  @if (showProfileEditor() && !isGuest) {
+    <app-profile-dialog (closeRequested)="showProfileEditor.set(false)" />
+  }
+
+  @if (showWorkspaceEditor() && !isGuest) {
+    <app-workspace-name-dialog
+      [workspaceName]="workspaceName"
+      (closeRequested)="showWorkspaceEditor.set(false)"
+      (saveRequested)="saveWorkspaceName($event)"
+    />
   }
 </main>
