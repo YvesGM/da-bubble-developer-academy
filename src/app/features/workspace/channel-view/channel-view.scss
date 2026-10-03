@@ -1,202 +1,100 @@
 .channel-view {
-  padding: 28px;
+  padding: 24px;
 }
 
 .channel-header,
-.header-actions,
-.form-actions {
+.member-tools,
+.member-stack {
   display: flex;
   align-items: center;
+}
+
+.channel-header {
   justify-content: space-between;
   gap: 16px;
 }
 
-.eyebrow {
-  margin: 0;
-  color: #444df2;
-  font-weight: 700;
-}
-
-h1 {
-  margin: 4px 0;
-}
-
-.description,
-.empty {
-  margin: 0;
-  color: #686868;
-}
-
-.header-actions {
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-button {
+.channel-title,
+.member-stack,
+.add-member {
   border: 0;
-  border-radius: 24px;
-  padding: 10px 16px;
   cursor: pointer;
+  background: transparent;
+}
+
+.channel-title {
+  padding: 8px 10px;
+  font-size: 24px;
   font-weight: 700;
 }
 
-.primary {
-  background: #444df2;
-  color: #fff;
-}
-
-.secondary {
-  background: #eceefe;
-  color: #444df2;
-}
-
-.danger {
-  background: #fff0f3;
-  color: #e61c40;
-}
-
-button:disabled {
+.channel-title:disabled {
   cursor: default;
-  opacity: 0.55;
+  color: #000;
 }
 
-.edit-form {
-  display: grid;
-  max-width: 640px;
-  margin-top: 24px;
-  padding: 20px;
-  gap: 16px;
-  border-radius: 20px;
-  background: #f7f7fc;
-}
-
-label {
-  display: grid;
+.member-tools {
   gap: 8px;
-  font-weight: 600;
 }
 
-input,
-textarea {
-  border: 0;
-  border-radius: 16px;
-  padding: 12px 16px;
-  outline: 1px solid #adb0d9;
-  font: inherit;
+.member-stack {
+  min-height: 44px;
+  padding: 4px 10px;
+  gap: 0;
+  border-radius: 24px;
+  background: #eceefe;
 }
 
-input:focus,
-textarea:focus {
-  outline: 2px solid #444df2;
+.member-stack app-avatar,
+.guest-avatar {
+  margin-left: -8px;
 }
 
-.field-error {
-  margin: -8px 0 0;
-  color: #e61c40;
-  font-size: 14px;
+.member-stack app-avatar:first-child {
+  margin-left: 0;
 }
 
-.form-actions {
-  justify-content: flex-end;
-}
-
-.content-grid {
+.guest-avatar {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 28px;
-  gap: 20px;
-}
-
-.panel,
-.message-placeholder {
-  padding: 22px;
-  border-radius: 20px;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
   background: #fff;
-  box-shadow: 0 2px 10px #0000000d;
+  color: #444df2;
+  font-weight: 700;
 }
 
-.panel h2,
-.message-placeholder h2 {
-  margin-top: 0;
+.member-stack strong {
+  margin-left: 8px;
 }
 
-.member-list {
+.add-member {
   display: grid;
-  gap: 10px;
-}
-
-.member {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.member div {
-  display: grid;
-}
-
-.member div span {
-  color: #686868;
-  font-size: 12px;
-}
-
-.avatar {
-  display: grid;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   place-items: center;
   border-radius: 50%;
   background: #eceefe;
   color: #444df2;
-  font-weight: 700;
+  font-size: 22px;
 }
 
-.user-option {
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  padding: 8px;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.user-option:hover {
-  background: #eceefe;
-}
-
-.user-option input {
-  width: auto;
-  outline: 0;
-}
-
-.add-button {
-  margin-top: 14px;
+.description {
+  margin: 8px 10px 0;
+  color: #686868;
 }
 
 .message-placeholder {
-  margin-top: 20px;
+  margin-top: 16px;
   min-height: 180px;
+  border-radius: 20px;
+  background: #fff;
 }
 
 .missing-channel {
   padding: 48px;
   text-align: center;
-}
-
-@media (max-width: 800px) {
-  .channel-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .content-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 600px) {
-  .channel-view {
-    padding: 20px;
-  }
 }
 
 .mobile-back {
@@ -207,25 +105,28 @@ textarea:focus {
 }
 
 @media (max-width: 640px) {
+  .channel-view {
+    padding: 14px;
+  }
+
   .mobile-back {
     display: inline-flex;
-    align-items: center;
   }
 
   .channel-header {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr auto;
   }
 
-  .header-actions {
-    grid-column: 1 / -1;
+  .channel-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 20px;
   }
 
-  .content-grid {
-    margin-top: 16px;
-  }
-
-  .message-placeholder {
-    padding: 8px;
+  .member-stack app-avatar:nth-of-type(n + 4) {
+    display: none;
   }
 }
