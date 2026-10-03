@@ -1,0 +1,35 @@
+<div class="composer">
+  @if (trigger()) {
+    <div class="suggestions">
+      @if (trigger() === '@') {
+        @for (user of matchingUsers(); track user.uid) {
+          <button type="button" (click)="chooseUser(user)">@{{ user.displayName }}</button>
+        }
+      } @else {
+        @for (channel of matchingChannels(); track channel.id) {
+          <button type="button" (click)="chooseChannel(channel)">#{{ channel.name }}</button>
+        }
+      }
+    </div>
+  }
+
+  @if (showEmojiPicker()) {
+    <div class="picker">
+      <app-emoji-picker [recent]="recentEmojis" (emojiSelected)="insertEmoji($event)" />
+    </div>
+  }
+
+  <textarea
+    #messageField
+    rows="3"
+    [placeholder]="placeholder"
+    [ngModel]="text()"
+    (ngModelChange)="updateText($event)"
+    (keydown.enter)="$event.shiftKey ? null : ($event.preventDefault(), submit())"
+  ></textarea>
+
+  <div class="composer-actions">
+    <button type="button" class="icon-button" (click)="showEmojiPicker.set(!showEmojiPicker())">☺</button>
+    <button type="button" class="send-button" [disabled]="!text().trim()" (click)="submit()">Send</button>
+  </div>
+</div>
