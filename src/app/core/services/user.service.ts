@@ -57,6 +57,13 @@ export class UserService {
     await this.run(() => updateDoc(this.userReference(user.uid), this.profileChanges(displayName, avatarId)));
   }
 
+  async updateWorkspaceName(workspaceName: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user || user.isAnonymous) throw new Error('workspace-not-available');
+    const changes = { workspaceName: workspaceName.trim(), updatedAt: serverTimestamp() };
+    await this.run(() => updateDoc(this.userReference(user.uid), changes));
+  }
+
   async rememberEmoji(emoji: string): Promise<void> {
     const user = this.auth.currentUser;
     if (!user || user.isAnonymous) return;
@@ -103,6 +110,7 @@ export class UserService {
       avatarId,
       isGuest: user.isAnonymous,
       recentEmojis: [...DEFAULT_RECENT_EMOJIS],
+      workspaceName: 'Workspace',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
