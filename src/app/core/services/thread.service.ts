@@ -44,6 +44,7 @@ export class ThreadService {
       authorAvatarId: user.isAnonymous ? 'avatar-1' : input.authorAvatarId,
       authorIsGuest: user.isAnonymous,
       text: input.text.trim(),
+      deleted: false,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
