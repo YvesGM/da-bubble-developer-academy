@@ -46,7 +46,7 @@
         <nav aria-label="Direct messages">
           @for (dm of directMessages; track dm.id) {
             <a [routerLink]="['/workspace/dm', dm.id]" routerLinkActive="active" class="channel-link">
-              <span>●</span>
+              <app-presence-indicator [userId]="directMessagePartnerId(dm)" />
               {{ directMessageName(dm) }}
             </a>
           } @empty {
