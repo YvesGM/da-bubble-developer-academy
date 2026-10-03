@@ -16,11 +16,13 @@ export class WorkspaceSidebar {
   @Input() directMessages: DirectMessage[] = [];
   @Input() users: UserProfile[] = [];
   @Input() currentUserId = '';
+  @Input() workspaceName = 'Workspace';
   @Input() guest = false;
   @Input() collapsed = false;
   @Output() readonly createRequested = new EventEmitter<void>();
   @Output() readonly newMessageRequested = new EventEmitter<void>();
   @Output() readonly collapseRequested = new EventEmitter<void>();
+  @Output() readonly workspaceEditRequested = new EventEmitter<void>();
 
   directMessageName(dm: DirectMessage): string {
     const partnerId = dm.participantIds.find((uid) => uid !== this.currentUserId);
