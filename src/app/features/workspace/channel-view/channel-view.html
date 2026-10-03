@@ -40,6 +40,7 @@
         [target]="target()"
         [mentionUsers]="members()"
         [inputPlaceholder]="'Message #' + currentChannel.name"
+        (userRequested)="openProfileById($event)"
       />
     </section>
   </section>
