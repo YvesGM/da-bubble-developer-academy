@@ -1,0 +1,68 @@
+<article class="message">
+  <div class="avatar">{{ message.authorName.charAt(0).toUpperCase() }}</div>
+
+  <div class="message-body">
+    <div class="meta">
+      <strong>{{ message.authorName }}</strong>
+      @if (message.authorIsGuest) {
+        <span>Guest</span>
+      }
+    </div>
+
+    @if (editing()) {
+      <div class="edit-row">
+        <input [ngModel]="editText()" (ngModelChange)="editText.set($event)" />
+        <button type="button" (click)="saveEdit()">Save</button>
+        <button type="button" (click)="editing.set(false)">Cancel</button>
+      </div>
+    } @else {
+      <p>{{ message.text }}</p>
+    }
+
+    <div class="actions">
+      @for (emoji of recentEmojis.slice(0, 2); track emoji) {
+        <button type="button" class="icon-action" (click)="toggleReaction(emoji)">{{ emoji }}</button>
+      }
+
+      <button
+        type="button"
+        class="icon-action"
+        aria-label="More reactions"
+        (click)="showEmojiPicker.set(!showEmojiPicker())"
+      >
+        +
+      </button>
+
+      @if (!parentMessageId) {
+        <button type="button" (click)="threadRequested.emit(message)">Thread</button>
+      }
+
+      @if (isOwnMessage() && !parentMessageId) {
+        <button type="button" (click)="startEditing()">Edit</button>
+        <button type="button" (click)="removeMessage()">Delete</button>
+      }
+    </div>
+
+    @if (showEmojiPicker()) {
+      <app-emoji-picker [recent]="recentEmojis" (emojiSelected)="toggleReaction($event)" />
+    }
+
+    @if (reactions().length) {
+      <div class="reactions">
+        @for (reaction of visibleReactions(); track reaction.emoji) {
+          <button
+            type="button"
+            [title]="reactionNames(reaction)"
+            (click)="toggleReaction(reaction.emoji)"
+          >
+            {{ reaction.emoji }} {{ reaction.userIds.length }}
+          </button>
+        }
+
+        @if (hiddenReactionCount()) {
+          <span>+ {{ hiddenReactionCount() }} more</span>
+        }
+      </div>
+    }
+  </div>
+</article>
