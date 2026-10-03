@@ -22,7 +22,7 @@ export class UserService {
   observeUsers(): Observable<UserProfile[]> {
     const reference = this.runSync(() => collection(this.firestore, 'users'));
     const users = this.runSync(() => collectionData(reference, { idField: 'uid' }));
-    return (users as Observable<UserProfile[]>).pipe(map((items) => this.sortUsers(items)));
+    return (users as Observable<UserProfile[]>).pipe(map((items) => this.visibleUsers(items)));
   }
 
   async createProfile(user: User, displayName?: string): Promise<void> {
@@ -35,6 +35,10 @@ export class UserService {
     const snapshot = await this.run(() => getDoc(reference));
     if (!snapshot.exists()) return this.createProfile(user, displayName);
     await this.syncDisplayName(reference, snapshot.data(), displayName);
+  }
+
+  private visibleUsers(users: UserProfile[]): UserProfile[] {
+    return this.sortUsers(users.filter((user) => !user.isGuest));
   }
 
   private async syncDisplayName(reference: ReturnType<typeof doc>, data: unknown, name?: string) {
@@ -61,7 +65,7 @@ export class UserService {
     return {
       uid: user.uid,
       email: user.email,
-      displayName: displayName || user.displayName || 'Guest',
+      displayName: displayName || user.displayName || 'User',
       avatarId: 'avatar-1',
       isGuest: user.isAnonymous,
       createdAt: serverTimestamp(),
