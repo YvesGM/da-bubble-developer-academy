@@ -5,6 +5,7 @@ export interface UserProfile {
   avatarId: string;
   isGuest: boolean;
   recentEmojis: string[];
+  workspaceName?: string;
   createdAt?: unknown;
   updatedAt?: unknown;
 }
