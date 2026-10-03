@@ -33,6 +33,7 @@
     [users]="users()"
     [recentEmojis]="recentEmojis()"
     placeholder="Reply in thread"
+    [focusKey]="parent().id"
     (sendRequested)="sendReply($event)"
   />
 </aside>
