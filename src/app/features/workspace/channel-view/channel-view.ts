@@ -130,6 +130,11 @@ export class ChannelView {
     this.selectedUser.set(user);
   }
 
+  openProfileById(uid: string): void {
+    const user = this.findUser(uid);
+    if (user) this.selectedUser.set(user);
+  }
+
   private channelErrorMessage(error: unknown): string {
     if (error instanceof ChannelNameTakenError) return 'This channel name is already in use.';
     return firebaseErrorMessage(error, 'The channel changes could not be saved.');
