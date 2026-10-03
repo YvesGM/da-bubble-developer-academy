@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 
 import { ChannelNameTakenError } from '../../../core/errors/channel-name-taken.error';
@@ -14,7 +14,7 @@ import { ChatPanel } from '../components/chat-panel/chat-panel';
 
 @Component({
   selector: 'app-channel-view',
-  imports: [ReactiveFormsModule, ChatPanel],
+  imports: [ReactiveFormsModule, RouterLink, ChatPanel],
   templateUrl: './channel-view.html',
   styleUrl: './channel-view.scss',
 })
@@ -27,7 +27,7 @@ export class ChannelView {
   private readonly usersService = inject(UserService);
 
   readonly channelId = toSignal(this.route.paramMap.pipe(map((params) => params.get('channelId') ?? '')), {
-    initialValue: '',
+    initialValue: this.route.snapshot.paramMap.get('channelId') ?? '',
   });
   readonly channel = toSignal(
     this.route.paramMap.pipe(
