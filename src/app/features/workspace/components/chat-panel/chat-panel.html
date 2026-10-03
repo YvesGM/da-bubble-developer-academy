@@ -1,0 +1,30 @@
+<section class="chat-panel">
+  <div class="chat-main">
+    <app-message-list
+      [target]="target()"
+      [messages]="messages()"
+      [recentEmojis]="recentEmojis()"
+      (threadRequested)="threadMessage.set($event)"
+    />
+
+    <app-message-input
+      [channels]="channels()"
+      [users]="users()"
+      [recentEmojis]="recentEmojis()"
+      [placeholder]="inputPlaceholder()"
+      (sendRequested)="sendMessage($event)"
+      (emojiUsed)="rememberEmoji($event)"
+    />
+  </div>
+
+  @if (threadMessage(); as parent) {
+    <app-thread-panel
+      [target]="target()"
+      [parent]="parent"
+      [channels]="channels()"
+      [users]="users()"
+      [recentEmojis]="recentEmojis()"
+      (closeRequested)="threadMessage.set(null)"
+    />
+  }
+</section>
