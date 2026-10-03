@@ -13,6 +13,7 @@
     [recentEmojis]="recentEmojis()"
     [compactReactions]="true"
     [showThreadAction]="false"
+    (userRequested)="userRequested.emit($event)"
   />
 
   <div class="divider">{{ replies().length }} replies</div>
@@ -25,6 +26,7 @@
         [parentMessageId]="parent().id"
         [recentEmojis]="recentEmojis()"
         [compactReactions]="true"
+        (userRequested)="userRequested.emit($event)"
       />
     }
   </div>
