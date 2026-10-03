@@ -1,0 +1,6 @@
+<span
+  class="presence"
+  [class.online]="online()"
+  [attr.aria-label]="online() ? 'Online' : 'Offline'"
+  [title]="online() ? 'Online' : 'Offline'"
+></span>
