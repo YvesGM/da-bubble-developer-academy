@@ -1,0 +1,24 @@
+<div class="backdrop" (click)="closeRequested.emit()">
+  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <header>
+      <h2>Edit workspace</h2>
+      <button type="button" aria-label="Close" (click)="closeRequested.emit()">×</button>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label>
+        Workspace name
+        <input type="text" formControlName="workspaceName" />
+      </label>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <div class="actions">
+        <button type="button" class="secondary" (click)="closeRequested.emit()">Cancel</button>
+        <button type="submit" class="primary">Save</button>
+      </div>
+    </form>
+  </section>
+</div>
