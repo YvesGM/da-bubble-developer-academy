@@ -4,6 +4,7 @@ export interface UserProfile {
   displayName: string;
   avatarId: string;
   isGuest: boolean;
+  recentEmojis: string[];
   createdAt?: unknown;
   updatedAt?: unknown;
 }
