@@ -1,0 +1,62 @@
+.backdrop {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #00000040;
+}
+
+.dialog {
+  display: grid;
+  width: min(520px, 100%);
+  padding: 28px;
+  gap: 18px;
+  border-radius: 24px;
+  background: #fff;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+input[type='search'] {
+  border: 0;
+  border-radius: 24px;
+  padding: 12px 16px;
+  outline: 1px solid #adb0d9;
+}
+
+.users {
+  display: grid;
+  max-height: 280px;
+  overflow: auto;
+  gap: 8px;
+}
+
+.users label {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  gap: 10px;
+  border-radius: 12px;
+}
+
+.primary {
+  justify-self: end;
+  border: 0;
+  border-radius: 24px;
+  padding: 11px 20px;
+  cursor: pointer;
+  background: #444df2;
+  color: #fff;
+  font-weight: 700;
+}
+
+.primary:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
