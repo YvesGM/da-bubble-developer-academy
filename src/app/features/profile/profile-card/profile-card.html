@@ -15,8 +15,7 @@
     </div>
 
     <div class="status">
-      <app-presence-indicator [userId]="user.uid" />
-      <span>Online status</span>
+      <app-presence-indicator [userId]="user.uid" [showLabel]="true" />
     </div>
 
     <div class="email">
@@ -24,7 +23,7 @@
       <span>{{ user.email }}</span>
     </div>
 
-    @if (!ownProfile) {
+    @if (!ownProfile && messageEnabled) {
       <button type="button" class="primary" (click)="messageRequested.emit(user.uid)">
         Message
       </button>
