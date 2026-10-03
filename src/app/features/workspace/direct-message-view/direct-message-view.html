@@ -15,6 +15,7 @@
   <div class="chat-area">
     <app-chat-panel
       [target]="target()"
+      [mentionUsers]="participantUsers()"
       [inputPlaceholder]="'Message ' + (partner()?.displayName ?? '')"
     />
   </div>
