@@ -4,10 +4,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Channel } from '../../../../core/models/channel.model';
 import { DirectMessage } from '../../../../core/models/direct-message.model';
 import { UserProfile } from '../../../../core/models/user-profile.model';
+import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 
 @Component({
   selector: 'app-workspace-sidebar',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, PresenceIndicator],
   templateUrl: './workspace-sidebar.html',
   styleUrl: './workspace-sidebar.scss',
 })
@@ -25,7 +26,11 @@ export class WorkspaceSidebar {
   @Output() readonly workspaceEditRequested = new EventEmitter<void>();
 
   directMessageName(dm: DirectMessage): string {
-    const partnerId = dm.participantIds.find((uid) => uid !== this.currentUserId);
-    return this.users.find((user) => user.uid === partnerId)?.displayName ?? 'Unknown user';
+    return this.users.find((user) => user.uid === this.directMessagePartnerId(dm))?.displayName
+      ?? 'Unknown user';
+  }
+
+  directMessagePartnerId(dm: DirectMessage): string {
+    return dm.participantIds.find((uid) => uid !== this.currentUserId) ?? '';
   }
 }
