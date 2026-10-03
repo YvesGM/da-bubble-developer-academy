@@ -74,6 +74,7 @@
         </div>
       </section>
 
+      @if (canManageChannel()) {
       <section class="panel">
         <h2>Add members</h2>
         @if (!currentChannel.guestAccess) {
@@ -111,6 +112,7 @@
           Add
         </button>
       </section>
+      }
     </div>
 
     <section class="message-placeholder">
