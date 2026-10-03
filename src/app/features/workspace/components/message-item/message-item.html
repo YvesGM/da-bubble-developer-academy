@@ -3,7 +3,14 @@
 
   <div class="message-body">
     <div class="meta">
-      <strong>{{ message().authorName }}</strong>
+      <button
+        type="button"
+        class="author-button"
+        [disabled]="message().authorIsGuest"
+        (click)="openAuthor()"
+      >
+        {{ message().authorName }}
+      </button>
       @if (message().authorIsGuest) {
         <span>Guest</span>
       }
