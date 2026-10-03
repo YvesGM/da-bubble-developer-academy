@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideRouter } from '@angular/router';
 
@@ -27,6 +28,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideAuth(() => getAuth()),
+    provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
   ],
 };
