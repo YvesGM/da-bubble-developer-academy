@@ -8,6 +8,7 @@ import { ConversationTarget } from '../../../../core/models/conversation.model';
 import { Message } from '../../../../core/models/message.model';
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { ThreadService } from '../../../../core/services/thread.service';
+import { UserService } from '../../../../core/services/user.service';
 import { MessageInput } from '../message-input/message-input';
 import { MessageItem } from '../message-item/message-item';
 
@@ -20,12 +21,14 @@ import { MessageItem } from '../message-item/message-item';
 export class ThreadPanel {
   private readonly auth = inject(Auth);
   private readonly threads = inject(ThreadService);
+  private readonly usersService = inject(UserService);
 
   readonly target = input.required<ConversationTarget>();
   readonly parent = input.required<Message>();
   readonly users = input<UserProfile[]>([]);
   readonly channels = input<Channel[]>([]);
   readonly recentEmojis = input<string[]>([]);
+  readonly profile = toSignal(this.usersService.observeCurrentProfile());
   @Output() readonly closeRequested = new EventEmitter<void>();
 
   readonly context = computed(() => ({ target: this.target(), messageId: this.parent().id }));
@@ -45,7 +48,7 @@ export class ThreadPanel {
     return {
       text,
       authorName: user?.displayName || (user?.isAnonymous ? 'Guest' : 'User'),
-      authorAvatarId: 'avatar-1',
+      authorAvatarId: this.profile()?.avatarId ?? 'avatar-1',
     };
   }
 }
