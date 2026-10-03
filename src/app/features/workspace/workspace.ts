@@ -37,6 +37,7 @@ export class Workspace {
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
   readonly directMessages = toSignal(this.directMessagesService.observeCurrentUserConversations(), { initialValue: [] });
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
+  readonly profile = toSignal(this.usersService.observeCurrentProfile());
   readonly showCreateChannel = signal(false);
   readonly showNewMessage = signal(false);
   readonly showProfile = signal(false);
@@ -44,6 +45,10 @@ export class Workspace {
 
   get displayName(): string {
     return this.auth.currentUser?.displayName || (this.auth.currentUser?.isAnonymous ? 'Guest' : 'User');
+  }
+
+  get avatarId(): string {
+    return this.profile()?.avatarId ?? 'avatar-1';
   }
 
   get currentUserId(): string {
