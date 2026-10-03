@@ -82,14 +82,15 @@ service cloud.firestore {
     function validMessage() {
       return request.resource.data.keys().hasOnly([
           'authorId', 'authorName', 'authorAvatarId', 'authorIsGuest',
-          'text', 'createdAt', 'updatedAt'
+          'text', 'deleted', 'createdAt', 'updatedAt'
         ])
         && request.resource.data.authorId == request.auth.uid
         && request.resource.data.authorName is string
         && request.resource.data.authorAvatarId is string
         && request.resource.data.authorIsGuest is bool
         && request.resource.data.text is string
-        && request.resource.data.text.size() > 0;
+        && request.resource.data.deleted is bool
+        && (request.resource.data.text.size() > 0 || request.resource.data.deleted == true);
     }
 
     function messageOwner() {
@@ -101,7 +102,8 @@ service cloud.firestore {
         && request.resource.data.authorName == resource.data.authorName
         && request.resource.data.authorAvatarId == resource.data.authorAvatarId
         && request.resource.data.authorIsGuest == resource.data.authorIsGuest
-        && request.resource.data.createdAt == resource.data.createdAt;
+        && request.resource.data.createdAt == resource.data.createdAt
+        && (resource.data.deleted == false || request.resource.data.deleted == true);
     }
 
     function validReaction() {
