@@ -11,6 +11,7 @@ import { ChannelService } from '../../../core/services/channel.service';
 import { DirectMessageService } from '../../../core/services/direct-message.service';
 import { UserService } from '../../../core/services/user.service';
 import { ProfileCard } from '../../profile/profile-card/profile-card';
+import { ProfileDialog } from '../../profile/profile-dialog/profile-dialog';
 import { Avatar } from '../../../shared/components/avatar/avatar';
 import {
   AddMembersDialog,
@@ -26,6 +27,7 @@ import { ChatPanel } from '../components/chat-panel/chat-panel';
     RouterLink,
     Avatar,
     ProfileCard,
+    ProfileDialog,
     AddMembersDialog,
     ChannelDetailsDialog,
     ChannelMembersDialog,
@@ -65,6 +67,7 @@ export class ChannelView {
   readonly showMembers = signal(false);
   readonly showAddMembers = signal(false);
   readonly selectedUser = signal<UserProfile | null>(null);
+  readonly showProfileEditor = signal(false);
 
   canManageChannel(): boolean {
     return !this.auth.currentUser?.isAnonymous;
@@ -88,6 +91,11 @@ export class ChannelView {
     if (!this.canManageChannel()) return;
     await this.channels.leaveChannel(this.channelId());
     await this.router.navigateByUrl('/workspace');
+  }
+
+  openProfileEditor(): void {
+    this.selectedUser.set(null);
+    this.showProfileEditor.set(true);
   }
 
   async startDirectMessage(uid: string): Promise<void> {
