@@ -28,9 +28,7 @@ export class ChannelService {
   private readonly injector = inject(EnvironmentInjector);
 
   observeCurrentUserChannels(): Observable<Channel[]> {
-    const uid = this.currentUserId();
-    const reference = this.channelsCollection();
-    const request = this.runSync(() => query(reference, where('memberIds', 'array-contains', uid)));
+    const request = this.currentUserChannelQuery();
     const channels = this.runSync(() => collectionData(request, { idField: 'id' }));
     return (channels as Observable<Channel[]>).pipe(map((items) => this.sortChannels(items)));
   }
@@ -56,17 +54,35 @@ export class ChannelService {
     await this.run(() => this.updateChannelTransaction(channelRef, input, name));
   }
 
-  async addMembers(channelId: string, memberIds: string[]): Promise<void> {
-    if (!memberIds.length) return;
+  async addMembers(channelId: string, memberIds: string[], guestAccess: boolean): Promise<void> {
+    if (!memberIds.length && !guestAccess) return;
     const reference = this.channelReference(channelId);
-    const changes = { memberIds: arrayUnion(...memberIds), updatedAt: serverTimestamp() };
+    const changes = this.memberChanges(memberIds, guestAccess);
     await this.run(() => updateDoc(reference, changes));
   }
 
   async leaveChannel(channelId: string): Promise<void> {
+    if (this.auth.currentUser?.isAnonymous) return;
     const reference = this.channelReference(channelId);
     const changes = { memberIds: arrayRemove(this.currentUserId()), updatedAt: serverTimestamp() };
     await this.run(() => updateDoc(reference, changes));
+  }
+
+  private currentUserChannelQuery() {
+    const reference = this.channelsCollection();
+    if (this.auth.currentUser?.isAnonymous) {
+      return this.runSync(() => query(reference, where('guestAccess', '==', true)));
+    }
+    return this.runSync(() =>
+      query(reference, where('memberIds', 'array-contains', this.currentUserId())),
+    );
+  }
+
+  private memberChanges(memberIds: string[], guestAccess: boolean) {
+    const changes: Record<string, unknown> = { updatedAt: serverTimestamp() };
+    if (memberIds.length) changes['memberIds'] = arrayUnion(...memberIds);
+    if (guestAccess) changes['guestAccess'] = true;
+    return changes;
   }
 
   private async createChannelTransaction(
@@ -122,7 +138,8 @@ export class ChannelService {
       nameKey: this.nameKey(name),
       description: input.description.trim(),
       creatorId,
-      memberIds: this.uniqueMembers(creatorId, input.memberIds),
+      memberIds: this.registeredMembers(creatorId, input.memberIds),
+      guestAccess: this.auth.currentUser?.isAnonymous ? true : input.guestAccess,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
@@ -142,8 +159,9 @@ export class ChannelService {
     return { channelId, normalizedName: data.normalizedName };
   }
 
-  private uniqueMembers(creatorId: string, memberIds: string[]): string[] {
-    return [...new Set([creatorId, ...memberIds].filter(Boolean))];
+  private registeredMembers(creatorId: string, memberIds: string[]): string[] {
+    const ids = this.auth.currentUser?.isAnonymous ? memberIds : [creatorId, ...memberIds];
+    return [...new Set(ids.filter(Boolean))];
   }
 
   private cleanName(name: string): string {
