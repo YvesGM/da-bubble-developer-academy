@@ -38,9 +38,7 @@ export class AuthService {
   }
 
   async loginAsGuest(): Promise<UserCredential> {
-    const credential = await this.run(() => signInAnonymously(this.auth));
-    await this.users.ensureProfile(credential.user, 'Guest');
-    return credential;
+    return this.run(() => signInAnonymously(this.auth));
   }
 
   async loginWithGoogle(): Promise<UserCredential> {
