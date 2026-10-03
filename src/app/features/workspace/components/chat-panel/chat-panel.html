@@ -12,6 +12,7 @@
       [users]="users()"
       [recentEmojis]="recentEmojis()"
       [placeholder]="inputPlaceholder()"
+      [focusKey]="target().id"
       (sendRequested)="sendMessage($event)"
       (emojiUsed)="rememberEmoji($event)"
     />
