@@ -20,6 +20,9 @@
       @if (form.controls.password.touched && form.controls.password.invalid) {
         <p class="field-error">Please enter your password.</p>
       }
+      @if (credentialError()) {
+        <p class="field-error">{{ credentialError() }}</p>
+      }
 
       @if (errorMessage()) {
         <p class="form-error">{{ errorMessage() }}</p>
