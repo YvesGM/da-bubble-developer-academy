@@ -118,6 +118,7 @@
     <section class="message-placeholder">
       <app-chat-panel
         [target]="target()"
+        [mentionUsers]="members()"
         [inputPlaceholder]="'Message #' + currentChannel.name"
       />
     </section>
