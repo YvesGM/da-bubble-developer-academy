@@ -5,6 +5,7 @@
     [value]="query()"
     (input)="query.set($any($event.target).value)"
     (focus)="focused.set(true)"
+    (blur)="focused.set(false)"
     aria-label="Search messages"
   />
 
