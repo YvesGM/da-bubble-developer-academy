@@ -26,6 +26,9 @@ export class MessageInput implements AfterViewInit {
   @Input() recentEmojis: string[] = [];
   @Input() placeholder = 'Write a message';
   @Input() autoFocus = true;
+  @Input() set focusKey(value: string) {
+    if (value && this.autoFocus) queueMicrotask(() => this.field?.nativeElement.focus());
+  }
   @Output() readonly sendRequested = new EventEmitter<string>();
   @Output() readonly emojiUsed = new EventEmitter<string>();
 
