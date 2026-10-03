@@ -24,6 +24,9 @@ export class DirectMessageView {
     this.route.paramMap.pipe(map((params) => params.get('dmId') ?? '')),
     { initialValue: this.route.snapshot.paramMap.get('dmId') ?? '' },
   );
+  readonly participantUsers = computed(() =>
+    this.users().filter((user) => this.dmId().split('__').includes(user.uid)),
+  );
   readonly partner = computed(() => this.findPartner());
   readonly target = computed<ConversationTarget>(() => ({
     type: 'directMessage',
@@ -31,8 +34,7 @@ export class DirectMessageView {
   }));
 
   private findPartner() {
-    const ids = this.dmId().split('__');
-    const partnerId = ids.find((uid) => uid !== this.auth.currentUser?.uid);
+    const partnerId = this.dmId().split('__').find((uid) => uid !== this.auth.currentUser?.uid);
     return this.users().find((user) => user.uid === partnerId);
   }
 }
