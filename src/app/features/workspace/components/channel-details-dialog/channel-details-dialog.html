@@ -1,0 +1,33 @@
+<div class="backdrop" (click)="closeRequested.emit()">
+  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <header>
+      <h2># Channel details</h2>
+      <button type="button" aria-label="Close" (click)="closeRequested.emit()">×</button>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label>
+        Channel name
+        <input type="text" formControlName="name" />
+      </label>
+      @if (form.controls.name.touched && form.controls.name.invalid) {
+        <p class="error">Please enter a channel name.</p>
+      }
+
+      <label>
+        Description
+        <textarea rows="4" formControlName="description"></textarea>
+      </label>
+
+      <div class="creator">
+        <strong>Created by</strong>
+        <span>{{ creatorName }}</span>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="danger" (click)="leaveRequested.emit()">Leave channel</button>
+        <button type="submit" class="primary">Save</button>
+      </div>
+    </form>
+  </section>
+</div>
