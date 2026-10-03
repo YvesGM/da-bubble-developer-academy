@@ -1,5 +1,9 @@
 <section class="message-list" aria-live="polite">
-  @for (message of messages; track message.id) {
+  @for (message of messages; track message.id; let index = $index) {
+    @if (showDateSeparator(index)) {
+      <div class="date-separator"><span>{{ dateLabel(message) }}</span></div>
+    }
+
     <app-message-item
       [target]="target"
       [message]="message"
@@ -9,8 +13,8 @@
     />
   } @empty {
     <div class="empty-state">
-      <strong>No messages yet.</strong>
-      <span>Start the conversation below.</span>
+      <strong>{{ emptyTitle }}</strong>
+      <span>{{ emptyText }}</span>
     </div>
   }
 </section>
