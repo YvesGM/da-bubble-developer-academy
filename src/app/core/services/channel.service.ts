@@ -165,7 +165,7 @@ export class ChannelService {
   }
 
   private cleanName(name: string): string {
-    return name.trim().replace(/\s+/g, ' ');
+    return name.trim().replace(/^#+\s*/, '').replace(/\s+/g, ' ');
   }
 
   private normalizeName(name: string): string {
