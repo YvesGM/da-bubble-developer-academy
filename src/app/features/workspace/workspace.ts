@@ -54,8 +54,17 @@ export class Workspace {
     return this.auth.currentUser?.isAnonymous ?? false;
   }
 
+  get conversationOpen(): boolean {
+    return /\/workspace\/(channel|dm)\//.test(this.router.url);
+  }
+
   async selectCreatedChannel(channelId: string): Promise<void> {
     this.showCreateChannel.set(false);
+    await this.router.navigate(['/workspace/channel', channelId]);
+  }
+
+  async openChannel(channelId: string): Promise<void> {
+    this.showNewMessage.set(false);
     await this.router.navigate(['/workspace/channel', channelId]);
   }
 
