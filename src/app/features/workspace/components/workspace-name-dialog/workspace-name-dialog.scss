@@ -1,0 +1,57 @@
+.backdrop {
+  position: fixed;
+  z-index: 55;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #00000040;
+}
+
+.dialog {
+  width: min(440px, 100%);
+  padding: 28px;
+  border-radius: 24px;
+  background: #fff;
+}
+
+header,
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+form,
+label {
+  display: grid;
+  gap: 14px;
+}
+
+input {
+  border: 0;
+  border-radius: 16px;
+  padding: 12px 16px;
+  outline: 1px solid #adb0d9;
+}
+
+button {
+  border: 0;
+  border-radius: 24px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.primary {
+  background: #444df2;
+  color: #fff;
+}
+
+.secondary {
+  background: #eceefe;
+  color: #444df2;
+}
+
+.error {
+  color: #e61c40;
+}
