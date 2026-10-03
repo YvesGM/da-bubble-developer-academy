@@ -10,7 +10,9 @@
       </div>
       <div class="header-actions">
         <button type="button" class="secondary" (click)="startEditing()">Edit</button>
-        <button type="button" class="danger" (click)="leaveChannel()">Leave</button>
+        @if (canLeaveChannel()) {
+          <button type="button" class="danger" (click)="leaveChannel()">Leave</button>
+        }
       </div>
     </header>
 
@@ -43,6 +45,18 @@
       <section class="panel">
         <h2>Members</h2>
         <div class="member-list">
+          @if (currentChannel.guestAccess) {
+            <div class="member">
+              <span class="avatar">G</span>
+              <div>
+                <strong>Guest</strong>
+                @if (isGuestCurrentUser()) {
+                  <span>You</span>
+                }
+              </div>
+            </div>
+          }
+
           @for (member of members(); track member.uid) {
             <div class="member">
               <span class="avatar">{{ member.displayName.charAt(0).toUpperCase() }}</span>
@@ -59,6 +73,17 @@
 
       <section class="panel">
         <h2>Add members</h2>
+        @if (!currentChannel.guestAccess) {
+          <label class="user-option">
+            <input
+              type="checkbox"
+              [checked]="addGuestAccess()"
+              (change)="toggleGuestAccess()"
+            />
+            <span>Guest</span>
+          </label>
+        }
+
         @for (user of availableUsers(); track user.uid) {
           <label class="user-option">
             <input
@@ -68,13 +93,16 @@
             />
             <span>{{ user.displayName }}</span>
           </label>
-        } @empty {
+        }
+
+        @if (currentChannel.guestAccess && availableUsers().length === 0) {
           <p class="empty">All users are already members.</p>
         }
+
         <button
           type="button"
           class="primary add-button"
-          [disabled]="selectedMemberIds().size === 0"
+          [disabled]="selectedMemberIds().size === 0 && !addGuestAccess()"
           (click)="addMembers()"
         >
           Add
