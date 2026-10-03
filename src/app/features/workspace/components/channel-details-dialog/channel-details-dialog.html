@@ -19,6 +19,10 @@
         <textarea rows="4" formControlName="description"></textarea>
       </label>
 
+      @if (errorMessage) {
+        <p class="error">{{ errorMessage }}</p>
+      }
+
       <div class="creator">
         <strong>Created by</strong>
         <span>{{ creatorName }}</span>
