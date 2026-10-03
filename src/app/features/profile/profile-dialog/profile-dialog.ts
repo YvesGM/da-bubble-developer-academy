@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { take } from 'rxjs';
 
 import { AVATAR_IDS } from '../../../core/constants/avatar.constants';
 import { UserService } from '../../../core/services/user.service';
@@ -27,10 +28,9 @@ export class ProfileDialog {
   });
 
   constructor() {
-    const subscription = this.users.observeCurrentProfile().subscribe((profile) => {
+    this.users.observeCurrentProfile().pipe(take(1)).subscribe((profile) => {
       if (!profile) return;
       this.form.setValue({ displayName: profile.displayName, avatarId: profile.avatarId });
-      subscription.unsubscribe();
     });
   }
 
