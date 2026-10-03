@@ -65,6 +65,10 @@ export class MessageItem {
     return this.auth.currentUser?.uid === this.message().authorId;
   }
 
+  canInteract(): boolean {
+    return !this.message().deleted;
+  }
+
   startEditing(): void {
     this.editText.set(this.message().text);
     this.editing.set(true);
