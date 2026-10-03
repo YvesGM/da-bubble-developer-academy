@@ -1,5 +1,6 @@
 <section class="dm-view">
   <header>
+    <a class="mobile-back" routerLink="/workspace" aria-label="Back to conversations">←</a>
     @if (partner(); as currentPartner) {
       <div class="avatar">{{ currentPartner.displayName.charAt(0).toUpperCase() }}</div>
       <div>
