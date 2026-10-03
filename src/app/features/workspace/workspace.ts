@@ -25,7 +25,7 @@ export class Workspace {
   readonly showCreateChannel = signal(false);
 
   get displayName(): string {
-    return this.auth.currentUser?.displayName || (this.auth.currentUser?.isAnonymous ? 'Gast' : 'User');
+    return this.auth.currentUser?.displayName || (this.auth.currentUser?.isAnonymous ? 'Guest' : 'User');
   }
 
   openChannelDialog(): void {
