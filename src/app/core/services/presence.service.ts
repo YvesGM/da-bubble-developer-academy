@@ -22,7 +22,9 @@ export class PresenceService {
   start(): void {
     if (this.connectedUnsubscribe || !this.registeredUserId()) return;
     const connectedRef = this.dbRef('.info/connected');
-    this.connectedUnsubscribe = onValue(connectedRef, (snapshot) => this.handleConnection(snapshot));
+    this.connectedUnsubscribe = this.runSync(() =>
+      onValue(connectedRef, (snapshot) => void this.handleConnection(snapshot)),
+    );
   }
 
   async stop(): Promise<void> {
@@ -36,7 +38,9 @@ export class PresenceService {
   observeOnline(uid: string): Observable<boolean> {
     return new Observable((subscriber) => {
       const reference = this.dbRef(`presence/${uid}/connections`);
-      const unsubscribe = onValue(reference, (snapshot) => subscriber.next(snapshot.exists()));
+      const unsubscribe = this.runSync(() =>
+        onValue(reference, (snapshot) => subscriber.next(snapshot.exists())),
+      );
       return unsubscribe;
     });
   }
