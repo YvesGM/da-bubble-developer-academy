@@ -1,4 +1,9 @@
-import { Injectable, inject } from '@angular/core';
+import {
+  EnvironmentInjector,
+  Injectable,
+  inject,
+  runInInjectionContext,
+} from '@angular/core';
 import {
   Auth,
   GoogleAuthProvider,
@@ -17,31 +22,39 @@ import { UserService } from './user.service';
 export class AuthService {
   private readonly auth = inject(Auth);
   private readonly users = inject(UserService);
+  private readonly injector = inject(EnvironmentInjector);
 
   async login(email: string, password: string): Promise<UserCredential> {
-    return signInWithEmailAndPassword(this.auth, email, password);
+    const credential = await this.run(() => signInWithEmailAndPassword(this.auth, email, password));
+    await this.users.ensureProfile(credential.user);
+    return credential;
   }
 
   async register(name: string, email: string, password: string): Promise<UserCredential> {
-    const credential = await createUserWithEmailAndPassword(this.auth, email, password);
-    await updateProfile(credential.user, { displayName: name });
-    await this.users.upsertProfile(credential.user, name);
+    const credential = await this.run(() => createUserWithEmailAndPassword(this.auth, email, password));
+    await this.run(() => updateProfile(credential.user, { displayName: name }));
+    await this.users.createProfile(credential.user, name);
     return credential;
   }
 
   async loginAsGuest(): Promise<UserCredential> {
-    const credential = await signInAnonymously(this.auth);
-    await this.users.upsertProfile(credential.user, 'Gast');
+    const credential = await this.run(() => signInAnonymously(this.auth));
+    await this.users.ensureProfile(credential.user, 'Gast');
     return credential;
   }
 
   async loginWithGoogle(): Promise<UserCredential> {
-    const credential = await signInWithPopup(this.auth, new GoogleAuthProvider());
-    await this.users.upsertProfile(credential.user);
+    const provider = new GoogleAuthProvider();
+    const credential = await this.run(() => signInWithPopup(this.auth, provider));
+    await this.users.ensureProfile(credential.user);
     return credential;
   }
 
   async logout(): Promise<void> {
-    await signOut(this.auth);
+    await this.run(() => signOut(this.auth));
+  }
+
+  private run<T>(action: () => Promise<T>): Promise<T> {
+    return runInInjectionContext(this.injector, action);
   }
 }
