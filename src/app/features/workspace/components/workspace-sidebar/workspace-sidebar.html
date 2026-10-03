@@ -1,26 +1,50 @@
-<aside class="sidebar">
-  <div class="section-heading">
-    <h2>Channels</h2>
-    <button type="button" aria-label="Create channel" (click)="createRequested.emit()">+</button>
+<aside class="sidebar" [class.collapsed]="collapsed">
+  <div class="sidebar-top">
+    <strong>Workspace</strong>
+    <button type="button" aria-label="Toggle menu" (click)="collapseRequested.emit()">
+      {{ collapsed ? '›' : '‹' }}
+    </button>
   </div>
 
-  <nav aria-label="Channels">
-    @for (channel of channels; track channel.id) {
-      <a
-        [routerLink]="['/workspace/channel', channel.id]"
-        routerLinkActive="active"
-        class="channel-link"
-      >
-        <span>#</span>
-        {{ channel.name }}
-      </a>
-    } @empty {
-      <p class="empty">No channels yet.</p>
-    }
-  </nav>
+  @if (!collapsed) {
+    <div class="section-heading">
+      <h2>Channels</h2>
+      <button type="button" aria-label="Create channel" (click)="createRequested.emit()">+</button>
+    </div>
 
-  <div class="direct-messages">
-    <h2>Direct messages</h2>
-    <p class="empty">Coming next.</p>
-  </div>
+    <nav aria-label="Channels">
+      @for (channel of channels; track channel.id) {
+        <a [routerLink]="['/workspace/channel', channel.id]" routerLinkActive="active" class="channel-link">
+          <span>#</span>
+          {{ channel.name }}
+        </a>
+      } @empty {
+        <p class="empty">No channels yet.</p>
+      }
+    </nav>
+
+    <div class="direct-messages">
+      <div class="section-heading">
+        <h2>Direct messages</h2>
+        @if (!guest) {
+          <button type="button" aria-label="Start direct message" (click)="newMessageRequested.emit()">+</button>
+        }
+      </div>
+
+      @if (guest) {
+        <p class="empty">Direct messages require an account.</p>
+      } @else {
+        <nav aria-label="Direct messages">
+          @for (dm of directMessages; track dm.id) {
+            <a [routerLink]="['/workspace/dm', dm.id]" routerLinkActive="active" class="channel-link">
+              <span>●</span>
+              {{ directMessageName(dm) }}
+            </a>
+          } @empty {
+            <p class="empty">No direct messages yet.</p>
+          }
+        </nav>
+      }
+    </div>
+  }
 </aside>
