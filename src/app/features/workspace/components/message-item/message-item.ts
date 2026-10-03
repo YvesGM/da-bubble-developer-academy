@@ -11,7 +11,7 @@ import {
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
-import { switchMap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 
 import { DEFAULT_RECENT_EMOJIS } from '../../../../core/constants/emoji.constants';
 import { ConversationTarget } from '../../../../core/models/conversation.model';
@@ -19,6 +19,7 @@ import { Message } from '../../../../core/models/message.model';
 import { ReactionGroup } from '../../../../core/models/reaction.model';
 import { MessageService } from '../../../../core/services/message.service';
 import { ReactionService } from '../../../../core/services/reaction.service';
+import { ThreadService } from '../../../../core/services/thread.service';
 import { UserService } from '../../../../core/services/user.service';
 import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
 
@@ -32,6 +33,7 @@ export class MessageItem {
   private readonly auth = inject(Auth);
   private readonly messages = inject(MessageService);
   private readonly reactionsService = inject(ReactionService);
+  private readonly threadsService = inject(ThreadService);
   private readonly usersService = inject(UserService);
 
   readonly target = input.required<ConversationTarget>();
@@ -62,6 +64,14 @@ export class MessageItem {
   );
   readonly visibleReactions = computed(() =>
     this.reactions().slice(0, this.reactionLimit()),
+  );
+  readonly replies = toSignal(
+    toObservable(this.reactionContext).pipe(
+      switchMap((context) =>
+        context.replyId ? of([] as Message[]) : this.threadsService.observeReplies(context.target, context.messageId),
+      ),
+    ),
+    { initialValue: [] as Message[] },
   );
 
   @HostListener('window:resize')
