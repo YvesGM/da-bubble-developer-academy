@@ -5,7 +5,6 @@ import {
   addDoc,
   collection,
   collectionData,
-  deleteDoc,
   doc,
   orderBy,
   query,
@@ -41,7 +40,12 @@ export class MessageService {
   }
 
   async deleteMessage(target: ConversationTarget, messageId: string): Promise<void> {
-    await this.run(() => deleteDoc(this.messageReference(target, messageId)));
+    const reference = this.messageReference(target, messageId);
+    await this.run(() => updateDoc(reference, {
+      text: '',
+      deleted: true,
+      updatedAt: serverTimestamp(),
+    }));
   }
 
   private messageData(input: CreateMessageInput) {
@@ -53,6 +57,7 @@ export class MessageService {
       authorAvatarId: user.isAnonymous ? 'avatar-1' : input.authorAvatarId,
       authorIsGuest: user.isAnonymous,
       text: input.text.trim(),
+      deleted: false,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
