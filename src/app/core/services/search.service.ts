@@ -49,7 +49,7 @@ export class SearchService {
     return this.messages.observeMessages(context.target).pipe(
       map((messages) =>
         messages
-          .filter((message) => message.text.toLowerCase().includes(query))
+          .filter((message) => !message.deleted && message.text.toLowerCase().includes(query))
           .map((message) => ({ ...context, message })),
       ),
     );
