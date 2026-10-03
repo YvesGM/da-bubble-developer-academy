@@ -1,0 +1,90 @@
+.backdrop {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #00000040;
+}
+
+.dialog {
+  width: min(480px, 100%);
+  padding: 28px;
+  border-radius: 24px;
+  background: #fff;
+}
+
+header,
+.actions,
+.avatar-grid {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+header {
+  justify-content: space-between;
+}
+
+form {
+  display: grid;
+  gap: 18px;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+
+input {
+  border: 0;
+  border-radius: 16px;
+  padding: 12px 16px;
+  outline: 1px solid #adb0d9;
+}
+
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: #eceefe;
+}
+
+.avatar.selected {
+  outline: 3px solid #444df2;
+}
+
+.actions {
+  justify-content: flex-end;
+}
+
+.actions button,
+header button {
+  border: 0;
+  border-radius: 24px;
+  padding: 10px 16px;
+}
+
+.primary {
+  background: #444df2;
+  color: #fff;
+}
+
+.secondary {
+  background: #eceefe;
+  color: #444df2;
+}
+
+.error {
+  margin: 0;
+  color: #d61f1f;
+}
