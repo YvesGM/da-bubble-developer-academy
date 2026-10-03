@@ -65,7 +65,7 @@ service cloud.firestore {
     }
 
     match /channels/{channelId} {
-      allow read: if channelMember(channelId);
+      allow read: if signedIn() && request.auth.uid in resource.data.memberIds;
       allow create: if signedIn()
         && validChannel()
         && request.auth.uid == request.resource.data.creatorId
