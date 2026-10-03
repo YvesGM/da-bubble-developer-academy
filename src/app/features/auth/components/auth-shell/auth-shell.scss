@@ -1,0 +1,140 @@
+@use '../../../../../styles/tokens' as tokens;
+@use '../../../../../styles/breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.auth-shell {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: tokens.$background;
+}
+
+.auth-shell-header {
+  position: absolute;
+  z-index: 2;
+  top: 42px;
+  right: 48px;
+  left: 48px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.auth-brand-mark {
+  width: 56px;
+  height: 56px;
+}
+
+.auth-brand-name {
+  width: 145px;
+  height: auto;
+}
+
+.auth-signup-prompt {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+  font-size: 18px;
+}
+
+.auth-signup-prompt a {
+  color: tokens.$purple-2;
+  text-decoration: none;
+}
+
+.auth-signup-prompt a:hover {
+  color: tokens.$purple-1;
+  font-weight: 700;
+}
+
+.auth-shell-stage {
+  display: grid;
+  min-height: 100dvh;
+  padding: 110px 24px 90px;
+  place-items: center;
+}
+
+.auth-shell-footer {
+  position: absolute;
+  right: 0;
+  bottom: 38px;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  gap: 42px;
+  color: tokens.$purple-2;
+  font-size: 18px;
+}
+
+@include bp.mobile {
+  .auth-shell {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    overflow: auto;
+  }
+
+  .auth-shell-header {
+    position: static;
+    padding: 24px 20px 12px;
+  }
+
+  .auth-brand {
+    gap: 10px;
+  }
+
+  .auth-brand-mark {
+    width: 48px;
+    height: 48px;
+  }
+
+  .auth-brand-name {
+    width: 126px;
+  }
+
+  .auth-signup-prompt {
+    display: none;
+  }
+
+  .auth-shell-stage {
+    min-height: auto;
+    padding: 18px 0 32px;
+  }
+
+  .auth-shell-footer {
+    position: static;
+    padding: 0 16px 24px;
+    gap: 28px;
+    font-size: 16px;
+  }
+}
+
+@include bp.widescreen {
+  .auth-shell-header {
+    top: 75px;
+    right: 75px;
+    left: 75px;
+  }
+
+  .auth-brand-mark {
+    width: 70px;
+    height: 70px;
+  }
+
+  .auth-brand-name {
+    width: 157px;
+  }
+
+  .auth-shell-footer {
+    bottom: 60px;
+  }
+}
