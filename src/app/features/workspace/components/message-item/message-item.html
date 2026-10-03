@@ -37,7 +37,9 @@
       </button>
 
       @if (!parentMessageId() && showThreadAction()) {
-        <button type="button" (click)="threadRequested.emit(message())">Thread</button>
+        <button type="button" (click)="threadRequested.emit(message())">
+          Thread@if (replies().length) { ({{ replies().length }}) }
+        </button>
       }
 
       @if (isOwnMessage() && !parentMessageId()) {
