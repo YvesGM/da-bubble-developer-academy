@@ -43,6 +43,7 @@ export class MessageItem {
   readonly compactReactions = input(false);
   readonly showThreadAction = input(true);
   @Output() readonly threadRequested = new EventEmitter<Message>();
+  @Output() readonly userRequested = new EventEmitter<string>();
 
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly editing = signal(false);
@@ -81,6 +82,10 @@ export class MessageItem {
 
   isOwnMessage(): boolean {
     return this.auth.currentUser?.uid === this.message().authorId;
+  }
+
+  openAuthor(): void {
+    if (!this.message().authorIsGuest) this.userRequested.emit(this.message().authorId);
   }
 
   canInteract(): boolean {
