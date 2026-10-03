@@ -14,7 +14,7 @@ import { UserService } from '../../../../core/services/user.service';
   styleUrl: './channel-create-dialog.scss',
 })
 export class ChannelCreateDialog {
-  private readonly auth = inject(Auth);
+  readonly auth = inject(Auth);
   private readonly channels = inject(ChannelService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly userService = inject(UserService);
