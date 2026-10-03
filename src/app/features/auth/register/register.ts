@@ -33,14 +33,19 @@ export class Register {
 
   async submit(): Promise<void> {
     if (this.form.invalid) return this.markInvalid();
-    const value = this.form.getRawValue();
-    await this.runRegistration(value);
+    const { name, email, password, avatarId } = this.form.getRawValue();
+    await this.runRegistration(name, email, password, avatarId);
   }
 
-  private async runRegistration(value: ReturnType<typeof this.form.getRawValue>): Promise<void> {
+  private async runRegistration(
+    name: string,
+    email: string,
+    password: string,
+    avatarId: string,
+  ): Promise<void> {
     this.startSubmit();
     try {
-      await this.auth.register(value.name, value.email, value.password, value.avatarId);
+      await this.auth.register(name, email, password, avatarId);
       await this.router.navigateByUrl('/workspace');
     } catch (error) {
       this.errorMessage.set(firebaseErrorMessage(error, 'Registration failed.'));
