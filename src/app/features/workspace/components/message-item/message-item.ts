@@ -38,6 +38,7 @@ export class MessageItem {
   readonly parentMessageId = input('');
   readonly recentEmojis = input<string[]>([...DEFAULT_RECENT_EMOJIS]);
   readonly compactReactions = input(false);
+  readonly showThreadAction = input(true);
   @Output() readonly threadRequested = new EventEmitter<Message>();
 
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
