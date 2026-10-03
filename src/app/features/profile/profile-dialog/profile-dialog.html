@@ -1,0 +1,40 @@
+<div class="backdrop" (click)="closeRequested.emit()">
+  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <header>
+      <h2>Edit profile</h2>
+      <button type="button" aria-label="Close profile" (click)="closeRequested.emit()">×</button>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+      <label>
+        Name
+        <input type="text" formControlName="displayName" />
+      </label>
+
+      <fieldset>
+        <legend>Avatar</legend>
+        <div class="avatar-grid">
+          @for (avatarId of avatarIds; track avatarId; let index = $index) {
+            <button
+              type="button"
+              class="avatar"
+              [class.selected]="form.controls.avatarId.value === avatarId"
+              (click)="selectAvatar(avatarId)"
+            >
+              {{ index + 1 }}
+            </button>
+          }
+        </div>
+      </fieldset>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <div class="actions">
+        <button type="button" class="secondary" (click)="closeRequested.emit()">Cancel</button>
+        <button type="submit" class="primary" [disabled]="saving()">Save</button>
+      </div>
+    </form>
+  </section>
+</div>
