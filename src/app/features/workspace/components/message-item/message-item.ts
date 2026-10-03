@@ -21,6 +21,7 @@ import { MessageService } from '../../../../core/services/message.service';
 import { ReactionService } from '../../../../core/services/reaction.service';
 import { ThreadService } from '../../../../core/services/thread.service';
 import { UserService } from '../../../../core/services/user.service';
+import { messageTime } from '../../../../core/utils/timestamp.util';
 import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
 
 @Component({
@@ -86,6 +87,10 @@ export class MessageItem {
 
   openAuthor(): void {
     if (!this.message().authorIsGuest) this.userRequested.emit(this.message().authorId);
+  }
+
+  timeLabel(): string {
+    return messageTime(this.message().createdAt);
   }
 
   canInteract(): boolean {
