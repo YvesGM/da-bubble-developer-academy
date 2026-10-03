@@ -40,9 +40,19 @@
   .workspace-body,
   .workspace-body.collapsed {
     grid-template-columns: 1fr;
+    padding: 8px;
+  }
+
+  .workspace-body.conversation-open app-workspace-sidebar {
+    display: none;
+  }
+
+  .workspace-body:not(.conversation-open) .workspace-content {
+    display: none;
   }
 
   .workspace-content {
-    min-height: 420px;
+    min-height: calc(100dvh - 150px);
+    border-radius: 18px;
   }
 }
