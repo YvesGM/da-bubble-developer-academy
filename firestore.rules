@@ -76,7 +76,18 @@ service cloud.firestore {
         ])
         && request.resource.data.participantIds is list
         && request.resource.data.participantIds.size() == 2
+        && request.resource.data.participantIds[0] != request.resource.data.participantIds[1]
         && request.auth.uid in request.resource.data.participantIds;
+    }
+
+    function validAuthorSnapshot() {
+      let profile = get(/databases/$(database)/documents/users/$(request.auth.uid));
+      return anonymousUser()
+        ? request.resource.data.authorIsGuest == true
+          && request.resource.data.authorName == 'Guest'
+        : request.resource.data.authorIsGuest == false
+          && request.resource.data.authorName == profile.data.displayName
+          && request.resource.data.authorAvatarId == profile.data.avatarId;
     }
 
     function validMessage() {
@@ -88,6 +99,7 @@ service cloud.firestore {
         && request.resource.data.authorName is string
         && request.resource.data.authorAvatarId is string
         && request.resource.data.authorIsGuest is bool
+        && validAuthorSnapshot()
         && request.resource.data.text is string
         && request.resource.data.deleted is bool
         && (request.resource.data.text.size() > 0 || request.resource.data.deleted == true);
