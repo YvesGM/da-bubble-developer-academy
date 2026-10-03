@@ -99,7 +99,6 @@ service cloud.firestore {
         && request.resource.data.authorName is string
         && request.resource.data.authorAvatarId is string
         && request.resource.data.authorIsGuest is bool
-        && validAuthorSnapshot()
         && request.resource.data.text is string
         && request.resource.data.deleted is bool
         && (request.resource.data.text.size() > 0 || request.resource.data.deleted == true);
@@ -156,7 +155,9 @@ service cloud.firestore {
 
       match /messages/{messageId} {
         allow read: if channelAccess(channelId);
-        allow create: if channelAccess(channelId) && validMessage();
+        allow create: if channelAccess(channelId)
+          && validMessage()
+          && validAuthorSnapshot();
         allow update: if channelAccess(channelId)
           && messageOwner()
           && validMessage()
@@ -172,7 +173,9 @@ service cloud.firestore {
 
         match /replies/{replyId} {
           allow read: if channelAccess(channelId);
-          allow create: if channelAccess(channelId) && validMessage();
+          allow create: if channelAccess(channelId)
+            && validMessage()
+            && validAuthorSnapshot();
           allow update: if channelAccess(channelId)
             && messageOwner()
             && validMessage()
@@ -204,7 +207,9 @@ service cloud.firestore {
 
       match /messages/{messageId} {
         allow read: if directMessageAccess(dmId);
-        allow create: if directMessageAccess(dmId) && validMessage();
+        allow create: if directMessageAccess(dmId)
+          && validMessage()
+          && validAuthorSnapshot();
         allow update: if directMessageAccess(dmId)
           && messageOwner()
           && validMessage()
@@ -220,7 +225,9 @@ service cloud.firestore {
 
         match /replies/{replyId} {
           allow read: if directMessageAccess(dmId);
-          allow create: if directMessageAccess(dmId) && validMessage();
+          allow create: if directMessageAccess(dmId)
+            && validMessage()
+            && validAuthorSnapshot();
           allow update: if directMessageAccess(dmId)
             && messageOwner()
             && validMessage()
