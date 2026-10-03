@@ -5,11 +5,16 @@
     (logoutRequested)="logout()"
   />
 
-  <div class="workspace-body" [class.collapsed]="sidebarCollapsed()">
+  <div
+    class="workspace-body"
+    [class.collapsed]="sidebarCollapsed()"
+    [class.conversation-open]="conversationOpen"
+  >
     <app-workspace-sidebar
       [channels]="channels()"
       [directMessages]="directMessages()"
       [users]="users()"
+      [channels]="channels()"
       [currentUserId]="currentUserId"
       [guest]="isGuest"
       [collapsed]="sidebarCollapsed()"
@@ -36,6 +41,7 @@
       [currentUserId]="currentUserId"
       (closeRequested)="showNewMessage.set(false)"
       (userSelected)="startDirectMessage($event)"
+      (channelSelected)="openChannel($event)"
     />
   }
 
