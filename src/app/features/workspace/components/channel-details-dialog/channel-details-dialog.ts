@@ -16,6 +16,7 @@ export class ChannelDetailsDialog {
     this.form.setValue({ name: value.name, description: value.description });
   }
   @Input() creatorName = 'Unknown user';
+  @Input() errorMessage = '';
   @Output() readonly closeRequested = new EventEmitter<void>();
   @Output() readonly saveRequested = new EventEmitter<UpdateChannelInput>();
   @Output() readonly leaveRequested = new EventEmitter<void>();
