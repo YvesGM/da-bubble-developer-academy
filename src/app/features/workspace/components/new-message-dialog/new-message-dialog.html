@@ -7,22 +7,36 @@
 
     <input
       type="search"
-      placeholder="Find a person"
+      placeholder="Type @ for people or # for channels"
       [value]="query()"
       (input)="query.set($any($event.target).value)"
     />
 
     <div class="user-list">
-      @for (user of filteredUsers(); track user.uid) {
-        <button type="button" class="user" (click)="userSelected.emit(user.uid)">
-          <span>{{ user.displayName.charAt(0).toUpperCase() }}</span>
-          <div>
-            <strong>{{ user.displayName }}</strong>
-            <small>{{ user.email }}</small>
-          </div>
-        </button>
-      } @empty {
-        <p>No matching users.</p>
+      @if (mode() === '#') {
+        @for (channel of filteredChannels(); track channel.id) {
+          <button type="button" class="user" (click)="channelSelected.emit(channel.id)">
+            <span>#</span>
+            <div>
+              <strong>{{ channel.name }}</strong>
+              <small>{{ channel.description }}</small>
+            </div>
+          </button>
+        } @empty {
+          <p>No matching channels.</p>
+        }
+      } @else {
+        @for (user of filteredUsers(); track user.uid) {
+          <button type="button" class="user" (click)="userSelected.emit(user.uid)">
+            <span>{{ user.displayName.charAt(0).toUpperCase() }}</span>
+            <div>
+              <strong>{{ user.displayName }}</strong>
+              <small>{{ user.email }}</small>
+            </div>
+          </button>
+        } @empty {
+          <p>No matching users.</p>
+        }
       }
     </div>
   </section>
