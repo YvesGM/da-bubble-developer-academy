@@ -117,10 +117,11 @@ service cloud.firestore {
         && (resource.data.deleted == false || request.resource.data.deleted == true);
     }
 
-    function validReaction() {
+    function validReaction(reactionId) {
       return request.resource.data.keys().hasOnly(['emoji', 'userId', 'createdAt'])
         && request.resource.data.userId == request.auth.uid
-        && request.resource.data.emoji is string;
+        && request.resource.data.emoji is string
+        && reactionId == request.auth.uid + '__' + request.resource.data.emoji;
     }
 
     function reactionOwner() {
@@ -166,7 +167,7 @@ service cloud.firestore {
 
         match /reactions/{reactionId} {
           allow read: if channelAccess(channelId);
-          allow create: if channelAccess(channelId) && validReaction();
+          allow create: if channelAccess(channelId) && validReaction(reactionId);
           allow update: if false;
           allow delete: if channelAccess(channelId) && reactionOwner();
         }
@@ -184,7 +185,7 @@ service cloud.firestore {
 
           match /reactions/{reactionId} {
             allow read: if channelAccess(channelId);
-            allow create: if channelAccess(channelId) && validReaction();
+            allow create: if channelAccess(channelId) && validReaction(reactionId);
             allow update: if false;
             allow delete: if channelAccess(channelId) && reactionOwner();
           }
@@ -218,7 +219,7 @@ service cloud.firestore {
 
         match /reactions/{reactionId} {
           allow read: if directMessageAccess(dmId);
-          allow create: if directMessageAccess(dmId) && validReaction();
+          allow create: if directMessageAccess(dmId) && validReaction(reactionId);
           allow update: if false;
           allow delete: if directMessageAccess(dmId) && reactionOwner();
         }
@@ -236,7 +237,7 @@ service cloud.firestore {
 
           match /reactions/{reactionId} {
             allow read: if directMessageAccess(dmId);
-            allow create: if directMessageAccess(dmId) && validReaction();
+            allow create: if directMessageAccess(dmId) && validReaction(reactionId);
             allow update: if false;
             allow delete: if directMessageAccess(dmId) && reactionOwner();
           }
