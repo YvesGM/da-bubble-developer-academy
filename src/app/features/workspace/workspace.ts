@@ -5,40 +5,64 @@ import { Router, RouterOutlet } from '@angular/router';
 
 import { AuthService } from '../../core/services/auth.service';
 import { ChannelService } from '../../core/services/channel.service';
+import { DirectMessageService } from '../../core/services/direct-message.service';
+import { UserService } from '../../core/services/user.service';
+import { ProfileDialog } from '../profile/profile-dialog/profile-dialog';
 import { ChannelCreateDialog } from './components/channel-create-dialog/channel-create-dialog';
+import { NewMessageDialog } from './components/new-message-dialog/new-message-dialog';
 import { WorkspaceHeader } from './components/workspace-header/workspace-header';
 import { WorkspaceSidebar } from './components/workspace-sidebar/workspace-sidebar';
 
 @Component({
   selector: 'app-workspace',
-  imports: [RouterOutlet, ChannelCreateDialog, WorkspaceHeader, WorkspaceSidebar],
+  imports: [
+    RouterOutlet,
+    ChannelCreateDialog,
+    NewMessageDialog,
+    ProfileDialog,
+    WorkspaceHeader,
+    WorkspaceSidebar,
+  ],
   templateUrl: './workspace.html',
   styleUrl: './workspace.scss',
 })
 export class Workspace {
-  private readonly auth = inject(Auth);
+  readonly auth = inject(Auth);
   private readonly authService = inject(AuthService);
   private readonly channelsService = inject(ChannelService);
+  private readonly directMessagesService = inject(DirectMessageService);
   private readonly router = inject(Router);
+  private readonly usersService = inject(UserService);
 
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
+  readonly directMessages = toSignal(this.directMessagesService.observeCurrentUserConversations(), { initialValue: [] });
+  readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly showCreateChannel = signal(false);
+  readonly showNewMessage = signal(false);
+  readonly showProfile = signal(false);
+  readonly sidebarCollapsed = signal(false);
 
   get displayName(): string {
     return this.auth.currentUser?.displayName || (this.auth.currentUser?.isAnonymous ? 'Guest' : 'User');
   }
 
-  openChannelDialog(): void {
-    this.showCreateChannel.set(true);
+  get currentUserId(): string {
+    return this.auth.currentUser?.uid ?? '';
   }
 
-  closeChannelDialog(): void {
-    this.showCreateChannel.set(false);
+  get isGuest(): boolean {
+    return this.auth.currentUser?.isAnonymous ?? false;
   }
 
   async selectCreatedChannel(channelId: string): Promise<void> {
-    this.closeChannelDialog();
+    this.showCreateChannel.set(false);
     await this.router.navigate(['/workspace/channel', channelId]);
+  }
+
+  async startDirectMessage(userId: string): Promise<void> {
+    const dmId = await this.directMessagesService.openConversation(userId);
+    this.showNewMessage.set(false);
+    await this.router.navigate(['/workspace/dm', dmId]);
   }
 
   async logout(): Promise<void> {
