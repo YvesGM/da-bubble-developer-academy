@@ -45,6 +45,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'new-message',
+        canActivate: [registeredUserGuard],
+        loadComponent: () =>
+          import('./features/workspace/new-message-view/new-message-view').then(
+            (module) => module.NewMessageView,
+          ),
+      },
+      {
         path: 'dm/:dmId',
         canActivate: [registeredUserGuard, directMessageGuard],
         loadComponent: () =>
@@ -62,6 +70,11 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '', pathMatch: 'full', redirectTo: 'login' },
+  {
+    path: 'splash',
+    loadComponent: () =>
+      import('./features/auth/splash/splash').then((module) => module.Splash),
+  },
+  { path: '', pathMatch: 'full', redirectTo: 'splash' },
   { path: '**', redirectTo: 'login' },
 ];
