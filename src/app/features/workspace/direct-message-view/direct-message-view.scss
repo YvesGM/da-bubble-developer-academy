@@ -1,0 +1,39 @@
+.dm-view {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  min-height: 88px;
+  padding: 18px 24px;
+  gap: 12px;
+  border-bottom: 1px solid #eceefe;
+}
+
+header span {
+  color: #444df2;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 2px 0 0;
+}
+
+.avatar {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eceefe;
+  color: #444df2;
+  font-weight: 700;
+}
+
+.chat-area {
+  min-height: 0;
+}
