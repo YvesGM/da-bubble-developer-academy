@@ -15,4 +15,5 @@ export class MessageList {
   @Input({ required: true }) messages: Message[] = [];
   @Input() recentEmojis: string[] = [];
   @Output() readonly threadRequested = new EventEmitter<Message>();
+  @Output() readonly userRequested = new EventEmitter<string>();
 }
