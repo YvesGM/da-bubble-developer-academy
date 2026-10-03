@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { SearchBox } from '../search-box/search-box';
 
@@ -16,4 +17,17 @@ export class WorkspaceHeader {
   @Input() profileEnabled = true;
   @Output() readonly profileRequested = new EventEmitter<void>();
   @Output() readonly logoutRequested = new EventEmitter<void>();
+  @Output() readonly userSelected = new EventEmitter<UserProfile>();
+
+  readonly menuOpen = signal(false);
+
+  openProfile(): void {
+    this.menuOpen.set(false);
+    this.profileRequested.emit();
+  }
+
+  logout(): void {
+    this.menuOpen.set(false);
+    this.logoutRequested.emit();
+  }
 }
