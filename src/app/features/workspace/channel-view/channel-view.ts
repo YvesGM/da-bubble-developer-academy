@@ -6,13 +6,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 
 import { ChannelNameTakenError } from '../../../core/errors/channel-name-taken.error';
+import { ConversationTarget } from '../../../core/models/conversation.model';
 import { ChannelService } from '../../../core/services/channel.service';
 import { UserService } from '../../../core/services/user.service';
 import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
+import { ChatPanel } from '../components/chat-panel/chat-panel';
 
 @Component({
   selector: 'app-channel-view',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ChatPanel],
   templateUrl: './channel-view.html',
   styleUrl: './channel-view.scss',
 })
@@ -37,6 +39,10 @@ export class ChannelView {
   readonly members = computed(() => this.users().filter((user) => this.isChannelMember(user.uid)));
   readonly availableUsers = computed(() => this.users().filter((user) => !this.isChannelMember(user.uid)));
   readonly selectedMemberIds = signal(new Set<string>());
+  readonly target = computed<ConversationTarget>(() => ({
+    type: 'channel',
+    id: this.channelId(),
+  }));
   readonly addGuestAccess = signal(false);
   readonly editing = signal(false);
   readonly errorMessage = signal('');
@@ -75,6 +81,10 @@ export class ChannelView {
 
   isGuestCurrentUser(): boolean {
     return this.auth.currentUser?.isAnonymous ?? false;
+  }
+
+  canManageChannel(): boolean {
+    return !this.isGuestCurrentUser();
   }
 
   canLeaveChannel(): boolean {
