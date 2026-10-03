@@ -1,0 +1,33 @@
+<div class="backdrop" (click)="closeRequested.emit()">
+  <section class="card" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <header>
+      <h2>Profile</h2>
+      <button type="button" aria-label="Close profile" (click)="closeRequested.emit()">×</button>
+    </header>
+
+    <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="large" />
+
+    <div class="name-row">
+      <h3>{{ user.displayName }}</h3>
+      @if (ownProfile) {
+        <button type="button" class="link-button" (click)="editRequested.emit()">Edit</button>
+      }
+    </div>
+
+    <div class="status">
+      <app-presence-indicator [userId]="user.uid" />
+      <span>Online status</span>
+    </div>
+
+    <div class="email">
+      <strong>Email address</strong>
+      <span>{{ user.email }}</span>
+    </div>
+
+    @if (!ownProfile) {
+      <button type="button" class="primary" (click)="messageRequested.emit(user.uid)">
+        Message
+      </button>
+    }
+  </section>
+</div>
