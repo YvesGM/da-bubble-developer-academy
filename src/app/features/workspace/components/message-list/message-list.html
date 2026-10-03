@@ -1,0 +1,15 @@
+<section class="message-list" aria-live="polite">
+  @for (message of messages; track message.id) {
+    <app-message-item
+      [target]="target"
+      [message]="message"
+      [recentEmojis]="recentEmojis"
+      (threadRequested)="threadRequested.emit($event)"
+    />
+  } @empty {
+    <div class="empty-state">
+      <strong>No messages yet.</strong>
+      <span>Start the conversation below.</span>
+    </div>
+  }
+</section>
