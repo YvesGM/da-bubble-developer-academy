@@ -28,6 +28,23 @@
         <p class="field-error">The password must be at least 6 characters long.</p>
       }
 
+      <fieldset class="avatar-fieldset">
+        <legend>Choose your avatar</legend>
+        <div class="avatar-grid">
+          @for (avatarId of avatarIds; track avatarId; let index = $index) {
+            <button
+              type="button"
+              class="avatar-choice"
+              [class.selected]="form.controls.avatarId.value === avatarId"
+              (click)="selectAvatar(avatarId)"
+              [attr.aria-label]="'Choose avatar ' + (index + 1)"
+            >
+              {{ index + 1 }}
+            </button>
+          }
+        </div>
+      </fieldset>
+
       @if (errorMessage()) {
         <p class="form-error">{{ errorMessage() }}</p>
       }
