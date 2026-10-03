@@ -43,9 +43,10 @@ export class MessageInput implements AfterViewInit {
     if (this.autoFocus) queueMicrotask(() => this.field?.nativeElement.focus());
   }
 
-  handleEnter(event: KeyboardEvent): void {
-    if (event.shiftKey) return;
-    event.preventDefault();
+  handleEnter(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
+    if (keyboardEvent.shiftKey) return;
+    keyboardEvent.preventDefault();
     this.submit();
   }
 
