@@ -1,6 +1,7 @@
 @if (channel(); as currentChannel) {
   <section class="channel-view">
     <header class="channel-header">
+      <a class="mobile-back" routerLink="/workspace" aria-label="Back to conversations">←</a>
       <div>
         <p class="eyebrow">Channel</p>
         <h1># {{ currentChannel.name }}</h1>
