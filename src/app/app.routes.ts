@@ -41,6 +41,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'dm/:dmId',
+        loadComponent: () =>
+          import('./features/workspace/direct-message-view/direct-message-view').then(
+            (module) => module.DirectMessageView,
+          ),
+      },
+      {
         path: '',
         pathMatch: 'full',
         loadComponent: () =>
