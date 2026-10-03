@@ -1,11 +1,8 @@
 .avatar {
-  display: inline-grid;
-  place-items: center;
+  display: block;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: #eceefe;
-  color: #444df2;
-  font-weight: 700;
+  object-fit: cover;
 }
 
 .small {
@@ -23,12 +20,12 @@
   height: 56px;
 }
 
-.avatar-2,
-.avatar-5 {
-  background: #f1edff;
+.hero {
+  width: 136px;
+  height: 136px;
 }
 
-.avatar-3,
-.avatar-6 {
-  background: #e8f7ef;
+.option {
+  width: 64px;
+  height: 64px;
 }

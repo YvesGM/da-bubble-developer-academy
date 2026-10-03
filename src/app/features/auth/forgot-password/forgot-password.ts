@@ -4,10 +4,11 @@ import { RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
+import { AuthShell } from '../components/auth-shell/auth-shell';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AuthShell],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',
 })

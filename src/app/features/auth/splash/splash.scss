@@ -1,34 +1,30 @@
+@use '../../../../styles/tokens' as tokens;
+@use '../../../../styles/breakpoints' as bp;
+
 .splash {
   display: grid;
   min-height: 100dvh;
   place-items: center;
   overflow: hidden;
-  background: #444df2;
+  background: tokens.$purple-1;
 }
 
-.brand {
+.splash-brand {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 22px;
 }
 
-.mark {
-  display: grid;
-  width: 76px;
-  height: 76px;
-  place-items: center;
-  border-radius: 24px;
-  background: #fff;
-  color: #444df2;
-  font-size: 42px;
-  font-weight: 800;
+.splash-mark {
+  width: 132px;
+  height: 130px;
   animation: mark-in 500ms ease-out both;
 }
 
-.name {
-  color: #fff;
-  font-size: 42px;
-  font-weight: 800;
+.splash-name {
+  width: 260px;
+  height: auto;
+  filter: brightness(0) invert(1);
   animation: name-in 650ms 350ms ease-out both;
 }
 
@@ -46,12 +42,38 @@
 
 @keyframes name-in {
   from {
-    transform: translateX(-18px);
+    transform: translateX(-24px);
     opacity: 0;
   }
 
   to {
     transform: translateX(0);
     opacity: 1;
+  }
+}
+
+@include bp.mobile {
+  .splash-brand {
+    gap: 14px;
+  }
+
+  .splash-mark {
+    width: 86px;
+    height: 85px;
+  }
+
+  .splash-name {
+    width: 170px;
+  }
+}
+
+@include bp.widescreen {
+  .splash-mark {
+    width: 150px;
+    height: 148px;
+  }
+
+  .splash-name {
+    width: 285px;
   }
 }

@@ -4,10 +4,11 @@ import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
+import { AuthShell } from '../components/auth-shell/auth-shell';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AuthShell],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

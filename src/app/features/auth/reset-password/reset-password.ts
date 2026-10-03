@@ -4,10 +4,11 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
+import { AuthShell } from '../components/auth-shell/auth-shell';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AuthShell],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.scss',
 })

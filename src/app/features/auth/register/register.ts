@@ -5,10 +5,12 @@ import { Router, RouterLink } from '@angular/router';
 import { AVATAR_IDS } from '../../../core/constants/avatar.constants';
 import { AuthService } from '../../../core/services/auth.service';
 import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
+import { Avatar } from '../../../shared/components/avatar/avatar';
+import { AuthShell } from '../components/auth-shell/auth-shell';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, Avatar, AuthShell],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
@@ -18,23 +20,46 @@ export class Register {
   private readonly router = inject(Router);
 
   readonly avatarIds = AVATAR_IDS;
+  readonly step = signal<'details' | 'avatar'>('details');
   readonly errorMessage = signal('');
   readonly submitting = signal(false);
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    avatarId: ['avatar-1', Validators.required],
+    privacyAccepted: [false, Validators.requiredTrue],
+    avatarId: ['', Validators.required],
   });
 
   selectAvatar(avatarId: string): void {
     this.form.controls.avatarId.setValue(avatarId);
   }
 
+  continueToAvatar(): void {
+    if (!this.detailsValid()) return this.markDetailsInvalid();
+    this.errorMessage.set('');
+    this.step.set('avatar');
+  }
+
+  backToDetails(): void {
+    this.errorMessage.set('');
+    this.step.set('details');
+  }
+
   async submit(): Promise<void> {
-    if (this.form.invalid) return this.markInvalid();
-    const { name, email, password, avatarId } = this.form.getRawValue();
-    await this.runRegistration(name, email, password, avatarId);
+    if (this.form.controls.avatarId.invalid) return this.markAvatarInvalid();
+    const value = this.form.getRawValue();
+    await this.runRegistration(value.name, value.email, value.password, value.avatarId);
+  }
+
+  selectedAvatar(): string {
+    return this.form.controls.avatarId.value;
+  }
+
+  private detailsValid(): boolean {
+    const controls = this.form.controls;
+    return controls.name.valid && controls.email.valid
+      && controls.password.valid && controls.privacyAccepted.valid;
   }
 
   private async runRegistration(
@@ -54,9 +79,16 @@ export class Register {
     }
   }
 
-  private markInvalid(): void {
-    this.form.markAllAsTouched();
-    this.errorMessage.set('Please check your input.');
+  private markDetailsInvalid(): void {
+    this.form.controls.name.markAsTouched();
+    this.form.controls.email.markAsTouched();
+    this.form.controls.password.markAsTouched();
+    this.form.controls.privacyAccepted.markAsTouched();
+  }
+
+  private markAvatarInvalid(): void {
+    this.form.controls.avatarId.markAsTouched();
+    this.errorMessage.set('Please choose an avatar.');
   }
 
   private startSubmit(): void {
