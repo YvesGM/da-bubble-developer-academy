@@ -1,0 +1,39 @@
+<section class="new-message-view">
+  <header>
+    <a class="mobile-back" routerLink="/workspace" aria-label="Back to conversations">←</a>
+    <h1>New message</h1>
+  </header>
+
+  <label class="to-field">
+    <span>To:</span>
+    <input
+      type="search"
+      placeholder="Type @ for people or # for channels"
+      [value]="query()"
+      (input)="query.set($any($event.target).value)"
+      autofocus
+    />
+  </label>
+
+  <div class="results">
+    @if (mode() === '#') {
+      @for (channel of filteredChannels(); track channel.id) {
+        <button type="button" (click)="selectChannel(channel.id)">
+          <strong># {{ channel.name }}</strong>
+          <span>{{ channel.description }}</span>
+        </button>
+      } @empty {
+        <p>No matching channels.</p>
+      }
+    } @else {
+      @for (user of filteredUsers(); track user.uid) {
+        <button type="button" (click)="selectUser(user.uid)">
+          <strong>{{ user.displayName }}</strong>
+          <span>{{ user.email }}</span>
+        </button>
+      } @empty {
+        <p>No matching users.</p>
+      }
+    }
+  </div>
+</section>
