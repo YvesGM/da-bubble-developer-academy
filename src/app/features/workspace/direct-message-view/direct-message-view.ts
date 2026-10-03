@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 
 import { ConversationTarget } from '../../../core/models/conversation.model';
@@ -10,7 +10,7 @@ import { ChatPanel } from '../components/chat-panel/chat-panel';
 
 @Component({
   selector: 'app-direct-message-view',
-  imports: [ChatPanel],
+  imports: [ChatPanel, RouterLink],
   templateUrl: './direct-message-view.html',
   styleUrl: './direct-message-view.scss',
 })
@@ -22,7 +22,7 @@ export class DirectMessageView {
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly dmId = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('dmId') ?? '')),
-    { initialValue: '' },
+    { initialValue: this.route.snapshot.paramMap.get('dmId') ?? '' },
   );
   readonly partner = computed(() => this.findPartner());
   readonly target = computed<ConversationTarget>(() => ({
