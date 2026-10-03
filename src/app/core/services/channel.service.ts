@@ -1,16 +1,17 @@
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import {
+  DocumentReference,
   Firestore,
-  addDoc,
+  Transaction,
   arrayRemove,
   arrayUnion,
   collection,
   collectionData,
   doc,
   docData,
-  getDocs,
   query,
+  runTransaction,
   serverTimestamp,
   updateDoc,
   where,
@@ -35,7 +36,7 @@ export class ChannelService {
   }
 
   observeChannel(channelId: string): Observable<Channel | undefined> {
-    const reference = this.runSync(() => doc(this.firestore, 'channels', channelId));
+    const reference = this.channelReference(channelId);
     return this.runSync(() => docData(reference, { idField: 'id' })) as Observable<
       Channel | undefined
     >;
@@ -44,18 +45,15 @@ export class ChannelService {
   async createChannel(input: CreateChannelInput): Promise<string> {
     const creatorId = this.currentUserId();
     const name = this.cleanName(input.name);
-    await this.assertNameAvailable(name);
-    const memberIds = this.uniqueMembers(creatorId, input.memberIds);
-    const data = this.buildChannelData(input, name, creatorId, memberIds);
-    const reference = await this.run(() => addDoc(this.channelsCollection(), data));
-    return reference.id;
+    const channelRef = this.newChannelReference();
+    await this.run(() => this.createChannelTransaction(channelRef, input, name, creatorId));
+    return channelRef.id;
   }
 
   async updateChannel(channelId: string, input: UpdateChannelInput): Promise<void> {
+    const channelRef = this.channelReference(channelId);
     const name = this.cleanName(input.name);
-    await this.assertNameAvailable(name, channelId);
-    const reference = this.channelReference(channelId);
-    await this.run(() => updateDoc(reference, this.channelChanges(input, name)));
+    await this.run(() => this.updateChannelTransaction(channelRef, input, name));
   }
 
   async addMembers(channelId: string, memberIds: string[]): Promise<void> {
@@ -71,47 +69,81 @@ export class ChannelService {
     await this.run(() => updateDoc(reference, changes));
   }
 
-  private async assertNameAvailable(name: string, ignoredId?: string): Promise<void> {
-    const normalizedName = this.normalizeName(name);
-    const request = this.nameQuery(normalizedName);
-    const snapshot = await this.run(() => getDocs(request));
-    const duplicate = snapshot.docs.some((item) => item.id !== ignoredId);
-    if (duplicate) throw new ChannelNameTakenError();
-  }
-
-  private nameQuery(normalizedName: string) {
-    const reference = this.channelsCollection();
-    return this.runSync(() => query(reference, where('normalizedName', '==', normalizedName)));
-  }
-
-  private buildChannelData(
+  private async createChannelTransaction(
+    channelRef: DocumentReference,
     input: CreateChannelInput,
     name: string,
     creatorId: string,
-    memberIds: string[],
-  ) {
+  ): Promise<void> {
+    await runTransaction(this.firestore, async (transaction) => {
+      const registryRef = this.nameReference(name);
+      const registry = await transaction.get(registryRef);
+      if (registry.exists()) throw new ChannelNameTakenError();
+      const data = this.buildChannelData(input, name, creatorId);
+      transaction.set(channelRef, data);
+      transaction.set(registryRef, this.nameRegistry(channelRef.id, data));
+    });
+  }
+
+  private async updateChannelTransaction(
+    channelRef: DocumentReference,
+    input: UpdateChannelInput,
+    name: string,
+  ): Promise<void> {
+    await runTransaction(this.firestore, async (transaction) => {
+      const snapshot = await transaction.get(channelRef);
+      if (!snapshot.exists()) throw new Error('channel-not-found');
+      const current = snapshot.data() as Channel;
+      await this.moveNameRegistry(transaction, channelRef.id, current, name);
+      transaction.update(channelRef, this.channelChanges(input, name));
+    });
+  }
+
+  private async moveNameRegistry(
+    transaction: Transaction,
+    channelId: string,
+    current: Channel,
+    name: string,
+  ): Promise<void> {
+    const nextKey = this.nameKey(name);
+    const previousKey = current.nameKey || this.nameKey(current.name);
+    if (nextKey === previousKey) return;
+    const nextRef = this.nameReference(name);
+    const existing = await transaction.get(nextRef);
+    if (existing.exists()) throw new ChannelNameTakenError();
+    transaction.delete(this.nameReferenceByKey(previousKey));
+    transaction.set(nextRef, this.nameRegistry(channelId, this.channelChanges({}, name)));
+  }
+
+  private buildChannelData(input: CreateChannelInput, name: string, creatorId: string) {
     return {
       name,
       normalizedName: this.normalizeName(name),
+      nameKey: this.nameKey(name),
       description: input.description.trim(),
       creatorId,
-      memberIds,
+      memberIds: this.uniqueMembers(creatorId, input.memberIds),
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
   }
 
-  private channelChanges(input: UpdateChannelInput, name: string) {
+  private channelChanges(input: Partial<UpdateChannelInput>, name: string) {
     return {
       name,
       normalizedName: this.normalizeName(name),
-      description: input.description.trim(),
+      nameKey: this.nameKey(name),
+      ...(input.description !== undefined ? { description: input.description.trim() } : {}),
       updatedAt: serverTimestamp(),
     };
   }
 
+  private nameRegistry(channelId: string, data: { normalizedName: string }) {
+    return { channelId, normalizedName: data.normalizedName };
+  }
+
   private uniqueMembers(creatorId: string, memberIds: string[]): string[] {
-    return [...new Set([creatorId, ...memberIds])];
+    return [...new Set([creatorId, ...memberIds].filter(Boolean))];
   }
 
   private cleanName(name: string): string {
@@ -122,8 +154,12 @@ export class ChannelService {
     return this.cleanName(name).toLowerCase();
   }
 
+  private nameKey(name: string): string {
+    return encodeURIComponent(this.normalizeName(name));
+  }
+
   private sortChannels(channels: Channel[]): Channel[] {
-    return [...channels].sort((first, second) => first.name.localeCompare(second.name, 'de'));
+    return [...channels].sort((first, second) => first.name.localeCompare(second.name, 'en'));
   }
 
   private currentUserId(): string {
@@ -136,8 +172,20 @@ export class ChannelService {
     return this.runSync(() => collection(this.firestore, 'channels'));
   }
 
-  private channelReference(channelId: string) {
+  private newChannelReference(): DocumentReference {
+    return this.runSync(() => doc(this.channelsCollection()));
+  }
+
+  private channelReference(channelId: string): DocumentReference {
     return this.runSync(() => doc(this.firestore, 'channels', channelId));
+  }
+
+  private nameReference(name: string): DocumentReference {
+    return this.nameReferenceByKey(this.nameKey(name));
+  }
+
+  private nameReferenceByKey(nameKey: string): DocumentReference {
+    return this.runSync(() => doc(this.firestore, 'channelNames', nameKey));
   }
 
   private run<T>(action: () => Promise<T>): Promise<T> {

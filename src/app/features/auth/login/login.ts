@@ -39,7 +39,7 @@ export class Login {
 
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Bitte prüfe deine Eingaben.');
+    this.errorMessage.set('Please check your input.');
   }
 
   private async runLogin(action: () => Promise<unknown>): Promise<void> {
@@ -48,7 +48,7 @@ export class Login {
       await action();
       await this.router.navigateByUrl('/workspace');
     } catch (error) {
-      this.errorMessage.set(firebaseErrorMessage(error, 'Anmeldung fehlgeschlagen.'));
+      this.errorMessage.set(firebaseErrorMessage(error, 'Login failed.'));
     } finally {
       this.submitting.set(false);
     }

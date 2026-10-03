@@ -2,6 +2,7 @@ export interface Channel {
   id: string;
   name: string;
   normalizedName: string;
+  nameKey: string;
   description: string;
   creatorId: string;
   memberIds: string[];

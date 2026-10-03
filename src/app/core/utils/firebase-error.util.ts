@@ -1,16 +1,16 @@
 import { FirebaseError } from 'firebase/app';
 
 const FIREBASE_MESSAGES: Record<string, string> = {
-  'auth/email-already-in-use': 'Diese E-Mail-Adresse wird bereits verwendet.',
-  'auth/invalid-credential': 'E-Mail-Adresse oder Passwort ist nicht korrekt.',
-  'auth/invalid-email': 'Die E-Mail-Adresse ist ungültig.',
-  'auth/operation-not-allowed': 'Diese Anmeldemethode ist in Firebase nicht aktiviert.',
-  'auth/popup-blocked': 'Das Anmeldefenster wurde vom Browser blockiert.',
-  'auth/popup-closed-by-user': 'Die Google-Anmeldung wurde abgebrochen.',
-  'auth/too-many-requests': 'Zu viele Versuche. Bitte versuche es später erneut.',
-  'auth/user-disabled': 'Dieses Benutzerkonto wurde deaktiviert.',
-  'auth/weak-password': 'Das Passwort ist zu schwach.',
-  'permission-denied': 'Der Datenbankzugriff wurde von den Firebase-Regeln abgelehnt.',
+  'auth/email-already-in-use': 'This email address is already in use.',
+  'auth/invalid-credential': 'The email address or password is incorrect.',
+  'auth/invalid-email': 'The email address is invalid.',
+  'auth/operation-not-allowed': 'This sign-in method is not enabled in Firebase.',
+  'auth/popup-blocked': 'The sign-in window was blocked by the browser.',
+  'auth/popup-closed-by-user': 'Google sign-in was cancelled.',
+  'auth/too-many-requests': 'Too many attempts. Please try again later.',
+  'auth/user-disabled': 'This user account has been disabled.',
+  'auth/weak-password': 'The password is too weak.',
+  'permission-denied': 'The database access was denied by the Firebase rules.',
 };
 
 export function firebaseErrorMessage(error: unknown, fallback: string): string {

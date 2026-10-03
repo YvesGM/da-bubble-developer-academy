@@ -11,10 +11,16 @@ service cloud.firestore {
         && request.auth.uid in get(/databases/$(database)/documents/channels/$(channelId)).data.memberIds;
     }
 
+    function channelMemberAfter(channelId) {
+      return signedIn()
+        && request.auth.uid in getAfter(/databases/$(database)/documents/channels/$(channelId)).data.memberIds;
+    }
+
     function validChannel() {
       return request.resource.data.keys().hasOnly([
           'name',
           'normalizedName',
+          'nameKey',
           'description',
           'creatorId',
           'memberIds',
@@ -23,9 +29,21 @@ service cloud.firestore {
         ])
         && request.resource.data.name is string
         && request.resource.data.normalizedName is string
+        && request.resource.data.nameKey is string
         && request.resource.data.description is string
         && request.resource.data.creatorId is string
         && request.resource.data.memberIds is list;
+    }
+
+    function validChannelName(nameKey) {
+      let channelId = request.resource.data.channelId;
+      let channel = getAfter(/databases/$(database)/documents/channels/$(channelId));
+      return request.resource.data.keys().hasOnly(['channelId', 'normalizedName'])
+        && channelId is string
+        && request.resource.data.normalizedName is string
+        && channel.data.nameKey == nameKey
+        && channel.data.normalizedName == request.resource.data.normalizedName
+        && request.auth.uid in channel.data.memberIds;
     }
 
     function directMessageMember(dmId) {
@@ -38,8 +56,16 @@ service cloud.firestore {
       allow create, update, delete: if signedIn() && request.auth.uid == userId;
     }
 
+    match /channelNames/{nameKey} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn() && validChannelName(nameKey);
+      allow update: if false;
+      allow delete: if signedIn() && channelMemberAfter(resource.data.channelId);
+    }
+
     match /channels/{channelId} {
-      allow read: if signedIn();
+      allow read: if channelMember(channelId);
       allow create: if signedIn()
         && validChannel()
         && request.auth.uid == request.resource.data.creatorId

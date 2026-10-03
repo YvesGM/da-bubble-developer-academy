@@ -9,29 +9,29 @@
     <div class="dialog-heading">
       <div>
         <p class="eyebrow">DABubble</p>
-        <h2 id="create-channel-title">Channel erstellen</h2>
+        <h2 id="create-channel-title">Create channel</h2>
       </div>
-      <button class="close" type="button" aria-label="Dialog schließen" (click)="closeRequested.emit()">
+      <button class="close" type="button" aria-label="Close dialog" (click)="closeRequested.emit()">
         ×
       </button>
     </div>
 
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <label>
-        Channelname
-        <input type="text" formControlName="name" placeholder="z. B. Entwicklerteam" />
+        Channel name
+        <input type="text" formControlName="name" placeholder="e.g. Development team" />
       </label>
       @if (form.controls.name.touched && form.controls.name.hasError('required')) {
-        <p class="field-error">Bitte gib einen Channelnamen ein.</p>
+        <p class="field-error">Please enter a channel name.</p>
       }
 
       <label>
-        Beschreibung
-        <textarea formControlName="description" rows="3" placeholder="Worum geht es in diesem Channel?"></textarea>
+        Description
+        <textarea formControlName="description" rows="3" placeholder="What is this channel about?"></textarea>
       </label>
 
       <fieldset>
-        <legend>Mitglieder</legend>
+        <legend>Members</legend>
         <div class="user-list">
           @for (user of users(); track user.uid) {
             <label class="user-option">
@@ -53,9 +53,9 @@
       }
 
       <div class="actions">
-        <button class="secondary" type="button" (click)="closeRequested.emit()">Abbrechen</button>
+        <button class="secondary" type="button" (click)="closeRequested.emit()">Cancel</button>
         <button class="primary" type="submit" [disabled]="submitting()">
-          {{ submitting() ? 'Wird erstellt…' : 'Erstellen' }}
+          {{ submitting() ? 'Creating…' : 'Create' }}
         </button>
       </div>
     </form>

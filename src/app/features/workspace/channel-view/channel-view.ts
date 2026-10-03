@@ -8,6 +8,7 @@ import { map, switchMap } from 'rxjs';
 import { ChannelNameTakenError } from '../../../core/errors/channel-name-taken.error';
 import { ChannelService } from '../../../core/services/channel.service';
 import { UserService } from '../../../core/services/user.service';
+import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 
 @Component({
   selector: 'app-channel-view',
@@ -99,13 +100,13 @@ export class ChannelView {
   }
 
   private channelError(error: unknown): string {
-    if (error instanceof ChannelNameTakenError) return 'Dieser Channelname ist bereits vergeben.';
-    return 'Die Channeländerungen konnten nicht gespeichert werden.';
+    if (error instanceof ChannelNameTakenError) return 'This channel name is already in use.';
+    return firebaseErrorMessage(error, 'The channel changes could not be saved.');
   }
 
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Bitte gib einen Channelnamen ein.');
+    this.errorMessage.set('Please enter a channel name.');
   }
 
   private startSaving(): void {

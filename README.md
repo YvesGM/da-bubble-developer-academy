@@ -1,59 +1,57 @@
-# Dabubble
+# DABubble
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.37.
+DABubble is an Angular and Firebase business chat application created as the final frontend project for the Developer Akademie.
 
-## Development server
+## Stack
 
-To start a local development server, run:
+- Angular 20
+- TypeScript
+- Firebase Authentication
+- Cloud Firestore
+- SCSS
+- GitHub Actions
+- FTP deployment
 
-```bash
-ng serve
-```
+## Development
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Install dependencies:
 
 ```bash
-ng generate --help
+npm ci
 ```
 
-## Building
-
-To build the project run:
+Start the local development server:
 
 ```bash
-ng build
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The application is available at `http://localhost:4200/`.
 
-## Running unit tests
+## Production build
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Create a production build with:
 
 ```bash
-ng test
+npm run build
 ```
 
-## Running end-to-end tests
+The browser bundle is written to:
 
-For end-to-end (e2e) testing, run:
+```text
+dist/dabubble/browser/
+```
+
+## Firebase rules
+
+Deploy Firestore rules with:
 
 ```bash
-ng e2e
+npx firebase-tools deploy --only firestore:rules
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Deployment
 
-## Additional Resources
+Pushes to `main` trigger the production GitHub Actions workflow. The workflow builds the Angular application and uploads the browser bundle to the configured FTP environment.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Production credentials are stored as GitHub environment secrets and are not committed to the repository.

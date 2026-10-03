@@ -39,7 +39,7 @@ export class AuthService {
 
   async loginAsGuest(): Promise<UserCredential> {
     const credential = await this.run(() => signInAnonymously(this.auth));
-    await this.users.ensureProfile(credential.user, 'Gast');
+    await this.users.ensureProfile(credential.user, 'Guest');
     return credential;
   }
 

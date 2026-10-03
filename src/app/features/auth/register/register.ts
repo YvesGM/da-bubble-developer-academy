@@ -32,7 +32,7 @@ export class Register {
 
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Bitte prüfe deine Eingaben.');
+    this.errorMessage.set('Please check your input.');
   }
 
   private async runRegistration(name: string, email: string, password: string): Promise<void> {
@@ -41,7 +41,7 @@ export class Register {
       await this.auth.register(name, email, password);
       await this.router.navigateByUrl('/workspace');
     } catch (error) {
-      this.errorMessage.set(firebaseErrorMessage(error, 'Registrierung fehlgeschlagen.'));
+      this.errorMessage.set(firebaseErrorMessage(error, 'Registration failed.'));
     } finally {
       this.submitting.set(false);
     }

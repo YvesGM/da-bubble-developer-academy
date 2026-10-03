@@ -1,7 +1,7 @@
 <aside class="sidebar">
   <div class="section-heading">
     <h2>Channels</h2>
-    <button type="button" aria-label="Channel erstellen" (click)="createRequested.emit()">+</button>
+    <button type="button" aria-label="Create channel" (click)="createRequested.emit()">+</button>
   </div>
 
   <nav aria-label="Channels">
@@ -15,12 +15,12 @@
         {{ channel.name }}
       </a>
     } @empty {
-      <p class="empty">Noch keine Channels.</p>
+      <p class="empty">No channels yet.</p>
     }
   </nav>
 
   <div class="direct-messages">
-    <h2>Direktnachrichten</h2>
-    <p class="empty">Werden als Nächstes angebunden.</p>
+    <h2>Direct messages</h2>
+    <p class="empty">Coming next.</p>
   </div>
 </aside>

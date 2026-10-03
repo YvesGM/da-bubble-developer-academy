@@ -1,38 +1,38 @@
 <main class="auth-page">
   <section class="auth-card">
     <p class="eyebrow">DABubble</p>
-    <h1>Anmeldung</h1>
-    <p class="intro">Melde dich mit deiner E-Mail-Adresse und deinem Passwort an.</p>
+    <h1>Log in</h1>
+    <p class="intro">Sign in with your email address and password.</p>
 
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <label>
-        E-Mail
+        Email
         <input type="email" formControlName="email" autocomplete="email" />
       </label>
       @if (form.controls.email.touched && form.controls.email.invalid) {
-        <p class="field-error">Bitte gib eine gültige E-Mail-Adresse ein.</p>
+        <p class="field-error">Please enter a valid email address.</p>
       }
 
       <label>
-        Passwort
+        Password
         <input type="password" formControlName="password" autocomplete="current-password" />
       </label>
       @if (form.controls.password.touched && form.controls.password.invalid) {
-        <p class="field-error">Bitte gib dein Passwort ein.</p>
+        <p class="field-error">Please enter your password.</p>
       }
 
       @if (errorMessage()) {
         <p class="form-error">{{ errorMessage() }}</p>
       }
 
-      <button type="submit" [disabled]="submitting()">Anmelden</button>
+      <button type="submit" [disabled]="submitting()">Log in</button>
     </form>
 
     <div class="actions">
-      <button type="button" class="secondary" (click)="loginWithGoogle()">Google Login</button>
-      <button type="button" class="secondary" (click)="loginAsGuest()">Gäste-Login</button>
+      <button type="button" class="secondary" (click)="loginWithGoogle()">Google login</button>
+      <button type="button" class="secondary" (click)="loginAsGuest()">Guest login</button>
     </div>
 
-    <a routerLink="/register">Noch kein Konto? Registrieren</a>
+    <a routerLink="/register">Don't have an account yet? Sign up</a>
   </section>
 </main>

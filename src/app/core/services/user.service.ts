@@ -8,6 +8,7 @@ import {
   getDoc,
   serverTimestamp,
   setDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 
@@ -32,13 +33,23 @@ export class UserService {
   async ensureProfile(user: User, displayName?: string): Promise<void> {
     const reference = this.userReference(user.uid);
     const snapshot = await this.run(() => getDoc(reference));
-    if (snapshot.exists()) return;
-    await this.run(() => setDoc(reference, this.buildProfile(user, displayName)));
+    if (!snapshot.exists()) return this.createProfile(user, displayName);
+    await this.syncDisplayName(reference, snapshot.data(), displayName);
+  }
+
+  private async syncDisplayName(reference: ReturnType<typeof doc>, data: unknown, name?: string) {
+    if (!name || !this.needsDisplayNameUpdate(data, name)) return;
+    await this.run(() => updateDoc(reference, { displayName: name, updatedAt: serverTimestamp() }));
+  }
+
+  private needsDisplayNameUpdate(data: unknown, name: string): boolean {
+    if (!data || typeof data !== 'object') return true;
+    return (data as { displayName?: string }).displayName !== name;
   }
 
   private sortUsers(users: UserProfile[]): UserProfile[] {
     return [...users].sort((first, second) =>
-      first.displayName.localeCompare(second.displayName, 'de'),
+      first.displayName.localeCompare(second.displayName, 'en'),
     );
   }
 
@@ -50,7 +61,7 @@ export class UserService {
     return {
       uid: user.uid,
       email: user.email,
-      displayName: displayName || user.displayName || 'Gast',
+      displayName: displayName || user.displayName || 'Guest',
       avatarId: 'avatar-1',
       isGuest: user.isAnonymous,
       createdAt: serverTimestamp(),
