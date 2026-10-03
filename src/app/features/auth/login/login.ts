@@ -17,6 +17,7 @@ export class Login {
   private readonly router = inject(Router);
 
   readonly errorMessage = signal('');
+  readonly credentialError = signal('');
   readonly submitting = signal(false);
   readonly form = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -26,7 +27,7 @@ export class Login {
   async submit(): Promise<void> {
     if (this.form.invalid) return this.markInvalid();
     const { email, password } = this.form.getRawValue();
-    await this.runLogin(() => this.auth.login(email, password));
+    await this.runLogin(() => this.auth.login(email, password), true);
   }
 
   async loginAsGuest(): Promise<void> {
@@ -42,20 +43,26 @@ export class Login {
     this.errorMessage.set('Please check your input.');
   }
 
-  private async runLogin(action: () => Promise<unknown>): Promise<void> {
+  private async runLogin(action: () => Promise<unknown>, credentialFlow = false): Promise<void> {
     this.startSubmit();
     try {
       await action();
       await this.router.navigateByUrl('/workspace');
     } catch (error) {
-      this.errorMessage.set(firebaseErrorMessage(error, 'Login failed.'));
+      this.setLoginError(error, credentialFlow);
     } finally {
       this.submitting.set(false);
     }
   }
 
+  private setLoginError(error: unknown, credentialFlow: boolean): void {
+    const message = firebaseErrorMessage(error, 'Login failed.');
+    credentialFlow ? this.credentialError.set(message) : this.errorMessage.set(message);
+  }
+
   private startSubmit(): void {
     this.submitting.set(true);
     this.errorMessage.set('');
+    this.credentialError.set('');
   }
 }
