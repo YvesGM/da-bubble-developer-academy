@@ -14,6 +14,7 @@ export class ChannelMembersDialog {
   @Input() members: UserProfile[] = [];
   @Input() guestAccess = false;
   @Input() currentUserId = '';
+  @Input() canAdd = true;
   @Output() readonly closeRequested = new EventEmitter<void>();
   @Output() readonly addRequested = new EventEmitter<void>();
   @Output() readonly userSelected = new EventEmitter<UserProfile>();
