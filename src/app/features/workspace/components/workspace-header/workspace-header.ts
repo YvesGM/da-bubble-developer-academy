@@ -11,6 +11,7 @@ import { SearchBox } from '../search-box/search-box';
 })
 export class WorkspaceHeader {
   @Input({ required: true }) displayName = '';
+  @Input() profileEnabled = true;
   @Output() readonly profileRequested = new EventEmitter<void>();
   @Output() readonly logoutRequested = new EventEmitter<void>();
 }
