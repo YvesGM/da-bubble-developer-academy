@@ -13,6 +13,7 @@ import { PresenceIndicator } from '../../../shared/components/presence-indicator
 export class ProfileCard {
   @Input({ required: true }) user!: UserProfile;
   @Input() ownProfile = false;
+  @Input() messageEnabled = true;
   @Output() readonly closeRequested = new EventEmitter<void>();
   @Output() readonly editRequested = new EventEmitter<void>();
   @Output() readonly messageRequested = new EventEmitter<string>();
