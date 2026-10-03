@@ -1,0 +1,64 @@
+.backdrop {
+  position: fixed;
+  z-index: 55;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #00000040;
+}
+
+.dialog {
+  width: min(420px, 100%);
+  padding: 28px;
+  border-radius: 24px;
+  background: #fff;
+}
+
+header,
+.member {
+  display: flex;
+  align-items: center;
+}
+
+header {
+  justify-content: space-between;
+}
+
+.members {
+  display: grid;
+  margin: 18px 0;
+  gap: 8px;
+}
+
+.member {
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  padding: 8px;
+  gap: 10px;
+  cursor: pointer;
+  text-align: left;
+  background: transparent;
+}
+
+.member:hover {
+  background: #eceefe;
+}
+
+.member app-presence-indicator {
+  margin-left: auto;
+}
+
+.guest {
+  cursor: default;
+}
+
+.add {
+  border: 0;
+  border-radius: 20px;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: #eceefe;
+  color: #444df2;
+}
