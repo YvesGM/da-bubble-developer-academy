@@ -9,7 +9,9 @@
         }
       </div>
       <div class="header-actions">
-        <button type="button" class="secondary" (click)="startEditing()">Edit</button>
+        @if (canManageChannel()) {
+          <button type="button" class="secondary" (click)="startEditing()">Edit</button>
+        }
         @if (canLeaveChannel()) {
           <button type="button" class="danger" (click)="leaveChannel()">Leave</button>
         }
@@ -111,8 +113,10 @@
     </div>
 
     <section class="message-placeholder">
-      <h2>Messages</h2>
-      <p>The channel is ready. Real-time messaging will be connected next.</p>
+      <app-chat-panel
+        [target]="target()"
+        [inputPlaceholder]="'Message #' + currentChannel.name"
+      />
     </section>
   </section>
 } @else {
