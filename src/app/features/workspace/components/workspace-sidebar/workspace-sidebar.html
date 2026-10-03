@@ -1,6 +1,15 @@
 <aside class="sidebar" [class.collapsed]="collapsed">
   <div class="sidebar-top">
-    <strong>Workspace</strong>
+    @if (!collapsed) {
+      <button
+        type="button"
+        class="workspace-name"
+        [disabled]="guest"
+        (click)="workspaceEditRequested.emit()"
+      >
+        {{ workspaceName }}
+      </button>
+    }
     <button type="button" aria-label="Toggle menu" (click)="collapseRequested.emit()">
       {{ collapsed ? '›' : '‹' }}
     </button>
