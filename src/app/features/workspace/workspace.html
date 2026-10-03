@@ -22,7 +22,7 @@
       [guest]="isGuest"
       [collapsed]="sidebarCollapsed()"
       (createRequested)="showCreateChannel.set(true)"
-      (newMessageRequested)="showNewMessage.set(true)"
+      (newMessageRequested)="openNewMessage()"
       (workspaceEditRequested)="showWorkspaceEditor.set(true)"
       (collapseRequested)="toggleSidebar()"
     />
@@ -34,19 +34,9 @@
 
   @if (showCreateChannel()) {
     <app-channel-create-dialog
+      [workspaceName]="workspaceName"
       (closeRequested)="showCreateChannel.set(false)"
       (channelCreated)="selectCreatedChannel($event)"
-    />
-  }
-
-  @if (showNewMessage()) {
-    <app-new-message-dialog
-      [users]="users()"
-      [channels]="channels()"
-      [currentUserId]="currentUserId"
-      (closeRequested)="showNewMessage.set(false)"
-      (userSelected)="startDirectMessage($event)"
-      (channelSelected)="openChannel($event)"
     />
   }
 
