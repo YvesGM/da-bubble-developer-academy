@@ -1,0 +1,84 @@
+.message {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  padding: 12px 16px;
+  gap: 10px;
+}
+
+.message:hover {
+  background: #f7f7fc;
+}
+
+.avatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eceefe;
+  color: #444df2;
+  font-weight: 700;
+}
+
+.meta,
+.actions,
+.reactions,
+.edit-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.meta span {
+  color: #686868;
+  font-size: 12px;
+}
+
+p {
+  margin: 4px 0 8px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  opacity: 0;
+}
+
+.message:hover .actions,
+.actions:focus-within {
+  opacity: 1;
+}
+
+button {
+  border: 0;
+  border-radius: 14px;
+  padding: 5px 9px;
+  background: #eceefe;
+}
+
+.icon-action {
+  background: transparent;
+}
+
+.reactions {
+  margin-top: 8px;
+}
+
+.reactions button {
+  background: #eceefe;
+}
+
+.edit-row input {
+  flex: 1;
+  min-width: 160px;
+  border: 1px solid #adb0d9;
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
+@media (max-width: 640px) {
+  .actions {
+    opacity: 1;
+  }
+}
