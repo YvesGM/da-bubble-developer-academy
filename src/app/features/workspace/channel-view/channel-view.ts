@@ -4,12 +4,14 @@ import { Auth } from '@angular/fire/auth';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 
-import { Channel, UpdateChannelInput } from '../../../core/models/channel.model';
+import { ChannelNameTakenError } from '../../../core/errors/channel-name-taken.error';
+import { UpdateChannelInput } from '../../../core/models/channel.model';
 import { ConversationTarget } from '../../../core/models/conversation.model';
 import { UserProfile } from '../../../core/models/user-profile.model';
 import { ChannelService } from '../../../core/services/channel.service';
 import { DirectMessageService } from '../../../core/services/direct-message.service';
 import { UserService } from '../../../core/services/user.service';
+import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { ProfileCard } from '../../profile/profile-card/profile-card';
 import { ProfileDialog } from '../../profile/profile-dialog/profile-dialog';
 import { Avatar } from '../../../shared/components/avatar/avatar';
@@ -68,6 +70,7 @@ export class ChannelView {
   readonly showAddMembers = signal(false);
   readonly selectedUser = signal<UserProfile | null>(null);
   readonly showProfileEditor = signal(false);
+  readonly channelError = signal('');
 
   canManageChannel(): boolean {
     return !this.auth.currentUser?.isAnonymous;
@@ -77,9 +80,18 @@ export class ChannelView {
     return this.auth.currentUser?.uid ?? '';
   }
 
+  openDetails(): void {
+    this.channelError.set('');
+    this.showDetails.set(true);
+  }
+
   async saveChannel(input: UpdateChannelInput): Promise<void> {
-    await this.channels.updateChannel(this.channelId(), input);
-    this.showDetails.set(false);
+    try {
+      await this.channels.updateChannel(this.channelId(), input);
+      this.showDetails.set(false);
+    } catch (error) {
+      this.channelError.set(this.channelErrorMessage(error));
+    }
   }
 
   async addMembers(selection: AddMembersSelection): Promise<void> {
@@ -116,6 +128,11 @@ export class ChannelView {
   openProfile(user: UserProfile): void {
     this.showMembers.set(false);
     this.selectedUser.set(user);
+  }
+
+  private channelErrorMessage(error: unknown): string {
+    if (error instanceof ChannelNameTakenError) return 'This channel name is already in use.';
+    return firebaseErrorMessage(error, 'The channel changes could not be saved.');
   }
 
   private isChannelMember(uid: string): boolean {
