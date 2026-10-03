@@ -2,118 +2,38 @@
   <section class="channel-view">
     <header class="channel-header">
       <a class="mobile-back" routerLink="/workspace" aria-label="Back to conversations">←</a>
-      <div>
-        <p class="eyebrow">Channel</p>
-        <h1># {{ currentChannel.name }}</h1>
-        @if (currentChannel.description) {
-          <p class="description">{{ currentChannel.description }}</p>
-        }
-      </div>
-      <div class="header-actions">
+
+      <button
+        type="button"
+        class="channel-title"
+        [disabled]="!canManageChannel()"
+        (click)="showDetails.set(true)"
+      >
+        # {{ currentChannel.name }} <span aria-hidden="true">⌄</span>
+      </button>
+
+      <div class="member-tools">
+        <button type="button" class="member-stack" (click)="openMembers()">
+          @for (member of visibleMembers(); track member.uid) {
+            <app-avatar [avatarId]="member.avatarId" [name]="member.displayName" size="small" />
+          }
+          @if (currentChannel.guestAccess && visibleMembers().length < 5) {
+            <span class="guest-avatar">G</span>
+          }
+          <strong>{{ memberCount() }}{{ overflowCount() ? '+' : '' }}</strong>
+        </button>
+
         @if (canManageChannel()) {
-          <button type="button" class="secondary" (click)="startEditing()">Edit</button>
-        }
-        @if (canLeaveChannel()) {
-          <button type="button" class="danger" (click)="leaveChannel()">Leave</button>
+          <button type="button" class="add-member" aria-label="Add members" (click)="showAddMembers.set(true)">
+            ＋
+          </button>
         }
       </div>
     </header>
 
-    @if (editing()) {
-      <form class="edit-form" [formGroup]="form" (ngSubmit)="saveChannel()" novalidate>
-        <label>
-          Channel name
-          <input type="text" formControlName="name" />
-        </label>
-        @if (form.controls.name.touched && form.controls.name.hasError('required')) {
-          <p class="field-error">Please enter a channel name.</p>
-        }
-        <label>
-          Description
-          <textarea rows="3" formControlName="description"></textarea>
-        </label>
-        @if (errorMessage()) {
-          <p class="field-error">{{ errorMessage() }}</p>
-        }
-        <div class="form-actions">
-          <button type="button" class="secondary" (click)="cancelEditing()">Cancel</button>
-          <button type="submit" class="primary" [disabled]="saving()">
-            {{ saving() ? 'Saving…' : 'Save' }}
-          </button>
-        </div>
-      </form>
+    @if (currentChannel.description) {
+      <p class="description">{{ currentChannel.description }}</p>
     }
-
-    <div class="content-grid">
-      <section class="panel">
-        <h2>Members</h2>
-        <div class="member-list">
-          @if (currentChannel.guestAccess) {
-            <div class="member">
-              <span class="avatar">G</span>
-              <div>
-                <strong>Guest</strong>
-                @if (isGuestCurrentUser()) {
-                  <span>You</span>
-                }
-              </div>
-            </div>
-          }
-
-          @for (member of members(); track member.uid) {
-            <div class="member">
-              <span class="avatar">{{ member.displayName.charAt(0).toUpperCase() }}</span>
-              <div>
-                <strong>{{ member.displayName }}</strong>
-                @if (member.uid === currentUserId()) {
-                  <span>You</span>
-                }
-              </div>
-            </div>
-          }
-        </div>
-      </section>
-
-      @if (canManageChannel()) {
-      <section class="panel">
-        <h2>Add members</h2>
-        @if (!currentChannel.guestAccess) {
-          <label class="user-option">
-            <input
-              type="checkbox"
-              [checked]="addGuestAccess()"
-              (change)="toggleGuestAccess()"
-            />
-            <span>Guest</span>
-          </label>
-        }
-
-        @for (user of availableUsers(); track user.uid) {
-          <label class="user-option">
-            <input
-              type="checkbox"
-              [checked]="isSelected(user.uid)"
-              (change)="toggleMember(user.uid)"
-            />
-            <span>{{ user.displayName }}</span>
-          </label>
-        }
-
-        @if (currentChannel.guestAccess && availableUsers().length === 0) {
-          <p class="empty">All users are already members.</p>
-        }
-
-        <button
-          type="button"
-          class="primary add-button"
-          [disabled]="selectedMemberIds().size === 0 && !addGuestAccess()"
-          (click)="addMembers()"
-        >
-          Add
-        </button>
-      </section>
-      }
-    </div>
 
     <section class="message-placeholder">
       <app-chat-panel
@@ -123,6 +43,45 @@
       />
     </section>
   </section>
+
+  @if (showDetails() && canManageChannel()) {
+    <app-channel-details-dialog
+      [channel]="currentChannel"
+      [creatorName]="creatorName()"
+      (closeRequested)="showDetails.set(false)"
+      (saveRequested)="saveChannel($event)"
+      (leaveRequested)="leaveChannel()"
+    />
+  }
+
+  @if (showMembers()) {
+    <app-channel-members-dialog
+      [members]="members()"
+      [guestAccess]="currentChannel.guestAccess"
+      [currentUserId]="currentUserId()"
+      (closeRequested)="showMembers.set(false)"
+      (addRequested)="openAddMembers()"
+      (userSelected)="openProfile($event)"
+    />
+  }
+
+  @if (showAddMembers() && canManageChannel()) {
+    <app-add-members-dialog
+      [users]="availableUsers()"
+      [guestAvailable]="!currentChannel.guestAccess"
+      (closeRequested)="showAddMembers.set(false)"
+      (addRequested)="addMembers($event)"
+    />
+  }
+
+  @if (selectedUser(); as user) {
+    <app-profile-card
+      [user]="user"
+      [ownProfile]="user.uid === currentUserId()"
+      (closeRequested)="selectedUser.set(null)"
+      (messageRequested)="startDirectMessage($event)"
+    />
+  }
 } @else {
   <section class="missing-channel">
     <h1>Channel not found</h1>
