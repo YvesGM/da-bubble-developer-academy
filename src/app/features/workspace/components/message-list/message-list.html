@@ -5,6 +5,7 @@
       [message]="message"
       [recentEmojis]="recentEmojis"
       (threadRequested)="threadRequested.emit($event)"
+      (userRequested)="userRequested.emit($event)"
     />
   } @empty {
     <div class="empty-state">
