@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth.guard';
+import { registeredUserGuard } from './core/guards/registered-user.guard';
 
 export const routes: Routes = [
   {
@@ -42,6 +43,7 @@ export const routes: Routes = [
       },
       {
         path: 'dm/:dmId',
+        canActivate: [registeredUserGuard],
         loadComponent: () =>
           import('./features/workspace/direct-message-view/direct-message-view').then(
             (module) => module.DirectMessageView,
