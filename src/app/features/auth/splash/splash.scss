@@ -1,0 +1,57 @@
+.splash {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  overflow: hidden;
+  background: #444df2;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mark {
+  display: grid;
+  width: 76px;
+  height: 76px;
+  place-items: center;
+  border-radius: 24px;
+  background: #fff;
+  color: #444df2;
+  font-size: 42px;
+  font-weight: 800;
+  animation: mark-in 500ms ease-out both;
+}
+
+.name {
+  color: #fff;
+  font-size: 42px;
+  font-weight: 800;
+  animation: name-in 650ms 350ms ease-out both;
+}
+
+@keyframes mark-in {
+  from {
+    transform: scale(0.65);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes name-in {
+  from {
+    transform: translateX(-18px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
