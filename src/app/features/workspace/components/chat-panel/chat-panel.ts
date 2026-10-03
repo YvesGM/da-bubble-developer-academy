@@ -6,6 +6,7 @@ import { switchMap } from 'rxjs';
 import { DEFAULT_RECENT_EMOJIS } from '../../../../core/constants/emoji.constants';
 import { ConversationTarget } from '../../../../core/models/conversation.model';
 import { Message } from '../../../../core/models/message.model';
+import { UserProfile } from '../../../../core/models/user-profile.model';
 import { ChannelService } from '../../../../core/services/channel.service';
 import { MessageService } from '../../../../core/services/message.service';
 import { UserService } from '../../../../core/services/user.service';
@@ -27,6 +28,7 @@ export class ChatPanel {
 
   readonly target = input.required<ConversationTarget>();
   readonly inputPlaceholder = input('Write a message');
+  readonly mentionUsers = input<UserProfile[] | null>(null);
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
   readonly profile = toSignal(this.usersService.observeCurrentProfile());
@@ -35,6 +37,7 @@ export class ChatPanel {
     { initialValue: [] as Message[] },
   );
   readonly threadMessage = signal<Message | null>(null);
+  readonly availableMentionUsers = computed(() => this.mentionUsers() ?? this.users());
   readonly recentEmojis = computed(() =>
     this.profile()?.recentEmojis?.length ? this.profile()!.recentEmojis : [...DEFAULT_RECENT_EMOJIS],
   );
