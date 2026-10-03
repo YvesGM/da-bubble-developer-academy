@@ -34,11 +34,10 @@ export class ChannelView {
     ),
   );
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
-  readonly members = computed(() => this.users().filter((user) => this.channel()?.memberIds.includes(user.uid)));
-  readonly availableUsers = computed(() =>
-    this.users().filter((user) => !this.channel()?.memberIds.includes(user.uid)),
-  );
+  readonly members = computed(() => this.users().filter((user) => this.isChannelMember(user.uid)));
+  readonly availableUsers = computed(() => this.users().filter((user) => !this.isChannelMember(user.uid)));
   readonly selectedMemberIds = signal(new Set<string>());
+  readonly addGuestAccess = signal(false);
   readonly editing = signal(false);
   readonly errorMessage = signal('');
   readonly saving = signal(false);
@@ -66,8 +65,20 @@ export class ChannelView {
     this.selectedMemberIds.set(selected);
   }
 
+  toggleGuestAccess(): void {
+    this.addGuestAccess.update((value) => !value);
+  }
+
   isSelected(uid: string): boolean {
     return this.selectedMemberIds().has(uid);
+  }
+
+  isGuestCurrentUser(): boolean {
+    return this.auth.currentUser?.isAnonymous ?? false;
+  }
+
+  canLeaveChannel(): boolean {
+    return !this.isGuestCurrentUser();
   }
 
   async saveChannel(): Promise<void> {
@@ -78,14 +89,23 @@ export class ChannelView {
 
   async addMembers(): Promise<void> {
     const memberIds = [...this.selectedMemberIds()];
-    if (!memberIds.length) return;
-    await this.channels.addMembers(this.channelId(), memberIds);
+    await this.channels.addMembers(this.channelId(), memberIds, this.addGuestAccess());
     this.selectedMemberIds.set(new Set());
+    this.addGuestAccess.set(false);
   }
 
   async leaveChannel(): Promise<void> {
+    if (!this.canLeaveChannel()) return;
     await this.channels.leaveChannel(this.channelId());
     await this.router.navigateByUrl('/workspace');
+  }
+
+  currentUserId(): string {
+    return this.auth.currentUser?.uid ?? '';
+  }
+
+  private isChannelMember(uid: string): boolean {
+    return this.channel()?.memberIds.includes(uid) ?? false;
   }
 
   private async runSave(): Promise<void> {
@@ -112,9 +132,5 @@ export class ChannelView {
   private startSaving(): void {
     this.saving.set(true);
     this.errorMessage.set('');
-  }
-
-  currentUserId(): string {
-    return this.auth.currentUser?.uid ?? '';
   }
 }
