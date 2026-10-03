@@ -36,7 +36,7 @@
         +
       </button>
 
-      @if (!parentMessageId()) {
+      @if (!parentMessageId() && showThreadAction()) {
         <button type="button" (click)="threadRequested.emit(message())">Thread</button>
       }
 
