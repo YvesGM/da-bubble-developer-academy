@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -21,6 +21,7 @@ export class ChannelCreateDialog {
   private readonly formBuilder = inject(FormBuilder);
   private readonly userService = inject(UserService);
 
+  @Input() workspaceName = 'Workspace';
   @Output() readonly closeRequested = new EventEmitter<void>();
   @Output() readonly channelCreated = new EventEmitter<string>();
 
