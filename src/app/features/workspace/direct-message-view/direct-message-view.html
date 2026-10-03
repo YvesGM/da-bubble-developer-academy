@@ -2,11 +2,13 @@
   <header>
     <a class="mobile-back" routerLink="/workspace" aria-label="Back to conversations">←</a>
     @if (partner(); as currentPartner) {
-      <div class="avatar">{{ currentPartner.displayName.charAt(0).toUpperCase() }}</div>
-      <div>
-        <span>Direct message</span>
-        <h1>{{ currentPartner.displayName }}</h1>
-      </div>
+      <button type="button" class="partner" (click)="selectedUser.set(currentPartner)">
+        <div class="avatar">{{ currentPartner.displayName.charAt(0).toUpperCase() }}</div>
+        <div>
+          <span>Direct message</span>
+          <h1>{{ currentPartner.displayName }}</h1>
+        </div>
+      </button>
     } @else {
       <h1>Direct message</h1>
     }
@@ -17,6 +19,21 @@
       [target]="target()"
       [mentionUsers]="participantUsers()"
       [inputPlaceholder]="'Message ' + (partner()?.displayName ?? '')"
+      (userRequested)="openProfile($event)"
     />
   </div>
 </section>
+
+@if (selectedUser(); as user) {
+  <app-profile-card
+    [user]="user"
+    [ownProfile]="user.uid === currentUserId()"
+    [messageEnabled]="false"
+    (closeRequested)="selectedUser.set(null)"
+    (editRequested)="openProfileEditor()"
+  />
+}
+
+@if (showProfileEditor()) {
+  <app-profile-dialog (closeRequested)="showProfileEditor.set(false)" />
+}
