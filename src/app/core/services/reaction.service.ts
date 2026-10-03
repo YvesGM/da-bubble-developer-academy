@@ -64,7 +64,7 @@ export class ReactionService {
     emoji: string,
     replyId?: string,
   ) {
-    const id = `${this.currentUserId()}__${encodeURIComponent(emoji)}`;
+    const id = `${this.currentUserId()}__${emoji}`;
     return this.runSync(() => doc(this.firestore, `${this.reactionsPath(target, messageId, replyId)}/${id}`));
   }
 
