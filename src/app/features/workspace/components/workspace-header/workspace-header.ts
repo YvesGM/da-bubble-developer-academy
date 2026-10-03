@@ -9,5 +9,6 @@ import { RouterLink } from '@angular/router';
 })
 export class WorkspaceHeader {
   @Input({ required: true }) displayName = '';
+  @Output() readonly profileRequested = new EventEmitter<void>();
   @Output() readonly logoutRequested = new EventEmitter<void>();
 }
