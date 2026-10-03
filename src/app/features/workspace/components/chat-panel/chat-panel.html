@@ -5,6 +5,7 @@
       [messages]="messages()"
       [recentEmojis]="recentEmojis()"
       (threadRequested)="threadMessage.set($event)"
+      (userRequested)="userRequested.emit($event)"
     />
 
     <app-message-input
@@ -26,6 +27,7 @@
       [users]="availableMentionUsers()"
       [recentEmojis]="recentEmojis()"
       (closeRequested)="threadMessage.set(null)"
+      (userRequested)="userRequested.emit($event)"
     />
   }
 </section>
