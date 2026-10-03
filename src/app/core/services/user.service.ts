@@ -1,10 +1,11 @@
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
-import { User } from '@angular/fire/auth';
+import { Auth, User, updateProfile } from '@angular/fire/auth';
 import {
   Firestore,
   collection,
   collectionData,
   doc,
+  docData,
   getDoc,
   serverTimestamp,
   setDoc,
@@ -12,10 +13,12 @@ import {
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 
+import { DEFAULT_RECENT_EMOJIS } from '../constants/emoji.constants';
 import { UserProfile } from '../models/user-profile.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
+  private readonly auth = inject(Auth);
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
@@ -25,9 +28,19 @@ export class UserService {
     return (users as Observable<UserProfile[]>).pipe(map((items) => this.visibleUsers(items)));
   }
 
-  async createProfile(user: User, displayName?: string): Promise<void> {
+  observeCurrentProfile(): Observable<UserProfile | undefined> {
+    const uid = this.auth.currentUser?.uid;
+    if (!uid || this.auth.currentUser?.isAnonymous) return new Observable((subscriber) => {
+      subscriber.next(undefined);
+      subscriber.complete();
+    });
+    const reference = this.userReference(uid);
+    return this.runSync(() => docData(reference, { idField: 'uid' })) as Observable<UserProfile>;
+  }
+
+  async createProfile(user: User, displayName?: string, avatarId = 'avatar-1'): Promise<void> {
     const reference = this.userReference(user.uid);
-    await this.run(() => setDoc(reference, this.buildProfile(user, displayName)));
+    await this.run(() => setDoc(reference, this.buildProfile(user, displayName, avatarId)));
   }
 
   async ensureProfile(user: User, displayName?: string): Promise<void> {
@@ -37,8 +50,31 @@ export class UserService {
     await this.syncDisplayName(reference, snapshot.data(), displayName);
   }
 
+  async updateCurrentProfile(displayName: string, avatarId: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user || user.isAnonymous) throw new Error('profile-not-available');
+    await this.run(() => updateProfile(user, { displayName }));
+    await this.run(() => updateDoc(this.userReference(user.uid), this.profileChanges(displayName, avatarId)));
+  }
+
+  async rememberEmoji(emoji: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user || user.isAnonymous) return;
+    const snapshot = await this.run(() => getDoc(this.userReference(user.uid)));
+    const current = (snapshot.data() as UserProfile | undefined)?.recentEmojis ?? [];
+    await this.run(() => updateDoc(this.userReference(user.uid), { recentEmojis: this.nextEmojis(emoji, current) }));
+  }
+
   private visibleUsers(users: UserProfile[]): UserProfile[] {
     return this.sortUsers(users.filter((user) => !user.isGuest));
+  }
+
+  private nextEmojis(emoji: string, current: string[]): string[] {
+    return [emoji, ...current.filter((item) => item !== emoji)].slice(0, 2);
+  }
+
+  private profileChanges(displayName: string, avatarId: string) {
+    return { displayName: displayName.trim(), avatarId, updatedAt: serverTimestamp() };
   }
 
   private async syncDisplayName(reference: ReturnType<typeof doc>, data: unknown, name?: string) {
@@ -52,22 +88,21 @@ export class UserService {
   }
 
   private sortUsers(users: UserProfile[]): UserProfile[] {
-    return [...users].sort((first, second) =>
-      first.displayName.localeCompare(second.displayName, 'en'),
-    );
+    return [...users].sort((first, second) => first.displayName.localeCompare(second.displayName, 'en'));
   }
 
   private userReference(uid: string) {
     return this.runSync(() => doc(this.firestore, 'users', uid));
   }
 
-  private buildProfile(user: User, displayName?: string): UserProfile {
+  private buildProfile(user: User, displayName?: string, avatarId = 'avatar-1'): UserProfile {
     return {
       uid: user.uid,
       email: user.email,
       displayName: displayName || user.displayName || 'User',
-      avatarId: 'avatar-1',
+      avatarId,
       isGuest: user.isAnonymous,
+      recentEmojis: [...DEFAULT_RECENT_EMOJIS],
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
