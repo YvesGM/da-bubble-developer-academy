@@ -149,7 +149,7 @@ service cloud.firestore {
           && messageOwner()
           && validMessage()
           && immutableMessageFields();
-        allow delete: if channelAccess(channelId) && messageOwner();
+        allow delete: if false;
 
         match /reactions/{reactionId} {
           allow read: if channelAccess(channelId);
@@ -165,7 +165,7 @@ service cloud.firestore {
             && messageOwner()
             && validMessage()
             && immutableMessageFields();
-          allow delete: if channelAccess(channelId) && messageOwner();
+          allow delete: if false;
 
           match /reactions/{reactionId} {
             allow read: if channelAccess(channelId);
@@ -197,7 +197,7 @@ service cloud.firestore {
           && messageOwner()
           && validMessage()
           && immutableMessageFields();
-        allow delete: if directMessageAccess(dmId) && messageOwner();
+        allow delete: if false;
 
         match /reactions/{reactionId} {
           allow read: if directMessageAccess(dmId);
@@ -213,7 +213,7 @@ service cloud.firestore {
             && messageOwner()
             && validMessage()
             && immutableMessageFields();
-          allow delete: if directMessageAccess(dmId) && messageOwner();
+          allow delete: if false;
 
           match /reactions/{reactionId} {
             allow read: if directMessageAccess(dmId);
