@@ -34,7 +34,9 @@ export class ForgotPassword {
       await this.auth.sendPasswordReset(this.form.controls.email.value);
       this.message.set('Die E-Mail zum Zurücksetzen deines Passworts wurde versendet.');
     } catch (error) {
-      this.errorMessage.set(firebaseErrorMessage(error, 'Das Zurücksetzen konnte nicht gestartet werden.'));
+      this.errorMessage.set(
+        firebaseErrorMessage(error, 'Das Zurücksetzen konnte nicht gestartet werden.'),
+      );
     } finally {
       this.submitting.set(false);
     }
