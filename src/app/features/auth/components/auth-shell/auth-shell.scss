@@ -133,6 +133,10 @@
       padding: 9px 14px;
       color: tokens.$purple-2;
       text-decoration: none;
+      transition:
+        border-color tokens.$motion-base,
+        color tokens.$motion-fast,
+        background-color tokens.$motion-base;
 
       &:hover {
         border-color: tokens.$purple-2;
@@ -152,6 +156,10 @@
     color: tokens.$purple-2;
     cursor: pointer;
     text-decoration: none;
+    transition:
+      border-color tokens.$motion-base,
+      color tokens.$motion-fast,
+      background-color tokens.$motion-base;
 
     &:hover {
       border-color: tokens.$purple-2;
