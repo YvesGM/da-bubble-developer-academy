@@ -29,6 +29,6 @@ export class WorkspaceNameDialog {
 
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Please enter a workspace name.');
+    this.errorMessage.set('Bitte gib einen Workspace-Namen ein.');
   }
 }
