@@ -1,4 +1,5 @@
 @use '../../../../styles/tokens' as tokens;
+@use '../../../../styles/breakpoints' as bp;
 
 .backdrop {
   position: fixed;
@@ -7,16 +8,17 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: #00000040;
+  background: #00000052;
 }
 
 .card {
   display: grid;
-  width: min(460px, 100%);
-  padding: 28px;
+  width: min(500px, 100%);
+  padding: 34px 40px 38px;
   gap: 22px;
-  border-radius: 24px;
+  border-radius: 30px;
   background: tokens.$white;
+  box-shadow: 0 8px 28px #00000024;
 
   header,
   .name-row,
@@ -31,51 +33,101 @@
   }
 
   header {
+    h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
     button {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
       border: 0;
-      cursor: pointer;
+      border-radius: 50%;
       background: transparent;
+      font-size: 26px;
+      transition:
+        background-color tokens.$motion-base,
+        color tokens.$motion-fast;
+
+      &:hover {
+        background: tokens.$background;
+        color: tokens.$purple-1;
+      }
     }
   }
 
-  h2,
-  h3 {
-    margin: 0;
+  .profile-avatar {
+    display: grid;
+    place-items: center;
+    padding: 8px 0 10px;
   }
 
   h3 {
-    font-size: 28px;
+    margin: 0;
+    font-size: 30px;
+  }
+
+  .link-button {
+    border: 0;
+    background: transparent;
+    color: tokens.$purple-1;
+    font-size: 17px;
+    transition: color tokens.$motion-fast;
+
+    &:hover {
+      color: tokens.$purple-2;
+    }
   }
 
   .status {
-    gap: 10px;
     color: tokens.$text-gray;
   }
 
   .email {
     display: grid;
-    gap: 6px;
+    gap: 8px;
 
-    span {
-      color: tokens.$purple-1;
+    strong {
+      font-size: 18px;
+    }
+
+    a {
+      color: #1381ff;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
-  .link-button {
-    border: 0;
-    cursor: pointer;
-    background: transparent;
-    color: tokens.$purple-1;
-  }
-
   .primary {
-    justify-self: start;
+    justify-self: center;
     border: 0;
     border-radius: 24px;
-    padding: 12px 22px;
-    cursor: pointer;
+    padding: 12px 24px;
     background: tokens.$purple-1;
     color: tokens.$white;
     font-weight: 700;
+    transition:
+      background-color tokens.$motion-base,
+      transform tokens.$motion-base;
+
+    &:hover {
+      background: tokens.$purple-2;
+      transform: translateY(-1px);
+    }
+  }
+
+  @include bp.mobile {
+    width: min(100%, 430px);
+    padding: 28px 24px 32px;
+    border-radius: 28px;
+
+    h3 {
+      font-size: 26px;
+    }
   }
 }
