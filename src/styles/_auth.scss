@@ -123,10 +123,13 @@
 }
 
 .auth-link {
-  border: 0;
-  background: transparent;
-  color: tokens.$purple-2;
   font-size: 18px;
+  text-align: center;
+  
+  color: tokens.$purple-2;
+  background: transparent;
+  border: 0;
+
   text-decoration: none;
 }
 
