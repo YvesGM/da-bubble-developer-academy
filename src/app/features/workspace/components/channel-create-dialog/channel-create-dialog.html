@@ -109,7 +109,7 @@
 
         <div class="actions">
           <button class="secondary" type="button" (click)="finishWithoutMembers()">Skip</button>
-          <button class="primary" type="button" [disabled]="submitting()" (click)="finishMembers()">
+          <button class="primary" type="button" [disabled]="submitting() || !canFinishMembers()" (click)="finishMembers()">
             {{ submitting() ? 'Adding…' : 'Add' }}
           </button>
         </div>
