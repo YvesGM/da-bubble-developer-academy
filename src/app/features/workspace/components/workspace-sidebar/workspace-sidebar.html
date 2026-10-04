@@ -10,50 +10,71 @@
         {{ workspaceName }}
       </button>
     }
-    <button type="button" aria-label="Toggle menu" (click)="collapseRequested.emit()">
+
+    <button
+      type="button"
+      class="collapse-button"
+      [attr.aria-label]="collapsed ? 'Menü öffnen' : 'Menü schließen'"
+      (click)="collapseRequested.emit()"
+    >
       {{ collapsed ? '›' : '‹' }}
     </button>
   </div>
 
   @if (!collapsed) {
-    <div class="section-heading">
-      <h2>Channels</h2>
-      <button type="button" aria-label="Create channel" (click)="createRequested.emit()">+</button>
-    </div>
-
-    <nav aria-label="Channels">
-      @for (channel of channels; track channel.id) {
-        <a [routerLink]="['/workspace/channel', channel.id]" routerLinkActive="active" class="channel-link">
-          <span>#</span>
-          {{ channel.name }}
-        </a>
-      } @empty {
-        <p class="empty">No channels yet.</p>
-      }
-    </nav>
-
-    <div class="direct-messages">
+    <section class="sidebar-section">
       <div class="section-heading">
-        <h2>Direct messages</h2>
+        <h2><span aria-hidden="true">⌄</span> Channels</h2>
+        <button type="button" aria-label="Channel erstellen" (click)="createRequested.emit()">＋</button>
+      </div>
+
+      <nav aria-label="Channels">
+        @for (channel of channels; track channel.id) {
+          <a
+            [routerLink]="['/workspace/channel', channel.id]"
+            routerLinkActive="active"
+            class="channel-link"
+          >
+            <span class="channel-hash">#</span>
+            <span>{{ channel.name }}</span>
+          </a>
+        } @empty {
+          <p class="empty">Noch keine Channels.</p>
+        }
+      </nav>
+    </section>
+
+    <section class="sidebar-section direct-messages">
+      <div class="section-heading">
+        <h2><span aria-hidden="true">⌄</span> Direktnachrichten</h2>
         @if (!guest) {
-          <button type="button" aria-label="Start direct message" (click)="newMessageRequested.emit()">+</button>
+          <button type="button" aria-label="Neue Nachricht" (click)="newMessageRequested.emit()">＋</button>
         }
       </div>
 
       @if (guest) {
-        <p class="empty">Direct messages require an account.</p>
+        <p class="empty">Direktnachrichten sind nur mit einem Konto verfügbar.</p>
       } @else {
-        <nav aria-label="Direct messages">
+        <nav aria-label="Direktnachrichten">
           @for (dm of directMessages; track dm.id) {
-            <a [routerLink]="['/workspace/dm', dm.id]" routerLinkActive="active" class="channel-link">
-              <app-presence-indicator [userId]="directMessagePartnerId(dm)" />
-              {{ directMessageName(dm) }}
+            <a
+              [routerLink]="['/workspace/dm', dm.id]"
+              routerLinkActive="active"
+              class="dm-link"
+            >
+              @if (directMessageUser(dm); as user) {
+                <span class="dm-avatar">
+                  <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
+                  <app-presence-indicator [userId]="user.uid" />
+                </span>
+              }
+              <span>{{ directMessageName(dm) }}</span>
             </a>
           } @empty {
-            <p class="empty">No direct messages yet.</p>
+            <p class="empty">Noch keine Direktnachrichten.</p>
           }
         </nav>
       }
-    </div>
+    </section>
   }
 </aside>
