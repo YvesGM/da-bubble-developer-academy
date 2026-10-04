@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Channel, UpdateChannelInput } from '../../../../core/models/channel.model';
@@ -15,19 +15,27 @@ export class ChannelDetailsDialog {
   @Input({ required: true }) set channel(value: Channel) {
     this.form.setValue({ name: value.name, description: value.description });
   }
-  @Input() creatorName = 'Unknown user';
+  @Input() creatorName = 'Unbekannter Benutzer';
   @Input() errorMessage = '';
   @Output() readonly closeRequested = new EventEmitter<void>();
   @Output() readonly saveRequested = new EventEmitter<UpdateChannelInput>();
   @Output() readonly leaveRequested = new EventEmitter<void>();
 
+  readonly editingName = signal(false);
+  readonly editingDescription = signal(false);
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', Validators.required],
     description: [''],
   });
 
-  submit(): void {
-    if (this.form.invalid) return this.form.markAllAsTouched();
+  saveName(): void {
+    if (this.form.controls.name.invalid) return this.form.controls.name.markAsTouched();
     this.saveRequested.emit(this.form.getRawValue());
+    this.editingName.set(false);
+  }
+
+  saveDescription(): void {
+    this.saveRequested.emit(this.form.getRawValue());
+    this.editingDescription.set(false);
   }
 }
