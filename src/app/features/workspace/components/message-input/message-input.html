@@ -29,7 +29,16 @@
   ></textarea>
 
   <div class="composer-actions">
-    <button type="button" class="icon-button" (click)="showEmojiPicker.set(!showEmojiPicker())">☺</button>
-    <button type="button" class="send-button" [disabled]="!text().trim()" (click)="submit()">Send</button>
+    <button
+      type="button"
+      class="icon-button"
+      aria-label="Emoji auswählen"
+      (click)="showEmojiPicker.set(!showEmojiPicker())"
+    >
+      ☺
+    </button>
+    <button type="button" class="send-button" [disabled]="!text().trim()" (click)="submit()">
+      Senden
+    </button>
   </div>
 </div>
