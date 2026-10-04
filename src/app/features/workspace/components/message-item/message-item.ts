@@ -22,11 +22,12 @@ import { ReactionService } from '../../../../core/services/reaction.service';
 import { ThreadService } from '../../../../core/services/thread.service';
 import { UserService } from '../../../../core/services/user.service';
 import { messageTime } from '../../../../core/utils/timestamp.util';
+import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
 
 @Component({
   selector: 'app-message-item',
-  imports: [FormsModule, EmojiPicker],
+  imports: [FormsModule, Avatar, EmojiPicker],
   templateUrl: './message-item.html',
   styleUrl: './message-item.scss',
 })
@@ -94,6 +95,10 @@ export class MessageItem {
     return messageTime(this.message().createdAt);
   }
 
+  authorAvatarId(): string {
+    return this.users().find((user) => user.uid === this.message().authorId)?.avatarId ?? '';
+  }
+
   canInteract(): boolean {
     return !this.message().deleted;
   }
@@ -145,7 +150,7 @@ export class MessageItem {
   }
 
   private userName(uid: string): string {
-    if (uid === this.auth.currentUser?.uid && this.auth.currentUser?.isAnonymous) return 'Guest';
-    return this.users().find((user) => user.uid === uid)?.displayName ?? 'Guest';
+    if (uid === this.auth.currentUser?.uid && this.auth.currentUser?.isAnonymous) return 'Gast';
+    return this.users().find((user) => user.uid === uid)?.displayName ?? 'Gast';
   }
 }
