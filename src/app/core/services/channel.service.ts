@@ -20,6 +20,7 @@ import { Observable, map } from 'rxjs';
 
 import { ChannelNameTakenError } from '../errors/channel-name-taken.error';
 import { Channel, CreateChannelInput, UpdateChannelInput } from '../models/channel.model';
+import { timestampToDate } from '../utils/timestamp.util';
 
 @Injectable({ providedIn: 'root' })
 export class ChannelService {
@@ -177,7 +178,14 @@ export class ChannelService {
   }
 
   private sortChannels(channels: Channel[]): Channel[] {
-    return [...channels].sort((first, second) => first.name.localeCompare(second.name, 'en'));
+    return [...channels].sort((first, second) => {
+      const timeDifference = this.channelTime(first) - this.channelTime(second);
+      return timeDifference || first.name.localeCompare(second.name, 'de');
+    });
+  }
+
+  private channelTime(channel: Channel): number {
+    return timestampToDate(channel.createdAt)?.getTime() ?? 0;
   }
 
   private currentUserId(): string {
