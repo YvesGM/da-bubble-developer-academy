@@ -10,7 +10,7 @@ export function timestampToDate(value: unknown): Date | null {
 export function messageTime(value: unknown): string {
   const date = timestampToDate(value);
   if (!date) return '';
-  return new Intl.DateTimeFormat('en', {
+  return new Intl.DateTimeFormat('de-DE', {
     hour: '2-digit',
     minute: '2-digit',
   }).format(date);
@@ -19,8 +19,8 @@ export function messageTime(value: unknown): string {
 export function messageDateLabel(value: unknown): string {
   const date = timestampToDate(value);
   if (!date) return '';
-  if (sameDay(date, new Date())) return 'Today';
-  return new Intl.DateTimeFormat('en', {
+  if (sameDay(date, new Date())) return 'Heute';
+  return new Intl.DateTimeFormat('de-DE', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
