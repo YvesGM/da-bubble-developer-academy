@@ -9,11 +9,13 @@ import { UserProfile } from '../../../core/models/user-profile.model';
 import { UserService } from '../../../core/services/user.service';
 import { ProfileCard } from '../../profile/profile-card/profile-card';
 import { ProfileDialog } from '../../profile/profile-dialog/profile-dialog';
+import { Avatar } from '../../../shared/components/avatar/avatar';
+import { PresenceIndicator } from '../../../shared/components/presence-indicator/presence-indicator';
 import { ChatPanel } from '../components/chat-panel/chat-panel';
 
 @Component({
   selector: 'app-direct-message-view',
-  imports: [ChatPanel, RouterLink, ProfileCard, ProfileDialog],
+  imports: [ChatPanel, RouterLink, ProfileCard, ProfileDialog, Avatar, PresenceIndicator],
   templateUrl: './direct-message-view.html',
   styleUrl: './direct-message-view.scss',
 })
@@ -52,8 +54,13 @@ export class DirectMessageView {
     return this.auth.currentUser?.uid ?? '';
   }
 
+  isSelfConversation(): boolean {
+    return this.partner()?.uid === this.currentUserId();
+  }
+
   private findPartner(): UserProfile | undefined {
-    const partnerId = this.dmId().split('__').find((uid) => uid !== this.currentUserId());
+    const ids = this.dmId().split('__');
+    const partnerId = ids.find((uid) => uid !== this.currentUserId()) ?? this.currentUserId();
     return this.users().find((user) => user.uid === partnerId);
   }
 }
