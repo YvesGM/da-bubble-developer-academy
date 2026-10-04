@@ -61,6 +61,11 @@ export class ChannelCreateDialog {
     return this.selectedMemberIds().has(uid);
   }
 
+  canFinishMembers(): boolean {
+    if (this.memberMode() === 'all') return this.memberIds().length > 0;
+    return this.selectedMemberIds().size > 0 || this.guestAccess();
+  }
+
   toggleMember(uid: string): void {
     const selected = new Set(this.selectedMemberIds());
     selected.has(uid) ? selected.delete(uid) : selected.add(uid);
