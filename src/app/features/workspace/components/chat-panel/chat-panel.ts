@@ -28,9 +28,9 @@ export class ChatPanel {
 
   readonly target = input.required<ConversationTarget>();
   @Output() readonly userRequested = new EventEmitter<string>();
-  readonly inputPlaceholder = input('Write a message');
-  readonly emptyTitle = input('No messages yet.');
-  readonly emptyText = input('Start the conversation below.');
+  readonly inputPlaceholder = input('Nachricht schreiben');
+  readonly emptyTitle = input('Noch keine Nachrichten.');
+  readonly emptyText = input('Starte die Unterhaltung unten.');
   readonly mentionUsers = input<UserProfile[] | null>(null);
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
@@ -57,7 +57,7 @@ export class ChatPanel {
     const user = this.auth.currentUser;
     return {
       text,
-      authorName: user?.displayName || (user?.isAnonymous ? 'Guest' : 'User'),
+      authorName: user?.displayName || (user?.isAnonymous ? 'Gast' : 'Benutzer'),
       authorAvatarId: this.profile()?.avatarId ?? 'avatar-1',
     };
   }
