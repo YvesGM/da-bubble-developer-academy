@@ -4,43 +4,79 @@
 .thread-panel {
   display: grid;
   grid-template-rows: auto auto auto minmax(0, 1fr) auto;
-  width: min(420px, 100%);
+  width: min(440px, 100%);
   height: 100%;
-  padding: 18px;
-  gap: 12px;
+  padding: 24px 18px 18px;
+  gap: 14px;
   border-left: 1px solid tokens.$background;
   background: tokens.$white;
 
   header {
     display: flex;
+    min-height: 48px;
     align-items: center;
     justify-content: space-between;
+    padding: 0 10px;
 
-    div {
-      display: grid;
+    .thread-title {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+
+      strong {
+        font-size: 22px;
+      }
+
+      span {
+        color: tokens.$purple-2;
+        font-size: 13px;
+      }
     }
 
     button {
+      width: 36px;
+      height: 36px;
       border: 0;
+      border-radius: 50%;
       background: transparent;
       font-size: 26px;
+      transition:
+        background-color tokens.$motion-base,
+        color tokens.$motion-fast;
+
+      &:hover {
+        background: tokens.$background;
+        color: tokens.$purple-1;
+      }
     }
   }
 
   .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     color: tokens.$text-gray;
     font-size: 13px;
+
+    &::after {
+      height: 1px;
+      flex: 1;
+      content: '';
+      background: tokens.$border;
+    }
   }
 
   .replies {
+    min-height: 0;
     overflow: auto;
   }
 
   @include bp.mobile {
-    position: absolute;
-    z-index: 20;
+    position: fixed;
+    z-index: 30;
     inset: 0;
     width: 100%;
+    padding: 16px 8px;
     border-left: 0;
   }
 }
