@@ -1,27 +1,36 @@
 <div class="backdrop" (click)="closeRequested.emit()">
   <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
     <header>
-      <h2>Edit profile</h2>
-      <button type="button" aria-label="Close profile" (click)="closeRequested.emit()">×</button>
+      <h2>Dein Profil bearbeiten</h2>
+      <button type="button" aria-label="Profil schließen" (click)="closeRequested.emit()">×</button>
     </header>
 
     <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+      <div class="profile-preview">
+        <app-avatar
+          [avatarId]="form.controls.avatarId.value"
+          [name]="form.controls.displayName.value || 'Profil'"
+          size="hero"
+        />
+      </div>
+
       <label>
-        Name
+        Vollständiger Name
         <input type="text" formControlName="displayName" />
       </label>
 
       <fieldset>
-        <legend>Avatar</legend>
+        <legend>Avatar auswählen</legend>
         <div class="avatar-grid">
           @for (avatarId of avatarIds; track avatarId; let index = $index) {
             <button
               type="button"
-              class="avatar"
+              class="avatar-option"
               [class.selected]="form.controls.avatarId.value === avatarId"
               (click)="selectAvatar(avatarId)"
+              [attr.aria-label]="'Avatar ' + (index + 1) + ' auswählen'"
             >
-              {{ index + 1 }}
+              <app-avatar [avatarId]="avatarId" [name]="'Avatar ' + (index + 1)" size="option" />
             </button>
           }
         </div>
@@ -32,8 +41,8 @@
       }
 
       <div class="actions">
-        <button type="button" class="secondary" (click)="closeRequested.emit()">Cancel</button>
-        <button type="submit" class="primary" [disabled]="saving()">Save</button>
+        <button type="button" class="secondary" (click)="closeRequested.emit()">Abbrechen</button>
+        <button type="submit" class="primary" [disabled]="saving()">Speichern</button>
       </div>
     </form>
   </section>
