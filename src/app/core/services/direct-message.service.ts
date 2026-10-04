@@ -5,7 +5,7 @@ import {
   collection,
   collectionData,
   doc,
-  getDocs,
+  getDoc,
   query,
   serverTimestamp,
   setDoc,
@@ -36,16 +36,15 @@ export class DirectMessageService {
   async openConversation(otherUserId: string): Promise<string> {
     const currentUserId = this.currentRegisteredUserId();
     if (!currentUserId) throw new Error('guest-direct-message-not-available');
-    const existing = await this.findConversation(currentUserId, otherUserId);
-    if (existing) return existing;
+    const id = this.conversationId(currentUserId, otherUserId);
+    if (await this.conversationExists(id)) return id;
     return this.createConversation(currentUserId, otherUserId);
   }
 
-  private async findConversation(currentUserId: string, otherUserId: string): Promise<string> {
-    const reference = this.runSync(() => collection(this.firestore, 'directMessages'));
-    const request = this.runSync(() => query(reference, where('participantIds', 'array-contains', currentUserId)));
-    const snapshot = await this.run(() => getDocs(request));
-    return snapshot.docs.find((item) => item.data()['participantIds'].includes(otherUserId))?.id ?? '';
+  private async conversationExists(id: string): Promise<boolean> {
+    const reference = this.runSync(() => doc(this.firestore, 'directMessages', id));
+    const snapshot = await this.run(() => getDoc(reference));
+    return snapshot.exists();
   }
 
   private async createConversation(currentUserId: string, otherUserId: string): Promise<string> {
@@ -57,12 +56,12 @@ export class DirectMessageService {
 
   conversationPartner(dm: DirectMessage): string {
     const current = this.currentRegisteredUserId();
-    return dm.participantIds.find((uid) => uid !== current) ?? '';
+    return dm.participantIds.find((uid) => uid !== current) ?? current;
   }
 
   private directMessageData(first: string, second: string) {
     return {
-      participantIds: [first, second].sort(),
+      participantIds: [...new Set([first, second])].sort(),
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
