@@ -7,25 +7,47 @@
   place-items: center;
   overflow: hidden;
   background: tokens.$purple-1;
-}
 
-.splash-brand {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-}
+  &-brand {
+    display: flex;
+    align-items: center;
+    gap: 22px;
 
-.splash-mark {
-  width: 132px;
-  height: 130px;
-  animation: mark-in 500ms ease-out both;
-}
+    @include bp.mobile {
+      gap: 14px;
+    }
+  }
 
-.splash-name {
-  width: 260px;
-  height: auto;
-  filter: brightness(0) invert(1);
-  animation: name-in 650ms 350ms ease-out both;
+  &-mark {
+    width: 132px;
+    height: 130px;
+    animation: mark-in 500ms ease-out both;
+
+    @include bp.mobile {
+      width: 86px;
+      height: 85px;
+    }
+
+    @include bp.widescreen {
+      width: 150px;
+      height: 148px;
+    }
+  }
+
+  &-name {
+    width: 260px;
+    height: auto;
+    filter: brightness(0) invert(1);
+    animation: name-in 650ms 350ms ease-out both;
+
+    @include bp.mobile {
+      width: 170px;
+    }
+
+    @include bp.widescreen {
+      width: 285px;
+    }
+  }
 }
 
 @keyframes mark-in {
@@ -49,31 +71,5 @@
   to {
     transform: translateX(0);
     opacity: 1;
-  }
-}
-
-@include bp.mobile {
-  .splash-brand {
-    gap: 14px;
-  }
-
-  .splash-mark {
-    width: 86px;
-    height: 85px;
-  }
-
-  .splash-name {
-    width: 170px;
-  }
-}
-
-@include bp.widescreen {
-  .splash-mark {
-    width: 150px;
-    height: 148px;
-  }
-
-  .splash-name {
-    width: 285px;
   }
 }

@@ -1,103 +1,111 @@
+@use '../../../../../styles/tokens' as tokens;
+@use '../../../../../styles/breakpoints' as bp;
+
 .message {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr);
   padding: 12px 16px;
   gap: 10px;
-}
 
-.message:hover {
-  background: #f7f7fc;
-}
+  &:hover {
+    background: #f7f7fc;
 
-.avatar {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  border-radius: 50%;
-  background: #eceefe;
-  color: #444df2;
-  font-weight: 700;
-}
-
-.meta,
-.actions,
-.reactions,
-.edit-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.meta span {
-  color: #686868;
-  font-size: 12px;
-}
-
-p {
-  margin: 4px 0 8px;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-.actions {
-  opacity: 0;
-}
-
-.message:hover .actions,
-.actions:focus-within {
-  opacity: 1;
-}
-
-button {
-  border: 0;
-  border-radius: 14px;
-  padding: 5px 9px;
-  background: #eceefe;
-}
-
-.icon-action {
-  background: transparent;
-}
-
-.reactions {
-  margin-top: 8px;
-}
-
-.reactions button {
-  background: #eceefe;
-}
-
-.edit-row input {
-  flex: 1;
-  min-width: 160px;
-  border: 1px solid #adb0d9;
-  border-radius: 12px;
-  padding: 8px 10px;
-}
-
-@media (max-width: 640px) {
-  .actions {
-    opacity: 1;
+    .actions {
+      opacity: 1;
+    }
   }
-}
 
-.deleted-message {
-  color: #686868;
-  font-style: italic;
-}
+  .avatar {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border-radius: 50%;
+    background: tokens.$background;
+    color: tokens.$purple-1;
+    font-weight: 700;
+  }
 
-.author-button {
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  font-weight: 700;
-}
+  .meta,
+  .actions,
+  .reactions,
+  .edit-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 
-.author-button:disabled {
-  cursor: default;
+  .meta {
+    span {
+      color: tokens.$text-gray;
+      font-size: 12px;
+    }
+  }
+
+  p {
+    margin: 4px 0 8px;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  .actions {
+    opacity: 0;
+
+    &:focus-within {
+      opacity: 1;
+    }
+
+    @include bp.mobile {
+      opacity: 1;
+    }
+  }
+
+  button {
+    border: 0;
+    border-radius: 14px;
+    padding: 5px 9px;
+    background: tokens.$background;
+  }
+
+  .icon-action {
+    background: transparent;
+  }
+
+  .reactions {
+    margin-top: 8px;
+
+    button {
+      background: tokens.$background;
+    }
+  }
+
+  .edit-row {
+    input {
+      flex: 1;
+      min-width: 160px;
+      border: 1px solid tokens.$border;
+      border-radius: 12px;
+      padding: 8px 10px;
+    }
+  }
+
+  .deleted-message {
+    color: tokens.$text-gray;
+    font-style: italic;
+  }
+
+  .author-button {
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 700;
+
+    &:disabled {
+      cursor: default;
+    }
+  }
 }

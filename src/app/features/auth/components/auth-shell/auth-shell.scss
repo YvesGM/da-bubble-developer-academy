@@ -145,33 +145,22 @@
       display: none;
     }
   }
+
+  @include bp.widescreen {
+    bottom: 60px;
+  }
 }
 
-@include bp.widescreen {
-  .auth {
-    &-shell {
-      &-header {
-        top: 75px;
-        right: 75px;
-        left: 75px;
-      }
+.auth-footer-link {
+  border: 1px solid transparent;
+  border-radius: 25px;
+  padding: 8px 14px;
+  color: tokens.$purple-2;
+  cursor: pointer;
+  text-decoration: none;
 
-      &-footer {
-        bottom: 60px;
-      }
-    }
-
-    &-brand {
-      transform: translateY(-18px);
-
-      &-mark {
-        width: 70px;
-        height: 70px;
-      }
-
-      &-name {
-        width: 157px;
-      }
-    }
+  &:hover {
+    border-color: tokens.$purple-2;
+    color: tokens.$purple-1;
   }
 }

@@ -1,28 +1,29 @@
+@use '../../../styles/tokens' as tokens;
+@use '../../../styles/breakpoints' as bp;
+
 .workspace-home {
   display: grid;
   min-height: 100%;
   padding: 48px;
   place-content: center;
   text-align: center;
-}
 
-.eyebrow {
-  margin: 0;
-  color: #444df2;
-  font-weight: 700;
-}
+  .eyebrow {
+    margin: 0;
+    color: tokens.$purple-1;
+    font-weight: 700;
+  }
 
-h1 {
-  margin: 8px 0;
-}
+  h1 {
+    margin: 8px 0;
+  }
 
-p:last-child {
-  margin: 0;
-  color: #686868;
-}
+  p:last-child {
+    margin: 0;
+    color: tokens.$text-gray;
+  }
 
-@media (max-width: 600px) {
-  .workspace-home {
+  @include bp.mobile {
     padding: 24px;
   }
 }

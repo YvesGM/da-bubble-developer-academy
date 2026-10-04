@@ -1,17 +1,19 @@
-.presence {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #686868;
-}
-
-.presence.online {
-  background: #92c83e;
-}
+@use '../../../../styles/tokens' as tokens;
 
 .presence-wrap {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+
+  .presence {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: tokens.$text-gray;
+
+    &.online {
+      background: tokens.$success;
+    }
+  }
 }

@@ -3,48 +3,37 @@
 .login {
   &-card {
     min-height: 660px;
+
+    @include bp.mobile {
+      min-height: 0;
+    }
+
+    @include bp.widescreen {
+      min-height: 769px;
+      padding-top: 52px;
+      padding-bottom: 48px;
+    }
   }
 
   &-form {
     margin-top: 34px;
     gap: 28px;
-  }
 
-  &-link {
-    justify-self: center;
-    margin-top: -6px;
-  }
-}
-
-@include bp.mobile {
-  login {
-    
-    &-card {
-      min-height: 0;
+    .forgot-link {
+      justify-self: center;
+      margin-top: -6px;
     }
 
-    &-form {
+    @include bp.mobile {
       margin-top: 26px;
       gap: 22px;
+
+      .auth-button-row {
+        flex-wrap: wrap;
+      }
     }
 
-    &-link {
-      flex-wrap: wrap;
-    }
-  }
-}
-
-@include bp.widescreen {
-  
-  .login {
-    &-card {
-      min-height: 769px;
-      padding-top: 52px;
-      padding-bottom: 48px;
-      margin-top: 52px;
-    }
-
-    &-form {
+    @include bp.widescreen {
       margin-top: 42px;
       gap: 30px;
     }

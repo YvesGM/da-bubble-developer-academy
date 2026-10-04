@@ -1,36 +1,38 @@
+@use '../../../../../styles/tokens' as tokens;
+
 .message-list {
   min-height: 240px;
   overflow: auto;
-}
 
-.empty-state {
-  display: grid;
-  place-content: center;
-  min-height: 240px;
-  color: #686868;
-  text-align: center;
-}
+  .empty-state {
+    display: grid;
+    min-height: 240px;
+    place-content: center;
+    color: tokens.$text-gray;
+    text-align: center;
+  }
 
-.date-separator {
-  display: flex;
-  align-items: center;
-  margin: 12px 0;
-  gap: 12px;
-  color: #686868;
-  font-size: 13px;
-}
+  .date-separator {
+    display: flex;
+    align-items: center;
+    margin: 12px 0;
+    gap: 12px;
+    color: tokens.$text-gray;
+    font-size: 13px;
 
-.date-separator::before,
-.date-separator::after {
-  height: 1px;
-  flex: 1;
-  content: '';
-  background: #adb0d9;
-}
+    &::before,
+    &::after {
+      height: 1px;
+      flex: 1;
+      content: '';
+      background: tokens.$border;
+    }
 
-.date-separator span {
-  border: 1px solid #adb0d9;
-  border-radius: 14px;
-  padding: 4px 12px;
-  background: #fff;
+    span {
+      border: 1px solid tokens.$border;
+      border-radius: 14px;
+      padding: 4px 12px;
+      background: tokens.$white;
+    }
+  }
 }

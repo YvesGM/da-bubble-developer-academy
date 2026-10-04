@@ -1,3 +1,5 @@
+@use '../../../../../styles/tokens' as tokens;
+
 .backdrop {
   position: fixed;
   z-index: 55;
@@ -6,59 +8,59 @@
   place-items: center;
   padding: 24px;
   background: #00000040;
-}
 
-.dialog {
-  width: min(420px, 100%);
-  padding: 28px;
-  border-radius: 24px;
-  background: #fff;
-}
+  .dialog {
+    width: min(420px, 100%);
+    padding: 28px;
+    border-radius: 24px;
+    background: tokens.$white;
 
-header,
-.member {
-  display: flex;
-  align-items: center;
-}
+    header,
+    .member {
+      display: flex;
+      align-items: center;
+    }
 
-header {
-  justify-content: space-between;
-}
+    header {
+      justify-content: space-between;
+    }
 
-.members {
-  display: grid;
-  margin: 18px 0;
-  gap: 8px;
-}
+    .members {
+      display: grid;
+      margin: 18px 0;
+      gap: 8px;
+    }
 
-.member {
-  width: 100%;
-  border: 0;
-  border-radius: 14px;
-  padding: 8px;
-  gap: 10px;
-  cursor: pointer;
-  text-align: left;
-  background: transparent;
-}
+    .member {
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 8px;
+      gap: 10px;
+      cursor: pointer;
+      text-align: left;
+      background: transparent;
 
-.member:hover {
-  background: #eceefe;
-}
+      &:hover {
+        background: tokens.$background;
+      }
 
-.member app-presence-indicator {
-  margin-left: auto;
-}
+      app-presence-indicator {
+        margin-left: auto;
+      }
 
-.guest {
-  cursor: default;
-}
+      &.guest {
+        cursor: default;
+      }
+    }
 
-.add {
-  border: 0;
-  border-radius: 20px;
-  padding: 10px 14px;
-  cursor: pointer;
-  background: #eceefe;
-  color: #444df2;
+    .add {
+      border: 0;
+      border-radius: 20px;
+      padding: 10px 14px;
+      cursor: pointer;
+      background: tokens.$background;
+      color: tokens.$purple-1;
+    }
+  }
 }

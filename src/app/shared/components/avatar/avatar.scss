@@ -3,29 +3,29 @@
   flex: 0 0 auto;
   border-radius: 50%;
   object-fit: cover;
-}
 
-.small {
-  width: 32px;
-  height: 32px;
-}
+  &.small {
+    width: 32px;
+    height: 32px;
+  }
 
-.medium {
-  width: 42px;
-  height: 42px;
-}
+  &.medium {
+    width: 42px;
+    height: 42px;
+  }
 
-.large {
-  width: 56px;
-  height: 56px;
-}
+  &.large {
+    width: 56px;
+    height: 56px;
+  }
 
-.hero {
-  width: 136px;
-  height: 136px;
-}
+  &.hero {
+    width: 136px;
+    height: 136px;
+  }
 
-.option {
-  width: 64px;
-  height: 64px;
+  &.option {
+    width: 64px;
+    height: 64px;
+  }
 }
