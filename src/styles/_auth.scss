@@ -34,15 +34,25 @@
   border: 0;
   border-radius: 50%;
   background: transparent;
-  transition: background-color tokens.$motion-fast;
+  color: tokens.$text;
+  transform: scale(1);
+  transition:
+    background-color tokens.$motion-fast,
+    color tokens.$motion-fast,
+    transform tokens.$motion-base;
 
   &:hover {
     background: tokens.$background;
+    color: tokens.$purple-1;
+    transform: scale(1.06);
   }
 
-  img {
+  &-icon {
     width: 16px;
     height: 16px;
+    background: currentColor;
+    mask: url('/assets/arrow-back.svg') center / contain no-repeat;
+    -webkit-mask: url('/assets/arrow-back.svg') center / contain no-repeat;
   }
 }
 
