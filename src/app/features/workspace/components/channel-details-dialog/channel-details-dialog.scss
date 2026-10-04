@@ -1,4 +1,5 @@
 @use '../../../../../styles/tokens' as tokens;
+@use '../../../../../styles/breakpoints' as bp;
 
 .backdrop {
   position: fixed;
@@ -7,63 +8,145 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: #00000040;
+  background: #00000052;
+}
 
-  .dialog {
-    width: min(720px, 100%);
-    padding: 28px;
-    border-radius: 24px;
-    background: tokens.$white;
+.dialog {
+  width: min(760px, 100%);
+  padding: 34px 40px 38px;
+  border-radius: 30px;
+  background: tokens.$white;
+  box-shadow: 0 8px 28px #00000024;
 
-    header,
-    .actions {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
+  header,
+  .detail-heading,
+  .actions {
+    display: flex;
+    align-items: center;
+  }
 
-    form,
-    label,
-    .creator {
-      display: grid;
-      gap: 12px;
-    }
+  header {
+    justify-content: space-between;
+    margin-bottom: 24px;
 
-    input,
-    textarea {
-      border: 0;
-      border-radius: 16px;
-      padding: 12px 16px;
-      outline: 1px solid tokens.$border;
-      font: inherit;
+    h2 {
+      margin: 0;
+      font-size: 24px;
     }
 
     button {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
       border: 0;
-      border-radius: 24px;
-      padding: 10px 16px;
-      cursor: pointer;
-    }
+      border-radius: 50%;
+      background: transparent;
+      font-size: 26px;
 
-    .primary {
-      background: tokens.$purple-1;
-      color: tokens.$white;
-    }
-
-    .danger {
-      background: #fff0f3;
-      color: tokens.$error;
-    }
-
-    .creator {
-      span {
+      &:hover {
+        background: tokens.$background;
         color: tokens.$purple-1;
       }
     }
+  }
 
-    .error {
-      color: tokens.$error;
+  form {
+    display: grid;
+    gap: 20px;
+  }
+
+  .detail-card {
+    display: grid;
+    border: 1px solid tokens.$border;
+    border-radius: 20px;
+    padding: 20px;
+    gap: 14px;
+  }
+
+  .detail-heading {
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .edit-button {
+    border: 0;
+    background: transparent;
+    color: tokens.$purple-1;
+    font-size: 16px;
+
+    &:hover {
+      color: tokens.$purple-2;
+    }
+  }
+
+  .detail-value {
+    margin: 0;
+    white-space: pre-wrap;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 8px;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    border: 0;
+    border-radius: 16px;
+    padding: 11px 14px;
+    outline: 1px solid tokens.$border;
+    font: inherit;
+
+    &:focus {
+      outline-color: tokens.$purple-1;
+    }
+  }
+
+  .creator {
+    display: grid;
+    padding-top: 18px;
+    gap: 6px;
+    border-top: 1px solid tokens.$border;
+
+    strong {
+      color: tokens.$purple-1;
+      font-size: 18px;
+    }
+  }
+
+  .actions {
+    justify-content: flex-end;
+  }
+
+  .leave-button {
+    border: 0;
+    border-radius: 24px;
+    padding: 11px 20px;
+    background: tokens.$purple-1;
+    color: tokens.$white;
+    font-weight: 700;
+    transition: background-color tokens.$motion-base;
+
+    &:hover {
+      background: tokens.$purple-2;
+    }
+  }
+
+  .error {
+    margin: 0;
+    color: tokens.$error;
+  }
+
+  @include bp.mobile {
+    padding: 26px 20px;
+    border-radius: 26px;
+
+    .detail-card {
+      padding: 16px;
     }
   }
 }
