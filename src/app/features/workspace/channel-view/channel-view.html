@@ -1,7 +1,7 @@
 @if (channel(); as currentChannel) {
   <section class="channel-view">
     <header class="channel-header">
-      <a class="mobile-back" routerLink="/workspace" aria-label="Back to conversations">←</a>
+      <a class="mobile-back" routerLink="/workspace" aria-label="Zurück zu den Unterhaltungen">←</a>
 
       <button
         type="button"
@@ -9,11 +9,13 @@
         [disabled]="!canManageChannel()"
         (click)="openDetails()"
       >
-        # {{ currentChannel.name }} <span aria-hidden="true">⌄</span>
+        <span class="channel-hash">#</span>
+        <span class="channel-name">{{ currentChannel.name }}</span>
+        <span class="channel-chevron" aria-hidden="true">⌄</span>
       </button>
 
       <div class="member-tools">
-        <button type="button" class="member-stack" (click)="openMembers()">
+        <button type="button" class="member-stack" (click)="openMembers()" aria-label="Mitglieder anzeigen">
           @for (member of visibleMembers(); track member.uid) {
             <app-avatar [avatarId]="member.avatarId" [name]="member.displayName" size="small" />
           }
@@ -24,22 +26,23 @@
         </button>
 
         @if (canManageChannel()) {
-          <button type="button" class="add-member" aria-label="Add members" (click)="showAddMembers.set(true)">
+          <button
+            type="button"
+            class="add-member"
+            aria-label="Mitglieder hinzufügen"
+            (click)="showAddMembers.set(true)"
+          >
             ＋
           </button>
         }
       </div>
     </header>
 
-    @if (currentChannel.description) {
-      <p class="description">{{ currentChannel.description }}</p>
-    }
-
-    <section class="message-placeholder">
+    <section class="chat-area">
       <app-chat-panel
         [target]="target()"
         [mentionUsers]="members()"
-        [inputPlaceholder]="'Message #' + currentChannel.name"
+        [inputPlaceholder]="'Nachricht an #' + currentChannel.name"
         [emptyTitle]="emptyTitle()"
         [emptyText]="emptyText()"
         (userRequested)="openProfileById($event)"
@@ -95,7 +98,7 @@
   }
 } @else {
   <section class="missing-channel">
-    <h1>Channel not found</h1>
-    <p>The channel does not exist or could not be loaded.</p>
+    <h1>Channel nicht gefunden</h1>
+    <p>Der Channel existiert nicht oder konnte nicht geladen werden.</p>
   </section>
 }
