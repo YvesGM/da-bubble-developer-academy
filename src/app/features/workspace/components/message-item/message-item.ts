@@ -145,7 +145,7 @@ export class MessageItem {
     this.showAllReactions.update((value) => !value);
   }
 
-  private reactionLimit(): number {
+  reactionLimit(): number {
     return this.compactReactions() || this.mobileViewport() ? 7 : 20;
   }
 
