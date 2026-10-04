@@ -62,7 +62,7 @@ export class ResetPassword {
     }
   }
 
-  private passwordsMatch(): boolean {
+  passwordsMatch(): boolean {
     return this.form.controls.password.value === this.form.controls.confirmPassword.value;
   }
 
