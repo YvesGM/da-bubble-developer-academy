@@ -60,14 +60,14 @@ export class ChannelView {
   readonly members = computed(() => this.users().filter((user) => this.isChannelMember(user.uid)));
   readonly availableUsers = computed(() => this.users().filter((user) => !this.isChannelMember(user.uid)));
   readonly visibleMembers = computed(() => this.members().slice(0, 5));
-  readonly creatorName = computed(() => this.findUser(this.channel()?.creatorId)?.displayName ?? 'Unknown user');
+  readonly creatorName = computed(() => this.findUser(this.channel()?.creatorId)?.displayName ?? 'Unbekannter Benutzer');
   readonly memberCount = computed(() => this.members().length + (this.channel()?.guestAccess ? 1 : 0));
   readonly overflowCount = computed(() => Math.max(0, this.memberCount() - 5));
   readonly target = computed<ConversationTarget>(() => ({ type: 'channel', id: this.channelId() }));
   readonly emptyTitle = computed(() =>
-    this.channel()?.creatorId === this.currentUserId() ? 'You created this channel.' : 'Channel created.',
+    this.channel()?.creatorId === this.currentUserId() ? 'Du hast diesen Channel erstellt.' : 'Channel wurde erstellt.',
   );
-  readonly emptyText = computed(() => `This is the beginning of the #${this.channel()?.name ?? ''} channel.`);
+  readonly emptyText = computed(() => `Das ist der Anfang des Channels #${this.channel()?.name ?? ''}.`);
 
   readonly showDetails = signal(false);
   readonly showMembers = signal(false);
@@ -140,8 +140,8 @@ export class ChannelView {
   }
 
   private channelErrorMessage(error: unknown): string {
-    if (error instanceof ChannelNameTakenError) return 'This channel name is already in use.';
-    return firebaseErrorMessage(error, 'The channel changes could not be saved.');
+    if (error instanceof ChannelNameTakenError) return 'Dieser Channelname wird bereits verwendet.';
+    return firebaseErrorMessage(error, 'Die Änderungen am Channel konnten nicht gespeichert werden.');
   }
 
   private isChannelMember(uid: string): boolean {
