@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 
 import { UserProfile } from '../../../../core/models/user-profile.model';
+import { Avatar } from '../../../../shared/components/avatar/avatar';
 
 export interface AddMembersSelection {
   memberIds: string[];
@@ -9,6 +10,7 @@ export interface AddMembersSelection {
 
 @Component({
   selector: 'app-add-members-dialog',
+  imports: [Avatar],
   templateUrl: './add-members-dialog.html',
   styleUrl: './add-members-dialog.scss',
 })
@@ -26,6 +28,10 @@ export class AddMembersDialog {
     const value = this.query().trim().toLowerCase();
     if (!value) return this.users;
     return this.users.filter((user) => user.displayName.toLowerCase().includes(value));
+  }
+
+  selectedUsers(): UserProfile[] {
+    return this.users.filter((user) => this.selectedIds().has(user.uid));
   }
 
   toggleUser(uid: string): void {
