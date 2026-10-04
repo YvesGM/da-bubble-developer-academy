@@ -1,10 +1,10 @@
 <aside class="thread-panel">
   <header>
-    <div>
-      <span>Thread</span>
-      <strong>{{ parent().authorName }}</strong>
+    <div class="thread-title">
+      <strong>Thread</strong>
+      <span>{{ parent().authorName }}</span>
     </div>
-    <button type="button" aria-label="Close thread" (click)="closeRequested.emit()">×</button>
+    <button type="button" aria-label="Thread schließen" (click)="closeRequested.emit()">×</button>
   </header>
 
   <app-message-item
@@ -16,7 +16,9 @@
     (userRequested)="userRequested.emit($event)"
   />
 
-  <div class="divider">{{ replies().length }} replies</div>
+  <div class="divider">
+    <span>{{ replies().length }} {{ replies().length === 1 ? 'Antwort' : 'Antworten' }}</span>
+  </div>
 
   <div class="replies">
     @for (reply of replies(); track reply.id) {
@@ -35,7 +37,7 @@
     [channels]="channels()"
     [users]="users()"
     [recentEmojis]="recentEmojis()"
-    placeholder="Reply in thread"
+    placeholder="Antworten…"
     [focusKey]="parent().id"
     (sendRequested)="sendReply($event)"
   />
