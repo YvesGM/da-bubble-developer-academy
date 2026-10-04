@@ -50,6 +50,7 @@ export class MessageItem {
   readonly editing = signal(false);
   readonly editText = signal('');
   readonly showEmojiPicker = signal(false);
+  readonly showAllReactions = signal(false);
   readonly mobileViewport = signal(window.innerWidth <= 640);
   readonly reactionContext = computed(() => ({
     target: this.target(),
@@ -65,7 +66,7 @@ export class MessageItem {
     { initialValue: [] as ReactionGroup[] },
   );
   readonly visibleReactions = computed(() =>
-    this.reactions().slice(0, this.reactionLimit()),
+    this.showAllReactions() ? this.reactions() : this.reactions().slice(0, this.reactionLimit()),
   );
   readonly replies = toSignal(
     toObservable(this.reactionContext).pipe(
@@ -131,7 +132,12 @@ export class MessageItem {
   }
 
   hiddenReactionCount(): number {
+    if (this.showAllReactions()) return 0;
     return Math.max(0, this.reactions().length - this.visibleReactions().length);
+  }
+
+  toggleReactionExpansion(): void {
+    this.showAllReactions.update((value) => !value);
   }
 
   private reactionLimit(): number {
