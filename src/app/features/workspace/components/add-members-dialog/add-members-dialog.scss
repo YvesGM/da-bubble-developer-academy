@@ -1,4 +1,5 @@
 @use '../../../../../styles/tokens' as tokens;
+@use '../../../../../styles/breakpoints' as bp;
 
 .backdrop {
   position: fixed;
@@ -7,58 +8,154 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: #00000040;
+  background: #00000052;
+}
 
-  .dialog {
-    display: grid;
-    width: min(520px, 100%);
-    padding: 28px;
-    gap: 18px;
-    border-radius: 24px;
-    background: tokens.$white;
+.dialog {
+  display: grid;
+  width: min(540px, 100%);
+  padding: 30px 36px;
+  gap: 18px;
+  border-radius: 30px;
+  background: tokens.$white;
+  box-shadow: 0 8px 28px #00000024;
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
     }
 
-    input[type='search'] {
-      border: 0;
-      border-radius: 24px;
-      padding: 12px 16px;
-      outline: 1px solid tokens.$border;
-    }
-
-    .users {
+    button {
       display: grid;
-      max-height: 280px;
-      overflow: auto;
-      gap: 8px;
-
-      label {
-        display: flex;
-        align-items: center;
-        padding: 8px;
-        gap: 10px;
-        border-radius: 12px;
-      }
-    }
-
-    .primary {
-      justify-self: end;
+      width: 36px;
+      height: 36px;
+      place-items: center;
       border: 0;
-      border-radius: 24px;
-      padding: 11px 20px;
-      cursor: pointer;
-      background: tokens.$purple-1;
-      color: tokens.$white;
-      font-weight: 700;
+      border-radius: 50%;
+      background: transparent;
+      font-size: 26px;
 
-      &:disabled {
-        cursor: default;
-        opacity: 0.55;
+      &:hover {
+        background: tokens.$background;
+        color: tokens.$purple-1;
       }
     }
+  }
+
+  .selection-field {
+    display: flex;
+    min-height: 54px;
+    flex-wrap: wrap;
+    align-items: center;
+    border: 1px solid tokens.$border;
+    border-radius: 28px;
+    padding: 5px 10px;
+    gap: 6px;
+
+    &:focus-within {
+      border-color: tokens.$purple-1;
+    }
+
+    input {
+      min-width: 140px;
+      height: 40px;
+      flex: 1;
+      border: 0;
+      padding: 0 8px;
+      outline: 0;
+    }
+  }
+
+  .chip {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    border: 0;
+    border-radius: 20px;
+    padding: 4px 10px 4px 4px;
+    gap: 7px;
+    background: tokens.$background;
+    color: tokens.$text;
+  }
+
+  .guest-chip-avatar,
+  .guest-avatar {
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: tokens.$background;
+    color: tokens.$purple-1;
+    font-weight: 700;
+  }
+
+  .guest-chip-avatar {
+    width: 30px;
+    height: 30px;
+    background: tokens.$white;
+  }
+
+  .guest-avatar {
+    width: 42px;
+    height: 42px;
+  }
+
+  .users {
+    display: grid;
+    max-height: 280px;
+    overflow: auto;
+    gap: 5px;
+  }
+
+  .user-option {
+    display: flex;
+    min-height: 54px;
+    align-items: center;
+    border: 0;
+    border-radius: 24px;
+    padding: 6px 10px;
+    gap: 12px;
+    background: transparent;
+    color: tokens.$text;
+    text-align: left;
+    transition:
+      background-color tokens.$motion-base,
+      color tokens.$motion-fast;
+
+    &:hover,
+    &.selected {
+      background: tokens.$background;
+      color: tokens.$purple-1;
+    }
+  }
+
+  .primary {
+    justify-self: end;
+    border: 0;
+    border-radius: 24px;
+    padding: 11px 20px;
+    background: tokens.$purple-1;
+    color: tokens.$white;
+    font-weight: 700;
+    transition:
+      background-color tokens.$motion-base,
+      opacity tokens.$motion-fast;
+
+    &:hover:not(:disabled) {
+      background: tokens.$purple-2;
+    }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.55;
+    }
+  }
+
+  @include bp.mobile {
+    padding: 26px 22px;
   }
 }
