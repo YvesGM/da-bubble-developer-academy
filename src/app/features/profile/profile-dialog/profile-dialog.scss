@@ -1,3 +1,5 @@
+@use '../../../../styles/tokens' as tokens;
+
 .backdrop {
   position: fixed;
   z-index: 40;
@@ -12,79 +14,79 @@
   width: min(480px, 100%);
   padding: 28px;
   border-radius: 24px;
-  background: #fff;
-}
+  background: tokens.$white;
 
-header,
-.actions,
-.avatar-grid {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+  header,
+  .actions,
+  .avatar-grid {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-header {
-  justify-content: space-between;
-}
+  header {
+    justify-content: space-between;
+  }
 
-form {
-  display: grid;
-  gap: 18px;
-}
+  form {
+    display: grid;
+    gap: 18px;
+  }
 
-label {
-  display: grid;
-  gap: 8px;
-  font-weight: 700;
-}
+  label {
+    display: grid;
+    gap: 8px;
+    font-weight: 700;
+  }
 
-input {
-  border: 0;
-  border-radius: 16px;
-  padding: 12px 16px;
-  outline: 1px solid #adb0d9;
-}
+  input {
+    border: 0;
+    border-radius: 16px;
+    padding: 12px 16px;
+    outline: 1px solid tokens.$border;
+  }
 
-fieldset {
-  border: 0;
-  padding: 0;
-  margin: 0;
-}
+  fieldset {
+    margin: 0;
+    border: 0;
+    padding: 0;
+  }
 
-.avatar {
-  width: 44px;
-  height: 44px;
-  border: 0;
-  border-radius: 50%;
-  background: #eceefe;
-}
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: tokens.$background;
 
-.avatar.selected {
-  outline: 3px solid #444df2;
-}
+    &.selected {
+      outline: 3px solid tokens.$purple-1;
+    }
+  }
 
-.actions {
-  justify-content: flex-end;
-}
+  .actions {
+    justify-content: flex-end;
+  }
 
-.actions button,
-header button {
-  border: 0;
-  border-radius: 24px;
-  padding: 10px 16px;
-}
+  .actions button,
+  header button {
+    border: 0;
+    border-radius: 24px;
+    padding: 10px 16px;
+  }
 
-.primary {
-  background: #444df2;
-  color: #fff;
-}
+  .primary {
+    background: tokens.$purple-1;
+    color: tokens.$white;
+  }
 
-.secondary {
-  background: #eceefe;
-  color: #444df2;
-}
+  .secondary {
+    background: tokens.$background;
+    color: tokens.$purple-1;
+  }
 
-.error {
-  margin: 0;
-  color: #d61f1f;
+  .error {
+    margin: 0;
+    color: tokens.$error;
+  }
 }
