@@ -21,15 +21,17 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-    }
 
-    .auth-brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      cursor: default;
-      text-decoration: none;
-      transform: translateY(-12px);
+      @include bp.mobile {
+        position: static;
+        padding: 24px 20px 12px;
+      }
+
+      @include bp.widescreen {
+        top: 75px;
+        right: 75px;
+        left: 75px;
+      }
     }
 
     &-stage {
@@ -37,6 +39,11 @@
       min-height: 100dvh;
       padding: 110px 24px 90px;
       place-items: center;
+
+      @include bp.mobile {
+        min-height: auto;
+        padding: 18px 0 32px;
+      }
     }
 
     &-footer {
@@ -48,18 +55,68 @@
       justify-content: center;
       gap: 16px;
       font-size: 18px;
+
+      @include bp.mobile {
+        position: static;
+        padding: 0 16px 24px;
+        gap: 8px;
+        font-size: 16px;
+      }
+
+      @include bp.widescreen {
+        bottom: 60px;
+      }
+    }
+
+    @include bp.mobile {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: auto;
     }
   }
 
   &-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: default;
+    text-decoration: none;
+    transform: translateY(-12px);
+
     &-mark {
       width: 56px;
       height: 56px;
+
+      @include bp.mobile {
+        width: 48px;
+        height: 48px;
+      }
+
+      @include bp.widescreen {
+        width: 70px;
+        height: 70px;
+      }
     }
 
-    -name {
+    &-name {
       width: 145px;
       height: auto;
+
+      @include bp.mobile {
+        width: 126px;
+      }
+
+      @include bp.widescreen {
+        width: 157px;
+      }
+    }
+
+    @include bp.mobile {
+      transform: none;
+    }
+
+    @include bp.widescreen {
+      transform: translateY(-18px);
     }
   }
 
@@ -72,95 +129,32 @@
     a {
       border: 1px solid transparent;
       border-radius: 25px;
+      padding: 9px 14px;
       color: tokens.$purple-2;
       text-decoration: none;
-    }
-  }
 
-  &-footer-link {
-    padding: 8px 14px;
-
-    color: tokens.$purple-2;
-    border: 1px solid transparent;
-    border-radius: 25px;
-
-    text-decoration: none;
-    cursor: pointer;
-
-    &:hover {
-      border-color: tokens.$purple-2;
-      color: tokens.$purple-1;
-    }
-  }
-
-  &-signup-prompt a {
-    padding: 9px 14px;
-
-    &:hover {
-      border-color: tokens.$purple-2;
-      color: tokens.$purple-1;
-    }
-  }
-}
-
-@include bp.mobile {
-  .auth {
-    &-shell {
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      overflow: auto;
-
-      &-header {
-        position: static;
-        padding: 24px 20px 12px;
-      }
-
-      &-stage {
-        min-height: auto;
-        padding: 18px 0 32px;
-      }
-
-      &-footer {
-        position: static;
-        padding: 0 16px 24px;
-        gap: 8px;
-        font-size: 16px;
+      &:hover {
+        border-color: tokens.$purple-2;
+        color: tokens.$purple-1;
       }
     }
 
-    &-brand {
-      transform: none;
-
-      &-mark {
-        width: 48px;
-        height: 48px;
-      }
-
-      &-name {
-        width: 126px;
-      }
-    }
-
-    &-signup-prompt {
+    @include bp.mobile {
       display: none;
     }
   }
 
-  @include bp.widescreen {
-    bottom: 60px;
-  }
-}
+  &-footer-link {
+    border: 1px solid transparent;
+    border-radius: 25px;
+    padding: 8px 14px;
+    color: tokens.$purple-2;
+    cursor: pointer;
+    text-decoration: none;
 
-.auth-footer-link {
-  border: 1px solid transparent;
-  border-radius: 25px;
-  padding: 8px 14px;
-  color: tokens.$purple-2;
-  cursor: pointer;
-  text-decoration: none;
-
-  &:hover {
-    border-color: tokens.$purple-2;
-    color: tokens.$purple-1;
+    &:hover {
+      border-color: tokens.$purple-2;
+      color: tokens.$purple-1;
+    }
   }
 }
