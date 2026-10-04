@@ -2,26 +2,27 @@
 @use '../../../../styles/breakpoints' as bp;
 
 .channel-view {
-  padding: 24px;
-
-  @include bp.mobile {
-    padding: 14px;
-  }
-
-  .channel-header,
-  .member-tools,
-  .member-stack {
-    display: flex;
-    align-items: center;
-  }
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+  min-height: 0;
 
   .channel-header {
+    display: flex;
+    min-height: 88px;
+    align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    padding: 16px 28px;
+    gap: 18px;
+    border-bottom: 1px solid tokens.$background;
+    box-shadow: 0 2px 5px #00000008;
 
     @include bp.mobile {
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      min-height: 72px;
+      padding: 10px 14px;
+      gap: 8px;
     }
   }
 
@@ -29,27 +30,62 @@
   .member-stack,
   .add-member {
     border: 0;
-    cursor: pointer;
     background: transparent;
   }
 
   .channel-title {
-    padding: 8px 10px;
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    border-radius: 24px;
+    padding: 8px 12px;
+    gap: 8px;
+    color: tokens.$text;
     font-size: 24px;
     font-weight: 700;
+    transition:
+      background-color tokens.$motion-base,
+      color tokens.$motion-fast;
+
+    &:hover:not(:disabled) {
+      background: tokens.$background;
+      color: tokens.$purple-1;
+    }
 
     &:disabled {
       cursor: default;
-      color: tokens.$text;
     }
 
-    @include bp.mobile {
-      min-width: 0;
+    .channel-hash {
+      font-size: 26px;
+    }
+
+    .channel-name {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    .channel-chevron {
+      flex: 0 0 auto;
       font-size: 20px;
     }
+
+    @include bp.mobile {
+      justify-self: start;
+      padding: 6px 8px;
+      font-size: 20px;
+
+      .channel-hash {
+        font-size: 22px;
+      }
+    }
+  }
+
+  .member-tools,
+  .member-stack {
+    display: flex;
+    align-items: center;
   }
 
   .member-tools {
@@ -62,6 +98,14 @@
     gap: 0;
     border-radius: 24px;
     background: tokens.$background;
+    transition:
+      background-color tokens.$motion-base,
+      transform tokens.$motion-base;
+
+    &:hover {
+      background: #e1e4ff;
+      transform: translateY(-1px);
+    }
 
     app-avatar,
     .guest-avatar {
@@ -82,13 +126,14 @@
 
     strong {
       margin-left: 8px;
+      color: tokens.$text;
     }
   }
 
   .guest-avatar {
     display: grid;
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     place-items: center;
     border-radius: 50%;
     background: tokens.$white;
@@ -103,20 +148,23 @@
     place-items: center;
     border-radius: 50%;
     background: tokens.$background;
-    color: tokens.$purple-1;
+    color: tokens.$text;
     font-size: 22px;
+    transition:
+      background-color tokens.$motion-base,
+      color tokens.$motion-fast,
+      transform tokens.$motion-base;
+
+    &:hover {
+      background: #e1e4ff;
+      color: tokens.$purple-1;
+      transform: scale(1.05);
+    }
   }
 
-  .description {
-    margin: 8px 10px 0;
-    color: tokens.$text-gray;
-  }
-
-  .message-placeholder {
-    margin-top: 16px;
-    min-height: 180px;
-    border-radius: 20px;
-    background: tokens.$white;
+  .chat-area {
+    min-height: 0;
+    overflow: hidden;
   }
 
   .mobile-back {
