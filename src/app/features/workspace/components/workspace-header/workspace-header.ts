@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
@@ -7,7 +6,7 @@ import { SearchBox } from '../search-box/search-box';
 
 @Component({
   selector: 'app-workspace-header',
-  imports: [RouterLink, Avatar, SearchBox],
+  imports: [Avatar, SearchBox],
   templateUrl: './workspace-header.html',
   styleUrl: './workspace-header.scss',
 })
