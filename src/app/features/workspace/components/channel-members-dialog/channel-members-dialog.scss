@@ -1,4 +1,5 @@
 @use '../../../../../styles/tokens' as tokens;
+@use '../../../../../styles/breakpoints' as bp;
 
 .backdrop {
   position: fixed;
@@ -7,60 +8,110 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: #00000040;
+  background: #00000052;
+}
 
-  .dialog {
-    width: min(420px, 100%);
-    padding: 28px;
-    border-radius: 24px;
-    background: tokens.$white;
+.dialog {
+  width: min(420px, 100%);
+  padding: 30px 34px;
+  border-radius: 30px;
+  background: tokens.$white;
+  box-shadow: 0 8px 28px #00000024;
 
-    header,
-    .member {
-      display: flex;
-      align-items: center;
+  header,
+  .member {
+    display: flex;
+    align-items: center;
+  }
+
+  header {
+    justify-content: space-between;
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
     }
 
-    header {
-      justify-content: space-between;
-    }
-
-    .members {
+    button {
       display: grid;
-      margin: 18px 0;
-      gap: 8px;
-    }
-
-    .member {
-      width: 100%;
+      width: 36px;
+      height: 36px;
+      place-items: center;
       border: 0;
-      border-radius: 14px;
-      padding: 8px;
-      gap: 10px;
-      cursor: pointer;
-      text-align: left;
+      border-radius: 50%;
       background: transparent;
+      font-size: 26px;
 
       &:hover {
         background: tokens.$background;
-      }
-
-      app-presence-indicator {
-        margin-left: auto;
-      }
-
-      &.guest {
-        cursor: default;
+        color: tokens.$purple-1;
       }
     }
+  }
 
-    .add {
-      border: 0;
-      border-radius: 20px;
-      padding: 10px 14px;
-      cursor: pointer;
+  .members {
+    display: grid;
+    margin: 18px 0;
+    gap: 6px;
+  }
+
+  .member {
+    width: 100%;
+    min-height: 54px;
+    border: 0;
+    border-radius: 24px;
+    padding: 6px 10px;
+    gap: 12px;
+    background: transparent;
+    text-align: left;
+    transition:
+      background-color tokens.$motion-base,
+      color tokens.$motion-fast;
+
+    &:hover:not(.guest) {
       background: tokens.$background;
       color: tokens.$purple-1;
     }
+
+    app-presence-indicator {
+      margin-left: auto;
+    }
+
+    &.guest {
+      cursor: default;
+    }
+  }
+
+  .guest-avatar {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border-radius: 50%;
+    background: tokens.$background;
+    color: tokens.$purple-1;
+    font-weight: 700;
+  }
+
+  .add {
+    border: 0;
+    border-radius: 24px;
+    padding: 10px 14px;
+    background: tokens.$background;
+    color: tokens.$text;
+    font-size: 16px;
+    transition:
+      background-color tokens.$motion-base,
+      color tokens.$motion-fast;
+
+    &:hover {
+      background: #e1e4ff;
+      color: tokens.$purple-1;
+    }
+  }
+
+  @include bp.mobile {
+    width: min(100%, 390px);
+    padding: 26px 22px;
   }
 }
