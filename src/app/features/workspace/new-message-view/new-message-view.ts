@@ -50,8 +50,11 @@ export class NewMessageView {
     return this.query().trim().replace(/^[@#]/, '').toLowerCase();
   }
 
+  isCurrentUser(uid: string): boolean {
+    return uid === this.auth.currentUser?.uid;
+  }
+
   private matchesUser(user: UserProfile, query: string): boolean {
-    if (user.uid === this.auth.currentUser?.uid) return false;
     if (!query) return true;
     return user.displayName.toLowerCase().includes(query)
       || user.email?.toLowerCase().includes(query) === true;
