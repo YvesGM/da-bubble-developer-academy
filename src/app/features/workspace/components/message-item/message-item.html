@@ -31,6 +31,12 @@
       <p>{{ message().text }}</p>
     }
 
+    @if (!parentMessageId() && replies().length) {
+      <button type="button" class="replies-link" (click)="threadRequested.emit(message())">
+        {{ replies().length }} {{ replies().length === 1 ? 'Antwort' : 'Antworten' }}
+      </button>
+    }
+
     @if (canInteract()) {
     <div class="actions">
       @for (emoji of recentEmojis().slice(0, 2); track emoji) {
@@ -79,7 +85,13 @@
         }
 
         @if (hiddenReactionCount()) {
-          <span>+ {{ hiddenReactionCount() }} more</span>
+          <button type="button" class="reaction-more" (click)="toggleReactionExpansion()">
+            + {{ hiddenReactionCount() }} weitere
+          </button>
+        } @else if (showAllReactions() && reactions().length > reactionLimit()) {
+          <button type="button" class="reaction-more" (click)="toggleReactionExpansion()">
+            Weniger anzeigen
+          </button>
         }
       </div>
     }
