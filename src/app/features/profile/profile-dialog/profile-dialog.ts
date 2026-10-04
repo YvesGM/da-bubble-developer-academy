@@ -5,10 +5,11 @@ import { take } from 'rxjs';
 
 import { AVATAR_IDS } from '../../../core/constants/avatar.constants';
 import { UserService } from '../../../core/services/user.service';
+import { Avatar } from '../../../shared/components/avatar/avatar';
 
 @Component({
   selector: 'app-profile-dialog',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Avatar],
   templateUrl: './profile-dialog.html',
   styleUrl: './profile-dialog.scss',
 })
@@ -50,7 +51,7 @@ export class ProfileDialog {
       await this.users.updateCurrentProfile(value.displayName, value.avatarId);
       this.closeRequested.emit();
     } catch {
-      this.errorMessage.set('The profile could not be updated.');
+      this.errorMessage.set('Das Profil konnte nicht aktualisiert werden.');
     } finally {
       this.saving.set(false);
     }
@@ -58,6 +59,6 @@ export class ProfileDialog {
 
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Please enter your name.');
+    this.errorMessage.set('Bitte gib deinen Namen ein.');
   }
 }
