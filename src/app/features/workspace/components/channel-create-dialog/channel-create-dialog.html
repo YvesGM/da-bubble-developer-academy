@@ -7,14 +7,13 @@
     (click)="$event.stopPropagation()"
   >
     <div class="dialog-heading">
-      <div>
-        <p class="eyebrow">DABubble</p>
-        <h2 id="create-channel-title">{{ step() === 'details' ? 'Create channel' : 'Add people' }}</h2>
-      </div>
+      <h2 id="create-channel-title">
+        {{ step() === 'details' ? 'Channel erstellen' : 'Leute hinzufügen' }}
+      </h2>
       <button
         class="close"
         type="button"
-        aria-label="Close dialog"
+        aria-label="Dialog schließen"
         (click)="step() === 'details' ? closeRequested.emit() : finishWithoutMembers()"
       >
         ×
@@ -22,18 +21,29 @@
     </div>
 
     @if (step() === 'details') {
+      <p class="intro">
+        Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein.
+      </p>
+
       <form [formGroup]="form" (ngSubmit)="submitDetails()" novalidate>
         <label>
-          Channel name
-          <input type="text" formControlName="name" placeholder="e.g. Development team" />
+          Channel-Name
+          <div class="channel-name-field">
+            <span>#</span>
+            <input type="text" formControlName="name" placeholder="z. B. Entwicklerteam" />
+          </div>
         </label>
         @if (form.controls.name.touched && form.controls.name.hasError('required')) {
-          <p class="field-error">Please enter a channel name.</p>
+          <p class="field-error">Bitte gib einen Channelnamen ein.</p>
         }
 
         <label>
-          Description
-          <textarea formControlName="description" rows="3" placeholder="What is this channel about?"></textarea>
+          Beschreibung <span class="optional">(optional)</span>
+          <textarea
+            formControlName="description"
+            rows="3"
+            placeholder="Worum geht es in diesem Channel?"
+          ></textarea>
         </label>
 
         @if (errorMessage()) {
@@ -41,9 +51,8 @@
         }
 
         <div class="actions">
-          <button class="secondary" type="button" (click)="closeRequested.emit()">Cancel</button>
           <button class="primary" type="submit" [disabled]="submitting()">
-            {{ submitting() ? 'Creating…' : 'Create' }}
+            {{ submitting() ? 'Wird erstellt…' : 'Erstellen' }}
           </button>
         </div>
       </form>
@@ -58,7 +67,7 @@
             [checked]="memberMode() === 'all'"
             (change)="memberMode.set('all')"
           />
-          Add all members of {{ workspaceName }}
+          Alle Mitglieder von {{ workspaceName }} hinzufügen
         </label>
 
         <label class="mode-option">
@@ -68,13 +77,13 @@
             [checked]="memberMode() === 'selected'"
             (change)="memberMode.set('selected')"
           />
-          Add selected people
+          Bestimmte Leute hinzufügen
         </label>
 
         @if (memberMode() === 'selected') {
           <input
             type="search"
-            placeholder="Enter a name"
+            placeholder="Name eingeben"
             [value]="query()"
             (input)="query.set($any($event.target).value)"
           />
@@ -87,7 +96,7 @@
                   [checked]="isSelected(user.uid)"
                   (change)="toggleMember(user.uid)"
                 />
-                <span class="avatar">{{ user.displayName.charAt(0).toUpperCase() }}</span>
+                <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="small" />
                 <span>{{ user.displayName }}</span>
               </label>
             }
@@ -99,7 +108,7 @@
               [checked]="guestAccess()"
               (change)="guestAccess.set(!guestAccess())"
             />
-            Guest
+            Gast
           </label>
         }
 
@@ -108,9 +117,14 @@
         }
 
         <div class="actions">
-          <button class="secondary" type="button" (click)="finishWithoutMembers()">Skip</button>
-          <button class="primary" type="button" [disabled]="submitting() || !canFinishMembers()" (click)="finishMembers()">
-            {{ submitting() ? 'Adding…' : 'Add' }}
+          <button class="secondary" type="button" (click)="finishWithoutMembers()">Überspringen</button>
+          <button
+            class="primary"
+            type="button"
+            [disabled]="submitting() || !canFinishMembers()"
+            (click)="finishMembers()"
+          >
+            {{ submitting() ? 'Wird hinzugefügt…' : 'Hinzufügen' }}
           </button>
         </div>
       </div>
