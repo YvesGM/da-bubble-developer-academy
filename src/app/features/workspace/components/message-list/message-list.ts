@@ -15,8 +15,8 @@ export class MessageList {
   @Input({ required: true }) target!: ConversationTarget;
   @Input({ required: true }) messages: Message[] = [];
   @Input() recentEmojis: string[] = [];
-  @Input() emptyTitle = 'No messages yet.';
-  @Input() emptyText = 'Start the conversation below.';
+  @Input() emptyTitle = 'Noch keine Nachrichten.';
+  @Input() emptyText = 'Starte die Unterhaltung unten.';
   @Output() readonly threadRequested = new EventEmitter<Message>();
   @Output() readonly userRequested = new EventEmitter<string>();
 
