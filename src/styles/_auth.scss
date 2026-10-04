@@ -72,6 +72,13 @@
 
 .auth-field {
   position: relative;
+
+  &-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    gap: 40px;
+  }
 }
 
 .auth-control {

@@ -64,7 +64,8 @@
       }
 
       @include bp.widescreen {
-        bottom: 60px;
+        bottom: 20px;
+        margin-top: 20px;
       }
     }
 
