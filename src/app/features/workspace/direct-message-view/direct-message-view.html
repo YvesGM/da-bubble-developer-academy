@@ -1,16 +1,19 @@
 <section class="dm-view">
   <header>
-    <a class="mobile-back" routerLink="/workspace" aria-label="Back to conversations">←</a>
+    <a class="mobile-back" routerLink="/workspace" aria-label="Zurück zu den Unterhaltungen">←</a>
+
     @if (partner(); as currentPartner) {
       <button type="button" class="partner" (click)="selectedUser.set(currentPartner)">
-        <div class="avatar">{{ currentPartner.displayName.charAt(0).toUpperCase() }}</div>
-        <div>
-          <span>Direct message</span>
-          <h1>{{ currentPartner.displayName }}</h1>
-        </div>
+        <span class="partner-avatar">
+          <app-avatar [avatarId]="currentPartner.avatarId" [name]="currentPartner.displayName" size="large" />
+          <app-presence-indicator [userId]="currentPartner.uid" />
+        </span>
+        <span class="partner-name">
+          {{ currentPartner.displayName }}{{ isSelfConversation() ? ' (Du)' : '' }}
+        </span>
       </button>
     } @else {
-      <h1>Direct message</h1>
+      <h1>Direktnachricht</h1>
     }
   </header>
 
@@ -18,7 +21,9 @@
     <app-chat-panel
       [target]="target()"
       [mentionUsers]="participantUsers()"
-      [inputPlaceholder]="'Message ' + (partner()?.displayName ?? '')"
+      [inputPlaceholder]="isSelfConversation() ? 'Notiz an dich selbst' : 'Nachricht an ' + (partner()?.displayName ?? '')"
+      [emptyTitle]="isSelfConversation() ? 'Dein persönlicher Bereich' : 'Noch keine Nachrichten.'"
+      [emptyText]="isSelfConversation() ? 'Hier kannst du Notizen, Links und To-dos für dich festhalten.' : 'Starte die Unterhaltung unten.'"
       (userRequested)="openProfile($event)"
     />
   </div>
