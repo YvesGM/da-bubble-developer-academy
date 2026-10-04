@@ -1,45 +1,60 @@
 <div class="backdrop" (click)="closeRequested.emit()">
   <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
     <header>
-      <h2>Add people</h2>
-      <button type="button" aria-label="Close" (click)="closeRequested.emit()">×</button>
+      <h2>Leute hinzufügen</h2>
+      <button type="button" aria-label="Dialog schließen" (click)="closeRequested.emit()">×</button>
     </header>
 
-    <input
-      type="search"
-      placeholder="Enter a name"
-      [value]="query()"
-      (input)="query.set($any($event.target).value)"
-    />
+    <div class="selection-field">
+      @for (user of selectedUsers(); track user.uid) {
+        <button type="button" class="chip" (click)="toggleUser(user.uid)">
+          <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="small" />
+          <span>{{ user.displayName }}</span>
+          <span aria-hidden="true">×</span>
+        </button>
+      }
+
+      @if (guestSelected()) {
+        <button type="button" class="chip" (click)="guestSelected.set(false)">
+          <span class="guest-chip-avatar">G</span>
+          <span>Gast</span>
+          <span aria-hidden="true">×</span>
+        </button>
+      }
+
+      <input
+        type="search"
+        placeholder="Name eingeben"
+        [value]="query()"
+        (input)="query.set($any($event.target).value)"
+      />
+    </div>
 
     <div class="users">
       @if (guestAvailable) {
-        <label>
-          <input
-            type="checkbox"
-            [checked]="guestSelected()"
-            (change)="guestSelected.set(!guestSelected())"
-          />
-          Guest
-        </label>
+        <button type="button" class="user-option" (click)="guestSelected.set(!guestSelected())">
+          <span class="guest-avatar">G</span>
+          <span>Gast</span>
+        </button>
       }
 
       @for (user of filteredUsers(); track user.uid) {
-        <label>
-          <input
-            type="checkbox"
-            [checked]="selectedIds().has(user.uid)"
-            (change)="toggleUser(user.uid)"
-          />
-          {{ user.displayName }}
-        </label>
+        <button
+          type="button"
+          class="user-option"
+          [class.selected]="selectedIds().has(user.uid)"
+          (click)="toggleUser(user.uid)"
+        >
+          <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
+          <span>{{ user.displayName }}</span>
+        </button>
       } @empty {
-        <p>No matching users.</p>
+        <p>Keine passenden Benutzer.</p>
       }
     </div>
 
     <button type="button" class="primary" [disabled]="!canSubmit()" (click)="submit()">
-      Add
+      Hinzufügen
     </button>
   </section>
 </div>
