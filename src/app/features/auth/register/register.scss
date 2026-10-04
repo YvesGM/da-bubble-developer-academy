@@ -88,6 +88,9 @@
   border-radius: 50%;
   padding: 4px;
   background: transparent;
+  transition:
+    background-color tokens.$motion-base,
+    box-shadow tokens.$motion-base;
 
   &:hover,
   &.selected {
