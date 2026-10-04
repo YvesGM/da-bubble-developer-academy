@@ -1,16 +1,18 @@
 <div class="backdrop" (click)="closeRequested.emit()">
   <section class="card" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
     <header>
-      <h2>Profile</h2>
-      <button type="button" aria-label="Close profile" (click)="closeRequested.emit()">×</button>
+      <h2>Profil</h2>
+      <button type="button" aria-label="Profil schließen" (click)="closeRequested.emit()">×</button>
     </header>
 
-    <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="large" />
+    <div class="profile-avatar">
+      <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="hero" />
+    </div>
 
     <div class="name-row">
       <h3>{{ user.displayName }}</h3>
       @if (ownProfile) {
-        <button type="button" class="link-button" (click)="editRequested.emit()">Edit</button>
+        <button type="button" class="link-button" (click)="editRequested.emit()">Bearbeiten</button>
       }
     </div>
 
@@ -19,13 +21,13 @@
     </div>
 
     <div class="email">
-      <strong>Email address</strong>
-      <span>{{ user.email }}</span>
+      <strong>E-Mail-Adresse</strong>
+      <a [href]="'mailto:' + user.email">{{ user.email }}</a>
     </div>
 
     @if (!ownProfile && messageEnabled) {
       <button type="button" class="primary" (click)="messageRequested.emit(user.uid)">
-        Message
+        Nachricht
       </button>
     }
   </section>
