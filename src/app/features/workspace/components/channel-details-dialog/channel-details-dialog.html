@@ -1,36 +1,68 @@
 <div class="backdrop" (click)="closeRequested.emit()">
   <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
     <header>
-      <h2># Channel details</h2>
-      <button type="button" aria-label="Close" (click)="closeRequested.emit()">×</button>
+      <h2># {{ form.controls.name.value }}</h2>
+      <button type="button" aria-label="Channel-Details schließen" (click)="closeRequested.emit()">×</button>
     </header>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-      <label>
-        Channel name
-        <input type="text" formControlName="name" />
-      </label>
-      @if (form.controls.name.touched && form.controls.name.invalid) {
-        <p class="error">Please enter a channel name.</p>
-      }
+    <form [formGroup]="form" novalidate>
+      <section class="detail-card">
+        <div class="detail-heading">
+          <strong>Channel-Name</strong>
+          <button
+            type="button"
+            class="edit-button"
+            (click)="editingName() ? saveName() : editingName.set(true)"
+          >
+            {{ editingName() ? 'Speichern' : 'Bearbeiten' }}
+          </button>
+        </div>
 
-      <label>
-        Description
-        <textarea rows="4" formControlName="description"></textarea>
-      </label>
+        @if (editingName()) {
+          <div class="field-row">
+            <span>#</span>
+            <input type="text" formControlName="name" />
+          </div>
+          @if (form.controls.name.touched && form.controls.name.invalid) {
+            <p class="error">Bitte gib einen Channelnamen ein.</p>
+          }
+        } @else {
+          <p class="detail-value"># {{ form.controls.name.value }}</p>
+        }
+      </section>
+
+      <section class="detail-card">
+        <div class="detail-heading">
+          <strong>Beschreibung</strong>
+          <button
+            type="button"
+            class="edit-button"
+            (click)="editingDescription() ? saveDescription() : editingDescription.set(true)"
+          >
+            {{ editingDescription() ? 'Speichern' : 'Bearbeiten' }}
+          </button>
+        </div>
+
+        @if (editingDescription()) {
+          <textarea rows="4" formControlName="description"></textarea>
+        } @else {
+          <p class="detail-value">{{ form.controls.description.value || 'Keine Beschreibung vorhanden.' }}</p>
+        }
+
+        <div class="creator">
+          <span>Erstellt von</span>
+          <strong>{{ creatorName }}</strong>
+        </div>
+      </section>
 
       @if (errorMessage) {
         <p class="error">{{ errorMessage }}</p>
       }
 
-      <div class="creator">
-        <strong>Created by</strong>
-        <span>{{ creatorName }}</span>
-      </div>
-
       <div class="actions">
-        <button type="button" class="danger" (click)="leaveRequested.emit()">Leave channel</button>
-        <button type="submit" class="primary">Save</button>
+        <button type="button" class="leave-button" (click)="leaveRequested.emit()">
+          Channel verlassen
+        </button>
       </div>
     </form>
   </section>
