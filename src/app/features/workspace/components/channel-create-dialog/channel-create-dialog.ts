@@ -7,11 +7,12 @@ import { ChannelNameTakenError } from '../../../../core/errors/channel-name-take
 import { ChannelService } from '../../../../core/services/channel.service';
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { UserService } from '../../../../core/services/user.service';
+import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { firebaseErrorMessage } from '../../../../core/utils/firebase-error.util';
 
 @Component({
   selector: 'app-channel-create-dialog',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Avatar],
   templateUrl: './channel-create-dialog.html',
   styleUrl: './channel-create-dialog.scss',
 })
@@ -94,7 +95,7 @@ export class ChannelCreateDialog {
       await this.channels.addMembers(channelId, this.memberIds(), this.guestAccess());
       this.channelCreated.emit(channelId);
     } catch (error) {
-      this.errorMessage.set(firebaseErrorMessage(error, 'Members could not be added.'));
+      this.errorMessage.set(firebaseErrorMessage(error, 'Mitglieder konnten nicht hinzugefügt werden.'));
     } finally {
       this.submitting.set(false);
     }
@@ -116,8 +117,8 @@ export class ChannelCreateDialog {
   }
 
   private channelError(error: unknown): string {
-    if (error instanceof ChannelNameTakenError) return 'This channel name is already in use.';
-    return firebaseErrorMessage(error, 'The channel could not be created.');
+    if (error instanceof ChannelNameTakenError) return 'Dieser Channelname wird bereits verwendet.';
+    return firebaseErrorMessage(error, 'Der Channel konnte nicht erstellt werden.');
   }
 
   private isGuestCurrentUser(): boolean {
@@ -130,7 +131,7 @@ export class ChannelCreateDialog {
 
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Please enter a channel name.');
+    this.errorMessage.set('Bitte gib einen Channelnamen ein.');
   }
 
   private startSubmit(): void {
