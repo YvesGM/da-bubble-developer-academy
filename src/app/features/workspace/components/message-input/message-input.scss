@@ -1,70 +1,72 @@
+@use '../../../../../styles/tokens' as tokens;
+
 .composer {
   position: relative;
-  border: 1px solid #adb0d9;
+  border: 1px solid tokens.$border;
   border-radius: 20px;
   padding: 10px;
-  background: #fff;
-}
+  background: tokens.$white;
 
-textarea {
-  width: 100%;
-  resize: none;
-  border: 0;
-  padding: 8px;
-  outline: 0;
-  font: inherit;
-}
+  textarea {
+    width: 100%;
+    resize: none;
+    border: 0;
+    padding: 8px;
+    outline: 0;
+    font: inherit;
+  }
 
-.composer-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-}
+  .composer-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
 
-button {
-  border: 0;
-  border-radius: 18px;
-  padding: 8px 14px;
-}
+  button {
+    border: 0;
+    border-radius: 18px;
+    padding: 8px 14px;
+  }
 
-.icon-button {
-  background: transparent;
-  font-size: 20px;
-}
+  .icon-button {
+    background: transparent;
+    font-size: 20px;
+  }
 
-.send-button {
-  background: #444df2;
-  color: #fff;
-}
+  .send-button {
+    background: tokens.$purple-1;
+    color: tokens.$white;
 
-.send-button:disabled {
-  opacity: 0.45;
-}
+    &:disabled {
+      opacity: 0.45;
+    }
+  }
 
-.suggestions,
-.picker {
-  position: absolute;
-  z-index: 15;
-  left: 12px;
-  bottom: calc(100% + 8px);
-}
+  .suggestions,
+  .picker {
+    position: absolute;
+    z-index: 15;
+    bottom: calc(100% + 8px);
+    left: 12px;
+  }
 
-.suggestions {
-  display: grid;
-  width: min(300px, calc(100vw - 48px));
-  max-height: 220px;
-  overflow: auto;
-  padding: 8px;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 4px 18px #0000001f;
-}
+  .suggestions {
+    display: grid;
+    width: min(300px, calc(100vw - 48px));
+    max-height: 220px;
+    overflow: auto;
+    padding: 8px;
+    border-radius: 14px;
+    background: tokens.$white;
+    box-shadow: 0 4px 18px #0000001f;
 
-.suggestions button {
-  text-align: left;
-  background: transparent;
-}
+    button {
+      text-align: left;
+      background: transparent;
 
-.suggestions button:hover {
-  background: #eceefe;
+      &:hover {
+        background: tokens.$background;
+      }
+    }
+  }
 }

@@ -1,75 +1,76 @@
+@use '../../../styles/tokens' as tokens;
+@use '../../../styles/breakpoints' as bp;
+
 .new-message-view {
   min-height: 100%;
   padding: 28px;
-}
 
-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-h1 {
-  margin: 0;
-}
-
-.mobile-back {
-  display: none;
-  color: #444df2;
-  text-decoration: none;
-  font-size: 24px;
-}
-
-.to-field {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  margin-top: 24px;
-  gap: 12px;
-  font-weight: 700;
-}
-
-.to-field input {
-  width: 100%;
-  border: 0;
-  border-radius: 24px;
-  padding: 13px 18px;
-  outline: 1px solid #adb0d9;
-}
-
-.results {
-  display: grid;
-  max-width: 720px;
-  margin-top: 16px;
-  gap: 6px;
-}
-
-.results button {
-  display: grid;
-  border: 0;
-  border-radius: 14px;
-  padding: 12px 16px;
-  gap: 3px;
-  cursor: pointer;
-  text-align: left;
-  background: transparent;
-}
-
-.results button:hover {
-  background: #eceefe;
-}
-
-.results span,
-.results p {
-  color: #686868;
-}
-
-@media (max-width: 640px) {
-  .mobile-back {
-    display: inline-flex;
+  header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
-  .new-message-view {
+  h1 {
+    margin: 0;
+  }
+
+  .mobile-back {
+    display: none;
+    color: tokens.$purple-1;
+    text-decoration: none;
+    font-size: 24px;
+
+    @include bp.mobile {
+      display: inline-flex;
+    }
+  }
+
+  .to-field {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    margin-top: 24px;
+    gap: 12px;
+    font-weight: 700;
+
+    input {
+      width: 100%;
+      border: 0;
+      border-radius: 24px;
+      padding: 13px 18px;
+      outline: 1px solid tokens.$border;
+    }
+  }
+
+  .results {
+    display: grid;
+    max-width: 720px;
+    margin-top: 16px;
+    gap: 6px;
+
+    button {
+      display: grid;
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      gap: 3px;
+      cursor: pointer;
+      text-align: left;
+      background: transparent;
+
+      &:hover {
+        background: tokens.$background;
+      }
+    }
+
+    span,
+    p {
+      color: tokens.$text-gray;
+    }
+  }
+
+  @include bp.mobile {
     padding: 18px;
   }
 }

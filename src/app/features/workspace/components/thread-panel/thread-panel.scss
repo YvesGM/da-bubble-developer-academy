@@ -1,3 +1,6 @@
+@use '../../../../../styles/tokens' as tokens;
+@use '../../../../../styles/breakpoints' as bp;
+
 .thread-panel {
   display: grid;
   grid-template-rows: auto auto auto minmax(0, 1fr) auto;
@@ -5,37 +8,35 @@
   height: 100%;
   padding: 18px;
   gap: 12px;
-  border-left: 1px solid #eceefe;
-  background: #fff;
-}
+  border-left: 1px solid tokens.$background;
+  background: tokens.$white;
 
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-header div {
-  display: grid;
-}
+    div {
+      display: grid;
+    }
 
-header button {
-  border: 0;
-  background: transparent;
-  font-size: 26px;
-}
+    button {
+      border: 0;
+      background: transparent;
+      font-size: 26px;
+    }
+  }
 
-.divider {
-  color: #686868;
-  font-size: 13px;
-}
+  .divider {
+    color: tokens.$text-gray;
+    font-size: 13px;
+  }
 
-.replies {
-  overflow: auto;
-}
+  .replies {
+    overflow: auto;
+  }
 
-@media (max-width: 900px) {
-  .thread-panel {
+  @include bp.mobile {
     position: absolute;
     z-index: 20;
     inset: 0;

@@ -1,132 +1,137 @@
+@use '../../../styles/tokens' as tokens;
+@use '../../../styles/breakpoints' as bp;
+
 .channel-view {
   padding: 24px;
-}
 
-.channel-header,
-.member-tools,
-.member-stack {
-  display: flex;
-  align-items: center;
-}
+  @include bp.mobile {
+    padding: 14px;
+  }
 
-.channel-header {
-  justify-content: space-between;
-  gap: 16px;
-}
+  .channel-header,
+  .member-tools,
+  .member-stack {
+    display: flex;
+    align-items: center;
+  }
 
-.channel-title,
-.member-stack,
-.add-member {
-  border: 0;
-  cursor: pointer;
-  background: transparent;
-}
+  .channel-header {
+    justify-content: space-between;
+    gap: 16px;
 
-.channel-title {
-  padding: 8px 10px;
-  font-size: 24px;
-  font-weight: 700;
-}
+    @include bp.mobile {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+    }
+  }
 
-.channel-title:disabled {
-  cursor: default;
-  color: #000;
-}
+  .channel-title,
+  .member-stack,
+  .add-member {
+    border: 0;
+    cursor: pointer;
+    background: transparent;
+  }
 
-.member-tools {
-  gap: 8px;
-}
+  .channel-title {
+    padding: 8px 10px;
+    font-size: 24px;
+    font-weight: 700;
 
-.member-stack {
-  min-height: 44px;
-  padding: 4px 10px;
-  gap: 0;
-  border-radius: 24px;
-  background: #eceefe;
-}
+    &:disabled {
+      cursor: default;
+      color: tokens.$text;
+    }
 
-.member-stack app-avatar,
-.guest-avatar {
-  margin-left: -8px;
-}
+    @include bp.mobile {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 20px;
+    }
+  }
 
-.member-stack app-avatar:first-child {
-  margin-left: 0;
-}
+  .member-tools {
+    gap: 8px;
+  }
 
-.guest-avatar {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border-radius: 50%;
-  background: #fff;
-  color: #444df2;
-  font-weight: 700;
-}
+  .member-stack {
+    min-height: 44px;
+    padding: 4px 10px;
+    gap: 0;
+    border-radius: 24px;
+    background: tokens.$background;
 
-.member-stack strong {
-  margin-left: 8px;
-}
+    app-avatar,
+    .guest-avatar {
+      margin-left: -8px;
+    }
 
-.add-member {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  border-radius: 50%;
-  background: #eceefe;
-  color: #444df2;
-  font-size: 22px;
-}
+    app-avatar {
+      &:first-child {
+        margin-left: 0;
+      }
 
-.description {
-  margin: 8px 10px 0;
-  color: #686868;
-}
+      @include bp.mobile {
+        &:nth-of-type(n + 4) {
+          display: none;
+        }
+      }
+    }
 
-.message-placeholder {
-  margin-top: 16px;
-  min-height: 180px;
-  border-radius: 20px;
-  background: #fff;
+    strong {
+      margin-left: 8px;
+    }
+  }
+
+  .guest-avatar {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border-radius: 50%;
+    background: tokens.$white;
+    color: tokens.$purple-1;
+    font-weight: 700;
+  }
+
+  .add-member {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border-radius: 50%;
+    background: tokens.$background;
+    color: tokens.$purple-1;
+    font-size: 22px;
+  }
+
+  .description {
+    margin: 8px 10px 0;
+    color: tokens.$text-gray;
+  }
+
+  .message-placeholder {
+    margin-top: 16px;
+    min-height: 180px;
+    border-radius: 20px;
+    background: tokens.$white;
+  }
+
+  .mobile-back {
+    display: none;
+    color: tokens.$purple-1;
+    text-decoration: none;
+    font-size: 24px;
+
+    @include bp.mobile {
+      display: inline-flex;
+    }
+  }
 }
 
 .missing-channel {
   padding: 48px;
   text-align: center;
-}
-
-.mobile-back {
-  display: none;
-  color: #444df2;
-  text-decoration: none;
-  font-size: 24px;
-}
-
-@media (max-width: 640px) {
-  .channel-view {
-    padding: 14px;
-  }
-
-  .mobile-back {
-    display: inline-flex;
-  }
-
-  .channel-header {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-  }
-
-  .channel-title {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 20px;
-  }
-
-  .member-stack app-avatar:nth-of-type(n + 4) {
-    display: none;
-  }
 }

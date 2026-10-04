@@ -1,3 +1,5 @@
+@use '../../../../../styles/tokens' as tokens;
+
 .backdrop {
   position: fixed;
   z-index: 55;
@@ -6,60 +8,62 @@
   place-items: center;
   padding: 24px;
   background: #00000040;
-}
 
-.dialog {
-  width: min(720px, 100%);
-  padding: 28px;
-  border-radius: 24px;
-  background: #fff;
-}
+  .dialog {
+    width: min(720px, 100%);
+    padding: 28px;
+    border-radius: 24px;
+    background: tokens.$white;
 
-header,
-.actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
+    header,
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
 
-form,
-label,
-.creator {
-  display: grid;
-  gap: 12px;
-}
+    form,
+    label,
+    .creator {
+      display: grid;
+      gap: 12px;
+    }
 
-input,
-textarea {
-  border: 0;
-  border-radius: 16px;
-  padding: 12px 16px;
-  outline: 1px solid #adb0d9;
-  font: inherit;
-}
+    input,
+    textarea {
+      border: 0;
+      border-radius: 16px;
+      padding: 12px 16px;
+      outline: 1px solid tokens.$border;
+      font: inherit;
+    }
 
-button {
-  border: 0;
-  border-radius: 24px;
-  padding: 10px 16px;
-  cursor: pointer;
-}
+    button {
+      border: 0;
+      border-radius: 24px;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
 
-.primary {
-  background: #444df2;
-  color: #fff;
-}
+    .primary {
+      background: tokens.$purple-1;
+      color: tokens.$white;
+    }
 
-.danger {
-  color: #e61c40;
-  background: #fff0f3;
-}
+    .danger {
+      background: #fff0f3;
+      color: tokens.$error;
+    }
 
-.creator span {
-  color: #444df2;
-}
+    .creator {
+      span {
+        color: tokens.$purple-1;
+      }
+    }
 
-.error {
-  color: #e61c40;
+    .error {
+      color: tokens.$error;
+    }
+  }
 }

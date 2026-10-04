@@ -1,58 +1,58 @@
+@use '../../../styles/tokens' as tokens;
+@use '../../../styles/breakpoints' as bp;
+
 .workspace {
   display: grid;
   grid-template-rows: auto 1fr;
   min-height: 100dvh;
-  background: #eceefe;
-}
+  background: tokens.$background;
 
-.workspace-body {
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  min-height: 0;
-  padding: 20px;
-  gap: 20px;
-}
-
-.workspace-body.collapsed {
-  grid-template-columns: 72px minmax(0, 1fr);
-}
-
-.workspace-content {
-  min-width: 0;
-  overflow: auto;
-  border-radius: 24px;
-  background: #fff;
-}
-
-@media (max-width: 820px) {
   .workspace-body {
-    grid-template-columns: 220px minmax(0, 1fr);
-    padding: 12px;
-    gap: 12px;
-  }
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    min-height: 0;
+    padding: 20px;
+    gap: 20px;
 
-  .workspace-body.collapsed {
-    grid-template-columns: 64px minmax(0, 1fr);
-  }
-}
+    &.collapsed {
+      grid-template-columns: 72px minmax(0, 1fr);
+    }
 
-@media (max-width: 640px) {
-  .workspace-body,
-  .workspace-body.collapsed {
-    grid-template-columns: 1fr;
-    padding: 8px;
-  }
+    &.conversation-open {
+      app-workspace-sidebar {
+        @include bp.mobile {
+          display: none;
+        }
+      }
+    }
 
-  .workspace-body.conversation-open app-workspace-sidebar {
-    display: none;
-  }
+    &:not(.conversation-open) {
+      .workspace-content {
+        @include bp.mobile {
+          display: none;
+        }
+      }
+    }
 
-  .workspace-body:not(.conversation-open) .workspace-content {
-    display: none;
+    @include bp.mobile {
+      grid-template-columns: 1fr;
+      padding: 8px;
+
+      &.collapsed {
+        grid-template-columns: 1fr;
+      }
+    }
   }
 
   .workspace-content {
-    min-height: calc(100dvh - 150px);
-    border-radius: 18px;
+    min-width: 0;
+    overflow: auto;
+    border-radius: 24px;
+    background: tokens.$white;
+
+    @include bp.mobile {
+      min-height: calc(100dvh - 150px);
+      border-radius: 18px;
+    }
   }
 }
