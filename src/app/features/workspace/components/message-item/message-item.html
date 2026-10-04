@@ -1,5 +1,17 @@
 <article class="message">
-  <div class="avatar">{{ message().authorName.charAt(0).toUpperCase() }}</div>
+  <button
+    type="button"
+    class="message-avatar"
+    [disabled]="message().authorIsGuest"
+    (click)="openAuthor()"
+    [attr.aria-label]="message().authorName + ' Profil öffnen'"
+  >
+    <app-avatar
+      [avatarId]="authorAvatarId()"
+      [name]="message().authorName"
+      size="medium"
+    />
+  </button>
 
   <div class="message-body">
     <div class="meta">
@@ -12,23 +24,23 @@
         {{ message().authorName }}
       </button>
       @if (message().authorIsGuest) {
-        <span>Guest</span>
+        <span>Gast</span>
       }
       @if (timeLabel()) {
-        <span>{{ timeLabel() }}</span>
+        <span>{{ timeLabel() }} Uhr</span>
       }
     </div>
 
     @if (message().deleted) {
-      <p class="deleted-message">Message deleted</p>
+      <p class="deleted-message">Nachricht gelöscht</p>
     } @else if (editing()) {
       <div class="edit-row">
         <input [ngModel]="editText()" (ngModelChange)="editText.set($event)" />
-        <button type="button" (click)="saveEdit()">Save</button>
-        <button type="button" (click)="editing.set(false)">Cancel</button>
+        <button type="button" (click)="saveEdit()">Speichern</button>
+        <button type="button" (click)="editing.set(false)">Abbrechen</button>
       </div>
     } @else {
-      <p>{{ message().text }}</p>
+      <p class="message-text">{{ message().text }}</p>
     }
 
     @if (!parentMessageId() && replies().length) {
@@ -38,38 +50,37 @@
     }
 
     @if (canInteract()) {
-    <div class="actions">
-      @for (emoji of recentEmojis().slice(0, 2); track emoji) {
-        <button type="button" class="icon-action" (click)="toggleReaction(emoji)">{{ emoji }}</button>
-      }
+      <div class="actions" aria-label="Nachrichtenaktionen">
+        @for (emoji of recentEmojis().slice(0, 2); track emoji) {
+          <button type="button" class="icon-action" (click)="toggleReaction(emoji)">{{ emoji }}</button>
+        }
 
-      <button
-        type="button"
-        class="icon-action"
-        aria-label="More reactions"
-        (click)="showEmojiPicker.set(!showEmojiPicker())"
-      >
-        +
-      </button>
-
-      @if (!parentMessageId() && showThreadAction()) {
-        <button type="button" (click)="threadRequested.emit(message())">
-          Thread
-          @if (replies().length) {
-            <span>({{ replies().length }})</span>
-          }
+        <button
+          type="button"
+          class="icon-action"
+          aria-label="Weitere Reaktionen"
+          (click)="showEmojiPicker.set(!showEmojiPicker())"
+        >
+          ☺
         </button>
-      }
 
-      @if (isOwnMessage() && !parentMessageId()) {
-        <button type="button" (click)="startEditing()">Edit</button>
-        <button type="button" (click)="removeMessage()">Delete</button>
-      }
-    </div>
+        @if (!parentMessageId() && showThreadAction()) {
+          <button type="button" class="action-text" (click)="threadRequested.emit(message())">
+            Thread
+          </button>
+        }
+
+        @if (isOwnMessage() && !parentMessageId()) {
+          <button type="button" class="action-text" (click)="startEditing()">Bearbeiten</button>
+          <button type="button" class="action-text" (click)="removeMessage()">Löschen</button>
+        }
+      </div>
     }
 
     @if (showEmojiPicker() && canInteract()) {
-      <app-emoji-picker [recent]="recentEmojis()" (emojiSelected)="toggleReaction($event)" />
+      <div class="reaction-picker">
+        <app-emoji-picker [recent]="recentEmojis()" (emojiSelected)="toggleReaction($event)" />
+      </div>
     }
 
     @if (reactions().length) {
