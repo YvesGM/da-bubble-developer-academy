@@ -1,14 +1,14 @@
 <section class="new-message-view">
   <header>
-    <a class="mobile-back" routerLink="/workspace" aria-label="Back to conversations">←</a>
-    <h1>New message</h1>
+    <a class="mobile-back" routerLink="/workspace" aria-label="Zurück zu den Unterhaltungen">←</a>
+    <h1>Neue Nachricht</h1>
   </header>
 
   <label class="to-field">
-    <span>To:</span>
+    <span>An:</span>
     <input
       type="search"
-      placeholder="Type @ for people or # for channels"
+      placeholder="@ für Personen oder # für Channels"
       [value]="query()"
       (input)="query.set($any($event.target).value)"
       autofocus
@@ -23,16 +23,16 @@
           <span>{{ channel.description }}</span>
         </button>
       } @empty {
-        <p>No matching channels.</p>
+        <p>Keine passenden Channels.</p>
       }
     } @else {
       @for (user of filteredUsers(); track user.uid) {
         <button type="button" (click)="selectUser(user.uid)">
-          <strong>{{ user.displayName }}</strong>
+          <strong>{{ user.displayName }}{{ isCurrentUser(user.uid) ? ' (Du)' : '' }}</strong>
           <span>{{ user.email }}</span>
         </button>
       } @empty {
-        <p>No matching users.</p>
+        <p>Keine passenden Personen.</p>
       }
     }
   </div>
