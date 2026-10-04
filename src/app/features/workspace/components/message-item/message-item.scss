@@ -78,6 +78,24 @@
     button {
       background: tokens.$background;
     }
+
+    .reaction-more {
+      color: tokens.$purple-1;
+      font-weight: 700;
+    }
+  }
+
+  .replies-link {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: tokens.$purple-2;
+    font-weight: 700;
+    transition: color tokens.$motion-fast;
+
+    &:hover {
+      color: tokens.$purple-1;
+    }
   }
 
   .edit-row {
