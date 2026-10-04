@@ -92,7 +92,7 @@ export class ChannelView {
   async saveChannel(input: UpdateChannelInput): Promise<void> {
     try {
       await this.channels.updateChannel(this.channelId(), input);
-      this.showDetails.set(false);
+      this.channelError.set('');
     } catch (error) {
       this.channelError.set(this.channelErrorMessage(error));
     }
