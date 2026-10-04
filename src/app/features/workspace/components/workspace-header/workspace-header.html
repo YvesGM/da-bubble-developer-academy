@@ -1,24 +1,29 @@
 <header class="workspace-header">
-  <a class="brand" routerLink="/workspace" aria-label="DABubble home">
-    <span class="brand-mark">D</span>
-    <span>DABubble</span>
-  </a>
+  <div class="brand" aria-label="DABubble">
+    <img class="brand-mark" src="/assets/logo.svg" alt="" />
+    <img class="brand-name" src="/assets/logo-name.svg" alt="DABubble" />
+  </div>
 
   <app-search-box (userSelected)="userSelected.emit($event)" />
 
   <div class="user-area">
-    <button type="button" class="profile-button" (click)="menuOpen.set(!menuOpen())">
-      <app-avatar [avatarId]="avatarId" [name]="displayName" size="small" />
-      <span>{{ displayName }}</span>
-      <span aria-hidden="true">⌄</span>
+    <button
+      type="button"
+      class="profile-button"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="menuOpen.set(!menuOpen())"
+    >
+      <span class="profile-name">{{ displayName }}</span>
+      <app-avatar [avatarId]="avatarId" [name]="displayName" size="large" />
+      <span class="profile-chevron" aria-hidden="true">⌄</span>
     </button>
 
     @if (menuOpen()) {
       <div class="user-menu">
         @if (profileEnabled) {
-          <button type="button" (click)="openProfile()">Profile</button>
+          <button type="button" (click)="openProfile()">Profil</button>
         }
-        <button type="button" (click)="logout()">Log out</button>
+        <button type="button" (click)="logout()">Abmelden</button>
       </div>
     }
   </div>
