@@ -2,6 +2,10 @@
 @use 'breakpoints' as bp;
 
 .auth-card {
+  display:flex;
+  flex-direction:column;
+
+  gap: 32px;
   width: min(606px, calc(100vw - 48px));
   border-radius: 30px;
   padding: 42px 53px;
