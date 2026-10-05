@@ -1,8 +1,7 @@
 @use '../../../../styles/tokens' as tokens;
 @use '../../../../styles/breakpoints' as bp;
 
-.dm {
-  &-view {
+.dm-view {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
 
@@ -25,7 +24,6 @@
         padding: 10px 14px;
       }
     }
-  }
 
   .partner {
     font-size: 22px;
