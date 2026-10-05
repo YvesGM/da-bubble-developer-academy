@@ -79,36 +79,90 @@ export class UserService {
     await this.run(() => updateDoc(this.userReference(user.uid), { recentEmojis: this.nextEmojis(emoji, current) }));
   }
 
+  /**
+   * Filters guest profiles from a user list and returns a sorted copy.
+   *
+   * @param users - Profiles to filter.
+   * @returns Visible registered users sorted by display name.
+   */
   private visibleUsers(users: UserProfile[]): UserProfile[] {
     return this.sortUsers(users.filter((user) => !user.isGuest));
   }
 
+  /**
+   * Builds the recent-emoji list with the latest emoji first and without duplicates.
+   *
+   * @param emoji - Most recently used emoji.
+   * @param current - Previously stored recent emojis.
+   * @returns At most two recent emojis.
+   */
   private nextEmojis(emoji: string, current: string[]): string[] {
     return [emoji, ...current.filter((item) => item !== emoji)].slice(0, 2);
   }
 
+  /**
+   * Builds the Firestore payload for profile display-name and avatar changes.
+   *
+   * @param displayName - New display name.
+   * @param avatarId - New avatar identifier.
+   * @returns The profile update payload.
+   */
   private profileChanges(displayName: string, avatarId: string) {
     return { displayName: displayName.trim(), avatarId, updatedAt: serverTimestamp() };
   }
 
+  /**
+   * Synchronizes a stored profile display name when it differs from the supplied Firebase name.
+   *
+   * @param reference - Firestore profile document reference.
+   * @param data - Current profile document data.
+   * @param name - Optional display name to synchronize.
+   */
   private async syncDisplayName(reference: ReturnType<typeof doc>, data: unknown, name?: string) {
     if (!name || !this.needsDisplayNameUpdate(data, name)) return;
     await this.run(() => updateDoc(reference, { displayName: name, updatedAt: serverTimestamp() }));
   }
 
+  /**
+   * Checks whether the stored profile data requires a display-name update.
+   *
+   * @param data - Current profile document data.
+   * @param name - Expected display name.
+   * @returns Whether the stored display name differs from the expected value.
+   */
   private needsDisplayNameUpdate(data: unknown, name: string): boolean {
     if (!data || typeof data !== 'object') return true;
     return (data as { displayName?: string }).displayName !== name;
   }
 
+  /**
+   * Sorts user profiles alphabetically by display name.
+   *
+   * @param users - Profiles to sort.
+   * @returns A new sorted user array.
+   */
   private sortUsers(users: UserProfile[]): UserProfile[] {
     return [...users].sort((first, second) => first.displayName.localeCompare(second.displayName, 'en'));
   }
 
+  /**
+   * Returns the Firestore document reference for a user profile.
+   *
+   * @param uid - Firebase user identifier.
+   * @returns The user's profile document reference.
+   */
   private userReference(uid: string) {
     return this.runSync(() => doc(this.firestore, 'users', uid));
   }
 
+  /**
+   * Builds a complete application profile from a Firebase user and optional overrides.
+   *
+   * @param user - Firebase user that owns the profile.
+   * @param displayName - Optional display-name override.
+   * @param avatarId - Avatar identifier to store.
+   * @returns The complete user profile payload.
+   */
   private buildProfile(user: User, displayName?: string, avatarId = 'avatar-1'): UserProfile {
     return {
       uid: user.uid,
@@ -123,10 +177,22 @@ export class UserService {
     };
   }
 
+  /**
+   * Executes an asynchronous Firestore operation inside the service injection context.
+   *
+   * @param action - Asynchronous Firestore operation to execute.
+   * @returns The promise returned by the supplied operation.
+   */
   private run<T>(action: () => Promise<T>): Promise<T> {
     return runInInjectionContext(this.injector, action);
   }
 
+  /**
+   * Executes a synchronous Firestore operation inside the service injection context.
+   *
+   * @param action - Synchronous Firestore operation to execute.
+   * @returns The value returned by the supplied operation.
+   */
   private runSync<T>(action: () => T): T {
     return runInInjectionContext(this.injector, action);
   }
