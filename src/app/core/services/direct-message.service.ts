@@ -21,6 +21,7 @@ export class DirectMessageService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
+  /** Observes direct-message conversations containing the current user. */
   observeCurrentUserConversations(): Observable<DirectMessage[]> {
     const uid = this.currentRegisteredUserId();
     if (!uid) return new Observable((subscriber) => {
@@ -33,6 +34,7 @@ export class DirectMessageService {
     return (items as Observable<DirectMessage[]>).pipe(map((dms) => this.sortById(dms)));
   }
 
+  /** Returns an existing deterministic conversation or creates it. */
   async openConversation(otherUserId: string): Promise<string> {
     const currentUserId = this.currentRegisteredUserId();
     if (!currentUserId) throw new Error('guest-direct-message-not-available');
@@ -54,6 +56,7 @@ export class DirectMessageService {
     return id;
   }
 
+  /** Returns the other participant id, or the current id for a self conversation. */
   conversationPartner(dm: DirectMessage): string {
     const current = this.currentRegisteredUserId();
     return dm.participantIds.find((uid) => uid !== current) ?? current;
