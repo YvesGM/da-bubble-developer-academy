@@ -23,6 +23,7 @@ export class PresenceService {
   /**
    * Starts realtime presence tracking for the current registered user. The service subscribes to Firebase's connection state and writes one connection node per browser session.
 
+   */
   start(): void {
     if (this.connectedUnsubscribe || !this.registeredUserId()) return;
     const connectedRef = this.dbRef('.info/connected');
@@ -37,6 +38,7 @@ export class PresenceService {
    *
    * @throws If the Realtime Database update fails.
 
+   */
   async stop(): Promise<void> {
     this.connectedUnsubscribe?.();
     this.connectedUnsubscribe = undefined;
@@ -52,6 +54,7 @@ export class PresenceService {
    * @param uid - Firebase user identifier whose presence should be observed.
    * @returns An observable that emits true while at least one connection exists.
 
+   */
   observeOnline(uid: string): Observable<boolean> {
     return new Observable((subscriber) => {
       const reference = this.dbRef(`presence/${uid}/connections`);
@@ -68,6 +71,7 @@ export class PresenceService {
    * @param snapshot - Realtime Database snapshot for `.info/connected`.
    * @throws If disconnect handlers or the connection write fail.
 
+   */
   private async handleConnection(snapshot: DataSnapshot): Promise<void> {
     if (snapshot.val() !== true) return;
     const uid = this.registeredUserId();
@@ -85,6 +89,7 @@ export class PresenceService {
    * @param uid - Firebase user identifier for the presence owner.
    * @returns The reference for the newly generated connection node.
 
+   */
   private createConnectionRef(uid: string) {
     const id = crypto.randomUUID().replaceAll('-', '');
     this.connectionPath = `presence/${uid}/connections/${id}`;
