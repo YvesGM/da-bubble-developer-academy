@@ -21,12 +21,18 @@ export class WorkspaceNameDialog {
     workspaceName: ['Workspace', Validators.required],
   });
 
+  /**
+   * Validates the workspace-name form and emits the trimmed value when valid.
+   */
   submit(): void {
     const value = this.form.controls.workspaceName.value.trim();
     if (!value) return this.markInvalid();
     this.saveRequested.emit(value);
   }
 
+  /**
+   * Marks the workspace-name control as touched and exposes the validation state.
+   */
   private markInvalid(): void {
     this.form.markAllAsTouched();
     this.errorMessage.set('Bitte gib einen Workspace-Namen ein.');
