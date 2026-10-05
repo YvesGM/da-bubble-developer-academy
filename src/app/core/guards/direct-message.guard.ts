@@ -3,7 +3,12 @@ import { Auth } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
 
-/** Allows registered participants to open a direct-message conversation. */
+/**
+ * Restricts direct-message routes to registered participants of the requested conversation.
+ *
+ * @param route - Route data containing the direct-message conversation identifier.
+ * @returns True when access is allowed; otherwise a workspace redirect.
+ */
 export const directMessageGuard: CanActivateFn = async (route) => {
   const context = guardContext();
   await context.auth.authStateReady();
