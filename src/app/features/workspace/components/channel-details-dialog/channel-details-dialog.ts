@@ -28,6 +28,9 @@ export class ChannelDetailsDialog {
     description: [''],
   });
 
+  /**
+   * Validates and emits the edited channel name together with the current description.
+   */
   saveName(): void {
     if (this.form.controls.name.invalid) return this.form.controls.name.markAsTouched();
     this.saveRequested.emit(this.form.getRawValue());
