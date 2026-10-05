@@ -76,19 +76,38 @@ export class ChannelView {
   readonly showProfileEditor = signal(false);
   readonly channelError = signal('');
 
+  /**
+   * Determines whether the current session may use channel-management actions.
+   *
+   * @returns Whether channel management is available for the current user.
+   */
   canManageChannel(): boolean {
     return !this.auth.currentUser?.isAnonymous;
   }
 
+  /**
+   * Returns the current Firebase user identifier.
+   *
+   * @returns The active user identifier, or an empty string when unavailable.
+   */
   currentUserId(): string {
     return this.auth.currentUser?.uid ?? '';
   }
 
+  /**
+   * Opens the channel details dialog and clears stale channel errors.
+   */
   openDetails(): void {
     this.channelError.set('');
     this.showDetails.set(true);
   }
 
+  /**
+   * Persists edited channel metadata and updates the visible error state.
+   *
+   * @param input - Updated channel name and description.
+   * @returns A promise that resolves after save handling completes.
+   */
   async saveChannel(input: UpdateChannelInput): Promise<void> {
     try {
       await this.channels.updateChannel(this.channelId(), input);
@@ -98,56 +117,110 @@ export class ChannelView {
     }
   }
 
+  /**
+   * Adds the selected members and guest-access setting to the current channel.
+   *
+   * @param selection - Selected member identifiers and guest-access flag.
+   * @returns A promise that resolves after the membership update completes.
+   */
   async addMembers(selection: AddMembersSelection): Promise<void> {
     await this.channels.addMembers(this.channelId(), selection.memberIds, selection.guestAccess);
     this.showAddMembers.set(false);
   }
 
+  /**
+   * Removes the current registered user from the channel and returns to the workspace.
+   *
+   * @returns A promise that resolves after the leave action and navigation complete.
+   */
   async leaveChannel(): Promise<void> {
     if (!this.canManageChannel()) return;
     await this.channels.leaveChannel(this.channelId());
     await this.router.navigateByUrl('/workspace');
   }
 
+  /**
+   * Opens the current user's profile editor and closes any selected profile card.
+   */
   openProfileEditor(): void {
     this.selectedUser.set(null);
     this.showProfileEditor.set(true);
   }
 
+  /**
+   * Opens or creates a direct-message conversation with the selected user.
+   *
+   * @param uid - Identifier of the user to message.
+   * @returns A promise that resolves after conversation creation and navigation complete.
+   */
   async startDirectMessage(uid: string): Promise<void> {
     const dmId = await this.directMessages.openConversation(uid);
     this.selectedUser.set(null);
     await this.router.navigate(['/workspace/dm', dmId]);
   }
 
+  /**
+   * Opens the dialog that lists members of the current channel.
+   */
   openMembers(): void {
     this.showMembers.set(true);
   }
 
+  /**
+   * Closes the member list and opens the dialog for adding more members.
+   */
   openAddMembers(): void {
     this.showMembers.set(false);
     this.showAddMembers.set(true);
   }
 
+  /**
+   * Opens the profile card for a selected channel member.
+   *
+   * @param user - User profile to display.
+   */
   openProfile(user: UserProfile): void {
     this.showMembers.set(false);
     this.selectedUser.set(user);
   }
 
+  /**
+   * Resolves a visible user by identifier and opens that user's profile card.
+   *
+   * @param uid - User identifier to resolve.
+   */
   openProfileById(uid: string): void {
     const user = this.findUser(uid);
     if (user) this.selectedUser.set(user);
   }
 
+  /**
+   * Maps channel-operation failures to localized user-facing messages.
+   *
+   * @param error - Error returned by a channel operation.
+   * @returns The message to display in the channel view.
+   */
   private channelErrorMessage(error: unknown): string {
     if (error instanceof ChannelNameTakenError) return 'Dieser Channelname wird bereits verwendet.';
     return firebaseErrorMessage(error, 'Die Änderungen am Channel konnten nicht gespeichert werden.');
   }
 
+  /**
+   * Checks whether a user belongs to the current channel.
+   *
+   * @param uid - User identifier to test.
+   * @returns Whether the user is a channel member.
+   */
   private isChannelMember(uid: string): boolean {
     return this.channel()?.memberIds.includes(uid) ?? false;
   }
 
+  /**
+   * Resolves a visible user profile by Firebase identifier.
+   *
+   * @param uid - Optional user identifier to resolve.
+   * @returns The matching profile when available.
+   */
   private findUser(uid?: string): UserProfile | undefined {
     return this.users().find((user) => user.uid === uid);
   }
