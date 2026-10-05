@@ -23,12 +23,22 @@ export class ForgotPassword {
     email: ['', [Validators.required, Validators.email]],
   });
 
+  /**
+   * Validates the reset form and starts the password-reset request.
+   *
+   * @returns A promise that resolves after validation and request handling complete.
+   */
   async submit(): Promise<void> {
     if (this.form.invalid) return this.markInvalid();
     this.startSubmit();
     await this.sendReset();
   }
 
+  /**
+   * Sends the password-reset email for the current form value and updates UI state.
+   *
+   * @returns A promise that resolves after Firebase finishes the request.
+   */
   private async sendReset(): Promise<void> {
     try {
       await this.auth.sendPasswordReset(this.form.controls.email.value);
@@ -42,11 +52,17 @@ export class ForgotPassword {
     }
   }
 
+  /**
+   * Marks the email control as touched so its validation error becomes visible.
+   */
   private markInvalid(): void {
     this.form.markAllAsTouched();
     this.errorMessage.set('Bitte gib eine gültige E-Mail-Adresse ein.');
   }
 
+  /**
+   * Resets transient messages and marks the form as submitting.
+   */
   private startSubmit(): void {
     this.submitting.set(true);
     this.message.set('');
