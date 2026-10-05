@@ -3,7 +3,12 @@ import { Auth } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { CanActivateFn, Router } from '@angular/router';
 
-/** Allows navigation only when the requested channel document can be read. */
+/**
+ * Checks whether the channel requested by the current route exists.
+ *
+ * @param route - Route data containing the channel identifier.
+ * @returns True when the channel exists; otherwise a workspace redirect.
+ */
 export const channelAccessGuard: CanActivateFn = async (route) => {
   const auth = inject(Auth);
   const firestore = inject(Firestore);
