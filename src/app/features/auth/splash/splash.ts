@@ -21,6 +21,12 @@ export class Splash {
     await this.router.navigateByUrl(target);
   }
 
+  /**
+   * Creates the timer used to keep the splash screen visible for a fixed duration.
+   *
+   * @param milliseconds - Delay duration in milliseconds.
+   * @returns A promise that resolves after the timer expires.
+   */
   private delay(milliseconds: number): Promise<void> {
     return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   }
