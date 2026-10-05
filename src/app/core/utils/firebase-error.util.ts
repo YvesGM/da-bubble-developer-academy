@@ -16,6 +16,7 @@ const FIREBASE_MESSAGES: Record<string, string> = {
   'permission-denied': 'Der Datenbankzugriff wurde durch die Firebase-Regeln verweigert.',
 };
 
+/** Maps known Firebase errors to user-facing German messages. */
 export function firebaseErrorMessage(error: unknown, fallback: string): string {
   if (!(error instanceof FirebaseError)) return fallback;
   return FIREBASE_MESSAGES[error.code] ?? fallback;
