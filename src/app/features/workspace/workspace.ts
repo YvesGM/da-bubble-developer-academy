@@ -77,43 +77,86 @@ export class Workspace {
     return /\/workspace\/(channel|dm)\/|\/workspace\/new-message/.test(this.router.url);
   }
 
+  /**
+   * Toggles the collapsed state of the workspace sidebar.
+   */
   toggleSidebar(): void {
     this.sidebarCollapsed.update((value) => !value);
   }
 
+  /**
+   * Opens the current registered user's profile card when a profile is available.
+   */
   openOwnProfile(): void {
     if (this.profile()) this.selectedUser.set(this.profile()!);
   }
 
+  /**
+   * Opens the profile editor and closes any currently selected profile card.
+   */
   openProfileEditor(): void {
     this.selectedUser.set(null);
     this.showProfileEditor.set(true);
   }
 
+  /**
+   * Persists a new workspace display name for the current user.
+   *
+   * @param name - New workspace display name.
+   * @returns A promise that resolves after persistence completes.
+   */
   async saveWorkspaceName(name: string): Promise<void> {
     await this.usersService.updateWorkspaceName(name);
     this.showWorkspaceEditor.set(false);
   }
 
+  /**
+   * Closes the channel-creation dialog and navigates to the created channel.
+   *
+   * @param channelId - Identifier of the newly created channel.
+   * @returns A promise that resolves after navigation completes.
+   */
   async selectCreatedChannel(channelId: string): Promise<void> {
     this.showCreateChannel.set(false);
     await this.router.navigate(['/workspace/channel', channelId]);
   }
 
+  /**
+   * Navigates to the new-message view.
+   *
+   * @returns A promise that resolves after navigation completes.
+   */
   async openNewMessage(): Promise<void> {
     await this.router.navigate(['/workspace/new-message']);
   }
 
+  /**
+   * Navigates to a channel from the workspace shell.
+   *
+   * @param channelId - Identifier of the channel to open.
+   * @returns A promise that resolves after navigation completes.
+   */
   async openChannel(channelId: string): Promise<void> {
     await this.router.navigate(['/workspace/channel', channelId]);
   }
 
+  /**
+   * Opens or creates a direct-message conversation with the selected user.
+   *
+   * @param userId - Firebase user identifier to message.
+   * @returns A promise that resolves after conversation creation and navigation complete.
+   */
   async startDirectMessage(userId: string): Promise<void> {
     const dmId = await this.directMessagesService.openConversation(userId);
     this.selectedUser.set(null);
     await this.router.navigate(['/workspace/dm', dmId]);
   }
 
+  /**
+   * Stops presence tracking, signs the current session out and returns to login.
+   *
+   * @returns A promise that resolves after cleanup, sign-out and navigation complete.
+   */
   async logout(): Promise<void> {
     await this.presence.stop();
     await this.authService.logout();
