@@ -15,6 +15,11 @@ export class Splash {
     void this.continue();
   }
 
+  /**
+   * Waits for authentication readiness and the splash delay before choosing the next route.
+   *
+   * @returns A promise that resolves after the splash flow has navigated to login or workspace.
+   */
   private async continue(): Promise<void> {
     await Promise.all([this.auth.authStateReady(), this.delay(1500)]);
     const target = this.auth.currentUser ? '/workspace' : '/login';
