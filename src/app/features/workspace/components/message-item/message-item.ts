@@ -79,35 +79,69 @@ export class MessageItem {
   );
 
   @HostListener('window:resize')
+  /**
+   * Updates the responsive reaction limit when the browser viewport changes.
+   */
   updateViewport(): void {
     this.mobileViewport.set(window.innerWidth <= 640);
   }
 
+  /**
+   * Checks whether the rendered message was authored by the current user.
+   *
+   * @returns Whether the current user owns the message.
+   */
   isOwnMessage(): boolean {
     return this.auth.currentUser?.uid === this.message().authorId;
   }
 
+  /**
+   * Requests the author's profile card when the message was not written by a guest.
+   */
   openAuthor(): void {
     if (!this.message().authorIsGuest) this.userRequested.emit(this.message().authorId);
   }
 
+  /**
+   * Formats the message creation timestamp for display.
+   *
+   * @returns The localized time label.
+   */
   timeLabel(): string {
     return messageTime(this.message().createdAt);
   }
 
+  /**
+   * Resolves the avatar identifier for the message author.
+   *
+   * @returns The author's avatar identifier, or an empty string when unavailable.
+   */
   authorAvatarId(): string {
     return this.users().find((user) => user.uid === this.message().authorId)?.avatarId ?? '';
   }
 
+  /**
+   * Determines whether message actions are available for the current message.
+   *
+   * @returns Whether the message has not been deleted.
+   */
   canInteract(): boolean {
     return !this.message().deleted;
   }
 
+  /**
+   * Copies the current message text into edit state and opens inline editing.
+   */
   startEditing(): void {
     this.editText.set(this.message().text);
     this.editing.set(true);
   }
 
+  /**
+   * Persists the edited message text when the message is editable.
+   *
+   * @returns A promise that resolves after the message update completes.
+   */
   async saveEdit(): Promise<void> {
     const value = this.editText().trim();
     if (!value || this.parentMessageId()) return;
@@ -115,11 +149,22 @@ export class MessageItem {
     this.editing.set(false);
   }
 
+  /**
+   * Soft-deletes the current user's top-level message.
+   *
+   * @returns A promise that resolves after deletion completes.
+   */
   async removeMessage(): Promise<void> {
     if (!this.isOwnMessage() || this.parentMessageId()) return;
     await this.messages.deleteMessage(this.target(), this.message().id);
   }
 
+  /**
+   * Adds or removes the current user's reaction and stores the emoji as recently used.
+   *
+   * @param emoji - Emoji to toggle on the message or reply.
+   * @returns A promise that resolves after reaction and preference updates complete.
+   */
   async toggleReaction(emoji: string): Promise<void> {
     const context = this.reactionContext();
     await this.reactionsService.toggleReaction(
@@ -132,23 +177,48 @@ export class MessageItem {
     this.showEmojiPicker.set(false);
   }
 
+  /**
+   * Resolves the display names of users contained in a reaction group.
+   *
+   * @param group - Grouped reaction whose users should be displayed.
+   * @returns A comma-separated list of user names.
+   */
   reactionNames(group: ReactionGroup): string {
     return group.userIds.map((uid) => this.userName(uid)).join(', ');
   }
 
+  /**
+   * Calculates how many reactions are currently hidden by the responsive limit.
+   *
+   * @returns The number of hidden reaction groups.
+   */
   hiddenReactionCount(): number {
     if (this.showAllReactions()) return 0;
     return Math.max(0, this.reactions().length - this.visibleReactions().length);
   }
 
+  /**
+   * Toggles between the limited and fully expanded reaction list.
+   */
   toggleReactionExpansion(): void {
     this.showAllReactions.update((value) => !value);
   }
 
+  /**
+   * Resolves the maximum visible reaction count for the current rendering context.
+   *
+   * @returns Seven reactions for compact/mobile rendering, otherwise twenty.
+   */
   reactionLimit(): number {
     return this.compactReactions() || this.mobileViewport() ? 7 : 20;
   }
 
+  /**
+   * Resolves a display name for a reaction user identifier.
+   *
+   * @param uid - Firebase user identifier.
+   * @returns The resolved display name or the guest fallback.
+   */
   private userName(uid: string): string {
     if (uid === this.auth.currentUser?.uid && this.auth.currentUser?.isAnonymous) return 'Gast';
     return this.users().find((user) => user.uid === uid)?.displayName ?? 'Gast';
