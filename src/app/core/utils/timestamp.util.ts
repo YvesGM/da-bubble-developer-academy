@@ -38,6 +38,13 @@ export function sameMessageDay(first: unknown, second: unknown): boolean {
   return sameDay(firstDate, secondDate);
 }
 
+/**
+ * Compares two dates by calendar day.
+ *
+ * @param first - First date.
+ * @param second - Second date.
+ * @returns Whether both dates share the same year, month and day.
+ */
 function sameDay(first: Date, second: Date): boolean {
   return first.getFullYear() === second.getFullYear()
     && first.getMonth() === second.getMonth()
