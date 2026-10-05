@@ -49,7 +49,7 @@ export class Register {
   async submit(): Promise<void> {
     if (this.form.controls.avatarId.invalid) return this.markAvatarInvalid();
     const value = this.form.getRawValue();
-    await this.runRegistration(value.name, value.email, value.password, value.avatarId);
+    await this.runRegistration(value);
   }
 
   selectedAvatar(): string {
@@ -62,15 +62,10 @@ export class Register {
       && controls.password.valid && controls.privacyAccepted.valid;
   }
 
-  private async runRegistration(
-    name: string,
-    email: string,
-    password: string,
-    avatarId: string,
-  ): Promise<void> {
+  private async runRegistration(input: RegistrationInput): Promise<void> {
     this.startSubmit();
     try {
-      await this.auth.register(name, email, password, avatarId);
+      await this.auth.register(input.name, input.email, input.password, input.avatarId);
       await this.router.navigateByUrl('/workspace');
     } catch (error) {
       this.errorMessage.set(firebaseErrorMessage(error, 'Registrierung fehlgeschlagen.'));
@@ -95,4 +90,12 @@ export class Register {
     this.submitting.set(true);
     this.errorMessage.set('');
   }
+}
+
+interface RegistrationInput {
+  name: string;
+  email: string;
+  password: string;
+  privacyAccepted: boolean;
+  avatarId: string;
 }
