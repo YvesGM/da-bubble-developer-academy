@@ -40,24 +40,47 @@ export class DirectMessageView {
   readonly selectedUser = signal<UserProfile | null>(null);
   readonly showProfileEditor = signal(false);
 
+  /**
+   * Opens the profile card for a requested direct-message participant.
+   *
+   * @param uid - Firebase user identifier to resolve.
+   */
   openProfile(uid: string): void {
     const user = this.users().find((item) => item.uid === uid);
     if (user) this.selectedUser.set(user);
   }
 
+  /**
+   * Opens the current user's profile editor and closes the profile card.
+   */
   openProfileEditor(): void {
     this.selectedUser.set(null);
     this.showProfileEditor.set(true);
   }
 
+  /**
+   * Returns the current Firebase user identifier.
+   *
+   * @returns The active user identifier, or an empty string when unavailable.
+   */
   currentUserId(): string {
     return this.auth.currentUser?.uid ?? '';
   }
 
+  /**
+   * Checks whether the active direct-message conversation targets the current user.
+   *
+   * @returns Whether the conversation is a self conversation.
+   */
   isSelfConversation(): boolean {
     return this.partner()?.uid === this.currentUserId();
   }
 
+  /**
+   * Resolves the profile represented by the active direct-message conversation.
+   *
+   * @returns The partner profile, including the current user for self conversations, when available.
+   */
   private findPartner(): UserProfile | undefined {
     const ids = this.dmId().split('__');
     const partnerId = ids.find((uid) => uid !== this.currentUserId()) ?? this.currentUserId();
