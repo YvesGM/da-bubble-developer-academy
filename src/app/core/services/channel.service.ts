@@ -20,7 +20,14 @@ import { Observable, map } from 'rxjs';
 
 import { ChannelNameTakenError } from '../errors/channel-name-taken.error';
 import { Channel, CreateChannelInput, UpdateChannelInput } from '../models/channel.model';
-import { timestampToDate } from '../utils/timestamp.util';
+import {
+  channelNameKey,
+  channelNameRegistry,
+  cleanChannelName,
+  normalizeChannelName,
+  registeredChannelMembers,
+  sortChannels,
+} from '../utils/channel.util';
 
 @Injectable({ providedIn: 'root' })
 export class ChannelService {
@@ -38,7 +45,7 @@ export class ChannelService {
   observeCurrentUserChannels(): Observable<Channel[]> {
     const request = this.currentUserChannelQuery();
     const channels = this.runSync(() => collectionData(request, { idField: 'id' }));
-    return (channels as Observable<Channel[]>).pipe(map((items) => this.sortChannels(items)));
+    return (channels as Observable<Channel[]>).pipe(map((items) => sortChannels(items)));
   }
 
 
@@ -67,7 +74,7 @@ export class ChannelService {
    */
   async createChannel(input: CreateChannelInput): Promise<string> {
     const creatorId = this.currentUserId();
-    const name = this.cleanName(input.name);
+    const name = cleanChannelName(input.name);
     const channelRef = this.newChannelReference();
     await this.run(() => this.createChannelTransaction(channelRef, input, name, creatorId));
     return channelRef.id;
@@ -84,7 +91,7 @@ export class ChannelService {
    */
   async updateChannel(channelId: string, input: UpdateChannelInput): Promise<void> {
     const channelRef = this.channelReference(channelId);
-    const name = this.cleanName(input.name);
+    const name = cleanChannelName(input.name);
     await this.run(() => this.updateChannelTransaction(channelRef, input, name));
   }
 
@@ -194,7 +201,7 @@ export class ChannelService {
     if ((await transaction.get(registryRef)).exists()) throw new ChannelNameTakenError();
     const data = this.buildChannelData(input, name, creatorId);
     transaction.set(channelRef, data);
-    transaction.set(registryRef, this.nameRegistry(channelRef.id, data));
+    transaction.set(registryRef, channelNameRegistry(channelRef.id, data.normalizedName));
   }
 
   /**
@@ -236,8 +243,8 @@ export class ChannelService {
     current: Channel,
     name: string,
   ): Promise<void> {
-    const previousKey = current.nameKey || this.nameKey(current.name);
-    if (this.nameKey(name) === previousKey) return;
+    const previousKey = current.nameKey || channelNameKey(current.name);
+    if (channelNameKey(name) === previousKey) return;
     await this.replaceNameRegistry(transaction, channelId, previousKey, name);
   }
 
@@ -260,7 +267,7 @@ export class ChannelService {
     const nextRef = this.nameReference(name);
     if ((await transaction.get(nextRef)).exists()) throw new ChannelNameTakenError();
     transaction.delete(this.nameReferenceByKey(previousKey));
-    transaction.set(nextRef, this.nameRegistry(channelId, this.channelChanges({}, name)));
+    transaction.set(nextRef, channelNameRegistry(channelId, normalizeChannelName(name)));
   }
 
   /**
@@ -275,11 +282,11 @@ export class ChannelService {
   private buildChannelData(input: CreateChannelInput, name: string, creatorId: string) {
     return {
       name,
-      normalizedName: this.normalizeName(name),
-      nameKey: this.nameKey(name),
+      normalizedName: normalizeChannelName(name),
+      nameKey: channelNameKey(name),
       description: input.description.trim(),
       creatorId,
-      memberIds: this.registeredMembers(creatorId, input.memberIds),
+      memberIds: registeredChannelMembers(creatorId, input.memberIds, this.auth.currentUser?.isAnonymous ?? false),
       guestAccess: this.auth.currentUser?.isAnonymous ? true : input.guestAccess,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
@@ -297,94 +304,11 @@ export class ChannelService {
   private channelChanges(input: Partial<UpdateChannelInput>, name: string) {
     return {
       name,
-      normalizedName: this.normalizeName(name),
-      nameKey: this.nameKey(name),
+      normalizedName: normalizeChannelName(name),
+      nameKey: channelNameKey(name),
       ...(input.description !== undefined ? { description: input.description.trim() } : {}),
       updatedAt: serverTimestamp(),
     };
-  }
-
-  /**
-   * Builds the registry payload used to reserve a normalized channel name.
-   *
-   * @param channelId - Identifier of the channel that owns the name.
-   * @param data - Data containing the normalized channel name.
-   * @returns The channel-name registry document payload.
-
-   */
-  private nameRegistry(channelId: string, data: { normalizedName: string }) {
-    return { channelId, normalizedName: data.normalizedName };
-  }
-
-  /**
-   * Builds a unique member list and guarantees that registered creators remain members.
-   *
-   * @param creatorId - Identifier of the channel creator.
-   * @param memberIds - Requested member identifiers.
-   * @returns A de-duplicated member identifier list.
-
-   */
-  private registeredMembers(creatorId: string, memberIds: string[]): string[] {
-    const ids = this.auth.currentUser?.isAnonymous ? memberIds : [creatorId, ...memberIds];
-    return [...new Set(ids.filter(Boolean))];
-  }
-
-  /**
-   * Sanitizes a channel name by removing a leading hash and normalizing whitespace.
-   *
-   * @param name - Raw channel name.
-   * @returns The cleaned channel name.
-
-   */
-  private cleanName(name: string): string {
-    return name.trim().replace(/^#+\s*/, '').replace(/\s+/g, ' ');
-  }
-
-  /**
-   * Normalizes a channel name for case-insensitive duplicate detection.
-   *
-   * @param name - Channel name to normalize.
-   * @returns The lowercase sanitized channel name.
-
-   */
-  private normalizeName(name: string): string {
-    return this.cleanName(name).toLowerCase();
-  }
-
-  /**
-   * Encodes the normalized channel name for use as a Firestore document key.
-   *
-   * @param name - Channel name to encode.
-   * @returns The encoded unique-name registry key.
-
-   */
-  private nameKey(name: string): string {
-    return encodeURIComponent(this.normalizeName(name));
-  }
-
-  /**
-   * Sorts channels chronologically and then alphabetically for deterministic display.
-   *
-   * @param channels - Channels to sort.
-   * @returns A new sorted channel array.
-
-   */
-  private sortChannels(channels: Channel[]): Channel[] {
-    return [...channels].sort((first, second) => {
-      const timeDifference = this.channelTime(first) - this.channelTime(second);
-      return timeDifference || first.name.localeCompare(second.name, 'de');
-    });
-  }
-
-  /**
-   * Converts a channel creation timestamp into a numeric sort value.
-   *
-   * @param channel - Channel whose creation time should be read.
-   * @returns The creation timestamp in milliseconds, or zero when unavailable.
-
-   */
-  private channelTime(channel: Channel): number {
-    return timestampToDate(channel.createdAt)?.getTime() ?? 0;
   }
 
   /**
@@ -435,7 +359,7 @@ export class ChannelService {
    * @returns The corresponding channel-name registry reference.
    */
   private nameReference(name: string): DocumentReference {
-    return this.nameReferenceByKey(this.nameKey(name));
+    return this.nameReferenceByKey(channelNameKey(name));
   }
 
   /**
