@@ -92,14 +92,23 @@ export class ChannelService {
     name: string,
     creatorId: string,
   ): Promise<void> {
-    await runTransaction(this.firestore, async (transaction) => {
-      const registryRef = this.nameReference(name);
-      const registry = await transaction.get(registryRef);
-      if (registry.exists()) throw new ChannelNameTakenError();
-      const data = this.buildChannelData(input, name, creatorId);
-      transaction.set(channelRef, data);
-      transaction.set(registryRef, this.nameRegistry(channelRef.id, data));
-    });
+    await runTransaction(this.firestore, (transaction) =>
+      this.writeNewChannel(transaction, channelRef, input, name, creatorId),
+    );
+  }
+
+  private async writeNewChannel(
+    transaction: Transaction,
+    channelRef: DocumentReference,
+    input: CreateChannelInput,
+    name: string,
+    creatorId: string,
+  ): Promise<void> {
+    const registryRef = this.nameReference(name);
+    if ((await transaction.get(registryRef)).exists()) throw new ChannelNameTakenError();
+    const data = this.buildChannelData(input, name, creatorId);
+    transaction.set(channelRef, data);
+    transaction.set(registryRef, this.nameRegistry(channelRef.id, data));
   }
 
   private async updateChannelTransaction(
@@ -122,12 +131,19 @@ export class ChannelService {
     current: Channel,
     name: string,
   ): Promise<void> {
-    const nextKey = this.nameKey(name);
     const previousKey = current.nameKey || this.nameKey(current.name);
-    if (nextKey === previousKey) return;
+    if (this.nameKey(name) === previousKey) return;
+    await this.replaceNameRegistry(transaction, channelId, previousKey, name);
+  }
+
+  private async replaceNameRegistry(
+    transaction: Transaction,
+    channelId: string,
+    previousKey: string,
+    name: string,
+  ): Promise<void> {
     const nextRef = this.nameReference(name);
-    const existing = await transaction.get(nextRef);
-    if (existing.exists()) throw new ChannelNameTakenError();
+    if ((await transaction.get(nextRef)).exists()) throw new ChannelNameTakenError();
     transaction.delete(this.nameReferenceByKey(previousKey));
     transaction.set(nextRef, this.nameRegistry(channelId, this.channelChanges({}, name)));
   }
