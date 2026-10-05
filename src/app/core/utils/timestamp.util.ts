@@ -1,3 +1,4 @@
+/** Converts Firestore-style timestamps and Date values into a Date. */
 export function timestampToDate(value: unknown): Date | null {
   if (value instanceof Date) return value;
   if (!value || typeof value !== 'object') return null;
@@ -7,6 +8,7 @@ export function timestampToDate(value: unknown): Date | null {
   return null;
 }
 
+/** Formats a message timestamp as a German local time. */
 export function messageTime(value: unknown): string {
   const date = timestampToDate(value);
   if (!date) return '';
@@ -16,6 +18,7 @@ export function messageTime(value: unknown): string {
   }).format(date);
 }
 
+/** Formats a message date separator, using "Heute" for the current day. */
 export function messageDateLabel(value: unknown): string {
   const date = timestampToDate(value);
   if (!date) return '';
@@ -27,6 +30,7 @@ export function messageDateLabel(value: unknown): string {
   }).format(date);
 }
 
+/** Reports whether two timestamp-like values fall on the same calendar day. */
 export function sameMessageDay(first: unknown, second: unknown): boolean {
   const firstDate = timestampToDate(first);
   const secondDate = timestampToDate(second);
