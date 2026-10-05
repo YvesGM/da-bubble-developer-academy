@@ -31,37 +31,69 @@ export class Register {
     avatarId: ['', Validators.required],
   });
 
+  /**
+   * Stores the avatar selected during registration.
+   *
+   * @param avatarId - Identifier of the selected avatar.
+   */
   selectAvatar(avatarId: string): void {
     this.form.controls.avatarId.setValue(avatarId);
   }
 
+  /**
+   * Validates account details and advances registration to avatar selection.
+   */
   continueToAvatar(): void {
     if (!this.detailsValid()) return this.markDetailsInvalid();
     this.errorMessage.set('');
     this.step.set('avatar');
   }
 
+  /**
+   * Returns registration to the account-details step and clears transient errors.
+   */
   backToDetails(): void {
     this.errorMessage.set('');
     this.step.set('details');
   }
 
+  /**
+   * Validates avatar selection and submits the complete registration payload.
+   *
+   * @returns A promise that resolves after registration handling completes.
+   */
   async submit(): Promise<void> {
     if (this.form.controls.avatarId.invalid) return this.markAvatarInvalid();
     const value = this.form.getRawValue();
     await this.runRegistration(value);
   }
 
+  /**
+   * Returns the currently selected avatar identifier.
+   *
+   * @returns The selected avatar identifier.
+   */
   selectedAvatar(): string {
     return this.form.controls.avatarId.value;
   }
 
+  /**
+   * Checks whether all account-detail controls required for the first step are valid.
+   *
+   * @returns Whether the registration details are valid.
+   */
   private detailsValid(): boolean {
     const controls = this.form.controls;
     return controls.name.valid && controls.email.valid
       && controls.password.valid && controls.privacyAccepted.valid;
   }
 
+  /**
+   * Executes account creation and navigates to the workspace after success.
+   *
+   * @param input - Validated registration form values.
+   * @returns A promise that resolves after registration and navigation complete.
+   */
   private async runRegistration(input: RegistrationInput): Promise<void> {
     this.startSubmit();
     try {
@@ -74,6 +106,9 @@ export class Register {
     }
   }
 
+  /**
+   * Marks every account-detail control as touched so validation messages become visible.
+   */
   private markDetailsInvalid(): void {
     this.form.controls.name.markAsTouched();
     this.form.controls.email.markAsTouched();
@@ -81,11 +116,17 @@ export class Register {
     this.form.controls.privacyAccepted.markAsTouched();
   }
 
+  /**
+   * Marks avatar selection as invalid and exposes the corresponding form error.
+   */
   private markAvatarInvalid(): void {
     this.form.controls.avatarId.markAsTouched();
     this.errorMessage.set('Bitte wähle einen Avatar aus.');
   }
 
+  /**
+   * Clears previous errors and marks registration as submitting.
+   */
   private startSubmit(): void {
     this.submitting.set(true);
     this.errorMessage.set('');
