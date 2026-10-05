@@ -20,11 +20,17 @@ export class WorkspaceHeader {
 
   readonly menuOpen = signal(false);
 
+  /**
+   * Requests the current user's profile view and closes the account menu.
+   */
   openProfile(): void {
     this.menuOpen.set(false);
     this.profileRequested.emit();
   }
 
+  /**
+   * Requests sign-out from the parent workspace and closes the account menu.
+   */
   logout(): void {
     this.menuOpen.set(false);
     this.logoutRequested.emit();
