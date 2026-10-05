@@ -27,6 +27,7 @@ export class DirectMessageService {
    *
    * @returns An observable of conversations sorted by their deterministic identifier.
 
+   */
   observeCurrentUserConversations(): Observable<DirectMessage[]> {
     const uid = this.currentRegisteredUserId();
     if (!uid) return new Observable((subscriber) => {
@@ -47,6 +48,7 @@ export class DirectMessageService {
    * @returns The deterministic direct-message conversation identifier.
    * @throws If the current session is anonymous or Firestore access fails.
 
+   */
   async openConversation(otherUserId: string): Promise<string> {
     const currentUserId = this.currentRegisteredUserId();
     if (!currentUserId) throw new Error('guest-direct-message-not-available');
@@ -61,6 +63,7 @@ export class DirectMessageService {
    * @param id - Deterministic conversation identifier.
    * @returns Whether the conversation already exists.
 
+   */
   private async conversationExists(id: string): Promise<boolean> {
     const reference = this.runSync(() => doc(this.firestore, 'directMessages', id));
     const snapshot = await this.run(() => getDoc(reference));
@@ -75,6 +78,7 @@ export class DirectMessageService {
    * @returns The deterministic conversation identifier.
    * @throws If Firestore rejects the write.
 
+   */
   private async createConversation(currentUserId: string, otherUserId: string): Promise<string> {
     const id = this.conversationId(currentUserId, otherUserId);
     const reference = this.runSync(() => doc(this.firestore, 'directMessages', id));
@@ -89,6 +93,7 @@ export class DirectMessageService {
    * @param dm - Conversation whose partner should be resolved.
    * @returns The other participant identifier, or the current identifier for a self conversation.
 
+   */
   conversationPartner(dm: DirectMessage): string {
     const current = this.currentRegisteredUserId();
     return dm.participantIds.find((uid) => uid !== current) ?? current;
@@ -101,6 +106,7 @@ export class DirectMessageService {
    * @param second - Second participant identifier.
    * @returns The conversation document payload.
 
+   */
   private directMessageData(first: string, second: string) {
     return {
       participantIds: [...new Set([first, second])].sort(),
@@ -116,6 +122,7 @@ export class DirectMessageService {
    * @param second - Second participant identifier.
    * @returns The stable sorted conversation identifier.
 
+   */
   private conversationId(first: string, second: string): string {
     return [first, second].sort().join('__');
   }
