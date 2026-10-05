@@ -13,6 +13,11 @@ export class EmojiPicker {
 
   readonly emojis = EMOJI_OPTIONS;
 
+  /**
+   * Combines recently used emojis with the default emoji catalog and removes duplicates.
+   *
+   * @returns The ordered emoji options rendered by the picker.
+   */
   options(): string[] {
     return [...new Set([...this.recent, ...this.emojis])];
   }
