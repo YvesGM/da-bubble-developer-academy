@@ -20,6 +20,12 @@ export class MessageList {
   @Output() readonly threadRequested = new EventEmitter<Message>();
   @Output() readonly userRequested = new EventEmitter<string>();
 
+  /**
+   * Determines whether a date separator should be rendered before a message.
+   *
+   * @param index - Index of the message in the rendered list.
+   * @returns Whether the message starts a new calendar day.
+   */
   showDateSeparator(index: number): boolean {
     if (index === 0) return true;
     return !sameMessageDay(this.messages[index - 1]?.createdAt, this.messages[index]?.createdAt);
