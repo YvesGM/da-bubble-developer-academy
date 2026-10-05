@@ -1,0 +1,143 @@
+@use 'tokens' as tokens;
+@use 'breakpoints' as bp;
+
+.auth {
+  &-google-button {
+    font-size: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 60px;
+    gap: 18px;
+
+    color: tokens.$purple-1;
+    background: tokens.$background;
+    border: 0;
+    border-radius: 100px;
+
+    transition:
+      background-color tokens.$motion-base,
+      box-shadow tokens.$motion-base,
+      color tokens.$motion-fast,
+      font-weight tokens.$motion-base,
+      font-size tokens.$motion-base;
+
+    &:hover {
+      font-weight: 700;
+
+      box-shadow: inset 0 0 0 1px tokens.$purple-1;
+    }
+
+    img {
+      width: 38px;
+      height: 38px;
+    }
+  }
+
+  &-button {
+    font-size: 18px;
+    font-weight: 700;
+
+    min-height: 49px;
+    padding: 11px 25px;
+
+    border: 0;
+    border-radius: 25px;
+
+    transition:
+      background-color tokens.$motion-base,
+      color tokens.$motion-fast,
+      box-shadow tokens.$motion-base,
+      opacity tokens.$motion-fast;
+
+    &-row {
+      display: flex;
+      justify-content: center;
+
+      gap: 30px;
+
+      @include bp.mobile {
+        gap: 16px;
+      }
+    }
+
+    &--primary {
+      color: tokens.$white;
+      background: tokens.$purple-1;
+
+      &:hover:not(:disabled) {
+        background: tokens.$purple-2;
+      }
+    }
+
+    &--secondary {
+      color: tokens.$purple-1;
+      background: tokens.$white;
+      box-shadow: inset 0 0 0 1px tokens.$purple-2;
+
+      &:hover:not(:disabled) {
+        color: tokens.$white;
+        background: tokens.$purple-2;
+        box-shadow: none;
+      }
+    }
+
+    &:disabled {
+      cursor: default;
+      color: tokens.$white;
+      background: tokens.$disabled;
+
+      opacity: 1;
+    }
+
+    @include bp.mobile {
+      font-size: 16px;
+    }
+  }
+
+  &-action {
+
+    &-row {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  &-privacy {
+    font-size: 14px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    color: tokens.$text-gray;
+
+    input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+
+      accent-color: tokens.$purple-2;
+    }
+
+    a {
+      text-decoration: none;
+
+      color: tokens.$purple-2;
+
+      transition:
+        color tokens.$motion-fast,
+        text-decoration-color tokens.$motion-fast;
+
+      &:hover {
+        text-decoration: underline;
+
+        color: tokens.$purple-1;
+      }
+    }
+  }
+}
