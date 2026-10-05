@@ -40,10 +40,22 @@ export class ThreadPanel {
     { initialValue: [] as Message[] },
   );
 
+  /**
+   * Sends a reply to the currently selected thread.
+   *
+   * @param text - Reply text entered by the user.
+   * @returns A promise that resolves after the reply has been persisted.
+   */
   async sendReply(text: string): Promise<void> {
     await this.threads.sendReply(this.target(), this.parent().id, this.messageInput(text));
   }
 
+  /**
+   * Builds the reply payload from the current authentication and profile state.
+   *
+   * @param text - Reply text to persist.
+   * @returns The normalized message creation payload.
+   */
   private messageInput(text: string) {
     const user = this.auth.currentUser;
     return {
