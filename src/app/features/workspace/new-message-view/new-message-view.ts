@@ -58,18 +58,42 @@ export class NewMessageView {
     await this.router.navigate(['/workspace/dm', dmId]);
   }
 
+  /**
+   * Navigates to the selected channel.
+   *
+   * @param channelId - Identifier of the selected channel.
+   * @returns A promise that resolves after navigation completes.
+   */
   async selectChannel(channelId: string): Promise<void> {
     await this.router.navigate(['/workspace/channel', channelId]);
   }
 
+  /**
+   * Normalizes the current query by removing an optional prefix and lowercasing it.
+   *
+   * @returns The normalized search query.
+   */
   private normalizedQuery(): string {
     return this.query().trim().replace(/^[@#]/, '').toLowerCase();
   }
 
+  /**
+   * Checks whether a user identifier belongs to the current Firebase session.
+   *
+   * @param uid - User identifier to compare.
+   * @returns Whether the identifier belongs to the current user.
+   */
   isCurrentUser(uid: string): boolean {
     return uid === this.auth.currentUser?.uid;
   }
 
+  /**
+   * Checks whether a user profile matches the normalized query.
+   *
+   * @param user - User profile to inspect.
+   * @param query - Normalized query.
+   * @returns Whether the display name or email matches.
+   */
   private matchesUser(user: UserProfile, query: string): boolean {
     if (!query) return true;
     return user.displayName.toLowerCase().includes(query)
