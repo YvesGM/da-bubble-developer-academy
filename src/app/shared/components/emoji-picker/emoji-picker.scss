@@ -1,25 +1,27 @@
 @use '../../../../styles/tokens' as tokens;
 
-.emoji-picker {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 260px;
-  padding: 8px;
-  gap: 4px;
-  border-radius: 14px;
-  background: tokens.$white;
-  box-shadow: 0 4px 18px #0000001f;
+.emoji {
+  &-picker {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 260px;
+    padding: 8px;
+    gap: 4px;
+    border-radius: 14px;
+    background: tokens.$white;
+    box-shadow: 0 4px 18px #0000001f;
 
-  button {
-    width: 34px;
-    height: 34px;
-    border: 0;
-    border-radius: 8px;
-    background: transparent;
-    font-size: 20px;
+    button {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      font-size: 20px;
 
-    &:hover {
-      background: tokens.$background;
+      &:hover {
+        background: tokens.$background;
+      }
     }
   }
 }

@@ -4,15 +4,19 @@
 .workspace {
   display: grid;
   grid-template-rows: auto 1fr;
+
   min-height: 100dvh;
+
   background: tokens.$background;
 
-  .workspace-body {
+  &-body {
     display: grid;
     grid-template-columns: 300px minmax(0, 1fr);
+
     min-height: 0;
     padding: 0 20px 20px;
     gap: 20px;
+
     transition: grid-template-columns tokens.$motion-base;
 
     &.collapsed {
@@ -37,6 +41,7 @@
 
     @include bp.mobile {
       grid-template-columns: 1fr;
+
       padding: 0;
 
       &.collapsed {
@@ -46,6 +51,7 @@
 
     @include bp.widescreen {
       grid-template-columns: 340px minmax(0, 1fr);
+
       padding: 0 24px 24px;
       gap: 24px;
 
@@ -55,12 +61,14 @@
     }
   }
 
-  .workspace-content {
+  &-content {
     min-width: 0;
-    overflow: hidden;
-    border-radius: 30px;
+
     background: tokens.$white;
+    border-radius: 30px;
     box-shadow: 0 2px 8px #0000000a;
+
+    overflow: hidden;
 
     @include bp.mobile {
       min-height: calc(100dvh - 118px);

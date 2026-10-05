@@ -19,9 +19,11 @@
     margin-top: 34px;
     gap: 28px;
 
-    .forgot-link {
-      justify-self: center;
-      margin-top: -6px;
+    .forgot {
+      &-link {
+        justify-self: center;
+        margin-top: -6px;
+      }
     }
 
     @include bp.mobile {

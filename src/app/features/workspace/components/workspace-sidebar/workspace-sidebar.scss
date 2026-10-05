@@ -5,8 +5,9 @@
   height: 100%;
   min-width: 0;
   padding: 28px 24px;
-  border-radius: 30px;
+
   background: tokens.$white;
+  border-radius: 30px;
 
   &.collapsed {
     padding-inline: 12px;
@@ -16,133 +17,170 @@
     }
   }
 
-  .sidebar-top,
-  .section-heading {
+  &-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    min-height: 44px;
+    margin-bottom: 26px;
     gap: 14px;
   }
 
-  .sidebar-top {
-    min-height: 44px;
-    margin-bottom: 26px;
+  &-section {
+    margin-top: 30px;
   }
 
-  .workspace-name {
-    width: auto;
-    max-width: 200px;
-    height: auto;
-    overflow: hidden;
-    border: 0;
-    border-radius: 16px;
-    padding: 6px 8px;
-    background: transparent;
-    color: tokens.$text;
-    font-size: 20px;
-    font-weight: 700;
-    text-align: left;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    transition:
-      background-color tokens.$motion-base,
-      color tokens.$motion-fast;
+  .section {
+    &-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
-    &:hover:not(:disabled) {
-      background: tokens.$background;
-      color: tokens.$purple-1;
+      gap: 14px;
+
+      h2 {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        gap: 8px;
+        font-size: 19px;
+      }
     }
+  }
 
-    &:disabled {
-      cursor: default;
-      opacity: 1;
+  .workspace {
+    &-name {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      width: auto;
+      max-width: 200px;
+      padding: 6px 8px;
+      height: auto;
+
+      color: tokens.$text;
+      background: transparent;
+      border: 0;
+      border-radius: 16px;
+      overflow: hidden;
+
+      transition:
+        background-color tokens.$motion-base,
+        color tokens.$motion-fast;
+
+      &:hover:not(:disabled) {
+        color: tokens.$purple-1;
+        background: tokens.$background;
+      }
+
+      &:disabled {
+        cursor: default;
+        opacity: 1;
+      }
     }
   }
 
   button {
+    font-size: 24px;
+
     display: grid;
+    place-items: center;
+
     width: 36px;
     height: 36px;
-    place-items: center;
+
+    color: tokens.$text;
+    background: transparent;
     border: 0;
     border-radius: 50%;
-    background: transparent;
-    color: tokens.$text;
-    font-size: 24px;
+
     transition:
       background-color tokens.$motion-base,
       color tokens.$motion-fast,
       transform tokens.$motion-base;
 
     &:hover {
-      background: tokens.$background;
       color: tokens.$purple-1;
+      background: tokens.$background;
+
       transform: scale(1.05);
-    }
-  }
-
-  .sidebar-section {
-    & + .sidebar-section {
-      margin-top: 30px;
-    }
-  }
-
-  .section-heading {
-    h2 {
-      display: flex;
-      align-items: center;
-      margin: 0;
-      gap: 8px;
-      font-size: 19px;
     }
   }
 
   nav {
     display: grid;
+
     margin-top: 10px;
     gap: 4px;
   }
 
-  .channel-link,
-  .dm-link {
-    display: flex;
-    min-height: 42px;
-    align-items: center;
-    border-radius: 24px;
-    padding: 4px 14px;
-    gap: 10px;
-    color: tokens.$text;
-    text-decoration: none;
-    transition:
-      background-color tokens.$motion-base,
-      color tokens.$motion-fast;
+  .channel {
+    &-link {
+      text-decoration: none;
 
-    &:hover,
-    &.active {
-      background: tokens.$background;
-      color: tokens.$purple-1;
+      display: flex;
+      align-items: center;
+
+      min-height: 42px;
+      padding: 4px 14px;
+      gap: 10px;
+
+      color: tokens.$text;
+      border-radius: 24px;
+
+      transition:
+        background-color tokens.$motion-base,
+        color tokens.$motion-fast;
+
+      &:hover,
+      &.active {
+        color: tokens.$purple-1;
+        background: tokens.$background;
+      }
+    }
+
+    &-hash {
+      font-size: 21px;
+      font-weight: 700;
     }
   }
 
-  .channel-hash {
-    font-size: 21px;
-    font-weight: 700;
-  }
+  .dm {
+    &-link {
+      display: flex;
+      min-height: 52px;
+      align-items: center;
+      border-radius: 24px;
+      padding: 4px 14px;
+      gap: 10px;
+      color: tokens.$text;
+      text-decoration: none;
+      transition:
+        background-color tokens.$motion-base,
+        color tokens.$motion-fast;
 
-  .dm-link {
-    min-height: 52px;
+      &:hover,
+      &.active {
+        background: tokens.$background;
+        color: tokens.$purple-1;
+      }
 
-    .dm-avatar {
-      position: relative;
-      flex: 0 0 auto;
+      &-avatar {
+        position: relative;
+        flex: 0 0 auto;
 
-      app-presence-indicator {
-        position: absolute;
-        right: -1px;
-        bottom: 1px;
-        display: grid;
-        border: 2px solid tokens.$white;
-        border-radius: 50%;
+        app-presence-indicator {
+          position: absolute;
+          right: -1px;
+          bottom: 1px;
+          display: grid;
+          border: 2px solid tokens.$white;
+          border-radius: 50%;
+        }
       }
     }
   }

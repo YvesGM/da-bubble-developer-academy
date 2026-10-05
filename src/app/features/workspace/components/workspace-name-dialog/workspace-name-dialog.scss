@@ -1,30 +1,30 @@
 @use '../../../../../styles/tokens' as tokens;
 
 .backdrop {
+  display: grid;
+  place-items: center;
+
   position: fixed;
   z-index: 55;
   inset: 0;
-  display: grid;
-  place-items: center;
   padding: 24px;
+
   background: #00000052;
 }
 
 .dialog {
   width: min(460px, 100%);
   padding: 30px 34px;
-  border-radius: 30px;
+
   background: tokens.$white;
+  border-radius: 30px;
   box-shadow: 0 8px 28px #00000024;
 
-  header,
-  .actions {
+  header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
 
-  header {
     h2 {
       margin: 0;
       font-size: 24px;
@@ -47,14 +47,22 @@
     }
   }
 
-  form,
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   label {
     display: grid;
     gap: 14px;
   }
 
   form {
+    display: grid;
+
     margin-top: 22px;
+    gap: 14px;
   }
 
   input {

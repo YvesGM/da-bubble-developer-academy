@@ -1,171 +1,206 @@
 @use '../../../../../styles/tokens' as tokens;
 @use '../../../../../styles/breakpoints' as bp;
 
-.workspace-header {
-  display: grid;
-  grid-template-columns: 220px minmax(280px, 1fr) auto;
-  min-height: 104px;
-  align-items: center;
-  padding: 18px 32px;
-  gap: 40px;
-  background: tokens.$background;
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: default;
-
-    &-mark {
-      width: 54px;
-      height: 54px;
-    }
-
-    &-name {
-      width: 150px;
-      height: auto;
-    }
-  }
-
-  app-search-box {
-    width: min(100%, 820px);
-    justify-self: center;
-  }
-
-  .user-area {
-    position: relative;
-    justify-self: end;
-  }
-
-  .profile-button {
-    display: flex;
-    min-height: 64px;
-    align-items: center;
-    border: 0;
-    border-radius: 32px;
-    padding: 4px 8px 4px 18px;
-    gap: 12px;
-    background: transparent;
-    color: tokens.$text;
-    font-weight: 700;
-    transition:
-      background-color tokens.$motion-base,
-      color tokens.$motion-fast;
-
-    &:hover {
-      background: #ffffff80;
-      color: tokens.$purple-1;
-    }
-
-    .profile-name {
-      max-width: 180px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 18px;
-    }
-
-    .profile-chevron {
-      margin-right: 4px;
-      font-size: 22px;
-      transition: transform tokens.$motion-base;
-    }
-
-    &[aria-expanded='true'] {
-      .profile-chevron {
-        transform: rotate(180deg);
-      }
-    }
-  }
-
-  .user-menu {
-    position: absolute;
-    z-index: 50;
-    top: calc(100% + 8px);
-    right: 0;
+.workspace {
+  &-header {
     display: grid;
-    min-width: 220px;
-    padding: 16px;
-    border-radius: 30px 0 30px 30px;
-    background: tokens.$white;
-    box-shadow: 0 6px 24px #00000024;
+    grid-template-columns: 220px minmax(280px, 1fr) auto;
+    align-items: center;
 
-    button {
-      width: 100%;
-      border: 0;
-      border-radius: 24px;
-      padding: 12px 20px;
-      background: transparent;
-      color: tokens.$text;
-      font-size: 18px;
-      text-align: center;
-      transition:
-        background-color tokens.$motion-base,
-        color tokens.$motion-fast;
+    min-height: 104px;
+    padding: 18px 32px;
+    gap: 40px;
 
-      &:hover {
-        background: tokens.$background;
-        color: tokens.$purple-1;
-      }
-    }
-  }
-
-  @include bp.mobile {
-    grid-template-columns: auto 1fr;
-    min-height: auto;
-    padding: 12px 16px;
-    gap: 10px 14px;
+    background: tokens.$background;
 
     .brand {
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+
+      cursor: default;
+
       &-mark {
-        width: 42px;
-        height: 42px;
+        width: 54px;
+        height: 54px;
       }
 
       &-name {
-        display: none;
+        width: 150px;
+        height: auto;
       }
     }
 
     app-search-box {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      width: 100%;
+      justify-self: center;
+
+      width: min(100%, 820px);
     }
 
-    .profile-button {
-      min-height: 50px;
-      padding: 2px 4px 2px 12px;
+    .user {
+      &-area {
+        justify-self: end;
 
-      .profile-name {
-        max-width: 130px;
-        font-size: 16px;
+        position: relative;
       }
     }
 
-    .user-menu {
-      min-width: 190px;
+    .profile {
+      &-button {
+        font-weight: 700;
+
+        display: flex;
+        align-items: center;
+
+        min-height: 64px;
+        padding: 4px 8px 4px 18px;
+        gap: 12px;
+
+        color: tokens.$text;
+        background: transparent;
+        border: 0;
+        border-radius: 32px;
+
+        transition:
+          background-color tokens.$motion-base,
+          color tokens.$motion-fast;
+
+        &:hover {
+          color: tokens.$purple-1;
+          background: #ffffff80;
+        }
+
+        &-name {
+          font-size: 18px;
+          text-overflow: ellipsis;
+
+          max-width: 180px;
+
+          overflow: hidden;
+          white-space: nowrap;
+        }
+
+        &-chevron {
+          font-size: 22px;
+
+          margin-right: 4px;
+
+          transition: transform tokens.$motion-base;
+        }
+
+        &[aria-expanded='true'] {
+          .profile-chevron {
+            transform: rotate(180deg);
+          }
+        }
+      }
     }
-  }
 
-  @include bp.widescreen {
-    grid-template-columns: 260px minmax(360px, 1fr) auto;
-    min-height: 118px;
-    padding-inline: 48px;
+    .user {
+      &-menu {
+        display: grid;
 
-    .brand {
-      &-mark {
-        width: 62px;
-        height: 62px;
+        position: absolute;
+        z-index: 50;
+        top: calc(100% + 8px);
+        right: 0;
+
+        min-width: 220px;
+        padding: 16px;
+
+        background: tokens.$white;
+        border-radius: 30px 0 30px 30px;
+        box-shadow: 0 6px 24px #00000024;
+
+        button {
+          font-size: 18px;
+          text-align: center;
+
+          width: 100%;
+          padding: 12px 20px;
+
+          color: tokens.$text;
+          border: 0;
+          border-radius: 24px;
+          background: transparent;
+
+          transition:
+            background-color tokens.$motion-base,
+            color tokens.$motion-fast;
+
+          &:hover {
+            color: tokens.$purple-1;
+            background: tokens.$background;
+          }
+        }
+      }
+    }
+
+    @include bp.mobile {
+      grid-template-columns: auto 1fr;
+
+      min-height: auto;
+      padding: 12px 16px;
+      gap: 10px 14px;
+
+      .brand {
+        &-mark {
+          width: 42px;
+          height: 42px;
+        }
+
+        &-name {
+          display: none;
+        }
       }
 
-      &-name {
-        width: 170px;
+      app-search-box {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        width: 100%;
+      }
+
+      .profile {
+        &-button {
+          min-height: 50px;
+          padding: 2px 4px 2px 12px;
+
+          .profile-name {
+            font-size: 16px;
+
+            max-width: 130px;
+          }
+        }
+      }
+
+      .user {
+        &-menu {
+          min-width: 190px;
+        }
       }
     }
 
-    app-search-box {
-      width: min(100%, 920px);
+    @include bp.widescreen {
+      grid-template-columns: 260px minmax(360px, 1fr) auto;
+      
+      min-height: 118px;
+      padding-inline: 48px;
+
+      .brand {
+        &-mark {
+          width: 62px;
+          height: 62px;
+        }
+
+        &-name {
+          width: 170px;
+        }
+      }
+
+      app-search-box {
+        width: min(100%, 920px);
+      }
     }
   }
 }

@@ -1,177 +1,195 @@
 @use '../../../../styles/tokens' as tokens;
 @use '../../../../styles/breakpoints' as bp;
 
-.channel-view {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  height: 100%;
-  min-height: 0;
+.channel {
+  &-view {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
 
-  .channel-header {
-    display: flex;
-    min-height: 88px;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 28px;
-    gap: 18px;
-    border-bottom: 1px solid tokens.$background;
-    box-shadow: 0 2px 5px #00000008;
+    height: 100%;
+    min-height: 0;
 
-    @include bp.mobile {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      min-height: 72px;
-      padding: 10px 14px;
-      gap: 8px;
-    }
-  }
+    .channel-header {
+      display: flex;
+      min-height: 88px;
+      align-items: center;
+      justify-content: space-between;
 
-  .channel-title,
-  .member-stack,
-  .add-member {
-    border: 0;
-    background: transparent;
-  }
+      padding: 16px 28px;
+      gap: 18px;
 
-  .channel-title {
-    display: flex;
-    min-width: 0;
-    align-items: center;
-    border-radius: 24px;
-    padding: 8px 12px;
-    gap: 8px;
-    color: tokens.$text;
-    font-size: 24px;
-    font-weight: 700;
-    transition:
-      background-color tokens.$motion-base,
-      color tokens.$motion-fast;
+      border-bottom: 1px solid tokens.$background;
+      box-shadow: 0 2px 5px #00000008;
 
-    &:hover:not(:disabled) {
-      background: tokens.$background;
-      color: tokens.$purple-1;
-    }
+      @include bp.mobile {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
 
-    &:disabled {
-      cursor: default;
-    }
-
-    .channel-hash {
-      font-size: 26px;
-    }
-
-    .channel-name {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .channel-chevron {
-      flex: 0 0 auto;
-      font-size: 20px;
-    }
-
-    @include bp.mobile {
-      justify-self: start;
-      padding: 6px 8px;
-      font-size: 20px;
-
-      .channel-hash {
-        font-size: 22px;
+        min-height: 72px;
+        padding: 10px 14px;
+        gap: 8px;
       }
     }
-  }
 
-  .member-tools,
-  .member-stack {
-    display: flex;
-    align-items: center;
-  }
+    &-title {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      border-radius: 24px;
+      padding: 8px 12px;
+      gap: 8px;
+      color: tokens.$text;
+      font-size: 24px;
+      font-weight: 700;
+      border: 0;
+      background: transparent;
+      transition:
+        background-color tokens.$motion-base,
+        color tokens.$motion-fast;
 
-  .member-tools {
-    gap: 8px;
-  }
+      &:hover:not(:disabled) {
+        background: tokens.$background;
+        color: tokens.$purple-1;
+      }
 
-  .member-stack {
-    min-height: 44px;
-    padding: 4px 10px;
-    gap: 0;
-    border-radius: 24px;
-    background: tokens.$background;
-    transition:
-      background-color tokens.$motion-base,
-      transform tokens.$motion-base;
+      &:disabled {
+        cursor: default;
+      }
 
-    &:hover {
-      background: #e1e4ff;
-      transform: translateY(-1px);
-    }
+      .channel {
+        &-hash {
+          font-size: 26px;
+        }
 
-    app-avatar,
-    .guest-avatar {
-      margin-left: -8px;
-    }
+        &-name {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
 
-    app-avatar {
-      &:first-child {
-        margin-left: 0;
+        &-chevron {
+          flex: 0 0 auto;
+          font-size: 20px;
+        }
       }
 
       @include bp.mobile {
-        &:nth-of-type(n + 4) {
-          display: none;
+        justify-self: start;
+        padding: 6px 8px;
+        font-size: 20px;
+
+        .channel-hash {
+          font-size: 22px;
         }
       }
     }
+  }
 
-    strong {
-      margin-left: 8px;
-      color: tokens.$text;
+  .member {
+    &-tools {
+      display: flex;
+      align-items: center;
+
+      gap: 8px;
+    }
+
+    &-stack {
+      display: flex;
+      align-items: center;
+      border: 0;
+      background: transparent;
+      min-height: 44px;
+      padding: 4px 10px;
+      gap: 0;
+      border-radius: 24px;
+      background: tokens.$background;
+      transition:
+        background-color tokens.$motion-base,
+        transform tokens.$motion-base;
+
+      &:hover {
+        background: #e1e4ff;
+        transform: translateY(-1px);
+      }
+
+      app-avatar,
+      .guest-avatar {
+        margin-left: -8px;
+      }
+
+      app-avatar {
+        &:first-child {
+          margin-left: 0;
+        }
+
+        @include bp.mobile {
+          &:nth-of-type(n + 4) {
+            display: none;
+          }
+        }
+      }
+
+      strong {
+        margin-left: 8px;
+        color: tokens.$text;
+      }
     }
   }
 
   .guest-avatar {
+    font-weight: 700;
+
     display: grid;
+    place-items: center;
+
     width: 32px;
     height: 32px;
-    place-items: center;
+
+    color: tokens.$purple-1;
     border-radius: 50%;
     background: tokens.$white;
-    color: tokens.$purple-1;
-    font-weight: 700;
   }
 
   .add-member {
+    font-size: 22px;
+
     display: grid;
+    place-items: center;
+
     width: 42px;
     height: 42px;
-    place-items: center;
-    border-radius: 50%;
-    background: tokens.$background;
+
     color: tokens.$text;
-    font-size: 22px;
+    background: tokens.$background;
+    border: 0;
+    border-radius: 50%;
+
     transition:
       background-color tokens.$motion-base,
       color tokens.$motion-fast,
       transform tokens.$motion-base;
 
     &:hover {
-      background: #e1e4ff;
       color: tokens.$purple-1;
+      background: #e1e4ff;
+
       transform: scale(1.05);
     }
   }
 
   .chat-area {
     min-height: 0;
+
     overflow: hidden;
   }
 
   .mobile-back {
+    font-size: 24px;
+
     display: none;
+
     color: tokens.$purple-1;
     text-decoration: none;
-    font-size: 24px;
 
     @include bp.mobile {
       display: inline-flex;
@@ -180,6 +198,7 @@
 }
 
 .missing-channel {
-  padding: 48px;
   text-align: center;
+
+  padding: 48px;
 }

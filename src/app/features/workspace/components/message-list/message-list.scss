@@ -1,38 +1,53 @@
 @use '../../../../../styles/tokens' as tokens;
 
-.message-list {
-  min-height: 240px;
-  overflow: auto;
-
-  .empty-state {
-    display: grid;
+.message {
+  &-list {
     min-height: 240px;
-    place-content: center;
-    color: tokens.$text-gray;
-    text-align: center;
-  }
+    overflow: auto;
 
-  .date-separator {
-    display: flex;
-    align-items: center;
-    margin: 12px 0;
-    gap: 12px;
-    color: tokens.$text-gray;
-    font-size: 13px;
+    .empty {
+      &-state {
+        text-align: center;
 
-    &::before,
-    &::after {
-      height: 1px;
-      flex: 1;
-      content: '';
-      background: tokens.$border;
+        display: grid;
+        place-content: center;
+
+        min-height: 240px;
+
+        color: tokens.$text-gray;
+      }
     }
 
-    span {
-      border: 1px solid tokens.$border;
-      border-radius: 14px;
-      padding: 4px 12px;
-      background: tokens.$white;
+    .date {
+      &-separator {
+        font-size: 13px;
+
+        display: flex;
+        align-items: center;
+
+        margin: 12px 0;
+        gap: 12px;
+
+        color: tokens.$text-gray;
+
+        &::before,
+        &::after {
+          flex: 1;
+
+          height: 1px;
+          content: '';
+
+          background: tokens.$border;
+        }
+
+        span {
+          padding: 4px 12px;
+
+          background: tokens.$white;
+          border: 1px solid tokens.$border;
+          border-radius: 14px;
+        }
+      }
     }
   }
 }

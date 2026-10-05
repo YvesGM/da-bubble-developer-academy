@@ -1,21 +1,25 @@
 @use '../../../../../styles/breakpoints' as bp;
 
-.chat-panel {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  min-height: 420px;
-  height: 100%;
-
-  .chat-main {
+.chat {
+  &-panel {
     display: grid;
-    grid-template-rows: minmax(0, 1fr) auto;
-    min-width: 0;
-    padding: 12px 18px 18px;
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) auto;
 
-    @include bp.mobile {
-      padding: 8px 10px 12px;
+    position: relative;
+    min-height: 420px;
+    height: 100%;
+
+    .chat-main {
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+
+      min-width: 0;
+      padding: 12px 18px 18px;
+      gap: 12px;
+
+      @include bp.mobile {
+        padding: 8px 10px 12px;
+      }
     }
   }
 }

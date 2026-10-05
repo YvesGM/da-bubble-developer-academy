@@ -1,339 +1,394 @@
 @use 'tokens' as tokens;
 @use 'breakpoints' as bp;
 
-.auth-card {
-  display:flex;
-  flex-direction:column;
+.auth {
 
-  gap: 32px;
-  width: min(606px, calc(100vw - 48px));
-  border-radius: 30px;
-  padding: 42px 53px;
-  background: tokens.$white;
-  box-shadow: 0 2px 10px #0000000a;
-
-  @include bp.mobile {
-    width: calc(100vw - 32px);
-    padding: 32px 24px;
-  }
-}
-
-.auth-card-header {
-  position: relative;
-  text-align: center;
-}
-
-.auth-back {
-  position: absolute;
-  top: 5px;
-  left: -5px;
-  display: grid;
-  width: 40px;
-  height: 40px;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: tokens.$text;
-  transform: scale(1);
-  transition:
-    background-color tokens.$motion-fast,
-    color tokens.$motion-fast,
-    transform tokens.$motion-base;
-
-  &:hover {
-    background: tokens.$background;
-    color: tokens.$purple-1;
-    transform: scale(1.06);
-  }
-
-  &-icon {
-    width: 16px;
-    height: 16px;
-    background: currentColor;
-    mask: url('/assets/arrow-back.svg') center / contain no-repeat;
-    -webkit-mask: url('/assets/arrow-back.svg') center / contain no-repeat;
-  }
-}
-
-.auth-title {
-  margin: 0;
-  color: tokens.$purple-1;
-  font-size: 46px;
-  font-weight: 700;
-  line-height: 1.2;
-
-  @include bp.mobile {
-    font-size: 32px;
-  }
-}
-
-.auth-description {
-  max-width: 486px;
-  margin: 22px auto 0;
-  font-size: 20px;
-  line-height: 1.2;
-  text-align: center;
-
-  @include bp.mobile {
-    margin-top: 16px;
-    font-size: 17px;
-  }
-}
-
-.auth-form {
-  display: grid;
-}
-
-.auth-field {
-  position: relative;
-
-  &-wrapper {
+  &-card {
     display: flex;
     flex-direction: column;
 
-    gap: 40px;
-  }
-}
+    gap: 32px;
+    width: min(606px, calc(100vw - 48px));
+    padding: 42px 53px;
 
-.auth-control {
-  width: 100%;
-  height: 60px;
-  border: 0;
-  border-radius: 100px;
-  padding: 18px 32px 18px 68px;
-  outline: 0;
-  background: tokens.$background;
-  color: tokens.$text;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.2;
-  transition:
-    background-color tokens.$motion-base,
-    box-shadow tokens.$motion-base,
-    color tokens.$motion-fast;
-
-  &::placeholder {
-    color: tokens.$text-gray;
-    opacity: 1;
-  }
-
-  &:hover {
-    box-shadow: inset 0 0 0 1px tokens.$border;
-  }
-
-  &:focus {
-    box-shadow: inset 0 0 0 1px tokens.$purple-1;
-  }
-
-  &--plain {
-    padding-left: 32px;
+    background: tokens.$white;
+    border-radius: 30px;
+    box-shadow: 0 2px 10px #0000000a;
 
     @include bp.mobile {
-      padding-left: 24px;
+      width: calc(100vw - 32px);
+      padding: 32px 24px;
+    }
+
+    &-header {
+      text-align: center;
+
+      position: relative;
     }
   }
 
-  @include bp.mobile {
-    height: 54px;
-    padding: 15px 24px 15px 56px;
-    font-size: 16px;
+  &-back {
+    display: grid;
+    place-items: center;
+
+    position: absolute;
+    top: 5px;
+    left: -5px;
+
+    width: 40px;
+    height: 40px;
+
+    color: tokens.$text;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+
+    transform: scale(1);
+    transition:
+      background-color tokens.$motion-fast,
+      color tokens.$motion-fast,
+      transform tokens.$motion-base;
+
+    &:hover {
+      background: tokens.$background;
+      color: tokens.$purple-1;
+
+      transform: scale(1.06);
+    }
+
+    &-icon {
+      width: 16px;
+      height: 16px;
+
+      background: currentColor;
+      mask: url('/assets/arrow-back.svg') center / contain no-repeat;
+      -webkit-mask: url('/assets/arrow-back.svg') center / contain no-repeat;
+    }
   }
-}
 
-.auth-field-icon {
-  position: absolute;
-  top: 30px;
-  left: 32px;
-  width: 20px;
-  max-height: 21px;
-  transform: translateY(-50%);
-  pointer-events: none;
-
-  @include bp.mobile {
-    top: 27px;
-    left: 24px;
-  }
-}
-
-.auth-field-error,
-.auth-form-error,
-.auth-success {
-  margin: 5px 0 0 32px;
-  min-height: 19px;
-  color: tokens.$error;
-  font-size: 14px;
-  line-height: normal;
-}
-
-.auth-field-error {
-  @include bp.mobile {
-    margin-left: 24px;
-  }
-}
-
-.auth-form-error {
-  margin-left: 0;
-  text-align: center;
-}
-
-.auth-success {
-  margin-left: 0;
-  color: tokens.$success;
-  text-align: center;
-}
-
-.auth-link {
-  font-size: 18px;
-  text-align: center;
-  
-  color: tokens.$purple-2;
-  background: transparent;
-  border: 0;
-
-  text-decoration: none;
-  transition:
-    color tokens.$motion-fast,
-    background-color tokens.$motion-fast,
-    font-weight tokens.$motion-base,
-    font-size tokens.$motion-base;
-
-  &:hover {
-    color: tokens.$purple-1;
+  &-title {
+    font-size: 46px;
     font-weight: 700;
-  }
-}
+    line-height: 1.2;
 
-.auth-divider {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 18px;
-
-  &::before,
-  &::after {
-    height: 1px;
-    flex: 1;
-    content: '';
-    background: tokens.$border;
-  }
-}
-
-.auth-google-button {
-  display: flex;
-  width: 100%;
-  height: 60px;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 100px;
-  gap: 18px;
-  background: tokens.$background;
-  color: tokens.$purple-1;
-  font-size: 18px;
-  transition:
-    background-color tokens.$motion-base,
-    box-shadow tokens.$motion-base,
-    color tokens.$motion-fast,
-    font-weight tokens.$motion-base,
-    font-size tokens.$motion-base;
-
-  &:hover {
-    box-shadow: inset 0 0 0 1px tokens.$purple-1;
-    font-weight: 700;
-  }
-
-  img {
-    width: 38px;
-    height: 38px;
-  }
-}
-
-.auth-button-row {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-
-  @include bp.mobile {
-    gap: 16px;
-  }
-}
-
-.auth-button {
-  min-height: 49px;
-  border: 0;
-  border-radius: 25px;
-  padding: 11px 25px;
-  font-size: 18px;
-  font-weight: 700;
-  transition:
-    background-color tokens.$motion-base,
-    color tokens.$motion-fast,
-    box-shadow tokens.$motion-base,
-    opacity tokens.$motion-fast;
-
-  &--primary {
-    background: tokens.$purple-1;
-    color: tokens.$white;
-
-    &:hover:not(:disabled) {
-      background: tokens.$purple-2;
-    }
-  }
-
-  &--secondary {
-    box-shadow: inset 0 0 0 1px tokens.$purple-2;
-    background: tokens.$white;
-    color: tokens.$purple-1;
-
-    &:hover:not(:disabled) {
-      box-shadow: none;
-      background: tokens.$purple-2;
-      color: tokens.$white;
-    }
-  }
-
-  &:disabled {
-    cursor: default;
-    background: tokens.$disabled;
-    color: tokens.$white;
-    opacity: 1;
-  }
-
-  @include bp.mobile {
-    font-size: 16px;
-  }
-}
-
-.auth-action-row {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.auth-privacy {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: tokens.$text-gray;
-  font-size: 14px;
-
-  input {
-    width: 18px;
-    height: 18px;
     margin: 0;
-    accent-color: tokens.$purple-2;
+    color: tokens.$purple-1;
+
+    @include bp.mobile {
+      font-size: 32px;
+    }
   }
 
-  a {
+  &-description {
+    font-size: 20px;
+    line-height: 1.2;
+    text-align: center;
+
+    max-width: 486px;
+    margin: 22px auto 0;
+
+    @include bp.mobile {
+      font-size: 17px;
+
+      margin-top: 16px;
+    }
+  }
+
+  &-form {
+    display: grid;
+
+    &-error {
+      font-size: 14px;
+      line-height: normal;
+      text-align: center;
+
+      min-height: 19px;
+      margin-left: 0;
+
+      color: tokens.$error;
+    }
+
+  }
+
+  &-field {
+    position: relative;
+
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+
+      gap: 40px;
+    }
+
+    &-icon {
+      position: absolute;
+      top: 30px;
+      left: 32px;
+
+      width: 20px;
+      max-height: 21px;
+
+      transform: translateY(-50%);
+      pointer-events: none;
+
+      @include bp.mobile {
+        top: 27px;
+        left: 24px;
+      }
+    }
+
+    &-error {
+      font-size: 14px;
+      line-height: normal;
+
+      margin: 5px 0 0 32px;
+      min-height: 19px;
+
+      color: tokens.$error;
+
+      @include bp.mobile {
+        margin-left: 24px;
+      }
+    }
+
+  }
+
+  &-control {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.2;
+
+    width: 100%;
+    height: 60px;
+    padding: 18px 32px 18px 68px;
+
+    color: tokens.$text;
+    background: tokens.$background;
+    border: 0;
+    border-radius: 100px;
+
+    outline: 0;
+    transition:
+      background-color tokens.$motion-base,
+      box-shadow tokens.$motion-base,
+      color tokens.$motion-fast;
+
+    &::placeholder {
+      color: tokens.$text-gray;
+
+      opacity: 1;
+    }
+
+    &:hover {
+      box-shadow: inset 0 0 0 1px tokens.$border;
+    }
+
+    &:focus {
+      box-shadow: inset 0 0 0 1px tokens.$purple-1;
+    }
+
+    &--plain {
+      padding-left: 32px;
+
+      @include bp.mobile {
+        padding-left: 24px;
+      }
+    }
+
+    @include bp.mobile {
+      font-size: 16px;
+
+      height: 54px;
+      padding: 15px 24px 15px 56px;
+    }
+  }
+
+  &-success {
+    font-size: 14px;
+    line-height: normal;
+    text-align: center;
+
+    min-height: 19px;
+    margin-left: 0;
+
+    color: tokens.$success;
+  }
+
+  &-link {
+    font-size: 18px;
+    text-align: center;
+
     color: tokens.$purple-2;
+    background: transparent;
+    border: 0;
+
     text-decoration: none;
     transition:
       color tokens.$motion-fast,
-      text-decoration-color tokens.$motion-fast;
+      background-color tokens.$motion-fast,
+      font-weight tokens.$motion-base,
+      font-size tokens.$motion-base;
 
     &:hover {
+      font-weight: 700;
+
       color: tokens.$purple-1;
-      text-decoration: underline;
+    }
+  }
+
+  &-divider {
+    font-size: 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    &::before,
+    &::after {
+      height: 1px;
+      flex: 1;
+      content: '';
+      background: tokens.$border;
+    }
+  }
+
+  &-google-button {
+    font-size: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 60px;
+    gap: 18px;
+
+    color: tokens.$purple-1;
+    background: tokens.$background;
+    border: 0;
+    border-radius: 100px;
+
+    transition:
+      background-color tokens.$motion-base,
+      box-shadow tokens.$motion-base,
+      color tokens.$motion-fast,
+      font-weight tokens.$motion-base,
+      font-size tokens.$motion-base;
+
+    &:hover {
+      font-weight: 700;
+
+      box-shadow: inset 0 0 0 1px tokens.$purple-1;
+    }
+
+    img {
+      width: 38px;
+      height: 38px;
+    }
+  }
+
+  &-button {
+    font-size: 18px;
+    font-weight: 700;
+
+    min-height: 49px;
+    padding: 11px 25px;
+
+    border: 0;
+    border-radius: 25px;
+
+    transition:
+      background-color tokens.$motion-base,
+      color tokens.$motion-fast,
+      box-shadow tokens.$motion-base,
+      opacity tokens.$motion-fast;
+
+    &-row {
+      display: flex;
+      justify-content: center;
+
+      gap: 30px;
+
+      @include bp.mobile {
+        gap: 16px;
+      }
+    }
+
+    &--primary {
+      color: tokens.$white;
+      background: tokens.$purple-1;
+
+      &:hover:not(:disabled) {
+        background: tokens.$purple-2;
+      }
+    }
+
+    &--secondary {
+      color: tokens.$purple-1;
+      background: tokens.$white;
+      box-shadow: inset 0 0 0 1px tokens.$purple-2;
+
+      &:hover:not(:disabled) {
+        color: tokens.$white;
+        background: tokens.$purple-2;
+        box-shadow: none;
+      }
+    }
+
+    &:disabled {
+      cursor: default;
+      color: tokens.$white;
+      background: tokens.$disabled;
+
+      opacity: 1;
+    }
+
+    @include bp.mobile {
+      font-size: 16px;
+    }
+  }
+
+  &-action {
+
+    &-row {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  &-privacy {
+    font-size: 14px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    color: tokens.$text-gray;
+
+    input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+
+      accent-color: tokens.$purple-2;
+    }
+
+    a {
+      text-decoration: none;
+
+      color: tokens.$purple-2;
+
+      transition:
+        color tokens.$motion-fast,
+        text-decoration-color tokens.$motion-fast;
+
+      &:hover {
+        text-decoration: underline;
+
+        color: tokens.$purple-1;
+      }
     }
   }
 }

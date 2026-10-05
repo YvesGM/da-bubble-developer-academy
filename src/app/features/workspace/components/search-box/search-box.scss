@@ -5,16 +5,19 @@
   width: 100%;
 
   input {
+    font-size: 17px;
+
     width: 100%;
     height: 54px;
+    padding: 0 24px;
+
+    color: tokens.$text;
+    background: tokens.$white;
     border: 0;
     border-radius: 28px;
-    padding: 0 24px;
-    outline: 0;
-    background: tokens.$white;
-    color: tokens.$text;
-    font-size: 17px;
     box-shadow: 0 2px 8px #0000000a;
+
+    outline: 0;
     transition:
       box-shadow tokens.$motion-base,
       color tokens.$motion-fast;
@@ -29,43 +32,51 @@
   }
 
   .results {
+    display: grid;
+
     position: absolute;
     z-index: 40;
     top: calc(100% + 8px);
     right: 0;
     left: 0;
-    display: grid;
+
     max-height: 360px;
-    overflow: auto;
     padding: 10px;
-    border-radius: 0 0 24px 24px;
+
     background: tokens.$white;
+    border-radius: 0 0 24px 24px;
     box-shadow: 0 8px 28px #0000001c;
+    overflow: auto;
 
     button {
+      text-align: left;
+
       display: grid;
+
       width: 100%;
-      border: 0;
-      border-radius: 18px;
       padding: 10px 14px;
       gap: 3px;
-      background: transparent;
+
       color: tokens.$text;
-      text-align: left;
+      background: transparent;
+      border: 0;
+      border-radius: 18px;
+
       transition:
         background-color tokens.$motion-base,
         color tokens.$motion-fast;
 
       &:hover {
-        background: tokens.$background;
         color: tokens.$purple-1;
+        background: tokens.$background;
       }
     }
 
     span,
     p {
-      color: tokens.$text-gray;
       font-size: 13px;
+
+      color: tokens.$text-gray;
     }
   }
 }

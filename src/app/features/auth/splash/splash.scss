@@ -3,14 +3,18 @@
 
 .splash {
   display: grid;
-  min-height: 100dvh;
   place-items: center;
-  overflow: hidden;
+
+  min-height: 100dvh;
+  
   background: tokens.$purple-1;
+  
+  overflow: hidden;
 
   &-brand {
     display: flex;
     align-items: center;
+  
     gap: 22px;
 
     @include bp.mobile {
@@ -21,6 +25,7 @@
   &-mark {
     width: 132px;
     height: 130px;
+  
     animation: mark-in 500ms ease-out both;
 
     @include bp.mobile {
@@ -37,6 +42,7 @@
   &-name {
     width: 260px;
     height: auto;
+  
     filter: brightness(0) invert(1);
     animation: name-in 650ms 350ms ease-out both;
 

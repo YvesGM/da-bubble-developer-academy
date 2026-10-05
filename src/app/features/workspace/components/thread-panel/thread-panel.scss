@@ -1,82 +1,101 @@
 @use '../../../../../styles/tokens' as tokens;
 @use '../../../../../styles/breakpoints' as bp;
 
-.thread-panel {
-  display: grid;
-  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
-  width: min(440px, 100%);
-  height: 100%;
-  padding: 24px 18px 18px;
-  gap: 14px;
-  border-left: 1px solid tokens.$background;
-  background: tokens.$white;
+.thread {
+  &-panel {
+    display: grid;
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
 
-  header {
-    display: flex;
-    min-height: 48px;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 10px;
+    width: min(440px, 100%);
+    height: 100%;
+    padding: 24px 18px 18px;
+    gap: 14px;
 
-    .thread-title {
+    background: tokens.$white;
+    border-left: 1px solid tokens.$background;
+
+    header {
       display: flex;
-      align-items: baseline;
-      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
 
-      strong {
-        font-size: 22px;
+      min-height: 48px;
+      padding: 0 10px;
+
+      .thread {
+        &-title {
+          display: flex;
+          align-items: baseline;
+
+          gap: 8px;
+
+          strong {
+            font-size: 22px;
+          }
+
+          span {
+            font-size: 13px;
+
+            color: tokens.$purple-2;
+          }
+        }
       }
 
-      span {
-        color: tokens.$purple-2;
-        font-size: 13px;
+      button {
+        font-size: 26px;
+
+        width: 36px;
+        height: 36px;
+
+        background: transparent;
+        border: 0;
+        border-radius: 50%;
+
+        transition:
+          background-color tokens.$motion-base,
+          color tokens.$motion-fast;
+
+        &:hover {
+          color: tokens.$purple-1;
+          background: tokens.$background;
+        }
       }
     }
 
-    button {
-      width: 36px;
-      height: 36px;
-      border: 0;
-      border-radius: 50%;
-      background: transparent;
-      font-size: 26px;
-      transition:
-        background-color tokens.$motion-base,
-        color tokens.$motion-fast;
+    .divider {
+      font-size: 13px;
 
-      &:hover {
-        background: tokens.$background;
-        color: tokens.$purple-1;
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      color: tokens.$text-gray;
+
+      &::after {
+        flex: 1;
+
+        height: 1px;
+        content: '';
+
+        background: tokens.$border;
       }
     }
-  }
 
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: tokens.$text-gray;
-    font-size: 13px;
-
-    &::after {
-      height: 1px;
-      flex: 1;
-      content: '';
-      background: tokens.$border;
+    .replies {
+      min-height: 0;
+      overflow: auto;
     }
-  }
 
-  .replies {
-    min-height: 0;
-    overflow: auto;
-  }
+    @include bp.mobile {
+      position: fixed;
+      z-index: 30;
+      inset: 0;
 
-  @include bp.mobile {
-    position: fixed;
-    z-index: 30;
-    inset: 0;
-    width: 100%;
-    padding: 16px 8px;
-    border-left: 0;
+      width: 100%;
+      padding: 16px 8px;
+
+      border-left: 0;
+    }
   }
 }

@@ -16,6 +16,13 @@
     box-shadow: 0 2px 8px #444df212;
   }
 
+  &-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
   textarea {
     width: 100%;
     min-height: 78px;
@@ -31,13 +38,6 @@
     }
   }
 
-  .composer-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
   button {
     border: 0;
     transition:
@@ -46,40 +46,43 @@
       transform tokens.$motion-base;
   }
 
-  .icon-button {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: transparent;
-    font-size: 22px;
+  .icon {
+    &-button {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: transparent;
+      font-size: 22px;
 
-    &:hover {
-      background: tokens.$background;
-      color: tokens.$purple-1;
-      transform: scale(1.05);
+      &:hover {
+        background: tokens.$background;
+        color: tokens.$purple-1;
+        transform: scale(1.05);
+      }
     }
   }
 
-  .send-button {
-    min-width: 88px;
-    height: 40px;
-    border-radius: 20px;
-    padding: 0 18px;
-    background: tokens.$purple-1;
-    color: tokens.$white;
-    font-weight: 700;
+  .send {
+    &-button {
+      min-width: 88px;
+      height: 40px;
+      border-radius: 20px;
+      padding: 0 18px;
+      background: tokens.$purple-1;
+      color: tokens.$white;
+      font-weight: 700;
 
-    &:hover:not(:disabled) {
-      background: tokens.$purple-2;
-    }
+      &:hover:not(:disabled) {
+        background: tokens.$purple-2;
+      }
 
-    &:disabled {
-      cursor: default;
-      opacity: 0.45;
+      &:disabled {
+        cursor: default;
+        opacity: 0.45;
+      }
     }
   }
 
-  .suggestions,
   .picker {
     position: absolute;
     z-index: 15;
@@ -89,23 +92,33 @@
 
   .suggestions {
     display: grid;
+
+    position: absolute;
+    z-index: 15;
+    bottom: calc(100% + 8px);
+    left: 12px;
+
     width: min(320px, calc(100vw - 48px));
     max-height: 240px;
-    overflow: auto;
     padding: 8px;
-    border-radius: 18px;
+
     background: tokens.$white;
+    border-radius: 18px;
     box-shadow: 0 6px 24px #0000001f;
 
+    overflow: auto;
+
     button {
-      border-radius: 14px;
-      padding: 9px 12px;
-      background: transparent;
       text-align: left;
 
+      padding: 9px 12px;
+
+      background: transparent;
+      border-radius: 14px;
+
       &:hover {
-        background: tokens.$background;
         color: tokens.$purple-1;
+        background: tokens.$background;
       }
     }
   }

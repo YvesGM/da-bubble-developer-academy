@@ -2,11 +2,14 @@
 @use '../../../../../styles/breakpoints' as bp;
 
 .message {
-  position: relative;
   display: grid;
   grid-template-columns: 48px minmax(0, 1fr);
+
+  position: relative;
+
   padding: 12px 28px;
   gap: 14px;
+
   transition: background-color tokens.$motion-base;
 
   &:hover {
@@ -19,81 +22,125 @@
     }
   }
 
-  .message-avatar {
+  &-avatar {
     width: 48px;
     height: 48px;
+    padding: 0;
+
+    background: transparent;
     border: 0;
     border-radius: 50%;
-    padding: 0;
-    background: transparent;
 
     &:disabled {
       cursor: default;
     }
   }
 
-  .message-body {
+  &-body {
     min-width: 0;
   }
 
-  .meta,
-  .reactions,
-  .edit-row {
+  &-text {
+    display: inline-block;
+    padding: 10px 14px;
+
+    max-width: min(680px, 90%);
+    margin: 5px 0 7px;
+
+    background: tokens.$background;
+    border-radius: 0 20px 20px 20px;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .edit {
+    &-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+
+      margin-top: 6px;
+      gap: 8px;
+
+      input {
+        flex: 1;
+        min-width: 160px;
+        border: 1px solid tokens.$border;
+        border-radius: 12px;
+        padding: 8px 10px;
+      }
+
+      button {
+        border: 0;
+        border-radius: 16px;
+        padding: 7px 10px;
+      }
+    }
+  }
+
+  .reactions {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+
     gap: 8px;
   }
 
   .meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
     span {
-      color: tokens.$text-gray;
       font-size: 12px;
+
+      color: tokens.$text-gray;
     }
   }
 
-  .author-button {
-    border: 0;
-    padding: 0;
-    background: transparent;
-    color: tokens.$text;
-    font-size: 16px;
-    font-weight: 700;
-    transition: color tokens.$motion-fast;
+  .author {
+    &-button {
+      font-size: 16px;
+      font-weight: 700;
 
-    &:hover:not(:disabled) {
-      color: tokens.$purple-1;
+      padding: 0;
+
+      color: tokens.$text;
+      background: transparent;
+      border: 0;
+
+      transition: color tokens.$motion-fast;
+
+      &:hover:not(:disabled) {
+        color: tokens.$purple-1;
+      }
+
+      &:disabled {
+        cursor: default;
+      }
     }
-
-    &:disabled {
-      cursor: default;
-    }
-  }
-
-  .message-text {
-    display: inline-block;
-    max-width: min(680px, 90%);
-    margin: 5px 0 7px;
-    border-radius: 0 20px 20px 20px;
-    padding: 10px 14px;
-    overflow-wrap: anywhere;
-    background: tokens.$background;
-    white-space: pre-wrap;
   }
 
   .actions {
+    display: flex;
+    align-items: center;
+
     position: absolute;
     z-index: 3;
     top: -14px;
     right: 28px;
-    display: flex;
-    align-items: center;
+
     padding: 4px 8px;
     gap: 4px;
+
+    background: tokens.$white;
     border: 1px solid tokens.$border;
     border-radius: 22px 22px 0 22px;
-    background: tokens.$white;
     box-shadow: 0 2px 8px #0000000d;
+
     opacity: 0;
     transform: translateY(4px);
     pointer-events: none;
@@ -110,17 +157,19 @@
     button {
       min-width: 32px;
       height: 32px;
+      padding: 0 8px;
+
+      background: transparent;
       border: 0;
       border-radius: 16px;
-      padding: 0 8px;
-      background: transparent;
+
       transition:
         background-color tokens.$motion-base,
         color tokens.$motion-fast;
 
       &:hover {
-        background: tokens.$background;
         color: tokens.$purple-1;
+        background: tokens.$background;
       }
     }
 
@@ -140,33 +189,39 @@
     margin-top: 6px;
 
     button {
+      padding: 4px 9px;
+
+      background: tokens.$white;
       border: 1px solid tokens.$border;
       border-radius: 16px;
-      padding: 4px 9px;
-      background: tokens.$white;
+
       transition:
         background-color tokens.$motion-base,
         border-color tokens.$motion-base;
 
       &:hover {
-        border-color: tokens.$purple-2;
         background: tokens.$background;
+        border-color: tokens.$purple-2;
       }
     }
 
     .reaction-more {
-      border-color: transparent;
-      color: tokens.$purple-1;
       font-weight: 700;
+
+      color: tokens.$purple-1;
+      border-color: transparent;
     }
   }
 
   .replies-link {
-    border: 0;
-    padding: 0;
-    background: transparent;
-    color: tokens.$purple-2;
     font-weight: 700;
+
+    padding: 0;
+
+    color: tokens.$purple-2;
+    background: transparent;
+    border: 0;
+
     transition: color tokens.$motion-fast;
 
     &:hover {
@@ -174,32 +229,19 @@
     }
   }
 
-  .edit-row {
-    margin-top: 6px;
+  .deleted {
+    &-message {
+      font-style: italic;
 
-    input {
-      flex: 1;
-      min-width: 160px;
-      border: 1px solid tokens.$border;
-      border-radius: 12px;
-      padding: 8px 10px;
+      margin: 5px 0;
+
+      color: tokens.$text-gray;
     }
-
-    button {
-      border: 0;
-      border-radius: 16px;
-      padding: 7px 10px;
-    }
-  }
-
-  .deleted-message {
-    margin: 5px 0;
-    color: tokens.$text-gray;
-    font-style: italic;
   }
 
   @include bp.mobile {
     grid-template-columns: 40px minmax(0, 1fr);
+
     padding: 10px 16px;
     gap: 10px;
 
@@ -209,16 +251,19 @@
     }
 
     .message-text {
-      max-width: 100%;
       font-size: 15px;
+
+      max-width: 100%;
     }
 
     .actions {
       position: static;
+
       width: fit-content;
       margin-top: 5px;
-      border: 0;
       padding: 0;
+
+      border: 0;
       box-shadow: none;
       opacity: 1;
       transform: none;

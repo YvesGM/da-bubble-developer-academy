@@ -1,113 +1,127 @@
 @use '../../../../styles/tokens' as tokens;
 @use '../../../../styles/breakpoints' as bp;
 
-.register-card {
-  min-height: 610px;
+.register {
+  &-card {
+    min-height: 610px;
 
-  @include bp.mobile {
-    min-height: 0;
+    @include bp.mobile {
+      min-height: 0;
+    }
+
+    @include bp.widescreen {
+      min-height: 669px;
+      padding-top: 47px;
+    }
   }
 
-  @include bp.widescreen {
-    min-height: 669px;
-    padding-top: 47px;
+  &-form {
+    margin-top: 28px;
+    gap: 20px;
+
+    @include bp.mobile {
+      margin-top: 24px;
+      gap: 18px;
+    }
   }
 }
 
-.register-form {
-  margin-top: 28px;
-  gap: 20px;
+.avatar {
+  &-card {
+    min-height: 560px;
 
-  @include bp.mobile {
+    @include bp.mobile {
+      min-height: 0;
+    }
+
+    @include bp.widescreen {
+      min-height: 600px;
+      padding-top: 45px;
+    }
+  }
+
+  &-header {
+    padding-bottom: 26px;
+  }
+
+  &-content {
+    display: grid;
+    justify-items: center;
+  }
+
+  &-preview {
+    &-default {
+      width: 136px;
+      height: 136px;
+
+      @include bp.mobile {
+        width: 112px;
+        height: 112px;
+      }
+    }
+  }
+
+  &-user {
+    &-name {
+      font-size: 20px;
+
+      margin-top: 16px;
+    }
+  }
+
+  &-hint {
+    font-size: 16px;
+
+    margin-top: 8px;
+  }
+
+  &-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    margin-top: 10px;
+    gap: 4px;
+
+    @include bp.mobile {
+      max-width: 240px;
+      gap: 6px;
+    }
+  }
+
+  &-choice {
+    display: grid;
+    place-items: center;
+
+    width: 72px;
+    height: 72px;
+    padding: 4px;
+
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+
+    transition:
+      background-color tokens.$motion-base,
+      box-shadow tokens.$motion-base;
+
+    &:hover,
+    &.selected {
+      background: tokens.$background;
+    }
+
+    &.selected {
+      box-shadow: inset 0 0 0 2px tokens.$purple-1;
+    }
+
+    @include bp.mobile {
+      width: 66px;
+      height: 66px;
+    }
+  }
+
+  &-action {
+    width: 100%;
     margin-top: 24px;
-    gap: 18px;
   }
-}
-
-.avatar-card {
-  min-height: 560px;
-
-  @include bp.mobile {
-    min-height: 0;
-  }
-
-  @include bp.widescreen {
-    min-height: 600px;
-    padding-top: 45px;
-  }
-}
-
-.avatar-header {
-  padding-bottom: 26px;
-}
-
-.avatar-content {
-  display: grid;
-  justify-items: center;
-}
-
-.avatar-preview-default {
-  width: 136px;
-  height: 136px;
-
-  @include bp.mobile {
-    width: 112px;
-    height: 112px;
-  }
-}
-
-.avatar-user-name {
-  margin-top: 16px;
-  font-size: 20px;
-}
-
-.avatar-hint {
-  margin-top: 8px;
-  font-size: 16px;
-}
-
-.avatar-grid {
-  display: flex;
-  margin-top: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px;
-
-  @include bp.mobile {
-    max-width: 240px;
-    gap: 6px;
-  }
-}
-
-.avatar-choice {
-  display: grid;
-  width: 72px;
-  height: 72px;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  padding: 4px;
-  background: transparent;
-  transition:
-    background-color tokens.$motion-base,
-    box-shadow tokens.$motion-base;
-
-  &:hover,
-  &.selected {
-    background: tokens.$background;
-  }
-
-  &.selected {
-    box-shadow: inset 0 0 0 2px tokens.$purple-1;
-  }
-
-  @include bp.mobile {
-    width: 66px;
-    height: 66px;
-  }
-}
-
-.avatar-action {
-  width: 100%;
-  margin-top: 24px;
 }

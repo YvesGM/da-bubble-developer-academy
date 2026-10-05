@@ -2,104 +2,135 @@
 @use '../../../../../styles/breakpoints' as bp;
 
 .backdrop {
+  display: grid;
+
   position: fixed;
   z-index: 55;
   inset: 0;
-  display: grid;
   place-items: center;
+
   padding: 24px;
+
   background: #00000052;
 }
 
 .dialog {
-  width: min(760px, 100%);
   padding: 34px 40px 38px;
-  border-radius: 30px;
+
+  width: min(760px, 100%);
+
   background: tokens.$white;
+  border-radius: 30px;
   box-shadow: 0 8px 28px #00000024;
 
-  header,
-  .detail-heading,
-  .actions {
+  header {
     display: flex;
     align-items: center;
-  }
-
-  header {
     justify-content: space-between;
+
     margin-bottom: 24px;
 
     h2 {
-      margin: 0;
       font-size: 24px;
+
+      margin: 0;
     }
 
     button {
-      display: grid;
-      width: 36px;
-      height: 36px;
-      place-items: center;
-      border: 0;
-      border-radius: 50%;
-      background: transparent;
       font-size: 26px;
 
+      display: grid;
+      place-items: center;
+
+      width: 36px;
+      height: 36px;
+
+      background: transparent;
+      border: 0;
+      border-radius: 50%;
+
       &:hover {
-        background: tokens.$background;
         color: tokens.$purple-1;
+        background: tokens.$background;
       }
     }
   }
 
   form {
     display: grid;
+
     gap: 20px;
   }
 
-  .detail-card {
-    display: grid;
-    border: 1px solid tokens.$border;
-    border-radius: 20px;
-    padding: 20px;
-    gap: 14px;
-  }
+  .detail {
+    &-card {
+      display: grid;
 
-  .detail-heading {
-    justify-content: space-between;
-    gap: 12px;
+      padding: 20px;
+      gap: 14px;
+
+      border: 1px solid tokens.$border;
+      border-radius: 20px;
+    }
+
+    &-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 12px;
+    }
+
+    &-value {
+      margin: 0;
+      white-space: pre-wrap;
+    }
   }
 
   .edit-button {
-    border: 0;
-    background: transparent;
-    color: tokens.$purple-1;
     font-size: 16px;
+
+    color: tokens.$purple-1;
+    background: transparent;
+    border: 0;
 
     &:hover {
       color: tokens.$purple-2;
     }
   }
 
-  .detail-value {
-    margin: 0;
-    white-space: pre-wrap;
-  }
-
   .field-row {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
+
     gap: 8px;
   }
 
-  input,
+  input {
+    font: inherit;
+
+    width: 100%;
+    padding: 11px 14px;
+
+    border: 0;
+    border-radius: 16px;
+    outline: 1px solid tokens.$border;
+
+    &:focus {
+      outline-color: tokens.$purple-1;
+    }
+  }
+
   textarea {
+    font: inherit;
+
+    padding: 11px 14px;
+
     width: 100%;
     border: 0;
     border-radius: 16px;
-    padding: 11px 14px;
     outline: 1px solid tokens.$border;
-    font: inherit;
 
     &:focus {
       outline-color: tokens.$purple-1;
@@ -108,31 +139,41 @@
 
   .creator {
     display: grid;
+
     padding-top: 18px;
     gap: 6px;
+
     border-top: 1px solid tokens.$border;
 
     strong {
-      color: tokens.$purple-1;
       font-size: 18px;
+
+      color: tokens.$purple-1;
     }
   }
 
   .actions {
+    display: flex;
+    align-items: center;
     justify-content: flex-end;
   }
 
-  .leave-button {
-    border: 0;
-    border-radius: 24px;
-    padding: 11px 20px;
-    background: tokens.$purple-1;
-    color: tokens.$white;
-    font-weight: 700;
-    transition: background-color tokens.$motion-base;
+  .leave {
+    &-button {
+      font-weight: 700;
 
-    &:hover {
-      background: tokens.$purple-2;
+      padding: 11px 20px;
+
+      color: tokens.$white;
+      background: tokens.$purple-1;
+      border: 0;
+      border-radius: 24px;
+
+      transition: background-color tokens.$motion-base;
+
+      &:hover {
+        background: tokens.$purple-2;
+      }
     }
   }
 
@@ -145,8 +186,10 @@
     padding: 26px 20px;
     border-radius: 26px;
 
-    .detail-card {
-      padding: 16px;
+    .detail {
+      &-card {
+        padding: 16px;
+      }
     }
   }
 }

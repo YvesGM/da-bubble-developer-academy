@@ -2,22 +2,27 @@
 @use '../../../../../styles/breakpoints' as bp;
 
 .backdrop {
+  display: grid;
+  place-items: center;
+
   position: fixed;
   z-index: 60;
   inset: 0;
-  display: grid;
-  place-items: center;
+
   padding: 24px;
+
   background: #00000052;
 }
 
 .dialog {
   display: grid;
+
   width: min(540px, 100%);
   padding: 30px 36px;
   gap: 18px;
-  border-radius: 30px;
+
   background: tokens.$white;
+  border-radius: 30px;
   box-shadow: 0 8px 28px #00000024;
 
   header {
@@ -26,121 +31,155 @@
     justify-content: space-between;
 
     h2 {
-      margin: 0;
       font-size: 24px;
+
+      margin: 0;
     }
 
     button {
-      display: grid;
-      width: 36px;
-      height: 36px;
-      place-items: center;
-      border: 0;
-      border-radius: 50%;
-      background: transparent;
       font-size: 26px;
 
+      display: grid;
+      place-items: center;
+
+      width: 36px;
+      height: 36px;
+
+      background: transparent;
+      border: 0;
+      border-radius: 50%;
+
       &:hover {
-        background: tokens.$background;
         color: tokens.$purple-1;
+        background: tokens.$background;
       }
     }
   }
 
-  .selection-field {
-    display: flex;
-    min-height: 54px;
-    flex-wrap: wrap;
-    align-items: center;
-    border: 1px solid tokens.$border;
-    border-radius: 28px;
-    padding: 5px 10px;
-    gap: 6px;
+  .selection {
+    &-field {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
 
-    &:focus-within {
-      border-color: tokens.$purple-1;
-    }
+      min-height: 54px;
+      padding: 5px 10px;
+      gap: 6px;
 
-    input {
-      min-width: 140px;
-      height: 40px;
-      flex: 1;
-      border: 0;
-      padding: 0 8px;
-      outline: 0;
+      border: 1px solid tokens.$border;
+      border-radius: 28px;
+
+      &:focus-within {
+        border-color: tokens.$purple-1;
+      }
+
+      input {
+        flex: 1;
+
+        min-width: 140px;
+        height: 40px;
+        padding: 0 8px;
+
+        border: 0;
+
+        outline: 0;
+      }
     }
   }
 
   .chip {
     display: flex;
-    height: 40px;
     align-items: center;
-    border: 0;
-    border-radius: 20px;
+
+    height: 40px;
     padding: 4px 10px 4px 4px;
     gap: 7px;
-    background: tokens.$background;
+
     color: tokens.$text;
-  }
-
-  .guest-chip-avatar,
-  .guest-avatar {
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
     background: tokens.$background;
-    color: tokens.$purple-1;
-    font-weight: 700;
+    border: 0;
+    border-radius: 20px;
   }
 
-  .guest-chip-avatar {
-    width: 30px;
-    height: 30px;
-    background: tokens.$white;
-  }
+  .guest {
+    &-avatar {
+      font-weight: 700;
 
-  .guest-avatar {
-    width: 42px;
-    height: 42px;
+      display: grid;
+      place-items: center;
+
+      width: 42px;
+      height: 42px;
+
+      color: tokens.$purple-1;
+      background: tokens.$background;
+      border-radius: 50%;
+    }
+
+    &-chip-avatar {
+      font-weight: 700;
+
+      display: grid;
+      place-items: center;
+
+      width: 30px;
+      height: 30px;
+
+      color: tokens.$purple-1;
+      background: tokens.$background;
+      border-radius: 50%;
+    }
   }
 
   .users {
     display: grid;
+
     max-height: 280px;
-    overflow: auto;
     gap: 5px;
+
+    overflow: auto;
   }
 
-  .user-option {
-    display: flex;
-    min-height: 54px;
-    align-items: center;
-    border: 0;
-    border-radius: 24px;
-    padding: 6px 10px;
-    gap: 12px;
-    background: transparent;
-    color: tokens.$text;
-    text-align: left;
-    transition:
-      background-color tokens.$motion-base,
-      color tokens.$motion-fast;
+  .user {
+    &-option {
+      text-align: left;
 
-    &:hover,
-    &.selected {
-      background: tokens.$background;
-      color: tokens.$purple-1;
+      display: flex;
+      align-items: center;
+
+      min-height: 54px;
+      padding: 6px 10px;
+      gap: 12px;
+
+      color: tokens.$text;
+      background: transparent;
+      border: 0;
+      border-radius: 24px;
+
+      transition:
+        background-color tokens.$motion-base,
+        color tokens.$motion-fast;
+
+      &:hover,
+      &.selected {
+        color: tokens.$purple-1;
+        background: tokens.$background;
+      }
     }
   }
 
   .primary {
+    font-weight: 700;
+
     justify-self: end;
+
+    padding: 11px 20px;
+
+    color: tokens.$white;
+    background: tokens.$purple-1;
     border: 0;
     border-radius: 24px;
-    padding: 11px 20px;
-    background: tokens.$purple-1;
-    color: tokens.$white;
-    font-weight: 700;
+
     transition:
       background-color tokens.$motion-base,
       opacity tokens.$motion-fast;

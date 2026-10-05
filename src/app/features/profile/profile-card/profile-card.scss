@@ -20,73 +20,89 @@
   background: tokens.$white;
   box-shadow: 0 8px 28px #00000024;
 
-  header,
-  .name-row,
-  .status {
-    display: flex;
-    align-items: center;
-  }
-
-  header,
-  .name-row {
-    justify-content: space-between;
+  .name {
+    &-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
   header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     h2 {
       margin: 0;
       font-size: 24px;
     }
 
     button {
+      font-size: 26px;
+
       display: grid;
+      place-items: center;
+
       width: 36px;
       height: 36px;
-      place-items: center;
+
       border: 0;
       border-radius: 50%;
       background: transparent;
-      font-size: 26px;
+
       transition:
         background-color tokens.$motion-base,
         color tokens.$motion-fast;
 
       &:hover {
-        background: tokens.$background;
         color: tokens.$purple-1;
+        background: tokens.$background;
       }
     }
   }
 
-  .profile-avatar {
-    display: grid;
-    place-items: center;
-    padding: 8px 0 10px;
+  .profile {
+    &-avatar {
+      display: grid;
+      place-items: center;
+
+      padding: 8px 0 10px;
+    }
   }
 
   h3 {
-    margin: 0;
     font-size: 30px;
+
+    margin: 0;
   }
 
-  .link-button {
-    border: 0;
-    background: transparent;
-    color: tokens.$purple-1;
-    font-size: 17px;
-    transition: color tokens.$motion-fast;
+  .link {
+    &-button {
+      font-size: 17px;
 
-    &:hover {
-      color: tokens.$purple-2;
+      color: tokens.$purple-1;
+      background: transparent;
+      border: 0;
+
+      transition: color tokens.$motion-fast;
+
+      &:hover {
+        color: tokens.$purple-2;
+      }
     }
   }
 
   .status {
+    display: flex;
+    align-items: center;
+
     color: tokens.$text-gray;
   }
 
   .email {
     display: grid;
+
     gap: 8px;
 
     strong {
@@ -94,8 +110,9 @@
     }
 
     a {
-      color: #1381ff;
       text-decoration: none;
+
+      color: #1381ff;
 
       &:hover {
         text-decoration: underline;
@@ -104,26 +121,33 @@
   }
 
   .primary {
+    font-weight: 700;
+
     justify-self: center;
+
+    padding: 12px 24px;
+
+    color: tokens.$white;
+    background: tokens.$purple-1;
     border: 0;
     border-radius: 24px;
-    padding: 12px 24px;
-    background: tokens.$purple-1;
-    color: tokens.$white;
-    font-weight: 700;
+
     transition:
       background-color tokens.$motion-base,
       transform tokens.$motion-base;
 
     &:hover {
       background: tokens.$purple-2;
+
       transform: translateY(-1px);
     }
   }
 
   @include bp.mobile {
     width: min(100%, 430px);
+
     padding: 28px 24px 32px;
+
     border-radius: 28px;
 
     h3 {

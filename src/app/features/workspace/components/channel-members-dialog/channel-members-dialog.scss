@@ -5,72 +5,83 @@
   position: fixed;
   z-index: 55;
   inset: 0;
+
   display: grid;
   place-items: center;
+
   padding: 24px;
+
   background: #00000052;
 }
 
 .dialog {
   width: min(420px, 100%);
   padding: 30px 34px;
-  border-radius: 30px;
+
   background: tokens.$white;
+  border-radius: 30px;
   box-shadow: 0 8px 28px #00000024;
 
-  header,
-  .member {
+  header {
     display: flex;
     align-items: center;
-  }
-
-  header {
     justify-content: space-between;
 
     h2 {
-      margin: 0;
       font-size: 24px;
+
+      margin: 0;
     }
 
     button {
+      font-size: 26px;
+
       display: grid;
+
       width: 36px;
       height: 36px;
       place-items: center;
+
       border: 0;
       border-radius: 50%;
       background: transparent;
-      font-size: 26px;
 
       &:hover {
-        background: tokens.$background;
         color: tokens.$purple-1;
+        background: tokens.$background;
       }
     }
   }
 
   .members {
     display: grid;
+
     margin: 18px 0;
     gap: 6px;
   }
 
   .member {
+    text-align: left;
+
+    display: flex;
+    align-items: center;
+
     width: 100%;
     min-height: 54px;
-    border: 0;
-    border-radius: 24px;
     padding: 6px 10px;
     gap: 12px;
+
     background: transparent;
-    text-align: left;
+    border: 0;
+    border-radius: 24px;
+
     transition:
       background-color tokens.$motion-base,
       color tokens.$motion-fast;
 
     &:hover:not(.guest) {
-      background: tokens.$background;
       color: tokens.$purple-1;
+      background: tokens.$background;
     }
 
     app-presence-indicator {
@@ -82,31 +93,39 @@
     }
   }
 
-  .guest-avatar {
-    display: grid;
-    width: 42px;
-    height: 42px;
-    place-items: center;
-    border-radius: 50%;
-    background: tokens.$background;
-    color: tokens.$purple-1;
-    font-weight: 700;
+  .guest {
+    &-avatar {
+      font-weight: 700;
+
+      display: grid;
+      place-items: center;
+
+      width: 42px;
+      height: 42px;
+
+      color: tokens.$purple-1;
+      background: tokens.$background;
+      border-radius: 50%;
+    }
   }
 
   .add {
+    font-size: 16px;
+
+    padding: 10px 14px;
+
+    color: tokens.$text;
+    background: tokens.$background;
     border: 0;
     border-radius: 24px;
-    padding: 10px 14px;
-    background: tokens.$background;
-    color: tokens.$text;
-    font-size: 16px;
+
     transition:
       background-color tokens.$motion-base,
       color tokens.$motion-fast;
 
     &:hover {
-      background: #e1e4ff;
       color: tokens.$purple-1;
+      background: #e1e4ff;
     }
   }
 

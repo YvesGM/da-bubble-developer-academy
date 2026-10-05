@@ -1,19 +1,22 @@
 @use '../../../../styles/tokens' as tokens;
 
-.presence-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.presence {
+  display: inline-block;
 
-  .presence {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: tokens.$text-gray;
+  width: 10px;
+  height: 10px;
 
-    &.online {
-      background: tokens.$success;
-    }
+  background: tokens.$text-gray;
+  border-radius: 50%;
+
+  &.online {
+    background: tokens.$success;
+  }
+
+  &-wrap {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 8px;
   }
 }
