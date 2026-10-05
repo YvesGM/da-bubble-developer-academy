@@ -31,6 +31,12 @@ export class MessageList {
     return !sameMessageDay(this.messages[index - 1]?.createdAt, this.messages[index]?.createdAt);
   }
 
+  /**
+   * Formats the date label displayed for a message group.
+   *
+   * @param message - Message whose creation date should be formatted.
+   * @returns The localized date label.
+   */
   dateLabel(message: Message): string {
     return messageDateLabel(message.createdAt);
   }

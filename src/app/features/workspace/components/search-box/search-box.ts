@@ -30,6 +30,12 @@ export class SearchBox {
     { initialValue: [] as SearchResult[] },
   );
 
+  /**
+   * Opens the route or profile represented by a selected search result.
+   *
+   * @param result - Search result selected by the user.
+   * @returns A promise that resolves after any required navigation completes.
+   */
   async openResult(result: SearchResult): Promise<void> {
     this.focused.set(false);
     if (result.type === 'user') return this.userSelected.emit(result.user);
