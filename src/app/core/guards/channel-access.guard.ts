@@ -3,6 +3,7 @@ import { Auth } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { CanActivateFn, Router } from '@angular/router';
 
+/** Allows navigation only when the requested channel document can be read. */
 export const channelAccessGuard: CanActivateFn = async (route) => {
   const auth = inject(Auth);
   const firestore = inject(Firestore);
