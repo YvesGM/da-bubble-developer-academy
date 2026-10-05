@@ -28,12 +28,14 @@ export class ChannelService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
+  /** Observes channels available to the current registered or guest user. */
   observeCurrentUserChannels(): Observable<Channel[]> {
     const request = this.currentUserChannelQuery();
     const channels = this.runSync(() => collectionData(request, { idField: 'id' }));
     return (channels as Observable<Channel[]>).pipe(map((items) => this.sortChannels(items)));
   }
 
+  /** Observes one channel document by id. */
   observeChannel(channelId: string): Observable<Channel | undefined> {
     const reference = this.channelReference(channelId);
     return this.runSync(() => docData(reference, { idField: 'id' })) as Observable<
@@ -41,6 +43,7 @@ export class ChannelService {
     >;
   }
 
+  /** Creates a channel while atomically reserving its normalized name. */
   async createChannel(input: CreateChannelInput): Promise<string> {
     const creatorId = this.currentUserId();
     const name = this.cleanName(input.name);
@@ -49,12 +52,14 @@ export class ChannelService {
     return channelRef.id;
   }
 
+  /** Updates channel metadata while preserving unique channel names. */
   async updateChannel(channelId: string, input: UpdateChannelInput): Promise<void> {
     const channelRef = this.channelReference(channelId);
     const name = this.cleanName(input.name);
     await this.run(() => this.updateChannelTransaction(channelRef, input, name));
   }
 
+  /** Adds registered members and optionally enables guest access. */
   async addMembers(channelId: string, memberIds: string[], guestAccess: boolean): Promise<void> {
     if (!memberIds.length && !guestAccess) return;
     const reference = this.channelReference(channelId);
@@ -62,6 +67,7 @@ export class ChannelService {
     await this.run(() => updateDoc(reference, changes));
   }
 
+  /** Removes the current registered user from a channel. */
   async leaveChannel(channelId: string): Promise<void> {
     if (this.auth.currentUser?.isAnonymous) return;
     const reference = this.channelReference(channelId);
