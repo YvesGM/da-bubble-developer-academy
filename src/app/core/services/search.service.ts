@@ -20,20 +20,30 @@ export class SearchService {
   private readonly messages = inject(MessageService);
   private readonly users = inject(UserService);
 
+  /**
+   * Searches visible users, channels and messages for the current user.
+   */
   search(searchText: string): Observable<SearchResult[]> {
     const value = searchText.trim();
     const query = value.replace(/^[@#]/, '').toLowerCase();
-    if (!query && !value.startsWith('@') && !value.startsWith('#')) return of([]);
-    const mode = this.searchMode(value);
+    if (!this.hasSearchQuery(value, query)) return of([]);
+    return this.searchSources().pipe(
+      switchMap(([channels, dms, users]) =>
+        this.collectResults(query, channels, dms, users, this.searchMode(value)),
+      ),
+    );
+  }
+
+  private hasSearchQuery(value: string, query: string): boolean {
+    return Boolean(query || value.startsWith('@') || value.startsWith('#'));
+  }
+
+  private searchSources() {
     return combineLatest([
       this.channels.observeCurrentUserChannels(),
       this.directMessages.observeCurrentUserConversations(),
       this.users.observeUsers(),
-    ]).pipe(
-      switchMap(([channels, dms, users]) =>
-        this.collectResults(query, channels, dms, users, mode),
-      ),
-    );
+    ]);
   }
 
   private collectResults(
