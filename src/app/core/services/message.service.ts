@@ -29,6 +29,7 @@ export class MessageService {
    * @param target - Conversation whose messages should be observed.
    * @returns An observable of message documents ordered by creation time.
 
+   */
   observeMessages(target: ConversationTarget): Observable<Message[]> {
     const reference = this.messagesCollection(target);
     const request = this.runSync(() => query(reference, orderBy('createdAt', 'asc')));
@@ -44,6 +45,7 @@ export class MessageService {
    * @returns The Firestore identifier of the created message.
    * @throws If no user is authenticated or Firestore rejects the write.
 
+   */
   async sendMessage(target: ConversationTarget, input: CreateMessageInput): Promise<string> {
     const reference = this.messagesCollection(target);
     const result = await this.run(() => addDoc(reference, this.messageData(input)));
@@ -59,6 +61,7 @@ export class MessageService {
    * @param text - Replacement message text.
    * @throws If Firestore rejects the update.
 
+   */
   async updateMessage(target: ConversationTarget, messageId: string, text: string): Promise<void> {
     const reference = this.messageReference(target, messageId);
     await this.run(() => updateDoc(reference, { text: text.trim(), updatedAt: serverTimestamp() }));
@@ -72,6 +75,7 @@ export class MessageService {
    * @param messageId - Identifier of the message to delete.
    * @throws If Firestore rejects the update.
 
+   */
   async deleteMessage(target: ConversationTarget, messageId: string): Promise<void> {
     const reference = this.messageReference(target, messageId);
     await this.run(() => updateDoc(reference, {
