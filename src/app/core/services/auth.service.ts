@@ -35,7 +35,7 @@ export class AuthService {
    * @param password - User password.
    * @returns The Firebase user credential for the authenticated user.
    * @throws If Firebase Authentication rejects the credentials or profile initialization fails.
-
+   */
   async login(email: string, password: string): Promise<UserCredential> {
     const credential = await this.run(() => signInWithEmailAndPassword(this.auth, email, password));
     await this.users.ensureProfile(credential.user);
@@ -52,7 +52,7 @@ export class AuthService {
    * @param avatarId - Identifier of the selected profile avatar.
    * @returns The Firebase user credential for the newly created account.
    * @throws If account creation, profile synchronization or Firestore persistence fails.
-
+   */
   async register(
     name: string,
     email: string,
@@ -71,7 +71,7 @@ export class AuthService {
    *
    * @returns The Firebase user credential for the anonymous guest session.
    * @throws If anonymous authentication is unavailable or rejected.
-
+   */
   async loginAsGuest(): Promise<UserCredential> {
     return this.run(() => signInAnonymously(this.auth));
   }
@@ -82,7 +82,7 @@ export class AuthService {
    *
    * @returns The Firebase user credential returned by Google authentication.
    * @throws If the popup flow or profile initialization fails.
-
+   */
   async loginWithGoogle(): Promise<UserCredential> {
     const provider = new GoogleAuthProvider();
     const credential = await this.run(() => signInWithPopup(this.auth, provider));
@@ -90,7 +90,6 @@ export class AuthService {
     return credential;
   }
 
-  /** Sends Firebase's password-reset email to the supplied address. */
   /**
    * Requests a Firebase password-reset email for the supplied address.
    *
@@ -101,7 +100,6 @@ export class AuthService {
     await this.run(() => sendPasswordResetEmail(this.auth, email));
   }
 
-  /** Validates a password-reset code and returns its email address. */
   /**
    * Validates a Firebase password-reset action code.
    *
@@ -113,7 +111,6 @@ export class AuthService {
     return this.run(() => verifyPasswordResetCode(this.auth, code));
   }
 
-  /** Confirms a password reset with Firebase Authentication. */
   /**
    * Completes a Firebase password reset with a verified action code.
    *
@@ -125,7 +122,6 @@ export class AuthService {
     await this.run(() => confirmPasswordReset(this.auth, code, password));
   }
 
-  /** Ends the active Firebase Authentication session. */
   /**
    * Signs the current Firebase Authentication session out.
    *
