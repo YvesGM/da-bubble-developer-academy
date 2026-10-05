@@ -19,6 +19,7 @@ export class PresenceService {
   private connectedUnsubscribe?: () => void;
   private connectionPath = '';
 
+  /** Starts realtime presence tracking for a registered user. */
   start(): void {
     if (this.connectedUnsubscribe || !this.registeredUserId()) return;
     const connectedRef = this.dbRef('.info/connected');
@@ -27,6 +28,7 @@ export class PresenceService {
     );
   }
 
+  /** Stops presence tracking and removes this client's connection entry. */
   async stop(): Promise<void> {
     this.connectedUnsubscribe?.();
     this.connectedUnsubscribe = undefined;
@@ -35,6 +37,7 @@ export class PresenceService {
     this.connectionPath = '';
   }
 
+  /** Observes whether a user currently owns at least one active connection. */
   observeOnline(uid: string): Observable<boolean> {
     return new Observable((subscriber) => {
       const reference = this.dbRef(`presence/${uid}/connections`);
