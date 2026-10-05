@@ -22,12 +22,14 @@ export class UserService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
+  /** Observes visible registered workspace users. */
   observeUsers(): Observable<UserProfile[]> {
     const reference = this.runSync(() => collection(this.firestore, 'users'));
     const users = this.runSync(() => collectionData(reference, { idField: 'uid' }));
     return (users as Observable<UserProfile[]>).pipe(map((items) => this.visibleUsers(items)));
   }
 
+  /** Observes the current registered user's profile, or undefined for guests. */
   observeCurrentProfile(): Observable<UserProfile | undefined> {
     const uid = this.auth.currentUser?.uid;
     if (!uid || this.auth.currentUser?.isAnonymous) return new Observable((subscriber) => {
@@ -38,11 +40,13 @@ export class UserService {
     return this.runSync(() => docData(reference, { idField: 'uid' })) as Observable<UserProfile>;
   }
 
+  /** Creates the Firestore profile belonging to a Firebase user. */
   async createProfile(user: User, displayName?: string, avatarId = 'avatar-1'): Promise<void> {
     const reference = this.userReference(user.uid);
     await this.run(() => setDoc(reference, this.buildProfile(user, displayName, avatarId)));
   }
 
+  /** Creates a missing profile and synchronizes the display name when needed. */
   async ensureProfile(user: User, displayName?: string): Promise<void> {
     const reference = this.userReference(user.uid);
     const snapshot = await this.run(() => getDoc(reference));
@@ -50,6 +54,7 @@ export class UserService {
     await this.syncDisplayName(reference, snapshot.data(), displayName);
   }
 
+  /** Updates the current user's Firebase display name and app profile. */
   async updateCurrentProfile(displayName: string, avatarId: string): Promise<void> {
     const user = this.auth.currentUser;
     if (!user || user.isAnonymous) throw new Error('profile-not-available');
@@ -57,6 +62,7 @@ export class UserService {
     await this.run(() => updateDoc(this.userReference(user.uid), this.profileChanges(displayName, avatarId)));
   }
 
+  /** Persists the current user's workspace display name. */
   async updateWorkspaceName(workspaceName: string): Promise<void> {
     const user = this.auth.currentUser;
     if (!user || user.isAnonymous) throw new Error('workspace-not-available');
@@ -64,6 +70,7 @@ export class UserService {
     await this.run(() => updateDoc(this.userReference(user.uid), changes));
   }
 
+  /** Stores the two most recently used reaction emojis for the current user. */
   async rememberEmoji(emoji: string): Promise<void> {
     const user = this.auth.currentUser;
     if (!user || user.isAnonymous) return;
