@@ -20,12 +20,14 @@ export class ThreadService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
+  /** Observes thread replies for a message in chronological order. */
   observeReplies(target: ConversationTarget, messageId: string): Observable<Message[]> {
     const reference = this.repliesCollection(target, messageId);
     const request = this.runSync(() => query(reference, orderBy('createdAt', 'asc')));
     return this.runSync(() => collectionData(request, { idField: 'id' })) as Observable<Message[]>;
   }
 
+  /** Adds a reply to the thread below a message. */
   async sendReply(
     target: ConversationTarget,
     messageId: string,
