@@ -35,16 +35,31 @@ export class ProfileDialog {
     });
   }
 
+  /**
+   * Stores the avatar selected in the profile editor.
+   *
+   * @param avatarId - Identifier of the selected avatar.
+   */
   selectAvatar(avatarId: string): void {
     this.form.controls.avatarId.setValue(avatarId);
   }
 
+  /**
+   * Validates the profile form and starts persistence of the current values.
+   *
+   * @returns A promise that resolves after save handling completes.
+   */
   async save(): Promise<void> {
     if (this.form.invalid) return this.markInvalid();
     this.saving.set(true);
     await this.runSave();
   }
 
+  /**
+   * Persists the edited profile and closes the dialog after a successful update.
+   *
+   * @returns A promise that resolves after the profile update completes.
+   */
   private async runSave(): Promise<void> {
     const value = this.form.getRawValue();
     try {
@@ -57,6 +72,9 @@ export class ProfileDialog {
     }
   }
 
+  /**
+   * Marks the profile form as touched and exposes the validation error state.
+   */
   private markInvalid(): void {
     this.form.markAllAsTouched();
     this.errorMessage.set('Bitte gib deinen Namen ein.');
