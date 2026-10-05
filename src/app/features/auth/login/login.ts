@@ -25,16 +25,31 @@ export class Login {
     password: ['', Validators.required],
   });
 
+  /**
+   * Validates the login form and starts the sign-in flow.
+   *
+   * @returns A promise that resolves after the sign-in attempt completes.
+   */
   async submit(): Promise<void> {
     if (this.form.invalid) return this.markInvalid();
     const { email, password } = this.form.getRawValue();
     await this.runLogin(() => this.auth.login(email, password), true);
   }
 
+  /**
+   * Starts an anonymous guest session and opens the workspace.
+   *
+   * @returns A promise that resolves after sign-in and navigation complete.
+   */
   async loginAsGuest(): Promise<void> {
     await this.runLogin(() => this.auth.loginAsGuest());
   }
 
+  /**
+   * Starts Google sign-in and opens the workspace after success.
+   *
+   * @returns A promise that resolves after sign-in and navigation complete.
+   */
   async loginWithGoogle(): Promise<void> {
     await this.runLogin(() => this.auth.loginWithGoogle());
   }
