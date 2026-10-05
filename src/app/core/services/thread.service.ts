@@ -37,6 +37,13 @@ export class ThreadService {
     await this.run(() => addDoc(reference, this.replyData(input)));
   }
 
+  /**
+   * Builds the Firestore payload for a new thread reply.
+   *
+   * @param input - Reply text and author presentation data.
+   * @returns The complete reply document payload.
+   * @throws If no Firebase user is authenticated.
+   */
   private replyData(input: CreateMessageInput) {
     const user = this.auth.currentUser;
     if (!user) throw new Error('auth-required');
@@ -52,15 +59,34 @@ export class ThreadService {
     };
   }
 
+  /**
+   * Returns the Firestore collection containing replies for a parent message.
+   *
+   * @param target - Conversation containing the parent message.
+   * @param messageId - Identifier of the parent message.
+   * @returns The replies collection reference.
+   */
   private repliesCollection(target: ConversationTarget, messageId: string) {
     const path = `${conversationDocumentPath(target)}/messages/${messageId}/replies`;
     return this.runSync(() => collection(this.firestore, path));
   }
 
+  /**
+   * Executes an asynchronous Firestore operation inside the service injection context.
+   *
+   * @param action - Asynchronous Firestore operation to execute.
+   * @returns The promise returned by the supplied operation.
+   */
   private run<T>(action: () => Promise<T>): Promise<T> {
     return runInInjectionContext(this.injector, action);
   }
 
+  /**
+   * Executes a synchronous Firestore operation inside the service injection context.
+   *
+   * @param action - Synchronous Firestore operation to execute.
+   * @returns The value returned by the supplied operation.
+   */
   private runSync<T>(action: () => T): T {
     return runInInjectionContext(this.injector, action);
   }
