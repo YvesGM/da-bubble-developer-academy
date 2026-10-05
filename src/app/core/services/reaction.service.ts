@@ -30,6 +30,7 @@ export class ReactionService {
    * @param replyId - Optional thread-reply identifier.
    * @returns An observable of reactions grouped by emoji.
 
+   */
   observeReactions(
     target: ConversationTarget,
     messageId: string,
@@ -50,6 +51,7 @@ export class ReactionService {
    * @param replyId - Optional thread-reply identifier.
    * @throws If no user is authenticated or Firestore access fails.
 
+   */
   async toggleReaction(
     target: ConversationTarget,
     messageId: string,
@@ -68,6 +70,7 @@ export class ReactionService {
    * @param reactions - Reaction documents to group.
    * @returns Grouped reactions suitable for rendering.
 
+   */
   private groupReactions(reactions: MessageReaction[]): ReactionGroup[] {
     const groups = new Map<string, string[]>();
     reactions.forEach((reaction) => this.addReaction(groups, reaction));
@@ -80,6 +83,7 @@ export class ReactionService {
    * @param groups - Mutable map keyed by emoji.
    * @param reaction - Reaction document to append.
 
+   */
   private addReaction(groups: Map<string, string[]>, reaction: MessageReaction): void {
     const users = groups.get(reaction.emoji) ?? [];
     groups.set(reaction.emoji, [...users, reaction.userId]);
@@ -92,6 +96,7 @@ export class ReactionService {
    * @returns The reaction document payload.
    * @throws If no Firebase user is authenticated.
 
+   */
   private reactionData(emoji: string) {
     return { emoji, userId: this.currentUserId(), createdAt: serverTimestamp() };
   }
@@ -105,6 +110,7 @@ export class ReactionService {
    * @param replyId - Optional thread-reply identifier.
    * @returns The deterministic reaction document reference.
 
+   */
   private reactionReference(
     target: ConversationTarget,
     messageId: string,
@@ -123,6 +129,7 @@ export class ReactionService {
    * @param replyId - Optional thread-reply identifier.
    * @returns The Firestore reaction collection reference.
 
+   */
   private reactionsCollection(target: ConversationTarget, messageId: string, replyId?: string) {
     return this.runSync(() => collection(this.firestore, this.reactionsPath(target, messageId, replyId)));
   }
@@ -135,6 +142,7 @@ export class ReactionService {
    * @param replyId - Optional thread-reply identifier.
    * @returns The reaction collection path.
 
+   */
   private reactionsPath(target: ConversationTarget, messageId: string, replyId?: string): string {
     const base = `${conversationDocumentPath(target)}/messages/${messageId}`;
     return replyId ? `${base}/replies/${replyId}/reactions` : `${base}/reactions`;
