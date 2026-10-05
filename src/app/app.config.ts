@@ -9,17 +9,8 @@ import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideRouter } from '@angular/router';
 
+import { firebaseConfig } from '../environments/environment.generated';
 import { routes } from './app.routes';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyAQsB_CQ63R4vjWwM647ugor8gD4tzV7i0',
-  authDomain: 'dabubble-48de7.firebaseapp.com',
-  databaseURL: 'https://dabubble-48de7-default-rtdb.europe-west1.firebasedatabase.app',
-  projectId: 'dabubble-48de7',
-  storageBucket: 'dabubble-48de7.firebasestorage.app',
-  messagingSenderId: '1019918544334',
-  appId: '1:1019918544334:web:9433c39c356542d420cf9f',
-};
 
 export const appConfig: ApplicationConfig = {
   providers: [
