@@ -22,23 +22,27 @@ export class MessageService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
+  /** Observes messages for a channel or direct-message conversation in chronological order. */
   observeMessages(target: ConversationTarget): Observable<Message[]> {
     const reference = this.messagesCollection(target);
     const request = this.runSync(() => query(reference, orderBy('createdAt', 'asc')));
     return this.runSync(() => collectionData(request, { idField: 'id' })) as Observable<Message[]>;
   }
 
+  /** Creates a new message and returns its Firestore document id. */
   async sendMessage(target: ConversationTarget, input: CreateMessageInput): Promise<string> {
     const reference = this.messagesCollection(target);
     const result = await this.run(() => addDoc(reference, this.messageData(input)));
     return result.id;
   }
 
+  /** Updates the text and timestamp of an existing message. */
   async updateMessage(target: ConversationTarget, messageId: string, text: string): Promise<void> {
     const reference = this.messageReference(target, messageId);
     await this.run(() => updateDoc(reference, { text: text.trim(), updatedAt: serverTimestamp() }));
   }
 
+  /** Soft-deletes a message while keeping its document for conversation history. */
   async deleteMessage(target: ConversationTarget, messageId: string): Promise<void> {
     const reference = this.messageReference(target, messageId);
     await this.run(() => updateDoc(reference, {
