@@ -27,16 +27,32 @@ export class NewMessageView {
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
   readonly mode = computed<'@' | '#'>(() => this.query().trim().startsWith('#') ? '#' : '@');
 
+  /**
+   * Filters workspace users by the normalized new-message query.
+   *
+   * @returns User profiles matching the current query.
+   */
   filteredUsers(): UserProfile[] {
     const query = this.normalizedQuery();
     return this.users().filter((user) => this.matchesUser(user, query));
   }
 
+  /**
+   * Filters visible channels by the normalized new-message query.
+   *
+   * @returns Channels whose names match the current query.
+   */
   filteredChannels(): Channel[] {
     const query = this.normalizedQuery();
     return this.channels().filter((channel) => channel.name.toLowerCase().includes(query));
   }
 
+  /**
+   * Opens or creates a direct-message conversation with the selected user.
+   *
+   * @param uid - Firebase user identifier to message.
+   * @returns A promise that resolves after navigation completes.
+   */
   async selectUser(uid: string): Promise<void> {
     const dmId = await this.directMessages.openConversation(uid);
     await this.router.navigate(['/workspace/dm', dmId]);
