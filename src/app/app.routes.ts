@@ -31,6 +31,16 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'imprint',
+    loadComponent: () =>
+      import('./features/legal/imprint/imprint').then((module) => module.Imprint),
+  },
+  {
+    path: 'privacy',
+    loadComponent: () =>
+      import('./features/legal/privacy/privacy').then((module) => module.Privacy),
+  },
+  {
     path: 'workspace',
     canActivate: [authGuard],
     loadComponent: () =>
