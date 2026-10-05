@@ -21,7 +21,10 @@ export class SearchService {
   private readonly users = inject(UserService);
 
   /**
-   * Searches visible users, channels and messages for the current user.
+   * Searches visible users, channels and messages based on free text or an optional search prefix.
+   *
+   * @param searchText - Raw search text entered by the user.
+   * @returns An observable containing matching users, channels and contextual message results.
    */
   search(searchText: string): Observable<SearchResult[]> {
     const value = searchText.trim();
@@ -34,10 +37,22 @@ export class SearchService {
     );
   }
 
+  /**
+   * Determines whether the current input represents a meaningful search.
+   *
+   * @param value - Trimmed raw search input.
+   * @param query - Normalized search query without the optional prefix.
+   * @returns Whether a search should be executed.
+   */
   private hasSearchQuery(value: string, query: string): boolean {
     return Boolean(query || value.startsWith('@') || value.startsWith('#'));
   }
 
+  /**
+   * Combines the channel, direct-message and user streams required by global search.
+   *
+   * @returns An observable tuple containing channels, direct messages and users.
+   */
   private searchSources() {
     return combineLatest([
       this.channels.observeCurrentUserChannels(),
