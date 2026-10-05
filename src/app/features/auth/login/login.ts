@@ -54,11 +54,21 @@ export class Login {
     await this.runLogin(() => this.auth.loginWithGoogle());
   }
 
+  /**
+   * Marks every login field as touched so validation messages become visible.
+   */
   private markInvalid(): void {
     this.form.markAllAsTouched();
     this.errorMessage.set('Bitte überprüfe deine Eingaben.');
   }
 
+  /**
+   * Executes one sign-in strategy and centralizes loading, error and navigation handling.
+   *
+   * @param action - Sign-in operation to execute.
+   * @param credentialFlow - Whether failures should be displayed with the form credentials.
+   * @returns A promise that resolves after the complete sign-in flow.
+   */
   private async runLogin(action: () => Promise<unknown>, credentialFlow = false): Promise<void> {
     this.startSubmit();
     try {
@@ -71,11 +81,20 @@ export class Login {
     }
   }
 
+  /**
+   * Maps a sign-in failure to the appropriate visible error state.
+   *
+   * @param error - Error returned by the sign-in operation.
+   * @param credentialFlow - Whether the message belongs to the form credential error.
+   */
   private setLoginError(error: unknown, credentialFlow: boolean): void {
     const message = firebaseErrorMessage(error, 'Anmeldung fehlgeschlagen.');
     credentialFlow ? this.credentialError.set(message) : this.errorMessage.set(message);
   }
 
+  /**
+   * Clears previous errors and marks the login form as submitting.
+   */
   private startSubmit(): void {
     this.submitting.set(true);
     this.errorMessage.set('');
