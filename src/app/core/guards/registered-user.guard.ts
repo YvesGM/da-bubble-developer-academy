@@ -2,7 +2,11 @@ import { inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { CanActivateFn, Router } from '@angular/router';
 
-/** Restricts features that are unavailable to anonymous guest sessions. */
+/**
+ * Restricts registered-user features to non-anonymous Firebase sessions.
+ *
+ * @returns True for a registered user; otherwise a workspace redirect.
+ */
 export const registeredUserGuard: CanActivateFn = async () => {
   const auth = inject(Auth);
   const router = inject(Router);
