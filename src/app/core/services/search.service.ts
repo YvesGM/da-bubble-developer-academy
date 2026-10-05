@@ -61,6 +61,16 @@ export class SearchService {
     ]);
   }
 
+  /**
+   * Builds the result set for the selected search mode.
+   *
+   * @param query - Normalized search query.
+   * @param channels - Channels visible to the current user.
+   * @param dms - Direct-message conversations visible to the current user.
+   * @param users - Visible workspace users.
+   * @param mode - Search mode derived from the input prefix.
+   * @returns An observable containing matching search results.
+   */
   private collectResults(
     query: string,
     channels: Channel[],
@@ -74,6 +84,16 @@ export class SearchService {
     return this.withMessageResults(query, channels, dms, users, immediate);
   }
 
+  /**
+   * Extends immediate user and channel results with message matches.
+   *
+   * @param query - Normalized message query.
+   * @param channels - Visible channels.
+   * @param dms - Visible direct-message conversations.
+   * @param users - Visible users used to label conversations.
+   * @param immediate - Already resolved user and channel results.
+   * @returns An observable containing immediate and message results.
+   */
   private withMessageResults(
     query: string,
     channels: Channel[],
@@ -88,18 +108,38 @@ export class SearchService {
     );
   }
 
+  /**
+   * Resolves the active search mode from the raw search input.
+   *
+   * @param value - Trimmed raw search input.
+   * @returns The resolved search mode.
+   */
   private searchMode(value: string): SearchMode {
     if (value.startsWith('@')) return 'users';
     if (value.startsWith('#')) return 'channels';
     return 'all';
   }
 
+  /**
+   * Creates user results matching the normalized query.
+   *
+   * @param query - Normalized user query.
+   * @param users - Users available for search.
+   * @returns Matching user results.
+   */
   private userResults(query: string, users: UserProfile[]): SearchResult[] {
     return users
       .filter((user) => this.userMatches(user, query))
       .map((user) => ({ type: 'user', id: user.uid, label: user.displayName, user }));
   }
 
+  /**
+   * Creates channel results matching the normalized query.
+   *
+   * @param query - Normalized channel query.
+   * @param channels - Channels available for search.
+   * @returns Matching channel results.
+   */
   private channelResults(query: string, channels: Channel[]): SearchResult[] {
     return channels
       .filter((channel) => channel.name.toLowerCase().includes(query))
@@ -111,11 +151,25 @@ export class SearchService {
       }));
   }
 
+  /**
+   * Checks whether a user profile matches the query.
+   *
+   * @param user - User profile to inspect.
+   * @param query - Normalized query.
+   * @returns Whether the display name or email matches.
+   */
   private userMatches(user: UserProfile, query: string): boolean {
     return user.displayName.toLowerCase().includes(query)
       || user.email?.toLowerCase().includes(query) === true;
   }
 
+  /**
+   * Maps matching messages from one conversation into contextual search results.
+   *
+   * @param query - Normalized message query.
+   * @param context - Conversation target and display label.
+   * @returns An observable containing matching message results.
+   */
   private messageResults(query: string, context: SearchContext): Observable<SearchResult[]> {
     return this.messages.observeMessages(context.target).pipe(
       map((messages) => messages
@@ -130,6 +184,14 @@ export class SearchService {
     );
   }
 
+  /**
+   * Builds searchable contexts for all visible conversations.
+   *
+   * @param channels - Visible channels.
+   * @param dms - Visible direct-message conversations.
+   * @param users - Visible users used to resolve direct-message labels.
+   * @returns Search contexts for all visible conversations.
+   */
   private contexts(channels: Channel[], dms: DirectMessage[], users: UserProfile[]): SearchContext[] {
     return [
       ...channels.map((channel) => ({
@@ -140,6 +202,13 @@ export class SearchService {
     ];
   }
 
+  /**
+   * Builds the search context for a direct-message conversation.
+   *
+   * @param dm - Direct-message conversation.
+   * @param users - Visible user profiles.
+   * @returns The resolved direct-message search context.
+   */
   private dmContext(dm: DirectMessage, users: UserProfile[]): SearchContext {
     const partnerId = dm.participantIds.find((uid) => uid !== this.auth.currentUser?.uid);
     const name = users.find((user) => user.uid === partnerId)?.displayName ?? 'Direct message';
