@@ -37,6 +37,9 @@ export class ChannelDetailsDialog {
     this.editingName.set(false);
   }
 
+  /**
+   * Emits the edited channel description together with the current channel name.
+   */
   saveDescription(): void {
     this.saveRequested.emit(this.form.getRawValue());
     this.editingDescription.set(false);
