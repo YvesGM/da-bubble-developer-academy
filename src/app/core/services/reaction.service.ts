@@ -21,6 +21,7 @@ export class ReactionService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
+  /** Observes grouped emoji reactions for a message or thread reply. */
   observeReactions(
     target: ConversationTarget,
     messageId: string,
@@ -31,6 +32,7 @@ export class ReactionService {
     return (items as Observable<MessageReaction[]>).pipe(map((items) => this.groupReactions(items)));
   }
 
+  /** Adds or removes the current user's reaction for the selected emoji. */
   async toggleReaction(
     target: ConversationTarget,
     messageId: string,
