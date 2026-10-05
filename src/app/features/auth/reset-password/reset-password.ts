@@ -32,6 +32,11 @@ export class ResetPassword {
     void this.loadResetRequest();
   }
 
+  /**
+   * Validates the reset form and confirms the password change when all inputs are valid.
+   *
+   * @returns A promise that resolves after reset handling completes.
+   */
   async submit(): Promise<void> {
     if (this.form.invalid) return this.markInvalid();
     if (!this.passwordsMatch()) return this.markMismatch();
@@ -39,6 +44,11 @@ export class ResetPassword {
     await this.confirmReset();
   }
 
+  /**
+   * Validates the reset action code from the current route and loads its account email.
+   *
+   * @returns A promise that resolves after the reset request has been verified.
+   */
   private async loadResetRequest(): Promise<void> {
     const code = this.resetCode();
     if (!code) return this.errorMessage.set('Der Link zum Zurücksetzen ist ungültig.');
@@ -50,6 +60,11 @@ export class ResetPassword {
     }
   }
 
+  /**
+   * Submits the new password with the current reset action code and updates UI state.
+   *
+   * @returns A promise that resolves after Firebase confirms the password reset.
+   */
   private async confirmReset(): Promise<void> {
     try {
       await this.auth.resetPassword(this.resetCode(), this.form.controls.password.value);
@@ -62,24 +77,43 @@ export class ResetPassword {
     }
   }
 
+  /**
+   * Checks whether both password fields contain the same value.
+   *
+   * @returns Whether password and confirmation match.
+   */
   passwordsMatch(): boolean {
     return this.form.controls.password.value === this.form.controls.confirmPassword.value;
   }
 
+  /**
+   * Exposes the password-mismatch state and clears unrelated form errors.
+   */
   private markMismatch(): void {
     this.passwordMismatch.set(true);
     this.errorMessage.set('');
   }
 
+  /**
+   * Reads the Firebase reset action code from the current route.
+   *
+   * @returns The reset action code, or an empty string when missing.
+   */
   private resetCode(): string {
     return this.route.snapshot.queryParamMap.get('oobCode') ?? '';
   }
 
+  /**
+   * Marks all reset-form controls as touched and exposes the validation error state.
+   */
   private markInvalid(): void {
     this.form.markAllAsTouched();
     this.errorMessage.set('Bitte überprüfe deine Passworteingaben.');
   }
 
+  /**
+   * Clears transient validation state and marks the reset form as submitting.
+   */
   private startSubmit(): void {
     this.submitting.set(true);
     this.passwordMismatch.set(false);
