@@ -45,14 +45,32 @@ export class ChatPanel {
     this.profile()?.recentEmojis?.length ? this.profile()!.recentEmojis : [...DEFAULT_RECENT_EMOJIS],
   );
 
+  /**
+   * Sends a message to the currently selected conversation target.
+   *
+   * @param text - Message text entered by the user.
+   * @returns A promise that resolves after the message has been persisted.
+   */
   async sendMessage(text: string): Promise<void> {
     await this.messagesService.sendMessage(this.target(), this.messageInput(text));
   }
 
+  /**
+   * Stores an emoji in the current user's recent-emoji history.
+   *
+   * @param emoji - Emoji that was selected by the user.
+   * @returns A promise that resolves after the preference has been persisted.
+   */
   async rememberEmoji(emoji: string): Promise<void> {
     await this.usersService.rememberEmoji(emoji);
   }
 
+  /**
+   * Builds the message payload from the current authentication and profile state.
+   *
+   * @param text - Message text to persist.
+   * @returns The normalized message creation payload.
+   */
   private messageInput(text: string) {
     const user = this.auth.currentUser;
     return {
