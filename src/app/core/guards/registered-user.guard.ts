@@ -7,6 +7,15 @@ import { CanActivateFn, Router } from '@angular/router';
  *
  * @returns True for a registered user; otherwise a workspace redirect.
  */
+/**
+ * Restricts routes to fully registered users.
+ *
+ * Anonymous Firebase guest sessions remain authenticated but are intentionally
+ * excluded from account-bound features such as direct messages.
+ *
+ * @returns `true` for a non-anonymous authenticated user; otherwise a URL tree
+ * redirecting back to the workspace.
+ */
 export const registeredUserGuard: CanActivateFn = async () => {
   const auth = inject(Auth);
   const router = inject(Router);
