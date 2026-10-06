@@ -49,30 +49,63 @@ export class Workspace {
   readonly selectedUser = signal<UserProfile | null>(null);
   readonly sidebarCollapsed = signal(false);
 
+  /**
+   * Starts realtime presence tracking when the workspace shell is created.
+   */
   constructor() {
     this.presence.start();
   }
 
+  /**
+   * Resolves the display name shown in the workspace header.
+   *
+   * @returns Firebase display name, or the appropriate registered/guest fallback.
+   */
   get displayName(): string {
     return this.auth.currentUser?.displayName || (this.auth.currentUser?.isAnonymous ? 'Guest' : 'User');
   }
 
+  /**
+   * Resolves the avatar displayed for the current user.
+   *
+   * @returns Stored profile avatar id or the default avatar identifier.
+   */
   get avatarId(): string {
     return this.profile()?.avatarId ?? 'avatar-1';
   }
 
+  /**
+   * Resolves the workspace name displayed in the sidebar.
+   *
+   * @returns Stored workspace name or the default `Workspace` label.
+   */
   get workspaceName(): string {
     return this.profile()?.workspaceName || 'Workspace';
   }
 
+  /**
+   * Exposes the current Firebase user identifier to child components.
+   *
+   * @returns Current uid, or an empty string when no session is available.
+   */
   get currentUserId(): string {
     return this.auth.currentUser?.uid ?? '';
   }
 
+  /**
+   * Indicates whether the active Firebase session is anonymous.
+   *
+   * @returns `true` for an anonymous guest session.
+   */
   get isGuest(): boolean {
     return this.auth.currentUser?.isAnonymous ?? false;
   }
 
+  /**
+   * Indicates whether the current route displays a conversation surface.
+   *
+   * @returns `true` for channel, direct-message and new-message workspace routes.
+   */
   get conversationOpen(): boolean {
     return /\/workspace\/(channel|dm)\/|\/workspace\/new-message/.test(this.router.url);
   }
