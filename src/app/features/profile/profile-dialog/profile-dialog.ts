@@ -28,6 +28,12 @@ export class ProfileDialog {
     avatarId: ['avatar-1', Validators.required],
   });
 
+  /**
+   * Preloads the current user profile into the edit form.
+   *
+   * Only the first profile emission is consumed because the dialog edits a local
+   * form snapshot until the user explicitly saves the changes.
+   */
   constructor() {
     this.users.observeCurrentProfile().pipe(take(1)).subscribe((profile) => {
       if (!profile) return;
