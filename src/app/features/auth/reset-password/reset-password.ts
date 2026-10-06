@@ -28,6 +28,12 @@ export class ResetPassword {
     confirmPassword: ['', Validators.required],
   });
 
+  /**
+   * Initializes reset-link validation as soon as the component is created.
+   *
+   * The asynchronous request is intentionally started without blocking component
+   * construction; its result is reflected through the component signals.
+   */
   constructor() {
     void this.loadResetRequest();
   }
