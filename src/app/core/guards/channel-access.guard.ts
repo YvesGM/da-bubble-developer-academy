@@ -9,6 +9,17 @@ import { CanActivateFn, Router } from '@angular/router';
  * @param route - Route data containing the channel identifier.
  * @returns True when the channel exists; otherwise a workspace redirect.
  */
+/**
+ * Verifies that the requested channel can be opened by the current session.
+ *
+ * The guard resolves the channel id from the route, waits for Firebase Auth to
+ * restore its state and then reads the corresponding Firestore document. The
+ * Firestore security rules remain the authoritative permission boundary.
+ *
+ * @param route Angular route snapshot containing the `channelId` parameter.
+ * @returns `true` when the channel document exists and is readable; otherwise
+ * a URL tree redirecting to the workspace.
+ */
 export const channelAccessGuard: CanActivateFn = async (route) => {
   const auth = inject(Auth);
   const firestore = inject(Firestore);
