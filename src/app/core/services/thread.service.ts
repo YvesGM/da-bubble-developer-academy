@@ -20,14 +20,31 @@ export class ThreadService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
-  /** Observes thread replies for a message in chronological order. */
+  /**
+   * Observes all replies belonging to a parent message in chronological order.
+   *
+   * @param target - Channel or direct-message conversation containing the parent message.
+   * @param messageId - Firestore identifier of the parent message.
+   * @returns An observable that emits the current thread replies ordered by creation time.
+   */
   observeReplies(target: ConversationTarget, messageId: string): Observable<Message[]> {
     const reference = this.repliesCollection(target, messageId);
     const request = this.runSync(() => query(reference, orderBy('createdAt', 'asc')));
     return this.runSync(() => collectionData(request, { idField: 'id' })) as Observable<Message[]>;
   }
 
-  /** Adds a reply to the thread below a message. */
+  /**
+   * Creates a new reply below an existing conversation message.
+   *
+   * Author metadata is derived from the active Firebase session and the supplied
+   * presentation data. Anonymous users are stored with the guest fallback values.
+   *
+   * @param target - Channel or direct-message conversation containing the thread.
+   * @param messageId - Identifier of the parent message.
+   * @param input - Reply text and author presentation data.
+   * @returns A promise that resolves after Firestore creates the reply document.
+   * @throws If no Firebase user is authenticated or Firestore rejects the write.
+   */
   async sendReply(
     target: ConversationTarget,
     messageId: string,
