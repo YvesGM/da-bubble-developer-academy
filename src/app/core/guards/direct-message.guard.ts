@@ -9,6 +9,17 @@ import { CanActivateFn, Router, UrlTree } from '@angular/router';
  * @param route - Route data containing the direct-message conversation identifier.
  * @returns True when access is allowed; otherwise a workspace redirect.
  */
+/**
+ * Protects direct-message routes from guests and non-participants.
+ *
+ * The guard restores the Firebase Auth state, validates the route request and
+ * confirms that the current registered user's uid is listed in the selected
+ * direct-message document.
+ *
+ * @param route Angular route snapshot containing the `dmId` parameter.
+ * @returns `true` when the current user participates in the conversation;
+ * otherwise a URL tree redirecting to the workspace.
+ */
 export const directMessageGuard: CanActivateFn = async (route) => {
   const context = guardContext();
   await context.auth.authStateReady();
@@ -21,6 +32,14 @@ export const directMessageGuard: CanActivateFn = async (route) => {
  * Resolves the injected services required by the direct-message route guard.
  *
  * @returns The authentication, Firestore, injector and router dependencies.
+ */
+/**
+ * Collects the Angular dependencies used by the direct-message guard.
+ *
+ * Keeping dependency lookup in one helper keeps the guard orchestration focused
+ * and makes the remaining access checks easier to understand and test.
+ *
+ * @returns Auth, Firestore, injection-context and router dependencies.
  */
 function guardContext() {
   return {
@@ -38,6 +57,13 @@ function guardContext() {
  * @param dmId - Requested direct-message conversation identifier.
  * @returns Whether a registered user and conversation id are available.
  */
+/**
+ * Checks whether a direct-message navigation request is structurally valid.
+ *
+ * @param auth Firebase Authentication instance for the current session.
+ * @param dmId Direct-message document id resolved from the route.
+ * @returns `true` only for a signed-in, non-anonymous user with a non-empty id.
+ */
 function validRequest(auth: Auth, dmId: string): boolean {
   return Boolean(auth.currentUser?.uid && !auth.currentUser.isAnonymous && dmId);
 }
@@ -48,6 +74,16 @@ function validRequest(auth: Auth, dmId: string): boolean {
  * @param context - Dependencies used by the route guard.
  * @param dmId - Requested direct-message conversation identifier.
  * @returns True when access is allowed, otherwise a redirect URL tree.
+ */
+/**
+ * Verifies that the current user participates in the requested conversation.
+ *
+ * Firestore read failures are treated as denied access so navigation never
+ * exposes a conversation after an unsuccessful authorization lookup.
+ *
+ * @param context Dependencies required to read the conversation and redirect.
+ * @param dmId Direct-message document id to verify.
+ * @returns `true` when access is allowed; otherwise the workspace URL tree.
  */
 async function verifyConversation(
   context: ReturnType<typeof guardContext>,
@@ -70,6 +106,13 @@ async function verifyConversation(
  * @param dmId - Requested direct-message conversation identifier.
  * @returns The Firestore document snapshot for the conversation.
  */
+/**
+ * Reads one direct-message document inside Angular's injection context.
+ *
+ * @param context Guard dependencies containing Firestore and the injector.
+ * @param dmId Direct-message document id to load.
+ * @returns Firestore document snapshot for the requested conversation.
+ */
 async function readConversation(context: ReturnType<typeof guardContext>, dmId: string) {
   const reference = runInInjectionContext(context.injector, () =>
     doc(context.firestore, 'directMessages', dmId),
@@ -83,6 +126,13 @@ async function readConversation(context: ReturnType<typeof guardContext>, dmId: 
  * @param data - Firestore conversation payload.
  * @param uid - Current Firebase user identifier.
  * @returns Whether the user is listed as a participant.
+ */
+/**
+ * Evaluates participant membership on a direct-message document.
+ *
+ * @param data Raw Firestore document data.
+ * @param uid Firebase uid of the user requesting access.
+ * @returns `true` when `participantIds` is an array containing the uid.
  */
 function hasAccess(data: unknown, uid: string): boolean {
   if (!data || typeof data !== 'object') return false;
