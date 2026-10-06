@@ -7,6 +7,15 @@ import { CanActivateFn, Router } from '@angular/router';
  *
  * @returns True when a Firebase user is authenticated; otherwise a redirect to the login route.
  */
+/**
+ * Protects routes that require any authenticated Firebase session.
+ *
+ * The guard waits until Firebase Authentication has restored the persisted
+ * session before deciding whether navigation may continue.
+ *
+ * @returns `true` when a user is authenticated; otherwise a URL tree that
+ * redirects the visitor to the login page.
+ */
 export const authGuard: CanActivateFn = async () => {
   const auth = inject(Auth);
   const router = inject(Router);
