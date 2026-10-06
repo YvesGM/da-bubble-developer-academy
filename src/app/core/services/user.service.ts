@@ -22,14 +22,28 @@ export class UserService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
-  /** Observes visible registered workspace users. */
+  /**
+   * Observes all visible registered workspace users.
+   *
+   * Guest profiles are excluded and the resulting list is sorted alphabetically
+   * by display name before it is exposed to consumers.
+   *
+   * @returns An observable that emits the current visible user profiles.
+   */
   observeUsers(): Observable<UserProfile[]> {
     const reference = this.runSync(() => collection(this.firestore, 'users'));
     const users = this.runSync(() => collectionData(reference, { idField: 'uid' }));
     return (users as Observable<UserProfile[]>).pipe(map((items) => this.visibleUsers(items)));
   }
 
-  /** Observes the current registered user's profile, or undefined for guests. */
+  /**
+   * Observes the application profile belonging to the current registered user.
+   *
+   * Anonymous sessions do not own a persistent profile and therefore receive a
+   * completed observable containing `undefined`.
+   *
+   * @returns An observable emitting the current profile or `undefined` for guests.
+   */
   observeCurrentProfile(): Observable<UserProfile | undefined> {
     const uid = this.auth.currentUser?.uid;
     if (!uid || this.auth.currentUser?.isAnonymous) return new Observable((subscriber) => {
@@ -40,13 +54,31 @@ export class UserService {
     return this.runSync(() => docData(reference, { idField: 'uid' })) as Observable<UserProfile>;
   }
 
-  /** Creates the Firestore profile belonging to a Firebase user. */
+  /**
+   * Creates the Firestore application profile for a Firebase user.
+   *
+   * @param user - Firebase Authentication user that owns the profile.
+   * @param displayName - Optional display name override.
+   * @param avatarId - Avatar identifier stored with the new profile.
+   * @returns A promise that resolves after the profile document is written.
+   * @throws If Firestore rejects the profile creation.
+   */
   async createProfile(user: User, displayName?: string, avatarId = 'avatar-1'): Promise<void> {
     const reference = this.userReference(user.uid);
     await this.run(() => setDoc(reference, this.buildProfile(user, displayName, avatarId)));
   }
 
-  /** Creates a missing profile and synchronizes the display name when needed. */
+  /**
+   * Ensures that an authenticated Firebase user has a synchronized app profile.
+   *
+   * Missing profiles are created. Existing profiles only receive a display-name
+   * update when the supplied value differs from the stored value.
+   *
+   * @param user - Firebase Authentication user to synchronize.
+   * @param displayName - Optional display name that should be reflected in Firestore.
+   * @returns A promise that resolves after profile verification or synchronization.
+   * @throws If Firestore profile reads or writes fail.
+   */
   async ensureProfile(user: User, displayName?: string): Promise<void> {
     const reference = this.userReference(user.uid);
     const snapshot = await this.run(() => getDoc(reference));
@@ -54,7 +86,17 @@ export class UserService {
     await this.syncDisplayName(reference, snapshot.data(), displayName);
   }
 
-  /** Updates the current user's Firebase display name and app profile. */
+  /**
+   * Updates the current registered user's display name and avatar.
+   *
+   * The display name is written to Firebase Authentication first and then the
+   * matching Firestore profile is updated with the name, avatar and timestamp.
+   *
+   * @param displayName - New display name for the user.
+   * @param avatarId - Identifier of the selected avatar.
+   * @returns A promise that resolves after both profile stores are updated.
+   * @throws If no registered user is available or either update fails.
+   */
   async updateCurrentProfile(displayName: string, avatarId: string): Promise<void> {
     const user = this.auth.currentUser;
     if (!user || user.isAnonymous) throw new Error('profile-not-available');
@@ -62,7 +104,13 @@ export class UserService {
     await this.run(() => updateDoc(this.userReference(user.uid), this.profileChanges(displayName, avatarId)));
   }
 
-  /** Persists the current user's workspace display name. */
+  /**
+   * Persists the workspace display name owned by the current registered user.
+   *
+   * @param workspaceName - New workspace name; leading and trailing whitespace is removed.
+   * @returns A promise that resolves after the Firestore profile update completes.
+   * @throws If the current session has no registered profile or Firestore rejects the update.
+   */
   async updateWorkspaceName(workspaceName: string): Promise<void> {
     const user = this.auth.currentUser;
     if (!user || user.isAnonymous) throw new Error('workspace-not-available');
@@ -70,7 +118,16 @@ export class UserService {
     await this.run(() => updateDoc(this.userReference(user.uid), changes));
   }
 
-  /** Stores the two most recently used reaction emojis for the current user. */
+  /**
+   * Stores an emoji in the current user's two-item recent-emoji history.
+   *
+   * Anonymous sessions are ignored. Existing occurrences are de-duplicated before
+   * the selected emoji is moved to the front of the history.
+   *
+   * @param emoji - Emoji that was most recently selected by the user.
+   * @returns A promise that resolves after Firestore is updated, or immediately for guests.
+   * @throws If the profile read or update fails.
+   */
   async rememberEmoji(emoji: string): Promise<void> {
     const user = this.auth.currentUser;
     if (!user || user.isAnonymous) return;
