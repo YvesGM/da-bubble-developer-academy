@@ -11,6 +11,12 @@ export class Splash {
   private readonly auth = inject(Auth);
   private readonly router = inject(Router);
 
+  /**
+   * Starts the splash-screen transition immediately after component creation.
+   *
+   * Navigation waits for both Firebase Authentication restoration and the minimum
+   * splash duration before choosing the next route.
+   */
   constructor() {
     void this.continue();
   }
