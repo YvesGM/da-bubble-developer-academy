@@ -2,17 +2,7 @@
 
 .login {
   &-card {
-    min-height: 660px;
-
-    @include bp.mobile {
-      min-height: 0;
-    }
-
-    @include bp.widescreen {
-      min-height: 769px;
-      padding-top: 52px;
-      padding-bottom: 48px;
-    }
+    min-height: 0;
   }
 
   &-form {
@@ -22,22 +12,30 @@
     .forgot {
       &-link {
         justify-self: center;
-        margin-top: -6px;
+        margin-top: -4px;
       }
     }
 
     @include bp.mobile {
-      margin-top: 26px;
-      gap: 22px;
+      margin-top: 22px;
+      gap: 18px;
+
+      .auth-field-wrapper {
+        gap: 22px;
+      }
+
+      .forgot-link {
+        margin-top: 2px;
+      }
 
       .auth-button-row {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
       }
     }
 
     @include bp.widescreen {
-      margin-top: 42px;
-      gap: 40px;
+      margin-top: 38px;
+      gap: 30px;
     }
   }
 }
