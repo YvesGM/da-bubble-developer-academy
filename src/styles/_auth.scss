@@ -7,7 +7,7 @@
     display: flex;
     flex-direction: column;
 
-    gap: 32px;
+    gap: 0;
     width: min(606px, calc(100vw - 48px));
     padding: 42px 53px;
 
@@ -17,7 +17,7 @@
 
     @include bp.mobile {
       width: calc(100vw - 32px);
-      padding: 32px 24px;
+      padding: 28px 16px;
     }
 
     &-header {
@@ -88,9 +88,11 @@
     margin: 22px auto 0;
 
     @include bp.mobile {
-      font-size: 17px;
+      font-size: 16px;
+      line-height: 1.25;
 
-      margin-top: 16px;
+      max-width: 360px;
+      margin-top: 14px;
     }
   }
 
@@ -117,7 +119,7 @@
       display: flex;
       flex-direction: column;
 
-      gap: 40px;
+      gap: 24px;
     }
 
     &-icon {
@@ -132,8 +134,8 @@
       pointer-events: none;
 
       @include bp.mobile {
-        top: 27px;
-        left: 24px;
+        top: 24px;
+        left: 20px;
       }
     }
 
@@ -147,7 +149,7 @@
       color: tokens.$error;
 
       @include bp.mobile {
-        margin-left: 24px;
+        margin-left: 20px;
       }
     }
 
@@ -198,8 +200,8 @@
     @include bp.mobile {
       font-size: 16px;
 
-      height: 54px;
-      padding: 15px 24px 15px 56px;
+      height: 48px;
+      padding: 13px 20px 13px 52px;
     }
   }
 
