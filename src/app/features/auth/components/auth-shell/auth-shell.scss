@@ -7,49 +7,30 @@
 
 .auth {
   &-shell {
-    position: relative;
+    display: grid;
+    grid-template-rows: auto auto auto auto;
+    justify-items: center;
 
     min-height: 100dvh;
+    padding: 48px 24px 32px;
 
     background: tokens.$background;
 
-    overflow: hidden;
+    overflow-x: hidden;
 
     &-header {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+      justify-content: center;
 
-      position: absolute;
-      z-index: 2;
-      top: 42px;
-      right: 48px;
-      left: 48px;
-
-      @include bp.mobile {
-        position: static;
-
-        padding: 24px 20px 12px;
-      }
-
-      @include bp.widescreen {
-        top: 75px;
-        right: 75px;
-        left: 75px;
-      }
+      width: 100%;
     }
 
     &-stage {
       display: grid;
       place-items: center;
 
-      min-height: 100dvh;
-      padding: 110px 24px 90px;
-
-      @include bp.mobile {
-        min-height: auto;
-        padding: 18px 0 32px;
-      }
+      width: 100%;
+      margin-top: 38px;
     }
 
     &-footer {
@@ -58,34 +39,36 @@
       display: flex;
       justify-content: center;
 
-      position: absolute;
-      right: 0;
-      bottom: 38px;
-      left: 0;
-
+      margin-top: 30px;
       gap: 16px;
-
-      @include bp.mobile {
-        font-size: 16px;
-
-        position: static;
-
-        padding: 0 16px 24px;
-        gap: 8px;
-      }
-
-      @include bp.widescreen {
-        bottom: 20px;
-
-        margin-top: 20px;
-      }
     }
 
     @include bp.mobile {
-      display: grid;
-      grid-template-rows: auto 1fr auto;
+      min-height: 100dvh;
+      padding: 24px 16px 20px;
 
-      overflow: auto;
+      &-stage {
+        margin-top: 34px;
+      }
+
+      &-footer {
+        font-size: 14px;
+
+        margin-top: 24px;
+        gap: 8px;
+      }
+    }
+
+    @include bp.widescreen {
+      padding-top: 72px;
+
+      &-stage {
+        margin-top: 42px;
+      }
+
+      &-footer {
+        margin-top: 32px;
+      }
     }
   }
 
@@ -95,10 +78,9 @@
     display: flex;
     align-items: center;
 
-    gap: 14px;
+    gap: 12px;
 
     cursor: default;
-    transform: translateY(-12px);
 
     &-mark {
       width: 56px;
@@ -110,8 +92,8 @@
       }
 
       @include bp.widescreen {
-        width: 70px;
-        height: 70px;
+        width: 64px;
+        height: 64px;
       }
     }
 
@@ -124,16 +106,8 @@
       }
 
       @include bp.widescreen {
-        width: 157px;
+        width: 151px;
       }
-    }
-
-    @include bp.mobile {
-      transform: none;
-    }
-
-    @include bp.widescreen {
-      transform: translateY(-18px);
     }
   }
 
@@ -141,8 +115,9 @@
     font-size: 18px;
 
     display: grid;
-    justify-items: end;
+    justify-items: center;
 
+    margin-top: 22px;
     gap: 8px;
 
     a {
@@ -151,7 +126,7 @@
       padding: 9px 14px;
 
       color: tokens.$purple-2;
-      border: 1px solid transparent;
+      border: 1px solid tokens.$purple-2;
       border-radius: 25px;
 
       transition:
@@ -161,12 +136,14 @@
 
       &:hover {
         color: tokens.$purple-1;
-        border-color: tokens.$purple-2;
+        border-color: tokens.$purple-1;
       }
     }
 
     @include bp.mobile {
-      display: none;
+      font-size: 16px;
+
+      margin-top: 20px;
     }
   }
 
