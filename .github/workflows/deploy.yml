@@ -18,7 +18,6 @@ jobs:
     name: Build and deploy
     runs-on: ubuntu-latest
     environment: production
-    timeout-minutes: 20
 
     steps:
       - name: Checkout repository
@@ -44,6 +43,11 @@ jobs:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         run: npm run build -- --configuration production
 
+      - name: Install FTP client
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes lftp
+
       - name: Deploy to FTP
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
@@ -51,20 +55,15 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_PORT: ${{ vars.FTP_PORT }}
           FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR }}
-        shell: bash
         run: |
-          set -euo pipefail
-
-          LOCAL_DIR="./dist/dabubble/browser"
-          REMOTE_DIR="${FTP_REMOTE_DIR:-/}"
-          REMOTE_DIR="/${REMOTE_DIR#/}"
-          REMOTE_DIR="${REMOTE_DIR%/}"
-
-          find "$LOCAL_DIR" -type f -print0 | while IFS= read -r -d '' file; do
-            relative="${file#"$LOCAL_DIR"/}"
-            remote_path="${REMOTE_DIR}/${relative}"
-
-            echo "Uploading ${relative}"
-
-            curl               --fail               --silent               --show-error               --ftp-create-dirs               --disable-epsv               --retry 5               --retry-all-errors               --retry-delay 3               --connect-timeout 30               --user "$FTP_USERNAME:$FTP_PASSWORD"               --upload-file "$file"               "ftp://${FTP_HOST}:${FTP_PORT}${remote_path}"
-          done
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -p "$FTP_PORT" "$FTP_HOST" <<EOF
+          set cmd:fail-exit yes
+          set net:max-retries 5
+          set net:reconnect-interval-base 5
+          set net:timeout 30
+          set ftp:passive-mode true
+          set ftp:prefer-epsv false
+          set ftp:ssl-allow no
+          mirror --reverse --verbose ./dist/dabubble/browser/ "$FTP_REMOTE_DIR"
+          bye
+          EOF
