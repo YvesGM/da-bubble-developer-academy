@@ -45,12 +45,26 @@ jobs:
         run: npm run build -- --configuration production
 
       - name: Deploy to FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ vars.FTP_PORT }}
-          protocol: ftp
-          local-dir: ./dist/dabubble/browser/
-          server-dir: ${{ vars.FTP_REMOTE_DIR }}
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PORT: ${{ vars.FTP_PORT }}
+          FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          LOCAL_DIR="./dist/dabubble/browser"
+          REMOTE_DIR="${FTP_REMOTE_DIR:-/}"
+          REMOTE_DIR="/${REMOTE_DIR#/}"
+          REMOTE_DIR="${REMOTE_DIR%/}"
+
+          find "$LOCAL_DIR" -type f -print0 | while IFS= read -r -d '' file; do
+            relative="${file#"$LOCAL_DIR"/}"
+            remote_path="${REMOTE_DIR}/${relative}"
+
+            echo "Uploading ${relative}"
+
+            curl               --fail               --silent               --show-error               --ftp-create-dirs               --disable-epsv               --retry 5               --retry-all-errors               --retry-delay 3               --connect-timeout 30               --user "$FTP_USERNAME:$FTP_PASSWORD"               --upload-file "$file"               "ftp://${FTP_HOST}:${FTP_PORT}${remote_path}"
+          done
