@@ -18,6 +18,7 @@ jobs:
     name: Build and deploy
     runs-on: ubuntu-latest
     environment: production
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository
@@ -43,27 +44,13 @@ jobs:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         run: npm run build -- --configuration production
 
-      - name: Install FTP client
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes lftp
-
       - name: Deploy to FTP
-        env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_PORT: ${{ vars.FTP_PORT }}
-          FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR }}
-        run: |
-          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -p "$FTP_PORT" "$FTP_HOST" <<EOF
-          set cmd:fail-exit yes
-          set net:max-retries 5
-          set net:reconnect-interval-base 5
-          set net:timeout 30
-          set ftp:passive-mode true
-          set ftp:prefer-epsv false
-          set ftp:ssl-allow no
-          mirror --reverse --verbose ./dist/dabubble/browser/ "$FTP_REMOTE_DIR"
-          bye
-          EOF
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ vars.FTP_PORT }}
+          protocol: ftp
+          local-dir: ./dist/dabubble/browser/
+          server-dir: ${{ vars.FTP_REMOTE_DIR }}
