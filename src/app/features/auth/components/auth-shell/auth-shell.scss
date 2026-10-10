@@ -111,9 +111,12 @@
     font-size: 18px;
 
     display: grid;
-    justify-items: center;
+    justify-items: end;
 
-    margin-top: 22px;
+    position: absolute;
+    top: 48px;
+    right: 48px;
+
     gap: 8px;
 
     a {
@@ -123,7 +126,7 @@
       max-height: 42px;
 
       color: tokens.$purple-2;
-      border: 1px solid tokens.$purple-2;
+      border: 1px solid transparent;
       border-radius: 25px;
 
       transition:
@@ -133,14 +136,27 @@
 
       &:hover {
         color: tokens.$purple-1;
-        border-color: tokens.$purple-1;
+        border-color: tokens.$purple-2;
       }
     }
 
     @include bp.mobile {
       font-size: 16px;
 
+      justify-items: center;
+
+      position: static;
+
       margin-top: 20px;
+
+      a {
+        border-color: tokens.$purple-2;
+      }
+    }
+
+    @include bp.widescreen {
+      top: 72px;
+      right: 72px;
     }
   }
 
