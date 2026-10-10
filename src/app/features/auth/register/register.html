@@ -11,11 +11,22 @@
         </p>
       </header>
 
-      <form class="auth-form register-form" [formGroup]="form" (ngSubmit)="continueToAvatar()" novalidate>
+      <form
+        class="auth-form register-form"
+        [formGroup]="form"
+        (ngSubmit)="continueToAvatar()"
+        novalidate
+      >
         <div class="auth-field">
           <img class="auth-field-icon" src="/assets/person-icon.svg" alt="" />
-          <input class="auth-control" type="text" formControlName="name" autocomplete="name"
-            placeholder="Name und Nachname" aria-label="Name und Nachname" />
+          <input
+            class="auth-control"
+            type="text"
+            formControlName="name"
+            autocomplete="name"
+            placeholder="Name und Nachname"
+            aria-label="Name und Nachname"
+          />
           @if (form.controls.name.touched && form.controls.name.invalid) {
             <p class="auth-field-error">Bitte gib deinen Namen ein.</p>
           }
@@ -23,8 +34,14 @@
 
         <div class="auth-field">
           <img class="auth-field-icon" src="/assets/email-icon.svg" alt="" />
-          <input class="auth-control" type="email" formControlName="email" autocomplete="email"
-            placeholder="beispielname@email.com" aria-label="E-Mail-Adresse" />
+          <input
+            class="auth-control"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="beispielname@email.com"
+            aria-label="E-Mail-Adresse"
+          />
           @if (form.controls.email.touched && form.controls.email.invalid) {
             <p class="auth-field-error">Bitte gib eine gültige E-Mail-Adresse ein.</p>
           }
@@ -32,30 +49,51 @@
 
         <div class="auth-field">
           <img class="auth-field-icon" src="/assets/lock-icon.svg" alt="" />
-          <input class="auth-control" type="password" formControlName="password"
-            autocomplete="new-password" placeholder="Passwort" aria-label="Passwort" />
+          <input
+            class="auth-control"
+            type="password"
+            formControlName="password"
+            autocomplete="new-password"
+            placeholder="Passwort"
+            aria-label="Passwort"
+          />
           @if (form.controls.password.touched && form.controls.password.invalid) {
             <p class="auth-field-error">Das Passwort muss mindestens 6 Zeichen lang sein.</p>
           }
         </div>
-
-        <label class="auth-privacy">
-          <input type="checkbox" formControlName="privacyAccepted" />
-          <span>Ich stimme der <a routerLink="/privacy" target="_blank">Datenschutzerklärung</a> zu.</span>
-        </label>
-
-        <div class="auth-action-row">
-          <button class="auth-button auth-button--primary" type="submit"
-            [disabled]="!form.controls.name.valid || !form.controls.email.valid || !form.controls.password.valid || !form.controls.privacyAccepted.valid">
-            Weiter
-          </button>
-        </div>
       </form>
+      <label class="auth-privacy">
+        <input type="checkbox" formControlName="privacyAccepted" />
+        <span
+          >Ich stimme der
+          <a routerLink="/privacy" target="_blank">Datenschutzerklärung</a> zu.</span
+        >
+      </label>
+
+      <div class="auth-action-row">
+        <button
+          class="auth-button auth-button--primary"
+          type="submit"
+          [disabled]="
+            !form.controls.name.valid ||
+            !form.controls.email.valid ||
+            !form.controls.password.valid ||
+            !form.controls.privacyAccepted.valid
+          "
+        >
+          Weiter
+        </button>
+      </div>
     </section>
   } @else {
     <section class="auth-card avatar-card">
       <header class="auth-card-header avatar-header">
-        <button class="auth-back" type="button" aria-label="Zurück zu den Kontodaten" (click)="backToDetails()">
+        <button
+          class="auth-back"
+          type="button"
+          aria-label="Zurück zu den Kontodaten"
+          (click)="backToDetails()"
+        >
           <img src="/assets/arrow-back.svg" alt="" />
         </button>
         <h1 class="auth-title">Wähle deinen Avatar</h1>
@@ -73,8 +111,13 @@
 
         <div class="avatar-grid" aria-label="Verfügbare Avatare">
           @for (avatarId of avatarIds; track avatarId; let index = $index) {
-            <button type="button" class="avatar-choice" [class.selected]="selectedAvatar() === avatarId"
-              (click)="selectAvatar(avatarId)" [attr.aria-label]="'Avatar ' + (index + 1) + ' wählen'">
+            <button
+              type="button"
+              class="avatar-choice"
+              [class.selected]="selectedAvatar() === avatarId"
+              (click)="selectAvatar(avatarId)"
+              [attr.aria-label]="'Avatar ' + (index + 1) + ' wählen'"
+            >
               <app-avatar [avatarId]="avatarId" [name]="'Avatar ' + (index + 1)" size="option" />
             </button>
           }
@@ -85,8 +128,12 @@
         }
 
         <div class="auth-action-row avatar-action">
-          <button class="auth-button auth-button--primary" type="button"
-            [disabled]="!selectedAvatar() || submitting()" (click)="submit()">
+          <button
+            class="auth-button auth-button--primary"
+            type="button"
+            [disabled]="!selectedAvatar() || submitting()"
+            (click)="submit()"
+          >
             {{ submitting() ? 'Wird erstellt…' : 'Weiter' }}
           </button>
         </div>
