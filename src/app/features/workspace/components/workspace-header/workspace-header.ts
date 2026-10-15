@@ -14,6 +14,8 @@ export class WorkspaceHeader {
   @Input({ required: true }) displayName = '';
   @Input() avatarId = 'avatar-1';
   @Input() profileEnabled = true;
+  @Input() conversationOpen = false;
+  @Input() workspaceName = 'Workspace';
   @Output() readonly profileRequested = new EventEmitter<void>();
   @Output() readonly logoutRequested = new EventEmitter<void>();
   @Output() readonly userSelected = new EventEmitter<UserProfile>();
