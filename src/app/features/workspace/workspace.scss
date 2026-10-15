@@ -6,6 +6,7 @@
   grid-template-rows: auto 1fr;
 
   min-height: 100dvh;
+  position: relative;
 
   background: tokens.$background;
 
@@ -20,7 +21,7 @@
     transition: grid-template-columns tokens.$motion-base;
 
     &.collapsed {
-      grid-template-columns: 44px minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr);
     }
 
     &.conversation-open {
@@ -56,8 +57,48 @@
       gap: 24px;
 
       &.collapsed {
-        grid-template-columns: 44px minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
       }
+    }
+  }
+
+  &-sidebar-toggle {
+    position: fixed;
+    z-index: 20;
+    left: 0;
+    top: 55%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    width: 36px;
+    padding: 12px 6px;
+    color: tokens.$text;
+    background: tokens.$white;
+    border: 0;
+    border-radius: 0 14px 14px 0;
+    box-shadow: 0 2px 8px #00000026;
+    cursor: pointer;
+    transform: translateY(-50%);
+
+    img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+
+    span {
+      font-size: 13px;
+      line-height: 1.2;
+      white-space: nowrap;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    @include bp.mobile {
+      top: 50%;
+      width: 30px;
     }
   }
 
