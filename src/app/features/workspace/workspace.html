@@ -8,11 +8,25 @@
     (logoutRequested)="logout()"
   />
 
+  <button
+    type="button"
+    class="workspace-sidebar-toggle"
+    [attr.aria-label]="sidebarCollapsed() ? 'Workspace-Menü öffnen' : 'Workspace-Menü schließen'"
+    (click)="toggleSidebar()"
+  >
+    <img
+      [src]="sidebarCollapsed() ? '/assets/sidebar-expand.svg' : '/assets/sidebar-collapse.svg'"
+      alt=""
+    />
+    <span>{{ sidebarCollapsed() ? 'Workspace-Menü öffnen' : 'Workspace-Menü schließen' }}</span>
+  </button>
+
   <div
     class="workspace-body"
     [class.collapsed]="sidebarCollapsed()"
     [class.conversation-open]="conversationOpen"
   >
+    @if (!sidebarCollapsed()) {
     <app-workspace-sidebar
       [channels]="channels()"
       [directMessages]="directMessages()"
@@ -20,12 +34,11 @@
       [currentUserId]="currentUserId"
       [workspaceName]="workspaceName"
       [guest]="isGuest"
-      [collapsed]="sidebarCollapsed()"
       (createRequested)="showCreateChannel.set(true)"
       (newMessageRequested)="openNewMessage()"
       (workspaceEditRequested)="showWorkspaceEditor.set(true)"
-      (collapseRequested)="toggleSidebar()"
     />
+    }
 
     <section class="workspace-content">
       <router-outlet />
