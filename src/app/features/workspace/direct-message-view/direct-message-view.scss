@@ -20,7 +20,7 @@
       box-shadow: 0 2px 5px #00000008;
 
       @include bp.mobile {
-        min-height: 72px;
+        min-height: 58px;
         padding: 10px 14px;
       }
     }
@@ -87,7 +87,7 @@
       color: tokens.$purple-1;
 
       @include bp.mobile {
-        display: inline-flex;
+        display: none;
       }
     }
   }
