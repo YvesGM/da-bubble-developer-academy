@@ -22,7 +22,7 @@
   gap: 18px;
 
   background: tokens.$white;
-  border-radius: 30px;
+  border-radius: 20px;
   box-shadow: 0 8px 28px #00000024;
 
   header {
@@ -67,7 +67,7 @@
       gap: 6px;
 
       border: 1px solid tokens.$border;
-      border-radius: 28px;
+      border-radius: 20px;
 
       &:focus-within {
         border-color: tokens.$purple-1;
@@ -197,4 +197,12 @@
   @include bp.mobile {
     padding: 26px 22px;
   }
+}
+
+.dialog header button img,
+.card header button img,
+.dialog-heading .close img {
+  display: block;
+  width: 18px;
+  height: 18px;
 }
