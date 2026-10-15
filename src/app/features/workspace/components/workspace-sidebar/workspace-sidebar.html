@@ -1,14 +1,14 @@
 <aside class="sidebar" [class.collapsed]="collapsed">
   <div class="sidebar-top">
     @if (!collapsed) {
-      <button
+      <div class="workspace-identity"><img class="workspace-identity-mark" src="/assets/workspace-icon.svg" alt="" /><button
         type="button"
         class="workspace-name"
         [disabled]="guest"
         (click)="workspaceEditRequested.emit()"
       >
         {{ workspaceName }}
-      </button>
+      </button></div>
     }
 
     <button
@@ -17,15 +17,15 @@
       [attr.aria-label]="collapsed ? 'Menü öffnen' : 'Menü schließen'"
       (click)="collapseRequested.emit()"
     >
-      {{ collapsed ? '›' : '‹' }}
+      <img class="sidebar-action-icon" [src]="collapsed ? '/assets/sidebar-expand.svg' : '/assets/sidebar-collapse.svg'" alt="" />
     </button>
   </div>
 
   @if (!collapsed) {
     <section class="sidebar-section">
       <div class="section-heading">
-        <h2><span aria-hidden="true">⌄</span> Channels</h2>
-        <button type="button" aria-label="Channel erstellen" (click)="createRequested.emit()">＋</button>
+        <h2><img class="section-chevron" src="/assets/chevron-down.svg" alt="" /><img class="section-icon" src="/assets/channels.svg" alt="" />Channels</h2>
+        <button type="button" aria-label="Channel erstellen" (click)="createRequested.emit()"><img class="sidebar-action-icon" src="/assets/add.svg" alt="" /></button>
       </div>
 
       <nav aria-label="Channels">
@@ -35,20 +35,21 @@
             routerLinkActive="active"
             class="channel-link"
           >
-            <span class="channel-hash">#</span>
+            <img class="channel-hash" src="/assets/channel-hash.svg" alt="" />
             <span>{{ channel.name }}</span>
           </a>
         } @empty {
           <p class="empty">Noch keine Channels.</p>
         }
       </nav>
+      <button type="button" class="sidebar-add-channel" (click)="createRequested.emit()"><img src="/assets/add.svg" alt="" />Channel hinzufügen</button>
     </section>
 
     <section class="sidebar-section direct-messages">
       <div class="section-heading">
-        <h2><span aria-hidden="true">⌄</span> Direktnachrichten</h2>
+        <h2><img class="section-chevron" src="/assets/chevron-down.svg" alt="" /><img class="section-icon" src="/assets/direct-messages.svg" alt="" />Direktnachrichten</h2>
         @if (!guest) {
-          <button type="button" aria-label="Neue Nachricht" (click)="newMessageRequested.emit()">＋</button>
+          <button type="button" aria-label="Neue Nachricht" (click)="newMessageRequested.emit()"><img class="sidebar-action-icon" src="/assets/add.svg" alt="" /></button>
         }
       </div>
 
