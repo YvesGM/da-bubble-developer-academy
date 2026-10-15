@@ -24,6 +24,33 @@
       text-align: center;
 
       position: relative;
+
+      &:has(.auth-back) {
+        display: grid;
+        grid-template-columns: 40px minmax(0, 1fr) 40px;
+        align-items: center;
+        column-gap: 4px;
+
+        .auth-back {
+          position: static;
+          grid-column: 1;
+          grid-row: 1;
+        }
+
+        .auth-title {
+          grid-column: 2;
+          grid-row: 1;
+          font-size: 40px;
+
+          @include bp.mobile {
+            font-size: 28px;
+          }
+        }
+
+        .auth-description {
+          grid-column: 1 / -1;
+        }
+      }
     }
   }
 
