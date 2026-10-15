@@ -48,6 +48,10 @@
       &.collapsed {
         grid-template-columns: 1fr;
       }
+
+      &.conversation-open {
+        app-workspace-sidebar { display: none; }
+      }
     }
 
     @include bp.widescreen {
@@ -98,6 +102,7 @@
     }
 
     @include bp.mobile {
+      display: none;
       top: 68%;
       width: 38px;
       min-height: 210px;
