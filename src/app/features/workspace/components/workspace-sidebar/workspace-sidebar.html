@@ -18,6 +18,7 @@
       (click)="collapseRequested.emit()"
     >
       <img class="sidebar-action-icon" [src]="collapsed ? '/assets/sidebar-expand.svg' : '/assets/sidebar-collapse.svg'" alt="" />
+      @if (collapsed) { <span class="collapse-label">Workspace-Menü öffnen</span> }
     </button>
   </div>
 
