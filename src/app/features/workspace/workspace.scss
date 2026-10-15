@@ -66,14 +66,15 @@
     position: fixed;
     z-index: 20;
     left: 0;
-    top: 55%;
+    top: 68%;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
     gap: 8px;
-    width: 36px;
-    padding: 12px 6px;
+    width: 46px;
+    min-height: 260px;
+    padding: 18px 8px;
     color: tokens.$text;
     background: tokens.$white;
     border: 0;
@@ -97,8 +98,9 @@
     }
 
     @include bp.mobile {
-      top: 50%;
-      width: 30px;
+      top: 68%;
+      width: 38px;
+      min-height: 210px;
     }
   }
 
