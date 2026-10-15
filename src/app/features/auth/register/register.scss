@@ -16,12 +16,18 @@
   }
 
   &-form {
-    min-height: 260px;
-    margin: 28px 0px 20px 0px;
+    margin-top: 28px;
     gap: 20px;
 
+    .auth-privacy {
+      margin-top: 2px;
+    }
+
+    .auth-action-row {
+      margin-top: 8px;
+    }
+
     @include bp.mobile {
-      min-height: 200px;
       margin-top: 20px;
       gap: 14px;
     }
