@@ -135,6 +135,9 @@
 
   @include bp.mobile {
     border-radius: 16px;
+    textarea { min-height: 60px; }
+    .icon-button { width: 32px; height: 32px; }
+    .send-button { width: 36px; height: 36px; min-width: 36px; padding: 0; }
 
     textarea {
       min-height: 66px;
