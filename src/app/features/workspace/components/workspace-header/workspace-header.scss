@@ -153,10 +153,12 @@
         }
 
         &-name {
-          display: none;
+          display: block;
+          width: 112px;
         }
       }
 
+      .mobile-conversation-name ~ app-search-box { display: none; }
       app-search-box {
         grid-column: 1 / -1;
         grid-row: 2;
@@ -168,19 +170,26 @@
           min-height: 50px;
           padding: 2px 4px 2px 12px;
 
-          .profile-name {
-            font-size: 16px;
-
-            max-width: 130px;
-          }
+          .profile-name, .profile-chevron { display: none; }
         }
       }
 
+      .mobile-conversation-name { grid-column: 1; grid-row: 1; }
       .user {
         &-menu {
           min-width: 190px;
         }
       }
+    }
+
+    .mobile-conversation-name { display: none; }
+
+    @include bp.mobile {
+      .mobile-conversation-name { display: flex; align-items: center; gap: 8px; min-width: 0; }
+      .mobile-conversation-name a img { width: 18px; height: 18px; }
+      .mobile-conversation-name > img { width: 34px; height: 34px; }
+      .mobile-conversation-name strong { font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      &:has(.mobile-conversation-name) .brand { display: none; }
     }
 
     @include bp.widescreen {
