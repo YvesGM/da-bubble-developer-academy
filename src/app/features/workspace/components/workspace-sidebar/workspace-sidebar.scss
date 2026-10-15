@@ -168,6 +168,25 @@
     }
   }
 
+  button.workspace-name {
+    display: block;
+    width: auto;
+    height: auto;
+    padding: 6px 8px;
+    border-radius: 16px;
+    text-align: left;
+    font-size: 20px;
+  }
+
+  button.sidebar-add-channel {
+    display: flex;
+    justify-content: flex-start;
+    width: auto;
+    height: auto;
+    border-radius: 12px;
+    font-size: 15px;
+  }
+
   nav {
     display: grid;
 
