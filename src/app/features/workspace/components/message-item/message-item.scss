@@ -28,7 +28,7 @@
     .message-avatar { grid-column: 2; grid-row: 1; }
     .message-body { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: flex-end; }
     .meta { justify-content: flex-end; }
-    .message-text { color: tokens.$white; background: tokens.$purple-2; border-radius: 20px 0 20px 20px; }
+    .message-text { align-self: flex-end; color: tokens.$white; background: tokens.$purple-2; border-radius: 20px 0 20px 20px; }
     .reactions { justify-content: flex-end; }
   }
 
