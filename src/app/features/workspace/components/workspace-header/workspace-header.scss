@@ -7,9 +7,9 @@
     grid-template-columns: 220px minmax(280px, 1fr) auto;
     align-items: center;
 
-    min-height: 104px;
-    padding: 18px 32px;
-    gap: 40px;
+    min-height: 96px;
+    padding: 14px 28px;
+    gap: 24px;
 
     background: tokens.$background;
 
@@ -35,7 +35,7 @@
     app-search-box {
       justify-self: center;
 
-      width: min(100%, 820px);
+      width: min(100%, 740px);
     }
 
     .user {
@@ -182,10 +182,10 @@
     }
 
     @include bp.widescreen {
-      grid-template-columns: 260px minmax(360px, 1fr) auto;
+      grid-template-columns: 240px minmax(360px, 1fr) auto;
       
-      min-height: 118px;
-      padding-inline: 48px;
+      min-height: 108px;
+      padding-inline: 36px;
 
       .brand {
         &-mark {
@@ -199,7 +199,7 @@
       }
 
       app-search-box {
-        width: min(100%, 920px);
+        width: min(100%, 820px);
       }
     }
   }
