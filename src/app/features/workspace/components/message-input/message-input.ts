@@ -92,6 +92,13 @@ export class MessageInput implements AfterViewInit {
     queueMicrotask(() => this.field?.nativeElement.focus());
   }
 
+  /** Inserts a mention trigger and opens the existing user suggestions. */
+  insertMentionTrigger(): void {
+    const value = this.text();
+    this.updateText(value + (value && !/\s$/.test(value) ? ' ' : '') + '@');
+    queueMicrotask(() => this.field?.nativeElement.focus());
+  }
+
   /**
    * Replaces the active mention trigger with the selected user.
    *
