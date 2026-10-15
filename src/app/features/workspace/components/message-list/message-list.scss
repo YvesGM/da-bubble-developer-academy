@@ -20,12 +20,12 @@
 
     .date {
       &-separator {
-        font-size: 16px;
+        font-size: 14px;
 
         display: flex;
         align-items: center;
 
-        margin: 12px 0;
+        margin: 22px 24px;
         gap: 12px;
 
         color: tokens.$text-gray;
