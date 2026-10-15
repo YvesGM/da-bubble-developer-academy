@@ -1,5 +1,7 @@
 <main class="workspace">
   <app-workspace-header
+    [conversationOpen]="conversationOpen"
+    [workspaceName]="workspaceName"
     [displayName]="displayName"
     [avatarId]="avatarId"
     [profileEnabled]="!isGuest"
@@ -26,7 +28,7 @@
     [class.collapsed]="sidebarCollapsed()"
     [class.conversation-open]="conversationOpen"
   >
-    @if (!sidebarCollapsed()) {
+    @if (!sidebarCollapsed() || !conversationOpen) {
     <app-workspace-sidebar
       [channels]="channels()"
       [directMessages]="directMessages()"
