@@ -219,6 +219,9 @@
 
   @include bp.mobile {
     min-height: calc(100dvh - 132px);
+    .sidebar-top { display: none; }
+    .sidebar-section { margin-top: 18px; }
+    .direct-messages .section-heading > button { display: none; }
     border-radius: 0;
     padding: 20px 18px;
   }
