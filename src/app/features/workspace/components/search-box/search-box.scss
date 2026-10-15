@@ -1,4 +1,5 @@
 @use '../../../../../styles/tokens' as tokens;
+@use '../../../../../styles/breakpoints' as bp;
 
 .search {
   position: relative;
@@ -87,6 +88,21 @@
       font-size: 16px;
 
       color: tokens.$text-gray;
+    }
+  }
+
+  @include bp.mobile {
+    input { height: 42px; font-size: 15px; border: 1px solid tokens.$border; }
+    .results {
+      position: fixed;
+      top: 136px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-height: none;
+      align-content: start;
+      border-radius: 0;
+      box-shadow: none;
     }
   }
 }
