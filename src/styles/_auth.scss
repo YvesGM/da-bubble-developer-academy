@@ -14,6 +14,7 @@
     background: tokens.$white;
     border-radius: 30px;
     box-shadow: 0 2px 10px #0000000a;
+    white-space: nowrap;
 
     @include bp.mobile {
       width: calc(100vw - 32px);
@@ -64,6 +65,7 @@
 
     width: 40px;
     height: 40px;
+    margin-left: -16px;
 
     color: tokens.$text;
     background: transparent;
@@ -114,6 +116,8 @@
     max-width: 486px;
     margin: 22px auto 0;
 
+    white-space: wrap;
+
     @include bp.mobile {
       font-size: 16px;
       line-height: 1.25;
@@ -127,7 +131,7 @@
     display: grid;
 
     &-error {
-      font-size: 14px;
+      font-size: 16px;
       line-height: normal;
       text-align: center;
 
@@ -146,7 +150,7 @@
       display: flex;
       flex-direction: column;
 
-      gap: 24px;
+      gap: 32px;
     }
 
     &-icon {
@@ -167,7 +171,7 @@
     }
 
     &-error {
-      font-size: 14px;
+      font-size: 16px;
       line-height: normal;
 
       margin: 5px 0 0 32px;
@@ -189,7 +193,7 @@
 
     width: 100%;
     height: 60px;
-    padding: 18px 32px 18px 68px;
+    padding: 18px 32px 18px 74px;
 
     color: tokens.$text;
     background: tokens.$background;
@@ -233,7 +237,7 @@
   }
 
   &-success {
-    font-size: 14px;
+    font-size: 16px;
     line-height: normal;
     text-align: center;
 

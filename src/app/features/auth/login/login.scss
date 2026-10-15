@@ -7,7 +7,7 @@
 
   &-form {
     margin-top: 40px;
-    gap: 34px;
+    gap: 36px;
 
     .forgot {
       &-link {
@@ -35,7 +35,6 @@
 
     @include bp.widescreen {
       margin-top: 44px;
-      gap: 36px;
     }
   }
 }
