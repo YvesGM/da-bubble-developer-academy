@@ -4,16 +4,27 @@
 .sidebar {
   height: 100%;
   min-width: 0;
-  padding: 28px 24px;
+  padding: 24px 20px;
 
   background: tokens.$white;
-  border-radius: 30px;
+  border-radius: 20px;
 
   &.collapsed {
-    padding-inline: 12px;
+    padding: 0;
+    background: transparent;
 
     .sidebar-top {
       justify-content: center;
+      height: 100%;
+      margin: 0;
+    }
+
+    .collapse-button {
+      width: 44px;
+      height: 170px;
+      border-radius: 0 14px 14px 0;
+      background: tokens.$white;
+      box-shadow: 0 2px 8px #00000015;
     }
   }
 
@@ -23,12 +34,12 @@
     justify-content: space-between;
 
     min-height: 44px;
-    margin-bottom: 26px;
+    margin-bottom: 22px;
     gap: 14px;
   }
 
   &-section {
-    margin-top: 30px;
+    margin-top: 24px;
   }
 
   .section {
@@ -44,9 +55,55 @@
         align-items: center;
         margin: 0;
         gap: 8px;
-        font-size: 19px;
+        font-size: 18px;
       }
     }
+  }
+
+  .workspace-identity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .workspace-identity-mark {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+  }
+
+  .section-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+
+  .section-chevron {
+    width: 12px;
+    height: 12px;
+    object-fit: contain;
+  }
+
+  .sidebar-action-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+
+  .sidebar-add-channel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 8px 14px;
+    font-size: 15px;
+    color: tokens.$text;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+
+    img { width: 18px; height: 18px; }
   }
 
   .workspace {
@@ -125,7 +182,7 @@
       display: flex;
       align-items: center;
 
-      min-height: 42px;
+      min-height: 36px;
       padding: 4px 14px;
       gap: 10px;
 
@@ -144,15 +201,16 @@
     }
 
     &-hash {
-      font-size: 21px;
-      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
     }
   }
 
   .dm {
     &-link {
       display: flex;
-      min-height: 52px;
+      min-height: 48px;
       align-items: center;
       border-radius: 24px;
       padding: 4px 14px;
@@ -198,7 +256,7 @@
   }
 
   @include bp.widescreen {
-    padding: 32px 28px;
+    padding: 28px 24px;
 
     .workspace-name {
       max-width: 230px;
