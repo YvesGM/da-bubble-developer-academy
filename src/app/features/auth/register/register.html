@@ -61,29 +61,21 @@
             <p class="auth-field-error">Das Passwort muss mindestens 6 Zeichen lang sein.</p>
           }
         </div>
-      </form>
-      <label class="auth-privacy">
-        <input type="checkbox" formControlName="privacyAccepted" />
-        <span
-          >Ich stimme der
-          <a routerLink="/privacy" target="_blank">Datenschutzerklärung</a> zu.</span
-        >
-      </label>
+        <label class="auth-privacy">
+          <input type="checkbox" formControlName="privacyAccepted" />
+          <span>Ich stimme der <a routerLink="/privacy" target="_blank">Datenschutzerklärung</a> zu.</span>
+        </label>
 
-      <div class="auth-action-row">
-        <button
-          class="auth-button auth-button--primary"
-          type="submit"
-          [disabled]="
-            !form.controls.name.valid ||
-            !form.controls.email.valid ||
-            !form.controls.password.valid ||
-            !form.controls.privacyAccepted.valid
-          "
-        >
-          Weiter
-        </button>
-      </div>
+        <div class="auth-action-row">
+          <button
+            class="auth-button auth-button--primary"
+            type="submit"
+            [disabled]="!form.controls.name.valid || !form.controls.email.valid || !form.controls.password.valid || !form.controls.privacyAccepted.valid || submitting()"
+          >
+            Weiter
+          </button>
+        </div>
+      </form>
     </section>
   } @else {
     <section class="auth-card avatar-card">
