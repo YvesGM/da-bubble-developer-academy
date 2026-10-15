@@ -90,12 +90,13 @@
     }
 
     @include bp.mobile {
-      position: fixed;
-      z-index: 30;
-      inset: 0;
+      position: relative;
+      z-index: 1;
+      inset: auto;
 
       width: 100%;
-      padding: 16px 8px;
+      min-width: 0;
+      padding: 12px 8px;
 
       border-left: 0;
     }
