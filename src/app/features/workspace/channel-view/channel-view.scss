@@ -22,10 +22,9 @@
       box-shadow: 0 2px 5px #00000008;
 
       @include bp.mobile {
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr) auto;
+        display: flex;
 
-        min-height: 72px;
+        min-height: 58px;
         padding: 10px 14px;
         gap: 8px;
       }
@@ -199,7 +198,7 @@
     text-decoration: none;
 
     @include bp.mobile {
-      display: inline-flex;
+      display: none;
     }
   }
 }
