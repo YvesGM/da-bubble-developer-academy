@@ -15,7 +15,7 @@
     >
       <span class="profile-name">{{ displayName }}</span>
       <app-avatar [avatarId]="avatarId" [name]="displayName" size="large" />
-      <span class="profile-chevron" aria-hidden="true">⌄</span>
+      <img class="profile-chevron" src="/assets/chevron-down.svg" alt="" aria-hidden="true" />
     </button>
 
     @if (menuOpen()) {
