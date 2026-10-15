@@ -16,7 +16,7 @@
   max-height: calc(100dvh - 48px);
   overflow: auto;
   padding: 32px 36px;
-  border-radius: 30px;
+  border-radius: 20px;
   background: tokens.$white;
   box-shadow: 0 8px 28px #00000024;
 
@@ -265,4 +265,12 @@
   @include bp.mobile {
     padding: 26px 22px;
   }
+}
+
+.dialog header button img,
+.card header button img,
+.dialog-heading .close img {
+  display: block;
+  width: 18px;
+  height: 18px;
 }
