@@ -21,10 +21,19 @@
 
     .collapse-button {
       width: 44px;
-      height: 170px;
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       border-radius: 0 14px 14px 0;
       background: tokens.$white;
       box-shadow: 0 2px 8px #00000015;
+
+      .collapse-label {
+        font-size: 13px;
+        writing-mode: vertical-rl;
+        white-space: nowrap;
+      }
     }
   }
 
