@@ -17,7 +17,7 @@
   padding: 30px 34px;
 
   background: tokens.$white;
-  border-radius: 30px;
+  border-radius: 20px;
   box-shadow: 0 8px 28px #00000024;
 
   header {
@@ -102,4 +102,12 @@
   .error {
     color: tokens.$error;
   }
+}
+
+.dialog header button img,
+.card header button img,
+.dialog-heading .close img {
+  display: block;
+  width: 18px;
+  height: 18px;
 }
