@@ -19,7 +19,7 @@
   &-actions {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 8px;
   }
 
@@ -53,6 +53,10 @@
       border-radius: 50%;
       background: transparent;
       font-size: 22px;
+      display: grid;
+      place-items: center;
+
+      img { width: 22px; height: 22px; }
 
       &:hover {
         background: tokens.$background;
@@ -64,13 +68,19 @@
 
   .send {
     &-button {
-      min-width: 88px;
+      min-width: 40px;
+      width: 40px;
       height: 40px;
+      margin-left: auto;
       border-radius: 20px;
       padding: 0 18px;
       background: tokens.$purple-1;
       color: tokens.$white;
       font-weight: 700;
+      display: grid;
+      place-items: center;
+
+      img { width: 23px; height: 23px; }
 
       &:hover:not(:disabled) {
         background: tokens.$purple-2;
@@ -131,7 +141,7 @@
     }
 
     .send-button {
-      min-width: 76px;
+      min-width: 40px;
     }
   }
 }
