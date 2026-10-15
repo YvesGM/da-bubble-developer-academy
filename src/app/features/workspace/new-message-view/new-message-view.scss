@@ -33,7 +33,7 @@
           color: tokens.$purple-1;
 
           @include bp.mobile {
-            display: inline-flex;
+            display: none;
           }
         }
       }
@@ -106,7 +106,7 @@
       }
 
       @include bp.mobile {
-        padding: 18px 16px;
+        padding: 12px 14px;
 
         .results {
           margin-left: 0;
