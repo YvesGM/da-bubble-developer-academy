@@ -49,6 +49,17 @@ Export these as SVG and place them directly in `public/assets/` using exactly th
 - `search.svg`
   - global workspace search field
 
+### Workspace sidebar — additional Figma exports
+
+- `workspace-icon.svg`
+  - workspace identity mark shown beside the workspace name in the sidebar
+- `channels.svg`
+  - connected-dots Channels section icon (not CSS-generated)
+- `direct-messages.svg`
+  - person-circle Direct messages section icon
+- `mention.svg`
+  - @ action in the message composer (prepared for messaging phase)
+
 ### Channel / members
 
 - `channel-hash.svg`
