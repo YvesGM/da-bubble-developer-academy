@@ -11,16 +11,16 @@
 
   &-body {
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: 280px minmax(0, 1fr);
 
     min-height: 0;
     padding: 0 20px 20px;
-    gap: 20px;
+    gap: 16px;
 
     transition: grid-template-columns tokens.$motion-base;
 
     &.collapsed {
-      grid-template-columns: 76px minmax(0, 1fr);
+      grid-template-columns: 44px minmax(0, 1fr);
     }
 
     &.conversation-open {
@@ -50,13 +50,13 @@
     }
 
     @include bp.widescreen {
-      grid-template-columns: 340px minmax(0, 1fr);
+      grid-template-columns: 300px minmax(0, 1fr);
 
       padding: 0 24px 24px;
       gap: 24px;
 
       &.collapsed {
-        grid-template-columns: 82px minmax(0, 1fr);
+        grid-template-columns: 44px minmax(0, 1fr);
       }
     }
   }
@@ -65,7 +65,7 @@
     min-width: 0;
 
     background: tokens.$white;
-    border-radius: 30px;
+    border-radius: 20px;
     box-shadow: 0 2px 8px #0000000a;
 
     overflow: hidden;
