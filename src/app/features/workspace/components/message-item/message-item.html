@@ -1,4 +1,4 @@
-<article class="message">
+<article class="message" [class.own-message]="isOwnMessage()">
   <button
     type="button"
     class="message-avatar"
@@ -61,12 +61,12 @@
           aria-label="Weitere Reaktionen"
           (click)="showEmojiPicker.set(!showEmojiPicker())"
         >
-          ☺
+          <img src="/assets/reaction-add.svg" alt="" />
         </button>
 
         @if (!parentMessageId() && showThreadAction()) {
           <button type="button" class="action-text" (click)="threadRequested.emit(message())">
-            Thread
+            <img src="/assets/thread.svg" alt="" />
           </button>
         }
 
