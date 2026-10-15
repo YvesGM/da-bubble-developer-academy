@@ -9,6 +9,8 @@
     aria-label="Benutzer, Channels und Nachrichten durchsuchen"
   />
 
+  <img class="search-icon" src="/assets/search.svg" alt="" aria-hidden="true" />
+
   @if (focused() && query().trim()) {
     <div class="results">
       @for (result of results(); track result.type + result.id) {
