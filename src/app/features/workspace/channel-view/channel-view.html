@@ -9,9 +9,9 @@
         [disabled]="!canManageChannel()"
         (click)="openDetails()"
       >
-        <span class="channel-hash">#</span>
+        <img class="channel-hash" src="/assets/channel-hash.svg" alt="" />
         <span class="channel-name">{{ currentChannel.name }}</span>
-        <span class="channel-chevron" aria-hidden="true">⌄</span>
+        <img class="channel-chevron" src="/assets/chevron-down.svg" alt="" />
       </button>
 
       <div class="member-tools">
@@ -32,7 +32,7 @@
             aria-label="Mitglieder hinzufügen"
             (click)="showAddMembers.set(true)"
           >
-            ＋
+            <img src="/assets/add-member.svg" alt="" />
           </button>
         }
       </div>
