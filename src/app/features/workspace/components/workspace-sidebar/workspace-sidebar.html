@@ -73,4 +73,7 @@
       }
     </section>
   }
+  @if (!guest) {
+    <button type="button" class="mobile-new-message" aria-label="Neue Nachricht" (click)="newMessageRequested.emit()"><img src="/assets/edit.svg" alt="" /></button>
+  }
 </aside>
