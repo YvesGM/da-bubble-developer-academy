@@ -9,6 +9,12 @@
     min-height: 420px;
     height: 100%;
 
+    @include bp.mobile {
+      grid-template-columns: minmax(0, 1fr);
+      &:has(app-thread-panel) .chat-main { display: none; }
+      app-thread-panel { grid-column: 1; min-width: 0; }
+    }
+
     .chat-main {
       display: grid;
       grid-template-rows: minmax(0, 1fr) auto;
