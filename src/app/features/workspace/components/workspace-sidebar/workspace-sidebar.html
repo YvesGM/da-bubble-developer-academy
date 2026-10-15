@@ -1,25 +1,19 @@
 <aside class="sidebar" [class.collapsed]="collapsed">
   <div class="sidebar-top">
-    @if (!collapsed) {
-      <div class="workspace-identity"><img class="workspace-identity-mark" src="/assets/workspace-icon.svg" alt="" /><button
+    <div class="workspace-identity">
+      <img class="workspace-identity-mark" src="/assets/workspace-icon.svg" alt="" />
+      <span class="workspace-name">{{ workspaceName }}</span>
+    </div>
+    @if (!guest) {
+      <button
         type="button"
-        class="workspace-name"
-        [disabled]="guest"
+        class="workspace-edit-button"
+        aria-label="Workspace bearbeiten"
         (click)="workspaceEditRequested.emit()"
       >
-        {{ workspaceName }}
-      </button></div>
+        <img class="sidebar-action-icon" src="/assets/edit.svg" alt="" />
+      </button>
     }
-
-    <button
-      type="button"
-      class="collapse-button"
-      [attr.aria-label]="collapsed ? 'Menü öffnen' : 'Menü schließen'"
-      (click)="collapseRequested.emit()"
-    >
-      <img class="sidebar-action-icon" [src]="collapsed ? '/assets/sidebar-expand.svg' : '/assets/sidebar-collapse.svg'" alt="" />
-      @if (collapsed) { <span class="collapse-label">Workspace-Menü öffnen</span> }
-    </button>
   </div>
 
   @if (!collapsed) {
