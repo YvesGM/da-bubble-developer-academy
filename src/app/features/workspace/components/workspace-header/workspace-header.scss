@@ -158,7 +158,7 @@
         }
       }
 
-      .mobile-conversation-name ~ app-search-box { display: none; }
+      &:has(.mobile-conversation-name) app-search-box { display: none; }
       app-search-box {
         grid-column: 1 / -1;
         grid-row: 2;
@@ -175,6 +175,7 @@
       }
 
       .mobile-conversation-name { grid-column: 1; grid-row: 1; }
+      .user-area { grid-column: 2; grid-row: 1; }
       .user {
         &-menu {
           min-width: 190px;
