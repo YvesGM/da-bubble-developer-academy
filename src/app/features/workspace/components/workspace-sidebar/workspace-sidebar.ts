@@ -27,6 +27,16 @@ export class WorkspaceSidebar {
   readonly channelsExpanded = signal(true);
   readonly directMessagesExpanded = signal(true);
 
+  /** Toggles the visibility of the channel list. */
+  toggleChannels(): void {
+    this.channelsExpanded.update((expanded) => !expanded);
+  }
+
+  /** Toggles the visibility of the direct-message list. */
+  toggleDirectMessages(): void {
+    this.directMessagesExpanded.update((expanded) => !expanded);
+  }
+
   /**
    * Resolves the other participant of a direct-message conversation.
    *

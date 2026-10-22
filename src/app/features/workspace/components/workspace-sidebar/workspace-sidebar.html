@@ -20,7 +20,7 @@
       <div class="section-heading">
         <h2>
           <button type="button" class="section-toggle" aria-controls="channel-section-content"
-            [attr.aria-expanded]="channelsExpanded()" (click)="channelsExpanded.update(value => !value)">
+            [attr.aria-expanded]="channelsExpanded()" (click)="toggleChannels()">
             <img class="section-chevron" [class.is-closed]="!channelsExpanded()" src="/assets/chevron-down.svg" alt="" />
             <img class="section-icon" src="/assets/channels.svg" alt="" />Channels
           </button>
@@ -52,7 +52,7 @@
       <div class="section-heading">
         <h2>
           <button type="button" class="section-toggle" aria-controls="dm-section-content"
-            [attr.aria-expanded]="directMessagesExpanded()" (click)="directMessagesExpanded.update(value => !value)">
+            [attr.aria-expanded]="directMessagesExpanded()" (click)="toggleDirectMessages()">
             <img class="section-chevron" [class.is-closed]="!directMessagesExpanded()" src="/assets/chevron-down.svg" alt="" />
             <img class="section-icon" src="/assets/direct-messages.svg" alt="" />Direktnachrichten
           </button>
