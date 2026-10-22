@@ -52,7 +52,7 @@
     @if (canInteract()) {
       <div class="actions" aria-label="Nachrichtenaktionen">
         @for (emoji of recentEmojis().slice(0, 2); track emoji) {
-          <button type="button" class="icon-action" (click)="toggleReaction(emoji)">{{ emoji }}</button>
+          <button type="button" class="icon-action" [attr.aria-label]="'Mit ' + emoji + ' reagieren'" (click)="toggleReaction(emoji)">{{ emoji }}</button>
         }
 
         <button

@@ -1,134 +1,27 @@
-# Figma Asset Manifest
+# Figma assets – status after final review
 
-This file defines the local asset names expected for the final DABubble Figma pass.
+Existing vector assets are used directly from `public/assets/`. Do not rename them without updating their consumers.
 
-Do not rename existing assets unless the consuming code is updated at the same time.
+## Present in the repository
 
-## Existing assets — already present
+`logo.svg`, `logo-name.svg`, `arrow-back.svg`, `default-profile-icon.svg`, `email-icon.svg`, `google-icon.svg`, `lock-icon.svg`, `person-icon.svg`, `add-channel.svg`, `add.svg`, `channel-hash.svg`, `channels.svg`, `chevron-down.svg`, `direct-messages.svg`, `edit.svg`, `search.svg`, `sidebar-collapse.svg`, `workspace-icon.svg`, and avatars `avatar1.svg` through `avatar6.svg`.
 
-- `logo.svg`
-- `logo-name.svg`
-- `arrow-back.svg`
-- `default-profile-icon.svg`
-- `email-icon.svg`
-- `google-icon.svg`
-- `lock-icon.svg`
-- `person-icon.svg`
-- `avatars/avatar1.svg`
-- `avatars/avatar2.svg`
-- `avatars/avatar3.svg`
-- `avatars/avatar4.svg`
-- `avatars/avatar5.svg`
-- `avatars/avatar6.svg`
+## Missing and still referenced by the application
 
-## Assets still to export from Figma
+Export the **original Figma symbols as SVG** and save under these exact names in `public/assets/`:
 
-Export these as SVG and place them directly in `public/assets/` using exactly these filenames.
+| File | Where needed |
+| --- | --- |
+| `close.svg` | Thread and channel/member dialogs |
+| `add-member.svg` | Add channel members |
+| `thread.svg` | Start a thread from message actions |
+| `reaction-add.svg` | Open reaction picker |
+| `emoji.svg` | Message composer |
+| `mention.svg` | Message composer @ action |
+| `send.svg` | Message composer send action |
 
-### Global / navigation
+Only these confirmed references are included here. Further files may be needed after complete template/asset validation. Never substitute arbitrary third-party icons for Figma originals.
 
-- `chevron-down.svg`
-  - dropdown indicators
-  - channel section expand indicator
-  - profile menu indicator
+The left sidebar's expansion state currently reuses `sidebar-collapse.svg` mirrored in CSS, because the original `sidebar-expand.svg` is missing. Export `sidebar-expand.svg` if the Figma variants are not exact mirrors.
 
-- `sidebar-collapse.svg`
-  - desktop workspace sidebar collapse control
-
-- `sidebar-expand.svg`
-  - collapsed workspace sidebar reopen control
-
-- `close.svg`
-  - dialogs, profile cards, thread panel
-  - Figma component seen as `45. Close`
-
-- `add.svg`
-  - generic plus action
-  - channel creation / new DM action
-
-- `search.svg`
-  - global workspace search field
-
-### Workspace sidebar — additional Figma exports
-
-- `workspace-icon.svg`
-  - workspace identity mark shown beside the workspace name in the sidebar
-- `channels.svg`
-  - connected-dots Channels section icon (not CSS-generated)
-- `direct-messages.svg`
-  - person-circle Direct messages section icon
-- `mention.svg`
-  - @ action in the message composer (prepared for messaging phase)
-
-### Channel / members
-
-- `channel-hash.svg`
-  - Figma channel/tag symbol where an icon is used instead of text `#`
-
-- `add-member.svg`
-  - channel header member-add action
-
-- `edit.svg`
-  - channel/profile edit actions
-
-### Messaging
-
-- `thread.svg`
-  - hover action for starting/opening a thread
-
-- `reaction-add.svg`
-  - additional reaction action
-  - Figma component seen as `59. add reaction`
-
-- `emoji.svg`
-  - composer emoji-picker action when Figma uses a dedicated icon
-
-- `send.svg`
-  - message send action
-
-- `delete.svg`
-  - own-message delete action if shown as icon in the final Figma frame
-
-### Profile / account
-
-- `mail.svg`
-  - profile e-mail row when using the Figma profile icon
-  - keep `email-icon.svg` for auth forms unless the final Figma comparison shows both are identical
-
-- `logout.svg`
-  - mobile account menu logout icon if present in the selected Figma frame
-
-## Naming rules
-
-- lowercase
-- kebab-case
-- SVG for all UI icons
-- no spaces
-- no Figma-generated suffixes
-- no inline SVG path data in Angular templates
-- components reference files as `/assets/<filename>.svg`
-
-## Before final Figma implementation
-
-For every downloaded asset verify:
-
-1. The exported asset corresponds to the exact Figma component/layer.
-2. The filename matches this manifest exactly.
-3. The SVG still contains its original Figma width/height/viewBox.
-4. Do not manually redraw or substitute a different icon.
-5. Tell ChatGPT which files have been added before the final icon-wiring pass.
-
-## Current text placeholders that will be replaced once assets exist
-
-Current implementation still contains visual placeholders such as:
-
-- `⌄`
-- `‹`
-- `›`
-- `＋`
-- `←` in places where `arrow-back.svg` should be used
-- `☺`
-- text action `Thread`
-- text actions `Bearbeiten` / `Löschen` where Figma uses icons
-
-These are intentionally not replaced until the corresponding exact Figma SVGs are available.
+Export as PNG only for actual bitmap artwork; do not convert ordinary line icons to PNG.
