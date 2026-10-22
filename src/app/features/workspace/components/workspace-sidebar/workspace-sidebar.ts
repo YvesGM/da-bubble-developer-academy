@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { Channel } from '../../../../core/models/channel.model';
@@ -23,6 +23,9 @@ export class WorkspaceSidebar {
   @Output() readonly createRequested = new EventEmitter<void>();
   @Output() readonly newMessageRequested = new EventEmitter<void>();
   @Output() readonly workspaceEditRequested = new EventEmitter<void>();
+
+  readonly channelsExpanded = signal(true);
+  readonly directMessagesExpanded = signal(true);
 
   /**
    * Resolves the other participant of a direct-message conversation.
