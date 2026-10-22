@@ -89,14 +89,6 @@
     }
   }
 
-  .reactions {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-
-    gap: 8px;
-  }
-
   .meta {
     display: flex;
     align-items: center;
@@ -198,7 +190,11 @@
   }
 
   .reactions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
     margin-top: 6px;
+    gap: 8px;
 
     button {
       padding: 4px 9px;

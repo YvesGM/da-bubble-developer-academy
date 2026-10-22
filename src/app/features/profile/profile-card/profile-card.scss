@@ -2,6 +2,7 @@
 @use '../../../../styles/breakpoints' as bp;
 
 .backdrop {
+  animation: dialog-backdrop-in tokens.$motion-fast both;
   position: fixed;
   z-index: 60;
   inset: 0;
@@ -12,6 +13,7 @@
 }
 
 .card {
+  animation: dialog-surface-in tokens.$motion-base both;
   display: grid;
   width: min(500px, 100%);
   padding: 34px 40px 38px;

@@ -2,6 +2,7 @@
 @use '../../../../../styles/breakpoints' as bp;
 
 .backdrop {
+  animation: dialog-backdrop-in tokens.$motion-fast both;
   position: fixed;
   z-index: 60;
   inset: 0;
@@ -12,6 +13,7 @@
 }
 
 .dialog {
+  animation: dialog-surface-in tokens.$motion-base both;
   width: min(620px, 100%);
   max-height: calc(100dvh - 48px);
   overflow: auto;

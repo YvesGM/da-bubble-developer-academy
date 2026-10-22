@@ -1,6 +1,8 @@
 @use '../../../../../styles/tokens' as tokens;
+@use '../../../../../styles/breakpoints' as bp;
 
 .backdrop {
+  animation: dialog-backdrop-in tokens.$motion-fast both;
   display: grid;
   place-items: center;
 
@@ -13,6 +15,7 @@
 }
 
 .dialog {
+  animation: dialog-surface-in tokens.$motion-base both;
   width: min(460px, 100%);
   padding: 30px 34px;
 
@@ -47,12 +50,6 @@
     }
   }
 
-  .actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
   label {
     display: grid;
     gap: 14px;
@@ -77,6 +74,8 @@
   }
 
   .actions {
+    display: flex;
+    align-items: center;
     justify-content: center;
     gap: 20px;
 
@@ -85,22 +84,40 @@
       border-radius: 24px;
       padding: 10px 18px;
       font-weight: 700;
+      transition:
+        background-color tokens.$motion-base,
+        color tokens.$motion-fast;
     }
   }
 
   .primary {
     background: tokens.$purple-1;
     color: tokens.$white;
+
+    &:hover:not(:disabled) {
+      background: tokens.$purple-2;
+    }
   }
 
   .secondary {
     box-shadow: inset 0 0 0 1px tokens.$purple-2;
     background: tokens.$white;
     color: tokens.$purple-1;
+
+    &:hover {
+      background: tokens.$background;
+    }
   }
 
   .error {
     color: tokens.$error;
+  }
+
+  @include bp.mobile {
+    width: 100%;
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    padding: 24px 18px;
   }
 }
 
@@ -110,10 +127,4 @@
   display: block;
   width: 18px;
   height: 18px;
-  @media (max-width: 640px) {
-    width: 100%;
-    max-height: calc(100dvh - 32px);
-    overflow-y: auto;
-    padding: 24px 18px;
-  }
 }
