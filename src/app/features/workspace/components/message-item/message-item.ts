@@ -52,7 +52,7 @@ export class MessageItem {
   readonly editText = signal('');
   readonly showEmojiPicker = signal(false);
   readonly showAllReactions = signal(false);
-  readonly mobileViewport = signal(window.innerWidth <= 640);
+  readonly mobileViewport = signal(window.innerWidth <= 800);
   readonly reactionContext = computed(() => ({
     target: this.target(),
     messageId: this.parentMessageId() || this.message().id,
@@ -83,7 +83,7 @@ export class MessageItem {
    * Updates the responsive reaction limit when the browser viewport changes.
    */
   updateViewport(): void {
-    this.mobileViewport.set(window.innerWidth <= 640);
+    this.mobileViewport.set(window.innerWidth <= 800);
   }
 
   /**

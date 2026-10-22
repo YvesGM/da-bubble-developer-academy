@@ -204,12 +204,14 @@
 
 
     @include bp.widescreen {
-      grid-template-columns: 240px minmax(360px, 1fr) auto;
-      
-      min-height: 108px;
-      padding-inline: 36px;
+      grid-template-columns: 366px minmax(0, 1fr) 342px;
+      min-height: 115px;
+      padding: 25px 34px 20px 20px;
+      gap: 20px;
 
       .brand {
+        margin-left: 25px;
+
         &-mark {
           width: 62px;
           height: 62px;
@@ -221,7 +223,14 @@
       }
 
       app-search-box {
-        width: min(100%, 820px);
+        justify-self: start;
+        width: min(100%, 989px);
+      }
+
+      .profile-button {
+        width: 100%;
+        min-height: 70px;
+        justify-content: flex-end;
       }
     }
   }
