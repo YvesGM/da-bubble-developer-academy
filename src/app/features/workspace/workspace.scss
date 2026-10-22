@@ -3,62 +3,53 @@
 
 .workspace {
   display: grid;
-  grid-template-rows: auto 1fr;
-
+  grid-template-rows: auto minmax(0, 1fr);
   min-height: 100dvh;
   position: relative;
-
   background: tokens.$background;
 
   &-body {
     display: grid;
     grid-template-columns: 280px minmax(0, 1fr);
-
     min-height: 0;
     padding: 0 20px 20px;
     gap: 16px;
-
     transition: grid-template-columns tokens.$motion-base;
 
     &.collapsed {
       grid-template-columns: minmax(0, 1fr);
-    }
 
-    &.conversation-open {
       app-workspace-sidebar {
-        @include bp.mobile {
-          display: none;
-        }
-      }
-    }
-
-    &:not(.conversation-open) {
-      .workspace-content {
-        @include bp.mobile {
-          display: none;
-        }
+        display: none;
       }
     }
 
     @include bp.mobile {
-      grid-template-columns: 1fr;
-
+      grid-template-columns: minmax(0, 1fr);
       padding: 0;
+      gap: 0;
 
       &.collapsed {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+
+        app-workspace-sidebar {
+          display: block;
+        }
       }
 
-      &.conversation-open {
-        app-workspace-sidebar { display: none; }
+      &.conversation-open app-workspace-sidebar {
+        display: none;
+      }
+
+      &:not(.conversation-open) .workspace-content {
+        display: none;
       }
     }
 
     @include bp.widescreen {
-      grid-template-columns: 300px minmax(0, 1fr);
-
-      padding: 0 24px 24px;
-      gap: 24px;
+      grid-template-columns: 366px minmax(0, 1fr);
+      padding: 0 20px 25px;
+      gap: 20px;
 
       &.collapsed {
         grid-template-columns: minmax(0, 1fr);
@@ -69,16 +60,16 @@
   &-sidebar-toggle {
     position: fixed;
     z-index: 20;
+    top: 70%;
     left: 0;
-    top: 68%;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    gap: 8px;
     width: 46px;
     min-height: 260px;
     padding: 18px 8px;
+    gap: 8px;
     color: tokens.$text;
     background: tokens.$white;
     border: 0;
@@ -93,6 +84,10 @@
       object-fit: contain;
     }
 
+    &.is-collapsed img {
+      transform: scaleX(-1);
+    }
+
     span {
       font-size: 16px;
       line-height: 1.2;
@@ -103,19 +98,24 @@
 
     @include bp.mobile {
       display: none;
-      top: 68%;
-      width: 38px;
-      min-height: 210px;
+    }
+
+    @include bp.widescreen {
+      width: 56px;
+      min-height: 339px;
+
+      &.is-collapsed {
+        min-height: 310px;
+      }
     }
   }
 
   &-content {
     min-width: 0;
-
+    min-height: 0;
     background: tokens.$white;
     border-radius: 20px;
     box-shadow: 0 2px 8px #0000000a;
-
     overflow: hidden;
 
     @include bp.mobile {

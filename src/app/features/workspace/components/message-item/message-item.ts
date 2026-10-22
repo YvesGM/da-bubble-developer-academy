@@ -207,10 +207,10 @@ export class MessageItem {
   /**
    * Resolves the maximum visible reaction count for the current rendering context.
    *
-   * @returns Seven reactions for compact/mobile rendering, otherwise two.
+   * @returns Seven reactions for compact/mobile rendering, otherwise twenty.
    */
   reactionLimit(): number {
-    return 2;
+    return this.compactReactions() || this.mobileViewport() ? 7 : 20;
   }
 
   /**

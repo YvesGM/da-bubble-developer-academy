@@ -13,11 +13,13 @@
   <button
     type="button"
     class="workspace-sidebar-toggle"
+    [class.is-collapsed]="sidebarCollapsed()"
     [attr.aria-label]="sidebarCollapsed() ? 'Workspace-Menü öffnen' : 'Workspace-Menü schließen'"
     (click)="toggleSidebar()"
   >
     <img
-      [src]="sidebarCollapsed() ? '/assets/sidebar-expand.svg' : '/assets/sidebar-collapse.svg'"
+      src="/assets/sidebar-collapse.svg"
+      [class.is-collapsed]="sidebarCollapsed()"
       alt=""
     />
     <span>{{ sidebarCollapsed() ? 'Workspace-Menü öffnen' : 'Workspace-Menü schließen' }}</span>
@@ -28,7 +30,6 @@
     [class.collapsed]="sidebarCollapsed()"
     [class.conversation-open]="conversationOpen"
   >
-    @if (!sidebarCollapsed() || !conversationOpen) {
     <app-workspace-sidebar
       [channels]="channels()"
       [directMessages]="directMessages()"
@@ -40,7 +41,6 @@
       (newMessageRequested)="openNewMessage()"
       (workspaceEditRequested)="showWorkspaceEditor.set(true)"
     />
-    }
 
     <section class="workspace-content">
       <router-outlet />

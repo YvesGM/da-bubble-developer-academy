@@ -14,6 +14,8 @@ export class ChannelDetailsDialog {
 
   @Input({ required: true }) set channel(value: Channel) {
     this.form.setValue({ name: value.name, description: value.description });
+    this.editingName.set(false);
+    this.editingDescription.set(false);
   }
   @Input() creatorName = 'Unbekannter Benutzer';
   @Input() errorMessage = '';
@@ -34,7 +36,6 @@ export class ChannelDetailsDialog {
   saveName(): void {
     if (this.form.controls.name.invalid) return this.form.controls.name.markAsTouched();
     this.saveRequested.emit(this.form.getRawValue());
-    this.editingName.set(false);
   }
 
   /**
@@ -42,6 +43,5 @@ export class ChannelDetailsDialog {
    */
   saveDescription(): void {
     this.saveRequested.emit(this.form.getRawValue());
-    this.editingDescription.set(false);
   }
 }

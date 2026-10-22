@@ -65,7 +65,7 @@
         </button>
 
         @if (!parentMessageId() && showThreadAction()) {
-          <button type="button" class="action-text" (click)="threadRequested.emit(message())">
+          <button type="button" class="action-text" aria-label="Thread starten" (click)="threadRequested.emit(message())">
             <img src="/assets/thread.svg" alt="" />
           </button>
         }
