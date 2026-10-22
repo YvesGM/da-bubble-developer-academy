@@ -22,11 +22,16 @@
   <textarea
     #messageField
     rows="3"
+    [disabled]="sending()"
     [placeholder]="placeholder"
     [ngModel]="text()"
     (ngModelChange)="updateText($event)"
     (keydown.enter)="handleEnter($event)"
   ></textarea>
+
+  @if (sendError()) {
+    <p class="composer-error" role="alert">{{ sendError() }}</p>
+  }
 
   <div class="composer-actions">
     <button
@@ -40,7 +45,7 @@
     <button type="button" class="icon-button" aria-label="Person erwähnen" (click)="insertMentionTrigger()">
       <img src="/assets/mention.svg" alt="" />
     </button>
-    <button type="button" class="send-button" aria-label="Nachricht senden" [disabled]="!text().trim()" (click)="submit()">
+    <button type="button" class="send-button" aria-label="Nachricht senden" [disabled]="!text().trim() || sending()" (click)="submit()">
       <img src="/assets/send.svg" alt="" />
     </button>
   </div>

@@ -16,7 +16,7 @@
       [recentEmojis]="recentEmojis()"
       [placeholder]="inputPlaceholder()"
       [focusKey]="target().id"
-      (sendRequested)="sendMessage($event)"
+      [sendAction]="submitMessage"
       (emojiUsed)="rememberEmoji($event)"
     />
   </div>

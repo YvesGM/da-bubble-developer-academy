@@ -29,7 +29,7 @@ export class MessageInput implements AfterViewInit {
   @Input() set focusKey(value: string) {
     if (value && this.autoFocus) queueMicrotask(() => this.field?.nativeElement.focus());
   }
-  @Output() readonly sendRequested = new EventEmitter<string>();
+  @Input({ required: true }) sendAction!: (text: string) => Promise<void>;
   @Output() readonly emojiUsed = new EventEmitter<string>();
 
   @ViewChild('messageField') private field?: ElementRef<HTMLTextAreaElement>;
@@ -38,6 +38,8 @@ export class MessageInput implements AfterViewInit {
   readonly trigger = signal<'@' | '#' | null>(null);
   readonly query = signal('');
   readonly showEmojiPicker = signal(false);
+  readonly sending = signal(false);
+  readonly sendError = signal('');
 
   /**
    * Applies initial focus to the message field when autofocus is enabled.
@@ -59,15 +61,25 @@ export class MessageInput implements AfterViewInit {
   }
 
   /**
-   * Emits the current non-empty message text and resets the input state.
+   * Persists a message and clears the draft only after successful delivery.
+   *
+   * @returns A promise that resolves once sending and error handling finish.
    */
-  submit(): void {
+  async submit(): Promise<void> {
     const value = this.text().trim();
-    if (!value) return;
-    this.sendRequested.emit(value);
-    this.text.set('');
-    this.closeSuggestions();
-    queueMicrotask(() => this.field?.nativeElement.focus());
+    if (!value || this.sending()) return;
+    this.sending.set(true);
+    this.sendError.set('');
+    try {
+      await this.sendAction(value);
+      this.text.set('');
+      this.closeSuggestions();
+    } catch {
+      this.sendError.set('Die Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.');
+    } finally {
+      this.sending.set(false);
+      queueMicrotask(() => this.field?.nativeElement.focus());
+    }
   }
 
   /**

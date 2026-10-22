@@ -39,6 +39,6 @@
     [recentEmojis]="recentEmojis()"
     placeholder="Antworten…"
     [focusKey]="parent().id"
-    (sendRequested)="sendReply($event)"
+    [sendAction]="submitReply"
   />
 </aside>

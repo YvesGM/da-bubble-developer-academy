@@ -142,3 +142,8 @@
 
   }
 }
+.composer-error {
+  margin: 0 10px 8px;
+  font-size: 14px;
+  color: tokens.$error;
+}

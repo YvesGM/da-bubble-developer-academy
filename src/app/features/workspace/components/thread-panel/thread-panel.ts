@@ -33,6 +33,7 @@ export class ThreadPanel {
   @Output() readonly userRequested = new EventEmitter<string>();
 
   readonly context = computed(() => ({ target: this.target(), messageId: this.parent().id }));
+  readonly submitReply = (text: string): Promise<void> => this.sendReply(text);
   readonly replies = toSignal(
     toObservable(this.context).pipe(
       switchMap((context) => this.threads.observeReplies(context.target, context.messageId)),

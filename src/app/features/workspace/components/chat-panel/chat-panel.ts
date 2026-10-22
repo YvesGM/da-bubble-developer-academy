@@ -40,6 +40,7 @@ export class ChatPanel {
     { initialValue: [] as Message[] },
   );
   readonly threadMessage = signal<Message | null>(null);
+  readonly submitMessage = (text: string): Promise<void> => this.sendMessage(text);
   readonly availableMentionUsers = computed(() => this.mentionUsers() ?? this.users());
   readonly recentEmojis = computed(() =>
     this.profile()?.recentEmojis?.length ? this.profile()!.recentEmojis : [...DEFAULT_RECENT_EMOJIS],
