@@ -89,6 +89,10 @@
       overflow: auto;
     }
 
+    @include bp.widescreen {
+      width: min(485px, 100%);
+    }
+
     @include bp.mobile {
       position: relative;
       z-index: 1;

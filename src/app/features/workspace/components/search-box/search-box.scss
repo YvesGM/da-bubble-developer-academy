@@ -91,6 +91,13 @@
     }
   }
 
+  @include bp.widescreen {
+    input {
+      height: 70px;
+      border-radius: 35px;
+    }
+  }
+
   @include bp.mobile {
     input { height: 42px; font-size: 15px; border: 1px solid tokens.$border; }
     .results {

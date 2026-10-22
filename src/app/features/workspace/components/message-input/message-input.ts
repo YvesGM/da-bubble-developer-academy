@@ -89,6 +89,7 @@ export class MessageInput implements AfterViewInit {
    */
   updateText(value: string): void {
     this.text.set(value);
+    this.sendError.set('');
     this.updateSuggestions(value);
   }
 

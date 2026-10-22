@@ -25,3 +25,11 @@ Only these confirmed references are included here. Further files may be needed a
 The left sidebar's expansion state currently reuses `sidebar-collapse.svg` mirrored in CSS, because the original `sidebar-expand.svg` is missing. Export `sidebar-expand.svg` if the Figma variants are not exact mirrors.
 
 Export as PNG only for actual bitmap artwork; do not convert ordinary line icons to PNG.
+
+## Rasterbilder (PNG/JPG)
+
+Der lokale Figma-Export enthält sieben eingebettete Rasterdateien. Sie sind überwiegend
+Screenshots einzelner Figma-Ansichten und keine im Angular-Projekt referenzierten
+Produktbilder. **Für den aktuellen App-Code muss kein zusätzliches PNG heruntergeladen
+werden.** Exportiere nur dann neue PNG-Dateien, wenn bei der visuellen Abnahme ein
+konkretes Bildmotiv in einem Figma-Frame als fehlendes App-Asset identifiziert wird.
