@@ -37,8 +37,9 @@ button {
   cursor: pointer;
 }
 
-/* Preserve keyboard focus visibility without changing mouse hover styling. */
-:where(button, a, input, textarea, select):focus-visible {
+/* Text fields already use their component-specific single focus border. */
+/* Preserve visible keyboard focus for interactive buttons and links. */
+:where(button, a):focus-visible {
   outline: 2px solid tokens.$purple-1;
   outline-offset: 3px;
 }
