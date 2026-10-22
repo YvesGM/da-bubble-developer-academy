@@ -1,4 +1,4 @@
-<aside class="sidebar" [class.collapsed]="collapsed">
+<aside class="sidebar">
   <div class="sidebar-top">
     <div class="workspace-identity">
       <img class="workspace-identity-mark" src="/assets/workspace-icon.svg" alt="" />
@@ -16,7 +16,6 @@
     }
   </div>
 
-  @if (!collapsed) {
     <section class="sidebar-section">
       <div class="section-heading">
         <h2><img class="section-chevron" src="/assets/chevron-down.svg" alt="" /><img class="section-icon" src="/assets/channels.svg" alt="" />Channels</h2>
@@ -72,7 +71,6 @@
         </nav>
       }
     </section>
-  }
   @if (!guest) {
     <button type="button" class="mobile-new-message" aria-label="Neue Nachricht" (click)="newMessageRequested.emit()"><img src="/assets/edit.svg" alt="" /></button>
   }

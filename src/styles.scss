@@ -36,3 +36,20 @@ button {
 
   cursor: pointer;
 }
+
+/* Preserve keyboard focus visibility without changing mouse hover styling. */
+:where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid tokens.$purple-1;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

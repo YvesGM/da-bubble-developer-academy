@@ -14,13 +14,25 @@
     min-height: 0;
     padding: 0 20px 20px;
     gap: 16px;
-    transition: grid-template-columns tokens.$motion-base;
+    transition:
+      grid-template-columns tokens.$motion-base,
+      gap tokens.$motion-base;
+
+    app-workspace-sidebar {
+      min-width: 0;
+      opacity: 1;
+      transition: opacity tokens.$motion-fast;
+    }
 
     &.collapsed {
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: 0 minmax(0, 1fr);
+      gap: 0;
 
       app-workspace-sidebar {
-        display: none;
+        visibility: hidden;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
       }
     }
 
@@ -33,7 +45,10 @@
         grid-template-columns: minmax(0, 1fr);
 
         app-workspace-sidebar {
-          display: block;
+          visibility: visible;
+          overflow: visible;
+          opacity: 1;
+          pointer-events: auto;
         }
       }
 
@@ -52,7 +67,7 @@
       gap: 20px;
 
       &.collapsed {
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: 0 minmax(0, 1fr);
       }
     }
   }
@@ -77,11 +92,23 @@
     box-shadow: 0 2px 8px #00000026;
     cursor: pointer;
     transform: translateY(-50%);
+    transition:
+      background-color tokens.$motion-base,
+      color tokens.$motion-fast,
+      box-shadow tokens.$motion-base;
+
+    &:hover,
+    &:focus-visible {
+      color: tokens.$purple-1;
+      background: tokens.$background;
+      box-shadow: 0 4px 16px #0000002b;
+    }
 
     img {
       width: 18px;
       height: 18px;
       object-fit: contain;
+      transition: transform tokens.$motion-base;
     }
 
     &.is-collapsed img {

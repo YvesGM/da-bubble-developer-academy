@@ -75,8 +75,10 @@ service cloud.firestore {
           'participantIds', 'createdAt', 'updatedAt'
         ])
         && request.resource.data.participantIds is list
-        && request.resource.data.participantIds.size() == 2
-        && request.resource.data.participantIds[0] != request.resource.data.participantIds[1]
+        && request.resource.data.participantIds.size() >= 1
+        && request.resource.data.participantIds.size() <= 2
+        && (request.resource.data.participantIds.size() == 1
+          || request.resource.data.participantIds[0] != request.resource.data.participantIds[1])
         && request.auth.uid in request.resource.data.participantIds;
     }
 
