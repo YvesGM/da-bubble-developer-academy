@@ -43,7 +43,7 @@ export class ForgotPassword {
   private async sendReset(): Promise<void> {
     try {
       await this.auth.sendPasswordReset(this.form.controls.email.value);
-      this.message.set('Die E-Mail zum Zurücksetzen deines Passworts wurde versendet.');
+      this.message.set('Falls für diese Adresse ein Konto existiert, erhältst du eine E-Mail zum Zurücksetzen.');
     } catch (error) {
       this.errorMessage.set(
         firebaseErrorMessage(error, 'Das Zurücksetzen konnte nicht gestartet werden.'),

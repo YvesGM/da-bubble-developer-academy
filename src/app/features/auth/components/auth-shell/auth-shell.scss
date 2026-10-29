@@ -289,6 +289,22 @@
         }
       }
     }
+    &--forgot {
+      @include bp.mobile {
+        padding-top: clamp(24px, calc(100dvh - 733px), 199px);
+
+        .auth-shell-stage {
+          flex: none;
+          width: min(398px, 100%);
+          margin-top: 32px;
+          padding: 0;
+        }
+
+        .auth-shell-footer {
+          margin-top: auto;
+        }
+      }
+    }
   }
 
   &-brand {
