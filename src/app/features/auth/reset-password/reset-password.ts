@@ -35,7 +35,10 @@ export class ResetPassword {
   /** Only resetPassword uses this page; delegate other Firebase action modes safely. */
   constructor() {
     const mode = this.route.snapshot.queryParamMap.get('mode');
-    if (mode && mode !== 'resetPassword') return this.forwardOtherAction();
+    if (mode && mode !== 'resetPassword') {
+      this.forwardOtherAction();
+      return;
+    }
     void this.loadResetRequest();
   }
 
