@@ -39,13 +39,7 @@ final class ResetMailer
         if (!is_file($file)) throw new RuntimeException('Service account missing');
         $auth = (new Factory())->withServiceAccount($file)->createAuth();
         $firebaseLink = $auth->getPasswordResetLink($email);
-        parse_str(parse_url($firebaseLink, PHP_URL_QUERY) ?: '', $params);
-        if (($params['mode'] ?? '') !== 'resetPassword' || empty($params['oobCode'])) {
-            throw new RuntimeException('Firebase returned an unsupported reset link');
-        }
-        return $site.'/reset-password?'.http_build_query([
-            'mode' => 'resetPassword', 'oobCode' => $params['oobCode'],
-        ], '', '&', PHP_QUERY_RFC3986);
+        return ResetLink::fromFirebase($firebaseLink, $site);
     }
 
     /** Sends the reset link using the dedicated ALL-INKL SMTP mailbox. */

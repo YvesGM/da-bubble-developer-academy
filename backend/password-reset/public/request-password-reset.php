@@ -40,6 +40,7 @@ try {
     }
     require $internal.'/vendor/autoload.php';
     require $internal.'/src/RequestGuard.php';
+    require $internal.'/src/ResetLink.php';
     require $internal.'/src/ResetMailer.php';
     (new \DABubble\ResetMailer($config, $privateDir))->handle();
 } catch (Throwable $error) {
