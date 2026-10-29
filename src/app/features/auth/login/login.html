@@ -35,7 +35,7 @@
             aria-label="Passwort"
           />
           @if (form.controls.password.touched && form.controls.password.invalid) {
-            <p class="auth-field-error">Bitte gib dein Passwort ein.</p>
+            <p class="auth-field-error">Bitte geben Sie ein Passwort ein.</p>
           }
           @if (credentialError()) {
             <p class="auth-field-error">{{ credentialError() }}</p>
