@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -16,6 +16,8 @@ import { InputCaretDirective } from '../../../shared/directives/input-caret.dire
 export class ForgotPassword {
   private readonly auth = inject(AuthService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
+  private noticeTimer?: ReturnType<typeof setTimeout>;
 
   readonly message = signal('');
   readonly errorMessage = signal('');
@@ -23,6 +25,11 @@ export class ForgotPassword {
   readonly form = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
   });
+
+  /** Clears pending notice timers if the user navigates away. */
+  constructor() {
+    this.destroyRef.onDestroy(() => clearTimeout(this.noticeTimer));
+  }
 
   /**
    * Validates the reset form and starts the password-reset request.
@@ -44,6 +51,7 @@ export class ForgotPassword {
     try {
       await this.auth.sendPasswordReset(this.form.controls.email.value);
       this.message.set('Falls für diese Adresse ein Konto existiert, erhältst du eine E-Mail zum Zurücksetzen.');
+      this.noticeTimer = setTimeout(() => this.message.set(''), 3500);
     } catch (error) {
       this.errorMessage.set(
         firebaseErrorMessage(error, 'Das Zurücksetzen konnte nicht gestartet werden.'),
@@ -66,6 +74,7 @@ export class ForgotPassword {
    */
   private startSubmit(): void {
     this.submitting.set(true);
+    clearTimeout(this.noticeTimer);
     this.message.set('');
     this.errorMessage.set('');
   }

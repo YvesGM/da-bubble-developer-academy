@@ -146,7 +146,7 @@
 </app-auth-shell>
 
 @if (registrationStatus()) {
-  <div class="register-notice" role="status" aria-live="polite">
+  <div class="auth-notice auth-notice--account" role="status" aria-live="polite">
     {{ registrationStatus() === 'success' ? 'Konto erfolgreich erstellt!' : 'Konto wird erstellt…' }}
   </div>
 }
