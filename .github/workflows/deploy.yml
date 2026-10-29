@@ -98,6 +98,6 @@ jobs:
           set ftp:ssl-force true
           set ftp:ssl-protect-data true
           set ssl:verify-certificate true
-          mirror --reverse --verbose ./dist/dabubble/browser/ /schniefs-portfolio.de/projects/dabubble/
+          mirror --reverse --verbose --parallel=4 ./dist/dabubble/browser/ /schniefs-portfolio.de/projects/dabubble/
           bye
           EOF

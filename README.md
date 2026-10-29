@@ -95,6 +95,13 @@ SMTP service uses port **465**. Akademie FTP/FTPS/SFTP settings are separate
 and must follow the Akademie host's documented transfer protocol. The remote path is fixed in the deployment workflow
 to prevent accidental uploads to the account root.
 
+The PHP Firebase SDK includes many small dependencies. The FTPS mirror therefore
+uses up to four parallel transfers to avoid the single-file-at-a-time delay
+observed in GitHub Actions run #25. If ALL-INKL rejects concurrent FTP
+sessions, lower `--parallel=4` in `.github/workflows/deploy.yml` to `2`.
+The previous canceled job uploaded only part of the PHP `vendor/` folder;
+repeat deployment fully before testing the PHP endpoint.
+
 Existing `FTP_HOST`, `FTP_USERNAME`, and `FTP_PASSWORD` secrets are reused:
 update their values to the ALL-INKL **FTP account**, not Developer Akademie credentials.
 `FTP_PORT` and `FTP_REMOTE_DIR` are ignored because the workflow fixes

@@ -13,6 +13,6 @@ test('FTPS targets the DABubble portfolio directory, not Developer Akademie', ()
   assert.match(workflow, /set ftp:ssl-protect-data true/);
   assert.match(workflow, /set ssl:verify-certificate true/);
   assert.match(workflow, /-p 21 "ftp:\/\/\$FTP_HOST"/);
-  assert.match(workflow, /mirror --reverse --verbose \.\/dist\/dabubble\/browser\/ \/schniefs-portfolio\.de\/projects\/dabubble\//);
+  assert.match(workflow, /mirror --reverse --verbose --parallel=4 \.\/dist\/dabubble\/browser\/ \/schniefs-portfolio\.de\/projects\/dabubble\//);
   assert.doesNotMatch(workflow, /ALLINKL_FTP_/);
 });
