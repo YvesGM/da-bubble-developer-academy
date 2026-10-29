@@ -28,7 +28,7 @@
             aria-label="Name und Nachname"
           />
           @if (form.controls.name.touched && form.controls.name.invalid) {
-            <p class="auth-field-error">Bitte gib deinen Namen ein.</p>
+            <p class="auth-field-error">Bitte schreiben Sie einen Namen.</p>
           }
         </div>
 
@@ -43,7 +43,7 @@
             aria-label="E-Mail-Adresse"
           />
           @if (form.controls.email.touched && form.controls.email.invalid) {
-            <p class="auth-field-error">Bitte gib eine gültige E-Mail-Adresse ein.</p>
+            <p class="auth-field-error">*Diese E-Mail-Adresse ist leider ungültig.</p>
           }
         </div>
 
@@ -58,7 +58,11 @@
             aria-label="Passwort"
           />
           @if (form.controls.password.touched && form.controls.password.invalid) {
-            <p class="auth-field-error">Das Passwort muss mindestens 6 Zeichen lang sein.</p>
+            @if (form.controls.password.hasError('required')) {
+              <p class="auth-field-error">Bitte geben Sie ein Passwort ein.</p>
+            } @else {
+              <p class="auth-field-error">Das Passwort muss mindestens 6 Zeichen lang sein.</p>
+            }
           }
         </div>
         <label class="auth-privacy">
@@ -86,7 +90,7 @@
           aria-label="Zurück zu den Kontodaten"
           (click)="backToDetails()"
         >
-          <img src="/assets/arrow-back.svg" alt="" />
+          <span class="auth-back-icon" aria-hidden="true"></span>
         </button>
         <h1 class="auth-title">Wähle deinen Avatar</h1>
       </header>
