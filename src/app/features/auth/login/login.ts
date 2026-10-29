@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { FirebaseError } from 'firebase/app';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
@@ -59,7 +60,7 @@ export class Login {
    */
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Bitte überprüfe deine Eingaben.');
+    this.errorMessage.set('');
   }
 
   /**
@@ -89,7 +90,13 @@ export class Login {
    */
   private setLoginError(error: unknown, credentialFlow: boolean): void {
     const message = firebaseErrorMessage(error, 'Anmeldung fehlgeschlagen.');
-    credentialFlow ? this.credentialError.set(message) : this.errorMessage.set(message);
+    const invalidCredentials = error instanceof FirebaseError && [
+      'auth/invalid-credential', 'auth/wrong-password', 'auth/user-not-found',
+    ].includes(error.code);
+    const visibleMessage = invalidCredentials
+      ? 'Falsches Passwort oder E-Mail.. Bitte noch einmal versuchen.'
+      : message;
+    credentialFlow ? this.credentialError.set(visibleMessage) : this.errorMessage.set(message);
   }
 
   /**
