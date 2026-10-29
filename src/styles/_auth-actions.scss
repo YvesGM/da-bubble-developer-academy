@@ -202,8 +202,8 @@
         width: 9px;
         height: 5px;
 
-        border-left: 2px solid tokens.$white;
-        border-bottom: 2px solid tokens.$white;
+        border-left: 2px solid tokens.$purple-2;
+        border-bottom: 2px solid tokens.$purple-2;
         opacity: 0;
         transform: translateY(-1px) rotate(-45deg);
       }
@@ -218,7 +218,7 @@
 
       &:checked::before {
         border-color: tokens.$purple-2;
-        background: tokens.$purple-2;
+        background: transparent;
       }
 
       &:checked::after {
@@ -227,7 +227,11 @@
 
       &:checked:hover::before {
         border-color: tokens.$purple-1;
-        background: tokens.$purple-1;
+        background: transparent;
+      }
+
+      &:checked:hover::after {
+        border-color: tokens.$purple-1;
       }
 
       &:focus-visible {
