@@ -61,9 +61,10 @@ jobs:
           php backend/password-reset/tests/reset-link.test.php
           php backend/password-reset/tests/private-directory.test.php
 
-      - name: Run reset staging tests and package PHP alongside Angular
+      - name: Run deployment and reset staging tests; package PHP
         run: |
           npm run test:reset
+          node --test tests/deploy-allinkl.test.mjs
           node scripts/stage-password-reset.mjs
 
       - name: Install FTP client
