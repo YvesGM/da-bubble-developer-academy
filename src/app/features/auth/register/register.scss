@@ -59,6 +59,10 @@
     @include bp.mobile {
       padding: 20px 20px 26px;
 
+      .auth-card-header:has(.auth-back) .auth-back {
+        top: 0;
+      }
+
       .auth-description {
         margin-top: 15px;
         font-size: 17px;
@@ -181,6 +185,10 @@
 
     @include bp.mobile {
       padding: 26px 21px;
+
+      .auth-card-header:has(.auth-back) .auth-back {
+        top: -6px;
+      }
 
       .auth-card-header:has(.auth-back) {
         .auth-title {
