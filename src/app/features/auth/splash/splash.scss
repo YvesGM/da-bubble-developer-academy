@@ -1,5 +1,4 @@
-@use '../../../../styles/breakpoints' as bp;
-
+/* Scale between the actual 430px and 1920px Figma intro frames. */
 .splash {
   position: fixed;
   z-index: 1000;
@@ -24,14 +23,16 @@
     display: flex;
     align-items: center;
 
-    gap: 20px;
+    gap: clamp(16px, 1.36vw, 26px);
+    max-width: calc(100vw - 32px);
+    transform: translateX(clamp(0px, calc(3.43vw - 15px), 51px));
   }
 
   &-mark {
     display: block;
     flex: none;
 
-    width: 140px;
+    width: clamp(70px, calc(33px + 8.02vw), 187px);
     height: auto;
   }
 
@@ -39,8 +40,7 @@
     display: block;
     flex: none;
 
-    width: 350px;
-
+    width: clamp(177px, calc(89px + 20.53vw), 483px);
     overflow: hidden;
   }
 
@@ -53,34 +53,6 @@
 
     filter: brightness(0) invert(1);
     animation: name-reveal 1100ms 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  }
-
-  @include bp.mobile {
-    &-brand {
-      gap: 14px;
-    }
-
-    &-mark {
-      width: 86px;
-    }
-
-    &-name-window {
-      width: 210px;
-    }
-  }
-
-  @include bp.widescreen {
-    &-brand {
-      gap: 26px;
-    }
-
-    &-mark {
-      width: 187px;
-    }
-
-    &-name-window {
-      width: 472px;
-    }
   }
 }
 
