@@ -1,6 +1,8 @@
 @use '../../../../../styles/breakpoints' as bp;
 
-/* Registration and avatar screens share the same Figma header and footer. */
+@mixin register-layout {
+
+  /* Registration and avatar screens share the same Figma header and footer. */
 .auth-shell--register {
   padding: 72px 24px 48px;
 
@@ -122,4 +124,4 @@
       margin-top: 64px;
     }
   }
-}
+}}
