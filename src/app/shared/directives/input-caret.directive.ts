@@ -28,7 +28,7 @@ export class InputCaretDirective implements AfterViewInit {
 
   private caret: HTMLElement | null = null;
   private context: CanvasRenderingContext2D | null = null;
-  private passwordMirror: HTMLSpanElement | null = null;
+  private passwordMirror: HTMLInputElement | null = null;
   private frame = 0;
   private active = false;
   private originalColor = '';
@@ -103,28 +103,35 @@ export class InputCaretDirective implements AfterViewInit {
     context.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
     const spacing = parseFloat(style.letterSpacing) || 0;
     const width = this.input.type === 'password'
-      ? this.passwordAdvance(position, style)
+      ? this.passwordAdvance(position, style, context)
       : this.textAdvance(context, position, spacing);
     this.positionIndicator(style, width);
   }
 
-  /** Measures masked glyphs in a width-independent element, never the password value. */
-  private passwordAdvance(count: number, style: CSSStyleDeclaration): number {
+  /** Measures password masks using the browser's actual native input renderer. */
+  private passwordAdvance(
+    count: number, style: CSSStyleDeclaration, context: CanvasRenderingContext2D,
+  ): number {
     if (!count) return 0;
     const mirror = this.ensurePasswordMirror();
     mirror.style.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
     mirror.style.letterSpacing = style.letterSpacing;
-    mirror.textContent = '•'.repeat(count);
-    return mirror.getBoundingClientRect().width;
+    mirror.value = 'x'.repeat(count);
+    // A one-pixel input reports the native masked content width via scrollWidth.
+    const nativeWidth = mirror.scrollWidth - mirror.clientWidth + 1;
+    return nativeWidth > 1 ? nativeWidth : context.measureText('•'.repeat(count)).width;
   }
 
-  /** Uses the browser's mask glyph in Chromium and matching bullet text elsewhere. */
-  private ensurePasswordMirror(): HTMLSpanElement {
+  /** The mirror never receives real password characters or keyboard focus. */
+  private ensurePasswordMirror(): HTMLInputElement {
     if (this.passwordMirror) return this.passwordMirror;
-    const mirror = this.document.createElement('span');
+    const mirror = this.document.createElement('input');
+    mirror.type = 'password';
+    mirror.readOnly = true;
+    mirror.tabIndex = -1;
+    mirror.autocomplete = 'off';
     mirror.setAttribute('aria-hidden', 'true');
-    mirror.style.cssText = 'position:fixed;left:-10000px;top:-10000px;display:inline-block;width:max-content;white-space:pre;padding:0;border:0;margin:0;visibility:hidden;pointer-events:none';
-    mirror.style.setProperty('-webkit-text-security', 'disc');
+    mirror.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;padding:0;border:0;margin:0;box-sizing:content-box;visibility:hidden;pointer-events:none';
     this.renderer.appendChild(this.document.body, mirror);
     return (this.passwordMirror = mirror);
   }
