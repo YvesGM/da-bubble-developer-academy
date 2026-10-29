@@ -28,7 +28,7 @@ export class InputCaretDirective implements AfterViewInit {
 
   private caret: HTMLElement | null = null;
   private context: CanvasRenderingContext2D | null = null;
-  private passwordMirror: HTMLInputElement | null = null;
+  private passwordMirror: HTMLSpanElement | null = null;
   private frame = 0;
   private active = false;
   private originalColor = '';
@@ -92,7 +92,7 @@ export class InputCaretDirective implements AfterViewInit {
     this.renderer.appendChild(this.document.body, this.caret);
   }
 
-  /** Measures characters before the insertion point, including password bullets. */
+  /** Measures characters before the insertion point using their rendered geometry. */
   private updatePosition(): void {
     if (!this.caret || !this.view || !this.active) return;
     const position = this.input.selectionStart;
@@ -105,31 +105,27 @@ export class InputCaretDirective implements AfterViewInit {
     const width = this.input.type === 'password'
       ? this.passwordAdvance(position, style)
       : this.textAdvance(context, position, spacing);
-    if (width === null) return this.hide();
     this.positionIndicator(style, width);
   }
 
-  /** Measures the browser's actual password-mask layout, never the password itself. */
-  private passwordAdvance(count: number, style: CSSStyleDeclaration): number | null {
+  /** Measures masked glyphs in a width-independent element, never the password value. */
+  private passwordAdvance(count: number, style: CSSStyleDeclaration): number {
     if (!count) return 0;
     const mirror = this.ensurePasswordMirror();
     mirror.style.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
     mirror.style.letterSpacing = style.letterSpacing;
-    mirror.value = 'x'.repeat(count);
-    return mirror.scrollWidth > 1 ? mirror.scrollWidth : null;
+    mirror.textContent = '•'.repeat(count);
+    return mirror.getBoundingClientRect().width;
   }
 
-  /** A read-only offscreen password input reproduces native masking metrics. */
-  private ensurePasswordMirror(): HTMLInputElement {
+  /** Uses the browser's mask glyph in Chromium and matching bullet text elsewhere. */
+  private ensurePasswordMirror(): HTMLSpanElement {
     if (this.passwordMirror) return this.passwordMirror;
-    const mirror = this.document.createElement('input');
-    mirror.type = 'password';
-    mirror.readOnly = true;
-    mirror.tabIndex = -1;
+    const mirror = this.document.createElement('span');
     mirror.setAttribute('aria-hidden', 'true');
-    mirror.autocomplete = 'off';
-    mirror.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;padding:0;border:0;margin:0;box-sizing:content-box;visibility:hidden;pointer-events:none';
-    this.document.body.appendChild(mirror);
+    mirror.style.cssText = 'position:fixed;left:-10000px;top:-10000px;display:inline-block;width:max-content;white-space:pre;padding:0;border:0;margin:0;visibility:hidden;pointer-events:none';
+    mirror.style.setProperty('-webkit-text-security', 'disc');
+    this.renderer.appendChild(this.document.body, mirror);
     return (this.passwordMirror = mirror);
   }
 
