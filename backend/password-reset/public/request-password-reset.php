@@ -16,6 +16,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Allow: POST');
     respond(405, 'Method not allowed');
 }
+$secure = !empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] !== 'off');
+if (!$secure && (int) ($_SERVER['SERVER_PORT'] ?? 0) !== 443) {
+    respond(403, 'HTTPS required');
+}
 
 $privateDir = dirname(__DIR__, 2).'/dabubble-private';
 $configFile = $privateDir.'/config.php';
