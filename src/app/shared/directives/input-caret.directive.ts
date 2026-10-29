@@ -11,6 +11,8 @@ import { AfterViewInit, DestroyRef, Directive, ElementRef, Renderer2, inject } f
     '(input)': 'queueUpdate()',
     '(keyup)': 'queueUpdate()',
     '(click)': 'queueUpdate()',
+    '(pointerup)': 'queueUpdate()',
+    '(change)': 'queueUpdate()',
     '(scroll)': 'queueUpdate()',
     '(select)': 'queueUpdate()',
     '(compositionstart)': 'hide()',
@@ -98,11 +100,23 @@ export class InputCaretDirective implements AfterViewInit {
     const context = this.measurementContext();
     if (!context) return this.hide();
     context.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
-    const prefix = this.input.type === 'password'
-      ? '•'.repeat(position) : this.input.value.slice(0, position);
     const spacing = parseFloat(style.letterSpacing) || 0;
-    const width = context.measureText(prefix).width + Math.max(0, prefix.length - 1) * spacing;
+    const width = this.input.type === 'password'
+      ? this.passwordAdvance(context, position, spacing)
+      : this.textAdvance(context, position, spacing);
     this.positionIndicator(style, width);
+  }
+
+  /** Password characters have a fixed mask advance; avoid cumulative text shaping drift. */
+  private passwordAdvance(context: CanvasRenderingContext2D, count: number, spacing: number): number {
+    if (!count) return 0;
+    return count * (context.measureText('•').width + spacing);
+  }
+
+  /** Measures editable text with its current font and character spacing. */
+  private textAdvance(context: CanvasRenderingContext2D, count: number, spacing: number): number {
+    const prefix = this.input.value.slice(0, count);
+    return context.measureText(prefix).width + Math.max(0, prefix.length - 1) * spacing;
   }
 
   /** Positions the indicator within the visible, horizontally scrolling input. */

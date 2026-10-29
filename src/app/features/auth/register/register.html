@@ -137,10 +137,16 @@
             [disabled]="!selectedAvatar() || submitting()"
             (click)="submit()"
           >
-            {{ submitting() ? 'Wird erstellt…' : 'Weiter' }}
+            Weiter
           </button>
         </div>
       </div>
     </section>
   }
 </app-auth-shell>
+
+@if (registrationStatus()) {
+  <div class="register-notice" role="status" aria-live="polite">
+    {{ registrationStatus() === 'success' ? 'Konto erfolgreich erstellt!' : 'Konto wird erstellt…' }}
+  </div>
+}

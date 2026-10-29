@@ -94,3 +94,22 @@ button {
     animation: none;
   }
 }
+
+/* Only invoked for the successful registration route change. */
+::view-transition-old(root) {
+  animation: 320ms ease-in both register-route-out;
+}
+
+::view-transition-new(root) {
+  animation: 450ms ease-out both register-route-in;
+}
+
+@keyframes register-route-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes register-route-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

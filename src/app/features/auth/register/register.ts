@@ -11,6 +11,7 @@ import { InputCaretDirective } from '../../../shared/directives/input-caret.dire
 
 @Component({
   selector: 'app-register',
+  host: { '[class.register-leaving]': 'leaving()' },
   imports: [InputCaretDirective, ReactiveFormsModule, RouterLink, Avatar, AuthShell],
   templateUrl: './register.html',
   styleUrl: './register.scss',
@@ -24,6 +25,8 @@ export class Register {
   readonly step = signal<'details' | 'avatar'>('details');
   readonly errorMessage = signal('');
   readonly submitting = signal(false);
+  readonly registrationStatus = signal<'creating' | 'success' | null>(null);
+  readonly leaving = signal(false);
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
@@ -99,12 +102,60 @@ export class Register {
     this.startSubmit();
     try {
       await this.auth.register(input.name, input.email, input.password, input.avatarId);
-      await this.router.navigateByUrl('/workspace');
     } catch (error) {
+      this.registrationStatus.set(null);
       this.errorMessage.set(firebaseErrorMessage(error, 'Registrierung fehlgeschlagen.'));
+      this.submitting.set(false);
+      return;
+    }
+    await this.finishRegistration();
+  }
+
+  /** Presents Figma's success notice before leaving the registration screen. */
+  private async finishRegistration(): Promise<void> {
+    this.registrationStatus.set('success');
+    await this.delay(1600);
+    try {
+      await this.openWorkspace();
+    } catch {
+      this.registrationStatus.set(null);
+      this.errorMessage.set('Konto erstellt. Weiterleitung fehlgeschlagen. Bitte neu laden.');
     } finally {
       this.submitting.set(false);
     }
+  }
+
+  /** Uses a native view transition where supported and a fade fallback elsewhere. */
+  private async openWorkspace(): Promise<void> {
+    if (this.reducedMotion()) return this.navigateWorkspace();
+    const page = document as TransitionDocument;
+    if (page.startViewTransition) {
+      await page.startViewTransition(() => this.navigateWorkspace()).finished;
+      return;
+    }
+    this.leaving.set(true);
+    await this.delay(300);
+    await this.navigateWorkspace();
+    document.documentElement.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: 400, easing: 'ease-out',
+    });
+  }
+
+  /** Guards against cancelled navigation after account creation. */
+  private async navigateWorkspace(): Promise<void> {
+    if (!await this.router.navigateByUrl('/workspace')) {
+      throw new Error('Workspace navigation was cancelled');
+    }
+  }
+
+  /** Respects the OS preference for reduced motion. */
+  private reducedMotion(): boolean {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  /** Keeps the success notice readable independently of Firebase response speed. */
+  private delay(milliseconds: number): Promise<void> {
+    return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   }
 
   /**
@@ -131,6 +182,7 @@ export class Register {
   private startSubmit(): void {
     this.submitting.set(true);
     this.errorMessage.set('');
+    this.registrationStatus.set('creating');
   }
 }
 
@@ -140,4 +192,9 @@ interface RegistrationInput {
   password: string;
   privacyAccepted: boolean;
   avatarId: string;
+}
+
+/** Browser-native crossfade is progressively enhanced; Firefox uses the fade fallback. */
+interface TransitionDocument extends Document {
+  startViewTransition?: (update: () => Promise<void>) => { finished: Promise<void> };
 }
