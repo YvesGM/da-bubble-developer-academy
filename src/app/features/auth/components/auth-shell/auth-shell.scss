@@ -237,6 +237,11 @@
 
     span {
       line-height: 25px;
+      margin-right: 10px;
+    }
+
+    a:hover {
+      border-color: tokens.$border;
     }
   }
 
@@ -319,6 +324,10 @@
       margin: 0;
       max-height: none;
 
+      span {
+        margin-right: 0;
+      }
+
       a {
         min-height: 39px;
         max-height: none;
@@ -328,6 +337,12 @@
         line-height: 23px;
         color: tokens.$purple-1;
         border-color: tokens.$purple-2;
+
+        &:hover {
+          color: tokens.$white;
+          background: tokens.$purple-1;
+          border-color: tokens.$purple-1;
+        }
       }
     }
 
