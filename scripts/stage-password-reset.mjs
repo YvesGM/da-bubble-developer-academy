@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync } from 'node:fs';
+import { cpSync, mkdirSync, rmSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -6,13 +6,13 @@ import { fileURLToPath } from 'node:url';
 export function stageResetApi(projectRoot) {
   const base = resolve(projectRoot, 'backend/password-reset');
   const output = resolve(projectRoot, 'dist/dabubble/browser/api');
-  const vendor = resolve(base, 'vendor/autoload.php');
-  if (!existsSync(vendor)) throw new Error('Run composer install in backend/password-reset');
+  // Composer packages are installed once in ALL-INKL's protected API directory.
+  // They must never be included in the regularly deployed Angular bundle.
+  rmSync(resolve(output, '_internal/vendor'), { recursive: true, force: true });
   mkdirSync(resolve(output, '_internal'), { recursive: true });
   cpSync(resolve(base, 'public/request-password-reset.php'),
     resolve(output, 'request-password-reset.php'));
   cpSync(resolve(base, 'src'), resolve(output, '_internal/src'), { recursive: true });
-  cpSync(resolve(base, 'vendor'), resolve(output, '_internal/vendor'), { recursive: true });
   cpSync(resolve(base, 'internal.htaccess'), resolve(output, '_internal/.htaccess'));
 }
 

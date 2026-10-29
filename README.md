@@ -53,9 +53,11 @@ npx firebase-tools deploy --only firestore:rules
 ## Deployment
 
 Pushes to `main` trigger the production GitHub Actions workflow. The workflow
-builds Angular, installs PHP mail dependencies with Composer, stages the PHP API
-inside `dist/dabubble/browser/api/`, and uploads the entire browser bundle over
-**explicit FTPS with certificate verification** directly to ALL-INKL:
+builds Angular, stages only the PHP API **source files**
+inside `dist/dabubble/browser/api/`, and uploads the bundle over
+**explicit FTPS with certificate verification** directly to ALL-INKL.
+Composer is deliberately **not** run in GitHub Actions, and `vendor/`
+is excluded from staging and upload:
 
 ```text
 /schniefs-portfolio.de/projects/dabubble/
@@ -95,12 +97,35 @@ SMTP service uses port **465**. Akademie FTP/FTPS/SFTP settings are separate
 and must follow the Akademie host's documented transfer protocol. The remote path is fixed in the deployment workflow
 to prevent accidental uploads to the account root.
 
-The PHP Firebase SDK includes many small dependencies. The FTPS mirror therefore
-uses up to four parallel transfers to avoid the single-file-at-a-time delay
-observed in GitHub Actions run #25. If ALL-INKL rejects concurrent FTP
-sessions, lower `--parallel=4` in `.github/workflows/deploy.yml` to `2`.
-The previous canceled job uploaded only part of the PHP `vendor/` folder;
-repeat deployment fully before testing the PHP endpoint.
+### One-time manual PHP dependency installation
+
+The Firebase PHP SDK has thousands of small files. **Do not upload them on every
+Angular build.** Once on an Arch/Omarchy workstation using PHP 8.5 and Composer:
+
+```bash
+cd backend/password-reset
+composer install --no-dev --prefer-dist --optimize-autoloader
+```
+
+Upload the **contents** of the resulting local `backend/password-reset/vendor/`
+to the ALL-INKL FTP directory (using FileZilla):
+
+```text
+/schniefs-portfolio.de/projects/dabubble/api/_internal/vendor/
+```
+
+Confirm that `.../vendor/autoload.php` exists. The local
+`backend/password-reset/vendor/` is ignored by Git; do not commit it.
+Keep `/dabubble-private/` entirely separate from the web document root.
+
+GitHub deploys Angular and PHP sources but **never `vendor/`**. Neither the
+staging script nor the FTP mirror uploads it, and the FTP mirror has
+**no remote deletion option**: previously uploaded dependencies stay in place.
+If `composer.json` changes, install compatible dependencies locally and update
+the remote `vendor/` deliberately before relying on new server code.
+The prior incomplete deployments may have left a partially populated
+remote `vendor/`; replace or complete it before testing. The FTPS mirror
+uses up to four parallel transfers for frontend and source changes.
 
 Existing `FTP_HOST`, `FTP_USERNAME`, and `FTP_PASSWORD` secrets are reused:
 update their values to the ALL-INKL **FTP account**, not Developer Akademie credentials.
@@ -125,9 +150,10 @@ Die Angular-Seite verarbeitet diesen Code wie bisher mit Firebase Authentication
 ### Vor dem ersten produktiven Einsatz
 
 1. Stelle sicher, dass ALL-INKL PHP 8.5 und Composer-Abhängigkeiten unterstützt.
-   Die GitHub-Action installiert Composer-Pakete bei jedem Build und legt PHP-Dateien
-   samt `vendor` im FTP-Bundle unter `api/` ab. `api/_internal/.htaccess`
-   sperrt öffentliche Zugriffe auf Implementierung und Libraries.
+   Composer-Pakete werden **einmalig lokal** erstellt und manuell per FTP
+   nach `api/_internal/vendor/` hochgeladen. GitHub Actions deployt nur
+   Angular und PHP-Quellcode. `api/_internal/.htaccess` sperrt öffentliche
+   Zugriffe auf Implementierung und Libraries.
 2. Erstelle in Firebase / Google Cloud unter **Service Accounts** einen privaten
    Service-Account-Schlüssel mit den nötigen Firebase Authentication Rechten.
    Niemals in `public/`, im Repository oder im Angular-Bundle ablegen.
@@ -189,8 +215,8 @@ Im Produktionsbetrieb **kein** `localhost` in `allowed_origins` aufnehmen.
 
 Zum Testen des Packaging-Skripts: `npm run test:reset`.
 Zum manuellen Staging nach `npm run build`:
-`cd backend/password-reset && composer install --no-dev && cd ../..`
-und danach `node scripts/stage-password-reset.mjs`.
+`node scripts/stage-password-reset.mjs`. Das Staging benötigt keinen lokalen
+`vendor/`-Ordner und enthält niemals Composer-Abhängigkeiten.
 
 ### Sicherheitsverhalten
 

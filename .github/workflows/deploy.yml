@@ -43,15 +43,10 @@ jobs:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         run: npm run build -- --configuration production
 
-      - name: Setup PHP for password-reset mail handler
+      - name: Setup PHP for backend checks
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
-          tools: composer:v2
-
-      - name: Install PHP mailer and Firebase Admin dependencies
-        working-directory: backend/password-reset
-        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
       - name: Lint server-side PHP sources
         run: find backend/password-reset -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l
@@ -62,11 +57,12 @@ jobs:
           php backend/password-reset/tests/private-directory.test.php
           php backend/password-reset/tests/reset-cors.test.php
 
-      - name: Run deployment and reset staging tests; package PHP
+      - name: Test and stage PHP sources without Composer dependencies
         run: |
           npm run test:reset
           node --test tests/deploy-allinkl.test.mjs
           node scripts/stage-password-reset.mjs
+          test ! -e dist/dabubble/browser/api/_internal/vendor
 
       - name: Install FTP client
         run: |
@@ -98,6 +94,6 @@ jobs:
           set ftp:ssl-force true
           set ftp:ssl-protect-data true
           set ssl:verify-certificate true
-          mirror --reverse --verbose --parallel=4 ./dist/dabubble/browser/ /schniefs-portfolio.de/projects/dabubble/
+          mirror --reverse --verbose --parallel=4 --exclude='^api/_internal/vendor(/|$)' ./dist/dabubble/browser/ /schniefs-portfolio.de/projects/dabubble/
           bye
           EOF
