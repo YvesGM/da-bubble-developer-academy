@@ -18,6 +18,7 @@ final class ResetCors
         header('Access-Control-Allow-Origin: '.$origin);
         header('Access-Control-Allow-Methods: POST, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type');
+        header('Access-Control-Expose-Headers: X-DABubble-Request-Id');
         header('Vary: Origin');
     }
 }

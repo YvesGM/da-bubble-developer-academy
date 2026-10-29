@@ -62,11 +62,17 @@ inside `dist/dabubble/browser/api/`, and uploads the entire browser bundle over
 ```
 
 The Developer Akademie is a **separate public frontend target** for the same
-Angular application; its SFTP access uses port 22. Deploy the static Angular
-files from local `dist/dabubble/browser/` after `npm run build` to the Akademie
-webroot once your SFTP access works again; **do not upload `api/` or private
-credentials there**. The GitHub Actions workflow currently publishes the
-combined Angular + PHP output only to ALL-INKL, independently of Akademie SFTP.
+Angular application. Its portal lists an FTP account; the correct protocol
+and port must be taken from its *Werkzeug-Guide*. An SSH banner on port 22
+does **not** prove that the FTP account supports SFTP. First test FTP with
+explicit TLS on port 21 using the credentials copied from the Akademie portal,
+if the guide permits it.
+
+Deploy the static Angular files from local `dist/dabubble/browser/` after
+`npm run build` to the Akademie webroot once its file-transfer access works;
+**do not upload `api/` or private credentials there**. The GitHub Actions
+workflow currently publishes the combined Angular + PHP output only to
+ALL-INKL, independently of the separate Akademie upload.
 
 The Akademie form sends requests from
 `https://yves-gildemeister.developerakademie.net` directly to
@@ -84,9 +90,9 @@ in repository Settings → Secrets and variables → Actions (or in the
 | `FTP_USERNAME` | ALL-INKL **FTP account** username, not the mailbox username |
 | `FTP_PASSWORD` | ALL-INKL **FTP account** password, not the SMTP password |
 
-The port is **21** with explicit FTPS/TLS. This is intentionally different from
-the Developer Akademie's **SFTP (SSH) on port 22** and from ALL-INKL's
-**SMTP on port 465**. The remote path is fixed in the deployment workflow
+The ALL-INKL deployment uses port **21** with explicit FTPS/TLS and its
+SMTP service uses port **465**. Akademie FTP/FTPS/SFTP settings are separate
+and must follow the Akademie host's documented transfer protocol. The remote path is fixed in the deployment workflow
 to prevent accidental uploads to the account root.
 
 Existing `FTP_HOST`, `FTP_USERNAME`, and `FTP_PASSWORD` secrets are reused:
