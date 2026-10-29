@@ -44,7 +44,12 @@ try {
         respond(503, 'Reset mail service is not configured');
     }
     foreach ($required as $key) {
-        if (empty($smtp[$key])) respond(503, 'Reset mail service is not configured');
+        $value = (string) ($smtp[$key] ?? '');
+        $placeholder = str_starts_with($value, 'YOUR_')
+            || str_starts_with($value, 'DEIN_') || str_starts_with($value, 'HIER_');
+        if ($value === '' || $placeholder) {
+            respond(503, 'Reset mail service is not configured');
+        }
     }
     require $internal.'/vendor/autoload.php';
     require $internal.'/src/RequestGuard.php';
