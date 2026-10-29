@@ -1,81 +1,101 @@
-@use '../../../../styles/tokens' as tokens;
 @use '../../../../styles/breakpoints' as bp;
 
 .splash {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+
   display: grid;
   place-items: center;
 
-  min-height: 100dvh;
-  
-  background: tokens.$purple-1;
-  
   overflow: hidden;
 
+  &-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(0.822deg, #313ae5 1.2239%, #797ef3 98.756%);
+  }
+
   &-brand {
+    position: relative;
+    z-index: 1;
+
     display: flex;
     align-items: center;
-  
-    gap: 22px;
 
-    @include bp.mobile {
-      gap: 14px;
-    }
+    gap: 20px;
   }
 
   &-mark {
-    width: 132px;
-    height: 130px;
-  
-    animation: mark-in 500ms ease-out both;
+    display: block;
+    flex: none;
 
-    @include bp.mobile {
-      width: 86px;
-      height: 85px;
-    }
+    width: 140px;
+    height: auto;
+  }
 
-    @include bp.widescreen {
-      width: 150px;
-      height: 148px;
-    }
+  &-name-window {
+    display: block;
+    flex: none;
+
+    width: 350px;
+
+    overflow: hidden;
   }
 
   &-name {
-    width: 260px;
+    display: block;
+
+    width: 100%;
     height: auto;
-  
+    max-width: none;
+
     filter: brightness(0) invert(1);
-    animation: name-in 650ms 350ms ease-out both;
+    animation: name-reveal 1100ms 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
 
-    @include bp.mobile {
-      width: 170px;
+  @include bp.mobile {
+    &-brand {
+      gap: 14px;
     }
 
-    @include bp.widescreen {
-      width: 285px;
+    &-mark {
+      width: 86px;
+    }
+
+    &-name-window {
+      width: 210px;
+    }
+  }
+
+  @include bp.widescreen {
+    &-brand {
+      gap: 26px;
+    }
+
+    &-mark {
+      width: 187px;
+    }
+
+    &-name-window {
+      width: 472px;
     }
   }
 }
 
-@keyframes mark-in {
+@keyframes name-reveal {
   from {
-    transform: scale(0.65);
-    opacity: 0;
-  }
-
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes name-in {
-  from {
-    transform: translateX(-24px);
-    opacity: 0;
+    transform: translateX(-100%);
   }
 
   to {
     transform: translateX(0);
-    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-name {
+    animation: none;
   }
 }
