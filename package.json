@@ -9,7 +9,8 @@
     "prebuild": "npm run env:generate",
     "build": "ng build",
     "prewatch": "npm run env:generate",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "test:reset": "node --test tests/password-reset-stage.test.mjs"
   },
   "prettier": {
     "printWidth": 100,

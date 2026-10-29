@@ -43,6 +43,24 @@ jobs:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         run: npm run build -- --configuration production
 
+      - name: Setup PHP for password-reset mail handler
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          tools: composer:v2
+
+      - name: Install PHP mailer and Firebase Admin dependencies
+        working-directory: backend/password-reset
+        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+
+      - name: Lint server-side PHP sources
+        run: find backend/password-reset -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Run reset staging tests and package PHP alongside Angular
+        run: |
+          npm run test:reset
+          node scripts/stage-password-reset.mjs
+
       - name: Install FTP client
         run: |
           sudo apt-get update

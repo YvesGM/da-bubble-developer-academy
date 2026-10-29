@@ -10,7 +10,6 @@ import {
   UserCredential,
   confirmPasswordReset,
   createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
   signInAnonymously,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -91,13 +90,16 @@ export class AuthService {
   }
 
   /**
-   * Requests a Firebase password-reset email for the supplied address.
-   *
-   * @param email - Email address that should receive the reset link.
-   * @throws If Firebase cannot create or send the reset request.
+   * Requests the same-origin ALL-INKL reset endpoint; no admin secrets enter Angular.
+   * @throws When the server cannot accept the request.
    */
   async sendPasswordReset(email: string): Promise<void> {
-    await this.run(() => sendPasswordResetEmail(this.auth, email));
+    const response = await fetch('/api/request-password-reset.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    if (!response.ok) throw new Error('Password reset request failed');
   }
 
   /**

@@ -1,0 +1,13 @@
+{
+  "name": "dabubble/password-reset",
+  "type": "project",
+  "description": "Server-only Firebase Auth reset links via ALL-INKL SMTP",
+  "require": {
+    "php": "^8.5",
+    "ext-json": "*",
+    "ext-openssl": "*",
+    "ext-mbstring": "*",
+    "kreait/firebase-php": "^8.6",
+    "phpmailer/phpmailer": "^7.0"
+  }
+}

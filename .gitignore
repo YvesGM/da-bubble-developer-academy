@@ -48,6 +48,11 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 
+# Server-only generated dependencies and credentials
+/backend/password-reset/vendor/
+/backend/password-reset/config.php
+/backend/password-reset/service-account.json
+
 # Firebase
 .firebase
 *-debug.log
