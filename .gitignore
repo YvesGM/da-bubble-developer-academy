@@ -49,6 +49,9 @@ __screenshots__/
 Thumbs.db
 
 # Server-only generated dependencies and credentials
+# Never commit downloaded Firebase Admin SDK private key JSON files
+**/service-account.json
+**/*firebase-adminsdk*.json
 /backend/password-reset/vendor/
 /backend/password-reset/config.php
 /backend/password-reset/service-account.json

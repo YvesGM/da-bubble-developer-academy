@@ -5,6 +5,14 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { stageResetApi } from '../scripts/stage-password-reset.mjs';
 
+/** The credential directory's protective template must remain versioned. */
+test('private credential directory has a deny-all .htaccess template', () => {
+  const file = new URL('../backend/password-reset/private-dir.htaccess', import.meta.url);
+  const contents = readFileSync(file, 'utf8');
+  assert.match(contents, /Require all denied/);
+  assert.match(contents, /Deny from all/);
+});
+
 /** Packaging must fail closed if Composer dependencies are not installed. */
 test('staging requires composer vendor/autoload.php', () => {
   const directory = mkdtempSync(join(tmpdir(), 'dabubble-reset-'));
