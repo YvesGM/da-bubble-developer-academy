@@ -127,5 +127,15 @@ und danach `node scripts/stage-password-reset.mjs`.
 - Unbekannte E-Mail-Adressen erhalten eine neutrale Antwort.
 - IP-, E-Mail- und Gesamt-Limits werden in einer privaten Datei verwaltet.
 - Das PHP-Skript akzeptiert nur JSON-POST-Anfragen vom eigenen Origin.
-- SMTP-Fehler landen nur als Exception-Klasse im Serverlog, ohne Reset-Link.
+- Der Endpunkt antwortet absichtlich auch bei unbekannten Konten und Versandfehlern
+  mit HTTP 200. Das verhindert die Kontoermittlung über HTTP-Antworten.
+- Der Header `X-DABubble-Request-Id` benennt die Anfrage. Dazu steht das Ergebnis
+  in `/dabubble-private/reset-events.log`: `smtp_accepted`, `smtp_auth_error`,
+  `smtp_connection_error`, `smtp_error`, `firebase_error` oder
+  `unknown_account`. Die Logdatei enthält **keine** E-Mail-Adressen,
+  SMTP-Passwörter oder Firebase-Reset-Links.
+- `smtp_accepted` bedeutet SMTP-Serverannahme, keine Garantie für Zustellung
+  im Zielpostfach. Bei diesem Ergebnis Spamordner und Zustellprotokolle prüfen.
+- Wenn die Logdatei fehlt: Schreibrechte auf `dabubble-private` und PHP-Fehlerlog
+  kontrollieren; niemals `display_errors` im Produktivsystem aktivieren.
 - Die Firebase-Realtime-Database-Regeln sind eine **separate** Sicherheitsfrage.

@@ -20,16 +20,42 @@ final class ResetMailer
         if (!str_starts_with($site, 'https://')) throw new RuntimeException('HTTPS site required');
         $email = RequestGuard::readEmail($site, $this->config['allowed_origins'] ?? [$site]);
         RequestGuard::throttle($this->privateDir.'/reset-rate-limit.json', $email);
+        $requestId = bin2hex(random_bytes(8));
+        header('X-DABubble-Request-Id: '.$requestId);
+        $phase = 'firebase';
         try {
             $link = $this->generateAppLink($email, $site);
+            $phase = 'smtp';
             $this->sendEmail($email, $link);
+            $this->recordOutcome($requestId, 'smtp_accepted');
         } catch (EmailNotFound) {
-            // Intentionally do not disclose whether the Firebase user exists.
+            $this->recordOutcome($requestId, 'unknown_account');
         } catch (Throwable $error) {
-            error_log('DABubble reset delivery failure: '.get_class($error));
+            $status = $this->failureCategory($phase, $error);
+            $this->recordOutcome($requestId, $status);
         }
         http_response_code(200);
         echo json_encode(['message' => 'If an account exists, a reset email will be sent'], JSON_THROW_ON_ERROR);
+    }
+
+    /** Records only a generated request ID and coarse outcome, never addresses or tokens. */
+    private function recordOutcome(string $id, string $status): void
+    {
+        $line = gmdate('c').' id='.$id.' outcome='.$status."\n";
+        $file = $this->privateDir.'/reset-events.log';
+        if (@error_log($line, 3, $file) === false) {
+            error_log('DABubble reset diagnostic logging unavailable');
+        }
+    }
+
+    /** Groups failures without exposing Firebase responses or SMTP credentials. */
+    private function failureCategory(string $phase, Throwable $error): string
+    {
+        if ($phase !== 'smtp') return 'firebase_error';
+        $description = strtolower($error->getMessage());
+        if (str_contains($description, 'authenticat')) return 'smtp_auth_error';
+        if (str_contains($description, 'connect')) return 'smtp_connection_error';
+        return 'smtp_error';
     }
 
     /** Firebase Admin SDK generates a real one-time action code, not a custom token. */
