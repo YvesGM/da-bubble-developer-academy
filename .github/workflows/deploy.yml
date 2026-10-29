@@ -71,22 +71,31 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes lftp
 
-      - name: Deploy to FTP
+      - name: Deploy DABubble to ALL-INKL via FTPS
         env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_PORT: ${{ vars.FTP_PORT }}
-          FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR }}
+          FTP_HOST: ${{ secrets.ALLINKL_FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.ALLINKL_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.ALLINKL_FTP_PASSWORD }}
         run: |
-          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -p "$FTP_PORT" "$FTP_HOST" <<EOF
+          set -euo pipefail
+          : "${FTP_HOST:?Missing ALLINKL_FTP_HOST}"
+          : "${FTP_USERNAME:?Missing ALLINKL_FTP_USERNAME}"
+          : "${FTP_PASSWORD:?Missing ALLINKL_FTP_PASSWORD}"
+          if [[ "$FTP_HOST" == *developerakademie* ]]; then
+            echo "Refusing deployment to the former Developer Akademie server."
+            exit 1
+          fi
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -p 21 "ftp://$FTP_HOST" <<EOF
           set cmd:fail-exit yes
           set net:max-retries 5
           set net:reconnect-interval-base 5
           set net:timeout 30
           set ftp:passive-mode true
           set ftp:prefer-epsv false
-          set ftp:ssl-allow no
-          mirror --reverse --verbose ./dist/dabubble/browser/ "$FTP_REMOTE_DIR"
+          set ftp:ssl-allow true
+          set ftp:ssl-force true
+          set ftp:ssl-protect-data true
+          set ssl:verify-certificate true
+          mirror --reverse --verbose ./dist/dabubble/browser/ /schniefs-portfolio.de/projects/dabubble/
           bye
           EOF

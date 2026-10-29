@@ -52,9 +52,40 @@ npx firebase-tools deploy --only firestore:rules
 
 ## Deployment
 
-Pushes to `main` trigger the production GitHub Actions workflow. The workflow builds the Angular application and uploads the browser bundle to the configured FTP environment.
+Pushes to `main` trigger the production GitHub Actions workflow. The workflow
+builds Angular, installs PHP mail dependencies with Composer, stages the PHP API
+inside `dist/dabubble/browser/api/`, and uploads the entire browser bundle over
+**explicit FTPS with certificate verification** directly to ALL-INKL:
 
-Production credentials are stored as GitHub environment secrets and are not committed to the repository.
+```text
+/schniefs-portfolio.de/projects/dabubble/
+```
+
+The Developer Akademie FTP/SFTP server is **not** a deployment target anymore.
+Do not copy only `api/` from the Akademie server: Angular and the API must
+be deployed together to the same origin.
+
+Before merging to `main`, configure these three **GitHub Actions secrets**
+in repository Settings → Secrets and variables → Actions (or in the
+`production` environment's secrets):
+
+| Secret | Value |
+|---|---|
+| `ALLINKL_FTP_HOST` | FTP hostname from the working ALL-INKL account in FileZilla/KAS, **not** the Akademie host |
+| `ALLINKL_FTP_USERNAME` | ALL-INKL **FTP account** username, not the mailbox username |
+| `ALLINKL_FTP_PASSWORD` | ALL-INKL **FTP account** password, not the SMTP password |
+
+The port is **21** with explicit FTPS/TLS. This is intentionally different from
+the Developer Akademie's **SFTP (SSH) on port 22** and from ALL-INKL's
+**SMTP on port 465**. The remote path is fixed in the deployment workflow
+to prevent accidental uploads to the account root.
+
+The old `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_PORT` and
+`FTP_REMOTE_DIR` settings are no longer used by this workflow. The deployment
+fails immediately if any new secret is absent, rather than falling back to
+the wrong server. No FTP/SMTP/Firebase private credentials belong in the
+repository. The confidential `/dabubble-private/` folder is never uploaded,
+overwritten or deleted by the workflow.
 
 ## Passwort-Reset über ALL-INKL (FTP, PHP und Firebase)
 
