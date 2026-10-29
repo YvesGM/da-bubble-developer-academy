@@ -49,7 +49,10 @@
 
       <button class="auth-google-button" type="button" (click)="loginWithGoogle()">
         <img src="/assets/google-icon.svg" alt="" />
-        <span>Anmelden mit Google</span>
+        <span class="auth-google-button-label">
+          <span class="auth-google-button-label-default">Anmelden mit Google</span>
+          <span class="auth-google-button-label-hover" aria-hidden="true">Anmelden mit Google</span>
+        </span>
       </button>
 
       @if (errorMessage()) {
