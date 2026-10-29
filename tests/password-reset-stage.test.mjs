@@ -41,3 +41,12 @@ test('staging only copies the public handler and protected backend', () => {
   assert.equal(existsSync(join(deployed, 'config.php')), false);
   assert.equal(existsSync(join(deployed, 'service-account.json')), false);
 });
+
+/** Apache's SPA fallback can return HTTP 200 HTML for an absent API route. */
+test('frontend rejects non-JSON responses from the password-reset endpoint', () => {
+  const root = new URL('../src/app/core/services/auth.service.ts', import.meta.url);
+  const source = readFileSync(root, 'utf8');
+  assert.match(source, /response\.headers\.get\('content-type'\)/);
+  assert.match(source, /response\.json\(\)/);
+  assert.match(source, /Invalid password reset endpoint response/);
+});

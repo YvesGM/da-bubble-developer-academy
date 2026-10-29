@@ -139,3 +139,18 @@ und danach `node scripts/stage-password-reset.mjs`.
 - Wenn die Logdatei fehlt: Schreibrechte auf `dabubble-private` und PHP-Fehlerlog
   kontrollieren; niemals `display_errors` im Produktivsystem aktivieren.
 - Die Firebase-Realtime-Database-Regeln sind eine **separate** Sicherheitsfrage.
+
+### Diagnose: HTTP 200 ohne E-Mail
+
+Beim FTP-Deployment muss `api/request-password-reset.php` mit seinem
+`api/_internal/vendor/autoload.php` vorhanden sein. Ein fehlender PHP-Endpunkt
+kann sonst durch die Angular-`.htaccess` als `index.html` mit HTTP 200
+beantwortet werden. Deshalb akzeptiert Angular ab jetzt ausschließlich eine
+erwartete JSON-Antwort. Bei erfolgreicher Bearbeitung wird nicht zwingend eine
+E-Mail zugestellt: Die Antwort bleibt zur Vermeidung von Kontoermittlung neutral.
+
+Auf dem Server zeigt `/dabubble-private/reset-events.log` mit
+`id` und `outcome`, ob Firebase oder SMTP die Anfrage verarbeitet hat.
+Im Browser findet man dieselbe Kennung im Response-Header
+`X-DABubble-Request-Id`. Niemals private Schlüssel, SMTP-Passwörter
+oder Reset-Codes für die Fehlersuche weitergeben.

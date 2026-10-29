@@ -99,7 +99,14 @@ export class AuthService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     });
-    if (!response.ok) throw new Error('Password reset request failed');
+    if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) {
+      throw new Error('Password reset endpoint unavailable');
+    }
+    const payload: unknown = await response.json();
+    if (!payload || typeof payload !== 'object' || !('message' in payload)
+      || payload.message !== 'If an account exists, a reset email will be sent') {
+      throw new Error('Invalid password reset endpoint response');
+    }
   }
 
   /**
