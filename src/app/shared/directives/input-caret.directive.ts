@@ -4,6 +4,7 @@ import { AfterViewInit, DestroyRef, Directive, ElementRef, Renderer2, inject } f
 /** Draws the compact Figma caret without changing native editing or selection. */
 @Directive({
   selector: 'input[appInputCaret]',
+  standalone: true,
   host: {
     '(focus)': 'show()',
     '(blur)': 'hide()',
@@ -43,7 +44,11 @@ export class InputCaretDirective implements AfterViewInit {
   show(): void {
     if (!this.canMeasure() || !this.view) return;
     this.ensureCaret();
-    if (!this.active) this.originalColor = this.input.style.caretColor;
+    if (!this.active) {
+      this.originalColor = this.input.style.caretColor;
+      this.document.addEventListener('scroll', this.onScroll, true);
+      this.view.addEventListener('resize', this.onScroll);
+    }
     this.active = true;
     this.input.style.caretColor = 'transparent';
     this.queueUpdate();
@@ -51,7 +56,11 @@ export class InputCaretDirective implements AfterViewInit {
 
   /** Restores the original input caret on blur or composition. */
   hide(): void {
-    if (this.active) this.input.style.caretColor = this.originalColor;
+    if (this.active) {
+      this.input.style.caretColor = this.originalColor;
+      this.document.removeEventListener('scroll', this.onScroll, true);
+      this.view?.removeEventListener('resize', this.onScroll);
+    }
     this.active = false;
     if (this.caret) this.caret.hidden = true;
   }
@@ -78,8 +87,6 @@ export class InputCaretDirective implements AfterViewInit {
     this.renderer.addClass(this.caret, 'app-input-caret');
     this.renderer.setAttribute(this.caret, 'aria-hidden', 'true');
     this.renderer.appendChild(this.document.body, this.caret);
-    this.document.addEventListener('scroll', this.onScroll, true);
-    this.view?.addEventListener('resize', this.onScroll);
   }
 
   /** Measures characters before the insertion point, including password bullets. */
@@ -126,8 +133,6 @@ export class InputCaretDirective implements AfterViewInit {
   private dispose(): void {
     this.hide();
     if (this.frame) this.view?.cancelAnimationFrame(this.frame);
-    this.document.removeEventListener('scroll', this.onScroll, true);
-    this.view?.removeEventListener('resize', this.onScroll);
     if (this.caret) this.renderer.removeChild(this.document.body, this.caret);
   }
 }
