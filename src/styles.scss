@@ -65,3 +65,32 @@ button {
   from { opacity: 0; transform: translateY(12px) scale(0.98); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* Shared visual caret for appInputCaret; native text editing remains active. */
+.app-input-caret {
+  position: fixed;
+  z-index: 2147483647;
+
+  width: 2px;
+  height: 18px;
+  border-radius: 1px;
+
+  background: #111;
+  pointer-events: none;
+  animation: app-input-caret-blink 1s step-end infinite;
+}
+
+.app-input-caret[hidden] {
+  display: none;
+}
+
+@keyframes app-input-caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-input-caret {
+    animation: none;
+  }
+}
