@@ -1,100 +1,237 @@
 @use '../../../../styles/tokens' as tokens;
 @use '../../../../styles/breakpoints' as bp;
 
-.register {
-  &-card {
+.register-card,
+.avatar-card {
+  width: min(606px, 100%);
+  min-height: 669px;
+  padding: 40px 53px;
+
+  white-space: normal;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+
+  .auth-card-header:has(.auth-back) {
+    display: block;
+
+    .auth-title {
+      font-size: 48px;
+      line-height: 1.2;
+      text-align: center;
+    }
+  }
+
+  .auth-back {
+    position: absolute;
+    top: 5px;
+    left: -21px;
+    margin-left: 0;
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  @include bp.mobile {
+    width: 100%;
     min-height: 0;
 
-    @include bp.mobile {
-      padding-top: 28px;
-      padding-bottom: 24px;
+    .auth-card-header:has(.auth-back) .auth-title {
+      font-size: 32px;
     }
 
-    @include bp.widescreen {
-      padding-top: 42px;
+    .auth-back {
+      top: -5px;
+      left: 2px;
+    }
+  }
+}
+
+.register {
+  &-card {
+    .auth-description {
+      margin-top: 32px;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    @include bp.mobile {
+      padding: 20px 20px 26px;
+
+      .auth-description {
+        margin-top: 15px;
+        font-size: 17px;
+        line-height: 1.2;
+      }
     }
   }
 
   &-form {
-    margin-top: 34px;
-    gap: 42px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 40px;
+
+    .auth-field + .auth-field {
+      margin-top: 40px;
+    }
+
+    .auth-field-icon {
+      top: 30px;
+      left: 32px;
+
+      width: 24px;
+      height: 24px;
+      max-height: 24px;
+      object-fit: contain;
+    }
+
+    .auth-control {
+      padding-left: 86px;
+    }
 
     .auth-privacy {
-      margin-top: 4px;
+      width: 100%;
+      margin-top: 32px;
+      gap: 8px;
+
+      font-size: 16px;
+      line-height: 1.2;
+      white-space: normal;
+
+      input {
+        flex: 0 0 24px;
+        width: 24px;
+        height: 24px;
+      }
+
+      span {
+        min-width: 0;
+      }
     }
 
     .auth-action-row {
-      margin-top: 12px;
+      margin-top: 40px;
     }
 
     @include bp.mobile {
-      margin-top: 24px;
-      gap: 20px;
+      margin-top: 20px;
+
+      .auth-field + .auth-field {
+        margin-top: 29px;
+      }
+
+      .auth-field-icon {
+        top: 25px;
+      }
+
+      .auth-control {
+        height: 50px;
+        padding: 13px 20px 13px 86px;
+        font-size: 18px;
+      }
+
+      .auth-field-error {
+        font-size: 14px;
+        overflow-wrap: anywhere;
+      }
+
+      .auth-privacy {
+        margin-top: 16px;
+      }
+
+      .auth-action-row {
+        margin-top: 15px;
+
+        .auth-button {
+          min-height: 49px;
+          padding: 12px 25px;
+          font-size: 18px;
+        }
+      }
+    }
+
+    @media (max-width: 370px) {
+      .auth-field-icon {
+        left: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      .auth-control {
+        padding-left: 56px;
+        font-size: 16px;
+      }
+
+      .auth-privacy {
+        font-size: 14px;
+      }
     }
   }
 }
 
 .avatar {
   &-card {
-    min-height: 560px;
+    .auth-card-header:has(.auth-back) {
+      .auth-title {
+        font-size: 46px;
+      }
+    }
 
     @include bp.mobile {
-      min-height: 0;
-    }
+      padding: 26px 21px;
 
-    @include bp.widescreen {
-      min-height: 600px;
-      padding-top: 45px;
-    }
-  }
+      .auth-card-header:has(.auth-back) {
+        .auth-title {
+          max-width: 235px;
+          min-height: 76px;
+          margin-inline: auto;
 
-  &-header {
-    padding-bottom: 26px;
-  }
-
-  &-content {
-    display: grid;
-    justify-items: center;
-  }
-
-  &-preview {
-    &-default {
-      width: 136px;
-      height: 136px;
-
-      @include bp.mobile {
-        width: 112px;
-        height: 112px;
+          font-size: 32px;
+          text-wrap: balance;
+        }
       }
     }
   }
 
-  &-user {
-    &-name {
-      font-size: 20px;
+  &-content {
+    --avatar-hero-size: 168px;
 
-      margin-top: 16px;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: min(472px, 100%);
+    margin: 56px auto 0;
+  }
+
+  &-preview-default {
+    width: 168px;
+    height: 168px;
+  }
+
+  &-user-name {
+    font-size: 32px;
+    line-height: 44px;
+    text-align: center;
+    overflow-wrap: anywhere;
+
+    margin-top: 32px;
   }
 
   &-hint {
-    font-size: 16px;
+    font-size: 20px;
+    line-height: 27px;
 
     margin-top: 8px;
   }
 
   &-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(6, 72px);
+    gap: 8px;
 
-    margin-top: 10px;
-    gap: 4px;
-
-    @include bp.mobile {
-      max-width: 240px;
-      gap: 6px;
-    }
+    margin-top: 16px;
   }
 
   &-choice {
@@ -121,15 +258,63 @@
     &.selected {
       box-shadow: inset 0 0 0 2px tokens.$purple-1;
     }
-
-    @include bp.mobile {
-      width: 66px;
-      height: 66px;
-    }
   }
 
   &-action {
-    width: 100%;
-    margin-top: 24px;
+    align-self: flex-end;
+    justify-content: flex-end;
+
+    width: calc(100% + 14px);
+    margin-top: 62px;
+    margin-right: -14px;
+  }
+
+  @include bp.mobile {
+    &-content {
+      --avatar-hero-size: 120px;
+
+      width: 100%;
+      margin-top: 24px;
+    }
+
+    &-preview-default {
+      width: 120px;
+      height: 120px;
+    }
+
+    &-user-name {
+      margin-top: 24px;
+    }
+
+    &-grid {
+      grid-template-columns: repeat(6, 56px);
+      gap: 4px;
+    }
+
+    &-choice {
+      width: 56px;
+      height: 56px;
+      padding: 0;
+    }
+
+    &-action {
+      width: 100%;
+      margin-top: 24px;
+      margin-right: 0;
+
+      .auth-button {
+        min-height: 49px;
+        padding: 12px 25px;
+        font-size: 18px;
+      }
+    }
+  }
+
+  @media (max-width: 410px) {
+    &-grid {
+      grid-template-columns: repeat(3, 56px);
+      justify-content: center;
+      gap: 8px;
+    }
   }
 }
