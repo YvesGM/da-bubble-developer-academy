@@ -1,4 +1,4 @@
-@use './auth-shell-register';
+@use './auth-shell-register' as register;
 @use '../../../../../styles/tokens' as tokens;
 @use '../../../../../styles/breakpoints' as bp;
 
@@ -368,3 +368,5 @@
     }
   }
 }
+
+@include register.register-layout;
