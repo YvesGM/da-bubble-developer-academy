@@ -1,4 +1,5 @@
 @use '../../../../styles/breakpoints' as bp;
+@use '../../../../styles/tokens' as tokens;
 
 .login {
   &-card {
@@ -11,8 +12,17 @@
 
     .forgot {
       &-link {
-        justify-self: center;
-        margin-top: -4px;
+        align-self: center;
+
+        margin: -9px 0 -5px;
+        padding: 5px 15px;
+
+        border-radius: 30px;
+
+        &:hover,
+        &:focus-visible {
+          background: tokens.$background;
+        }
       }
     }
 
@@ -25,7 +35,7 @@
       }
 
       .forgot-link {
-        margin-top: 2px;
+        margin-top: -3px;
       }
 
       .auth-button-row {
