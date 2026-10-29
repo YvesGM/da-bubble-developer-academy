@@ -201,3 +201,154 @@
     }
   }
 }
+
+
+/* Login-only layout: exact 1920px / 430px Figma anchors, adaptable in between. */
+.auth-shell--login {
+  padding: 72px 24px 48px;
+
+  .auth-shell-header {
+    top: 75px;
+    left: 75px;
+  }
+
+  .auth-shell-stage {
+    flex: 1 0 auto;
+    padding-top: 52px;
+  }
+
+  .auth-brand {
+    gap: 16px;
+  }
+
+  .auth-brand-mark {
+    width: 70px;
+    height: 70px;
+  }
+
+  .auth-brand-name {
+    width: 156px;
+  }
+
+  .auth-signup-prompt {
+    top: 75px;
+    right: 65px;
+    gap: 10px;
+
+    span {
+      line-height: 25px;
+    }
+  }
+
+  .auth-shell-footer {
+    margin-top: 32px;
+  }
+
+  /* Reserve the header's height when a shorter desktop needs vertical scrolling. */
+  @media (min-width: 801px) and (max-width: 1599px) {
+    padding-top: 48px;
+
+    .auth-shell-header {
+      top: 48px;
+      left: 48px;
+    }
+
+    .auth-shell-stage {
+      padding-top: 72px;
+    }
+
+    .auth-brand {
+      gap: 12px;
+    }
+
+    .auth-brand-mark {
+      width: 56px;
+      height: 56px;
+    }
+
+    .auth-brand-name {
+      width: 145px;
+    }
+
+    .auth-signup-prompt {
+      top: 48px;
+      right: 48px;
+    }
+  }
+
+  @include bp.mobile {
+    gap: 32px;
+    padding: 72px 16px 30px;
+
+    .auth-shell-header {
+      position: static;
+      justify-content: center;
+      flex: none;
+      width: 100%;
+    }
+
+    .auth-brand {
+      gap: 12.8px;
+    }
+
+    .auth-brand-mark {
+      width: 56px;
+      height: 56px;
+    }
+
+    .auth-brand-name {
+      width: 135.3px;
+    }
+
+    .auth-shell-stage {
+      display: block;
+      flex: none;
+      width: min(398px, 100%);
+      min-height: 0;
+      padding: 0;
+    }
+
+    .auth-signup-prompt {
+      position: static;
+      display: flex;
+      flex: none;
+      flex-direction: column;
+      align-items: center;
+      justify-items: center;
+      gap: 20px;
+      margin: 0;
+      max-height: none;
+
+      a {
+        min-height: 39px;
+        max-height: none;
+        padding: 7px 18px;
+
+        font-weight: 700;
+        line-height: 23px;
+        color: tokens.$purple-1;
+        border-color: tokens.$purple-2;
+      }
+    }
+
+    .auth-shell-footer {
+      flex: none;
+      margin: 0;
+      gap: 16px;
+    }
+  }
+
+  /* Fit a narrower handset without shrinking the entire interface. */
+  @media (max-width: 370px) {
+    gap: 24px;
+    padding: 32px 12px 24px;
+
+    .auth-shell-stage {
+      width: 100%;
+    }
+
+    .auth-shell-footer {
+      gap: 4px;
+    }
+  }
+}
