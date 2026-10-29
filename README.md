@@ -71,19 +71,20 @@ in repository Settings → Secrets and variables → Actions (or in the
 
 | Secret | Value |
 |---|---|
-| `ALLINKL_FTP_HOST` | FTP hostname from the working ALL-INKL account in FileZilla/KAS, **not** the Akademie host |
-| `ALLINKL_FTP_USERNAME` | ALL-INKL **FTP account** username, not the mailbox username |
-| `ALLINKL_FTP_PASSWORD` | ALL-INKL **FTP account** password, not the SMTP password |
+| `FTP_HOST` | FTP hostname from the working ALL-INKL account in FileZilla/KAS, **not** the Akademie host |
+| `FTP_USERNAME` | ALL-INKL **FTP account** username, not the mailbox username |
+| `FTP_PASSWORD` | ALL-INKL **FTP account** password, not the SMTP password |
 
 The port is **21** with explicit FTPS/TLS. This is intentionally different from
 the Developer Akademie's **SFTP (SSH) on port 22** and from ALL-INKL's
 **SMTP on port 465**. The remote path is fixed in the deployment workflow
 to prevent accidental uploads to the account root.
 
-The old `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_PORT` and
-`FTP_REMOTE_DIR` settings are no longer used by this workflow. The deployment
-fails immediately if any new secret is absent, rather than falling back to
-the wrong server. No FTP/SMTP/Firebase private credentials belong in the
+Existing `FTP_HOST`, `FTP_USERNAME`, and `FTP_PASSWORD` secrets are reused:
+update their values to the ALL-INKL **FTP account**, not Developer Akademie credentials.
+`FTP_PORT` and `FTP_REMOTE_DIR` are ignored because the workflow fixes
+port 21 and the portfolio destination. The deployment refuses a host name
+containing `developerakademie`. No FTP/SMTP/Firebase private credentials belong in the
 repository. The confidential `/dabubble-private/` folder is never uploaded,
 overwritten or deleted by the workflow.
 

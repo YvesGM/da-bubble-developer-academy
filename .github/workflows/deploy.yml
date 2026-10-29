@@ -74,14 +74,14 @@ jobs:
 
       - name: Deploy DABubble to ALL-INKL via FTPS
         env:
-          FTP_HOST: ${{ secrets.ALLINKL_FTP_HOST }}
-          FTP_USERNAME: ${{ secrets.ALLINKL_FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.ALLINKL_FTP_PASSWORD }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
-          : "${FTP_HOST:?Missing ALLINKL_FTP_HOST}"
-          : "${FTP_USERNAME:?Missing ALLINKL_FTP_USERNAME}"
-          : "${FTP_PASSWORD:?Missing ALLINKL_FTP_PASSWORD}"
+          : "${FTP_HOST:?Missing FTP_HOST}"
+          : "${FTP_USERNAME:?Missing FTP_USERNAME}"
+          : "${FTP_PASSWORD:?Missing FTP_PASSWORD}"
           if [[ "$FTP_HOST" == *developerakademie* ]]; then
             echo "Refusing deployment to the former Developer Akademie server."
             exit 1
