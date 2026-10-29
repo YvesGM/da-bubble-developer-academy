@@ -28,6 +28,7 @@ export class InputCaretDirective implements AfterViewInit {
 
   private caret: HTMLElement | null = null;
   private context: CanvasRenderingContext2D | null = null;
+  private passwordMirror: HTMLInputElement | null = null;
   private frame = 0;
   private active = false;
   private originalColor = '';
@@ -102,15 +103,34 @@ export class InputCaretDirective implements AfterViewInit {
     context.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
     const spacing = parseFloat(style.letterSpacing) || 0;
     const width = this.input.type === 'password'
-      ? this.passwordAdvance(context, position, spacing)
+      ? this.passwordAdvance(position, style)
       : this.textAdvance(context, position, spacing);
+    if (width === null) return this.hide();
     this.positionIndicator(style, width);
   }
 
-  /** Password characters have a fixed mask advance; avoid cumulative text shaping drift. */
-  private passwordAdvance(context: CanvasRenderingContext2D, count: number, spacing: number): number {
+  /** Measures the browser's actual password-mask layout, never the password itself. */
+  private passwordAdvance(count: number, style: CSSStyleDeclaration): number | null {
     if (!count) return 0;
-    return count * (context.measureText('•').width + spacing);
+    const mirror = this.ensurePasswordMirror();
+    mirror.style.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    mirror.style.letterSpacing = style.letterSpacing;
+    mirror.value = 'x'.repeat(count);
+    return mirror.scrollWidth > 1 ? mirror.scrollWidth : null;
+  }
+
+  /** A read-only offscreen password input reproduces native masking metrics. */
+  private ensurePasswordMirror(): HTMLInputElement {
+    if (this.passwordMirror) return this.passwordMirror;
+    const mirror = this.document.createElement('input');
+    mirror.type = 'password';
+    mirror.readOnly = true;
+    mirror.tabIndex = -1;
+    mirror.setAttribute('aria-hidden', 'true');
+    mirror.autocomplete = 'off';
+    mirror.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;padding:0;border:0;margin:0;box-sizing:content-box;visibility:hidden;pointer-events:none';
+    this.document.body.appendChild(mirror);
+    return (this.passwordMirror = mirror);
   }
 
   /** Measures editable text with its current font and character spacing. */
@@ -148,5 +168,6 @@ export class InputCaretDirective implements AfterViewInit {
     this.hide();
     if (this.frame) this.view?.cancelAnimationFrame(this.frame);
     if (this.caret) this.renderer.removeChild(this.document.body, this.caret);
+    if (this.passwordMirror) this.renderer.removeChild(this.document.body, this.passwordMirror);
   }
 }
