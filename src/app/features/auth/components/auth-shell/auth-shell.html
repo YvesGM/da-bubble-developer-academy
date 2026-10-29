@@ -1,4 +1,10 @@
-<main class="auth-shell" [class.auth-shell--login]="showSignup">
+<main
+  class="auth-shell"
+  [class.auth-shell--login]="showSignup"
+  [class.auth-shell--register]="registerStep !== null"
+  [class.auth-shell--register-details]="registerStep === 'details'"
+  [class.auth-shell--register-avatar]="registerStep === 'avatar'"
+>
   <header class="auth-shell-header">
     <a class="auth-brand" routerLink="/login" aria-label="DABubble Anmeldung">
       <img class="auth-brand-mark" src="/assets/logo.svg" alt="" />
