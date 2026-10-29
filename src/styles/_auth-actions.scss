@@ -162,7 +162,7 @@
 
     span {
       min-width: 0;
-      line-height: 1.5;
+      line-height: 32px;
     }
 
     /* Native checkbox keeps keyboard/label behaviour; only its appearance changes. */
@@ -206,6 +206,7 @@
     }
 
     a {
+      line-height: 22px;
       padding: 2px;
       margin: 0 -2px;
       border-radius: 6px;
