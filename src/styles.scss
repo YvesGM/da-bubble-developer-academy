@@ -95,7 +95,7 @@ button {
   }
 }
 
-/* Only invoked for the successful registration route change. */
+/* Used for successful registration and password-reset route transitions. */
 ::view-transition-old(root) {
   animation: 320ms ease-in both register-route-out;
 }
