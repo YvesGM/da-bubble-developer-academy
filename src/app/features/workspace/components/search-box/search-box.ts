@@ -1,3 +1,4 @@
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
@@ -10,6 +11,7 @@ import { SearchService } from '../../../../core/services/search.service';
 
 @Component({
   selector: 'app-search-box',
+  imports: [InputCaretDirective],
   templateUrl: './search-box.html',
   styleUrl: './search-box.scss',
 })

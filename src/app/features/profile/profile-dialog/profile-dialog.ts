@@ -1,3 +1,4 @@
+import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -9,7 +10,7 @@ import { Avatar } from '../../../shared/components/avatar/avatar';
 
 @Component({
   selector: 'app-profile-dialog',
-  imports: [ReactiveFormsModule, Avatar],
+  imports: [InputCaretDirective, ReactiveFormsModule, Avatar],
   templateUrl: './profile-dialog.html',
   styleUrl: './profile-dialog.scss',
 })

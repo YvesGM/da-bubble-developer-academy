@@ -1,3 +1,4 @@
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 
 import { UserProfile } from '../../../../core/models/user-profile.model';
@@ -10,7 +11,7 @@ export interface AddMembersSelection {
 
 @Component({
   selector: 'app-add-members-dialog',
-  imports: [Avatar],
+  imports: [InputCaretDirective, Avatar],
   templateUrl: './add-members-dialog.html',
   styleUrl: './add-members-dialog.scss',
 })

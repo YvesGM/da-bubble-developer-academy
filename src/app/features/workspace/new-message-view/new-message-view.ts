@@ -1,3 +1,4 @@
+import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
@@ -11,7 +12,7 @@ import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-new-message-view',
-  imports: [RouterLink],
+  imports: [InputCaretDirective, RouterLink],
   templateUrl: './new-message-view.html',
   styleUrl: './new-message-view.scss',
 })
