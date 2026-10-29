@@ -7,6 +7,8 @@ declare(strict_types=1);
  */
 return [
     'site_url' => 'https://dabubble.schniefs-portfolio.de',
+    // For local PHP development only, add 'http://localhost:4200' here.
+    'allowed_origins' => ['https://dabubble.schniefs-portfolio.de'],
     'service_account_file' => __DIR__.'/service-account.json',
     'smtp' => [
         'host' => 'YOUR_KAS_LOGIN.kasserver.com',

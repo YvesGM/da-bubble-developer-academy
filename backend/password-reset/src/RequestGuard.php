@@ -13,11 +13,12 @@ final class RequestGuard
     private const GLOBAL_LIMIT = 120;
 
     /** Rejects invalid requests before touching Firebase or SMTP. */
-    public static function readEmail(string $origin): string
+    public static function readEmail(string $origin, array $allowedOrigins = []): string
     {
         $sentOrigin = $_SERVER['HTTP_ORIGIN'] ?? $origin;
         $type = strtolower(trim(explode(';', $_SERVER['CONTENT_TYPE'] ?? '')[0]));
-        if ($sentOrigin !== $origin || $type !== 'application/json') {
+        $allowedOrigins = $allowedOrigins ?: [$origin];
+        if (!in_array($sentOrigin, $allowedOrigins, true) || $type !== 'application/json') {
             self::fail(403, 'Forbidden');
         }
         if ((int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 1024) {

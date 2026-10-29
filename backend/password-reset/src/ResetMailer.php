@@ -18,7 +18,7 @@ final class ResetMailer
     {
         $site = rtrim((string) ($this->config['site_url'] ?? ''), '/');
         if (!str_starts_with($site, 'https://')) throw new RuntimeException('HTTPS site required');
-        $email = RequestGuard::readEmail($site);
+        $email = RequestGuard::readEmail($site, $this->config['allowed_origins'] ?? [$site]);
         RequestGuard::throttle($this->privateDir.'/reset-rate-limit.json', $email);
         try {
             $link = $this->generateAppLink($email, $site);

@@ -99,10 +99,20 @@ Die eigene E-Mail wird ausschließlich über den PHP-Endpunkt generiert.
 
 ### Lokal entwickeln
 
-Im Angular-Entwicklungsserver ist PHP nicht ausführbar. Für echte lokale
-E-Mail-Tests zusätzlich den PHP-Server und einen Angular-Proxy konfigurieren
-oder den bereits bereitgestellten HTTPS-Endpunkt verwenden. Nicht einfach
-`localhost` als produktive Reset-URL eintragen.
+Im Angular-Entwicklungsserver ist PHP nicht ausführbar. Für einen lokalen
+End-to-End-Test nach `npm run build` und `composer install`:
+
+1. `node scripts/stage-password-reset.mjs` erstellt `dist/dabubble/browser/api/`.
+2. Erstelle `dist/dabubble/dabubble-private/` mit der privaten `config.php`,
+   `service-account.json` und der sperrenden `.htaccess`; alles bleibt unter `dist/`
+   und wird nicht in Git eingecheckt.
+3. Ergänze **nur in der lokalen** `config.php` bei `allowed_origins`
+   `http://localhost:4200`. `site_url` bleibt die HTTPS-Produktionsdomain,
+   sodass der versendete Link im bereitgestellten Reset-Frontend endet.
+4. Terminal A: `npm run serve:reset`. Terminal B: `npm run start:reset`.
+5. Im normalen `npm start` ohne Proxy ist die PHP-Route nicht verfügbar.
+
+Im Produktionsbetrieb **kein** `localhost` in `allowed_origins` aufnehmen.
 
 Zum Testen des Packaging-Skripts: `npm run test:reset`.
 Zum manuellen Staging nach `npm run build`:
