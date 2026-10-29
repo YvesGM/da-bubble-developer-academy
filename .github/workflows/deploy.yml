@@ -60,6 +60,7 @@ jobs:
         run: |
           php backend/password-reset/tests/reset-link.test.php
           php backend/password-reset/tests/private-directory.test.php
+          php backend/password-reset/tests/reset-cors.test.php
 
       - name: Run deployment and reset staging tests; package PHP
         run: |

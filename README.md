@@ -61,9 +61,18 @@ inside `dist/dabubble/browser/api/`, and uploads the entire browser bundle over
 /schniefs-portfolio.de/projects/dabubble/
 ```
 
-The Developer Akademie FTP/SFTP server is **not** a deployment target anymore.
-Do not copy only `api/` from the Akademie server: Angular and the API must
-be deployed together to the same origin.
+The Developer Akademie is a **separate public frontend target** for the same
+Angular application; its SFTP access uses port 22. Deploy the static Angular
+files from local `dist/dabubble/browser/` after `npm run build` to the Akademie
+webroot once your SFTP access works again; **do not upload `api/` or private
+credentials there**. The GitHub Actions workflow currently publishes the
+combined Angular + PHP output only to ALL-INKL, independently of Akademie SFTP.
+
+The Akademie form sends requests from
+`https://yves-gildemeister.developerakademie.net` directly to
+`https://dabubble.schniefs-portfolio.de/api/request-password-reset.php`.
+ALL-INKL validates the origin and answers the browser's CORS preflight.
+The email link always leads back to the Figma reset route on ALL-INKL.
 
 Before merging to `main`, configure these three **GitHub Actions secrets**
 in repository Settings → Secrets and variables → Actions (or in the
@@ -91,7 +100,9 @@ overwritten or deleted by the workflow.
 ## Passwort-Reset über ALL-INKL (FTP, PHP und Firebase)
 
 Der Login, die Registrierung und die Firebase-Authentifizierung bleiben unverändert.
-Nur `AuthService.sendPasswordReset()` ruft `/api/request-password-reset.php` auf.
+Nur `AuthService.sendPasswordReset()` ruft auf beiden Live-Domains die
+ALL-INKL-API unter `https://dabubble.schniefs-portfolio.de/api/request-password-reset.php`
+auf. Der lokale Angular-Devserver nutzt weiter `/api` über den PHP-Proxy.
 Der öffentliche PHP-Endpunkt verwendet serverseitig `kreait/firebase-php` zur
 Erzeugung eines echten Firebase-Reset-Codes und `PHPMailer` zum Versand über
 das vorhandene ALL-INKL-SMTP-Postfach. Die E-Mail verlinkt direkt auf
@@ -127,6 +138,21 @@ Die Angular-Seite verarbeitet diesen Code wie bisher mit Firebase Authentication
    regulär deployen. Die Anwendung muss zwingend über HTTPS erreichbar sein.
 7. Mit einem dedizierten Testkonto einen neuen Reset-Link anfordern, aufrufen,
    Passwort ändern und anschließend mit dem neuen Passwort anmelden.
+
+**Wichtig: Private ALL-INKL-Konfiguration ergänzen.** In
+`/dabubble-private/config.php` muss `allowed_origins` beide öffentlichen
+Origins enthalten (ohne abschließenden Slash):
+
+```php
+'allowed_origins' => [
+    'https://dabubble.schniefs-portfolio.de',
+    'https://yves-gildemeister.developerakademie.net',
+],
+```
+
+Bei einer Akademie-Adresse ohne HTTPS den tatsächlich im Browser angezeigten
+Origin prüfen und nur diesen zusätzlich freigeben. Kein `*` verwenden.
+Die Datei wird nur **privat per FTP** aktualisiert und nie in GitHub hochgeladen.
 
 Die Konsoleinstellung **Authentication → Vorlagen → Aktions-URL** bleibt unverändert.
 Die eigene E-Mail wird ausschließlich über den PHP-Endpunkt generiert.

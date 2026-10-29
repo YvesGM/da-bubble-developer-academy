@@ -90,11 +90,11 @@ export class AuthService {
   }
 
   /**
-   * Requests the same-origin ALL-INKL reset endpoint; no admin secrets enter Angular.
-   * @throws When the server cannot accept the request.
+   * Sends reset requests to ALL-INKL from both the Akademie and portfolio sites.
+   * Local development still uses the existing /api proxy.
    */
   async sendPasswordReset(email: string): Promise<void> {
-    const response = await fetch('/api/request-password-reset.php', {
+    const response = await fetch(this.passwordResetEndpoint(), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
@@ -107,6 +107,13 @@ export class AuthService {
       || payload.message !== 'If an account exists, a reset email will be sent') {
       throw new Error('Invalid password reset endpoint response');
     }
+  }
+
+  /** Returns the remote API, keeping the local PHP development proxy intact. */
+  private passwordResetEndpoint(): string {
+    const local = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    return local ? '/api/request-password-reset.php'
+      : 'https://dabubble.schniefs-portfolio.de/api/request-password-reset.php';
   }
 
   /**

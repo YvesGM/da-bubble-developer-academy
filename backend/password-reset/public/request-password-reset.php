@@ -12,8 +12,9 @@ function respond(int $status, string $message): never
     exit;
 }
 
-if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
-    header('Allow: POST');
+$method = $_SERVER['REQUEST_METHOD'] ?? '';
+if ($method !== 'POST' && $method !== 'OPTIONS') {
+    header('Allow: POST, OPTIONS');
     respond(405, 'Method not allowed');
 }
 $secure = !empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] !== 'off');
@@ -36,6 +37,16 @@ try {
     $config = require $configFile;
     if (!is_array($config)) {
         throw new RuntimeException('Invalid private config');
+    }
+    require_once $internal.'/src/ResetCors.php';
+    $origin = (string) ($_SERVER['HTTP_ORIGIN'] ?? '');
+    $allowed = (array) ($config['allowed_origins'] ?? []);
+    $permitted = \DABubble\ResetCors::permits($allowed, $origin);
+    if ($permitted) \DABubble\ResetCors::writeHeaders($origin);
+    if ($method === 'OPTIONS') {
+        if (!$permitted) respond(403, 'Forbidden');
+        http_response_code(204);
+        exit;
     }
     $accountFile = (string) ($config['service_account_file'] ?? '');
     $smtp = $config['smtp'] ?? [];
