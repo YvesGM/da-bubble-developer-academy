@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, inject, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Output, ViewChild } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
@@ -9,7 +9,7 @@ type LogoTargets = [HTMLImageElement, HTMLImageElement];
   templateUrl: './splash.html',
   styleUrl: './splash.scss',
 })
-export class Splash {
+export class Splash implements AfterViewInit {
   @Output() readonly finished = new EventEmitter<void>();
   @ViewChild('backdrop') private backdrop!: ElementRef<HTMLElement>;
   @ViewChild('mark') private mark!: ElementRef<HTMLImageElement>;
@@ -19,8 +19,8 @@ export class Splash {
   private readonly auth = inject(Auth);
   private readonly router = inject(Router);
 
-  /** Keeps the overlay mounted until the target page and outro are ready. */
-  constructor() {
+  /** Starts only after the splash elements are available for animation. */
+  ngAfterViewInit(): void {
     void this.continue();
   }
 
@@ -29,7 +29,10 @@ export class Splash {
     try {
       await Promise.all([this.auth.authStateReady(), this.delay(1500)]);
       const destination = this.auth.currentUser ? '/workspace' : '/login';
-      if (this.router.url !== destination) await this.router.navigateByUrl(destination);
+      if (this.router.url !== destination) {
+        const navigated = await this.router.navigateByUrl(destination);
+        if (!navigated) throw new Error('Splash destination navigation was cancelled');
+      }
       await this.waitForLayout();
       await this.playOutro();
     } catch (error) {
