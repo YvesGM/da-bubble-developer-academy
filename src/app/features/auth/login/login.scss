@@ -3,7 +3,6 @@
 
 .login {
   &-card {
-    width: min(606px, 100%);
     min-height: 0;
     padding: 50px 53px;
 
@@ -86,8 +85,8 @@
 
       .auth-control {
         height: 50px;
-        padding: 13px 20px 13px 86px;
-        font-size: 18px;
+        padding: 13px 20px 13px clamp(56px, calc(30vw - 43px), 86px);
+        font-size: clamp(13px, 4.2vw, 18px);
       }
 
       .auth-field-error {
@@ -142,11 +141,6 @@
         height: 20px;
       }
 
-      .auth-control {
-        padding-left: 56px;
-        font-size: 16px;
-      }
-
       .auth-google-button {
         gap: 12px;
         font-size: 15px;
@@ -171,7 +165,6 @@
 
   @include bp.mobile {
     &-card {
-      width: 100%;
       padding: 35px 20px;
 
       .auth-description {

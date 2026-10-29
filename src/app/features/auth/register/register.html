@@ -68,10 +68,14 @@
             }
           }
         </div>
-        <label class="auth-privacy">
-          <input type="checkbox" formControlName="privacyAccepted" />
-          <span>Ich stimme der <a routerLink="/privacy" target="_blank">Datenschutzerklärung</a> zu.</span>
-        </label>
+        <div class="auth-privacy">
+          <input id="register-privacy" type="checkbox" formControlName="privacyAccepted"
+            aria-labelledby="register-privacy-text" />
+          <span id="register-privacy-text">
+            <label for="register-privacy">Ich stimme der </label><a routerLink="/privacy"
+              target="_blank">Datenschutzerklärung</a><label for="register-privacy"> zu.</label>
+          </span>
+        </div>
 
         <div class="auth-action-row">
           <button

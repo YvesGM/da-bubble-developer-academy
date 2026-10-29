@@ -8,7 +8,7 @@
     flex-direction: column;
 
     gap: 0;
-    width: min(606px, calc(100vw - 48px));
+    width: min(606px, 100%);
     padding: 42px 53px;
 
     background: tokens.$white;
@@ -17,7 +17,7 @@
     white-space: nowrap;
 
     @include bp.mobile {
-      width: calc(100vw - 32px);
+      width: 100%;
       padding: 28px 16px;
     }
 
@@ -129,6 +129,7 @@
 
   &-form {
     display: grid;
+    min-width: 0;
 
     &-error {
       font-size: 16px;
@@ -145,6 +146,7 @@
 
   &-field {
     position: relative;
+    min-width: 0;
 
     &-wrapper {
       display: flex;
@@ -192,6 +194,7 @@
   }
 
   &-control {
+    min-width: 0;
     font-size: 18px;
     font-weight: 500;
     line-height: 1.2;

@@ -155,7 +155,7 @@
 
   &-privacy {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
     font-size: 16px;
     color: #42526e;
@@ -171,7 +171,7 @@
       flex: 0 0 16px;
       width: 16px;
       height: 16px;
-      margin: 0;
+      margin: 8px 0 0;
 
       border: 2px solid tokens.$purple-2;
       border-radius: 2px;
@@ -229,6 +229,14 @@
     @include bp.mobile {
       gap: 7px;
       font-size: 16px;
+
+      span {
+        line-height: 24px;
+      }
+
+      input[type='checkbox'] {
+        margin-top: 4px;
+      }
     }
   }
 }

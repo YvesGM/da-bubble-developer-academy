@@ -3,7 +3,6 @@
 
 .register-card,
 .avatar-card {
-  width: min(606px, 100%);
   min-height: 669px;
   padding: 40px 53px;
 
@@ -47,11 +46,10 @@
   }
 
   @include bp.mobile {
-    width: 100%;
     min-height: 0;
 
     .auth-card-header:has(.auth-back) .auth-title {
-      font-size: 32px;
+      font-size: clamp(26px, 7.45vw, 32px);
     }
 
     .auth-card-header:has(.auth-back) .auth-back {
@@ -136,8 +134,8 @@
 
       .auth-control {
         height: 50px;
-        padding: 13px 20px 13px 86px;
-        font-size: 18px;
+        padding: 13px 20px 13px clamp(56px, calc(30vw - 43px), 86px);
+        font-size: clamp(13px, 4.2vw, 18px);
       }
 
       .auth-privacy {
@@ -160,11 +158,6 @@
         left: 20px;
         width: 20px;
         height: 20px;
-      }
-
-      .auth-control {
-        padding-left: 56px;
-        font-size: 16px;
       }
 
       .auth-privacy {
@@ -320,7 +313,7 @@
     }
   }
 
-  @media (max-width: 410px) {
+  @media (max-width: 429px) {
     &-grid {
       grid-template-columns: repeat(3, 56px);
       justify-content: center;

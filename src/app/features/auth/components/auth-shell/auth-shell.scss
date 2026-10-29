@@ -25,12 +25,12 @@
       display: flex;
       justify-content: flex-start;
     }
-
     &-stage {
       display: grid;
       place-items: center;
       flex: 1;
       width: 100%;
+      min-width: 0;
       min-height: 0;
     }
 
@@ -61,7 +61,6 @@
         gap: 0;
       }
     }
-
     @include bp.widescreen {
       padding-top: 72px;
 
@@ -86,7 +85,6 @@
 
       .auth-brand {
         gap: 16px;
-
         &-mark {
           width: 70px;
           height: 70px;
@@ -112,7 +110,6 @@
           top: 48px;
           left: 48px;
         }
-
         .auth-brand {
           gap: 12px;
 
@@ -128,7 +125,7 @@
       }
 
       @include bp.mobile {
-        padding: 72px 16px 30px;
+        padding: 24px 16px 30px;
 
         .auth-shell-header {
           position: static;
@@ -139,7 +136,6 @@
 
         .auth-brand {
           gap: 13px;
-
           &-mark {
             width: 56px;
             height: 56px;
@@ -173,10 +169,11 @@
         }
       }
     }
-
     &--login {
-      .auth-shell-stage {
-        padding-top: 52px;
+      @include bp.widescreen {
+        .auth-shell-stage {
+          padding-top: 52px;
+        }
       }
 
       .auth-signup-prompt {
@@ -204,9 +201,9 @@
           right: 48px;
         }
       }
-
       @include bp.mobile {
         gap: 32px;
+        padding-top: clamp(24px, calc(100dvh - 860px), 72px);
 
         .auth-brand {
           gap: 12.8px;
@@ -238,7 +235,6 @@
             line-height: 23px;
             color: tokens.$purple-1;
             border-color: tokens.$purple-2;
-
             &:hover {
               color: tokens.$white;
               background: tokens.$purple-1;
@@ -255,8 +251,10 @@
     }
 
     &--register {
-      .auth-shell-stage {
-        padding-top: 84px;
+      @include bp.widescreen {
+        .auth-shell-stage {
+          padding-top: 84px;
+        }
       }
 
       @media (min-width: 801px) and (max-width: 1599px) {
@@ -272,7 +270,6 @@
         .auth-shell-stage {
           margin-top: 32px;
         }
-
         .auth-shell-footer {
           margin-top: auto;
         }
@@ -315,7 +312,6 @@
         height: 64px;
       }
     }
-
     &-name {
       width: 145px;
       height: auto;
@@ -356,7 +352,6 @@
         border-color: tokens.$purple-2;
       }
     }
-
     @include bp.widescreen {
       top: 72px;
       right: 72px;
