@@ -32,6 +32,7 @@ export class InputCaretDirective implements AfterViewInit {
   private frame = 0;
   private active = false;
   private originalColor = '';
+  private originalPriority = '';
   private readonly onScroll = () => this.queueUpdate();
 
   constructor() {
@@ -49,18 +50,23 @@ export class InputCaretDirective implements AfterViewInit {
     this.ensureCaret();
     if (!this.active) {
       this.originalColor = this.input.style.caretColor;
+      this.originalPriority = this.input.style.getPropertyPriority('caret-color');
       this.document.addEventListener('scroll', this.onScroll, true);
       this.view.addEventListener('resize', this.onScroll);
     }
     this.active = true;
-    this.input.style.caretColor = 'transparent';
+    this.input.style.setProperty('caret-color', 'transparent', 'important');
     this.queueUpdate();
   }
 
   /** Restores the original input caret on blur or composition. */
   hide(): void {
     if (this.active) {
-      this.input.style.caretColor = this.originalColor;
+      if (this.originalColor) {
+        this.input.style.setProperty('caret-color', this.originalColor, this.originalPriority);
+      } else {
+        this.input.style.removeProperty('caret-color');
+      }
       this.document.removeEventListener('scroll', this.onScroll, true);
       this.view?.removeEventListener('resize', this.onScroll);
     }
@@ -70,7 +76,9 @@ export class InputCaretDirective implements AfterViewInit {
 
   /** Avoids layout reads for every keydown and selection event. */
   queueUpdate(): void {
-    if (!this.active || this.frame || !this.view) return;
+    if (!this.active || !this.view) return;
+    this.input.style.setProperty('caret-color', 'transparent', 'important');
+    if (this.frame) return;
     this.frame = this.view.requestAnimationFrame(() => {
       this.frame = 0;
       this.updatePosition();
@@ -150,8 +158,10 @@ export class InputCaretDirective implements AfterViewInit {
     const right = rect.right - (parseFloat(style.paddingRight) || 0);
     const x = left + advance - this.input.scrollLeft;
     if (x < left - 2 || x > right + 2) return this.hideIndicator();
-    this.caret.style.left = `${Math.max(left, Math.min(right, x))}px`;
-    this.caret.style.top = `${rect.top + (rect.height - 18) / 2}px`;
+    const ratio = this.view.devicePixelRatio || 1;
+    const snap = (value: number): number => Math.round(value * ratio) / ratio;
+    this.caret.style.left = `${snap(Math.max(left, Math.min(right, x)))}px`;
+    this.caret.style.top = `${snap(rect.top + (rect.height - 18) / 2)}px`;
     this.caret.hidden = rect.bottom < 0 || rect.top > this.view.innerHeight;
   }
 
