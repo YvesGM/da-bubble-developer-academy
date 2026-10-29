@@ -1,15 +1,10 @@
 @use '../../../../styles/tokens' as tokens;
 @use '../../../../styles/breakpoints' as bp;
-@use './register-privacy' as privacy;
 
 .register-card,
 .avatar-card {
-  width: min(606px, 100%);
   min-height: 669px;
   padding: 40px 53px;
-
-  white-space: normal;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 
   .auth-card-header:has(.auth-back) {
     display: block;
@@ -119,26 +114,8 @@
     }
 
     .auth-privacy {
-      width: 100%;
       margin-top: 32px;
-      gap: 8px;
-
-      font-size: 16px;
-      line-height: 1.2;
-      white-space: normal;
-
-      input {
-        flex: 0 0 24px;
-        width: 24px;
-        height: 24px;
-      }
-
-      span {
-        min-width: 0;
-      }
     }
-
-    @include privacy.controls;
 
     .auth-action-row {
       margin-top: 40px;
