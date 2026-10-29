@@ -1,4 +1,3 @@
-import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,6 +6,7 @@ import { take } from 'rxjs';
 import { AVATAR_IDS } from '../../../core/constants/avatar.constants';
 import { UserService } from '../../../core/services/user.service';
 import { Avatar } from '../../../shared/components/avatar/avatar';
+import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
 @Component({
   selector: 'app-profile-dialog',

@@ -1,4 +1,3 @@
-import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -6,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { AuthShell } from '../components/auth-shell/auth-shell';
+import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
 @Component({
   selector: 'app-forgot-password',

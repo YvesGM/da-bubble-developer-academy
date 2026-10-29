@@ -1,4 +1,3 @@
-import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
@@ -8,6 +7,7 @@ import { conversationRoute } from '../../../../core/models/conversation.model';
 import { SearchResult } from '../../../../core/models/search-result.model';
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { SearchService } from '../../../../core/services/search.service';
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 @Component({
   selector: 'app-search-box',

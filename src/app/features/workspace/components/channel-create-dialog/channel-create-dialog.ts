@@ -1,4 +1,3 @@
-import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
@@ -10,6 +9,7 @@ import { UserProfile } from '../../../../core/models/user-profile.model';
 import { UserService } from '../../../../core/services/user.service';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { firebaseErrorMessage } from '../../../../core/utils/firebase-error.util';
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 @Component({
   selector: 'app-channel-create-dialog',

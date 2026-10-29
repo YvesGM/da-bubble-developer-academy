@@ -1,8 +1,8 @@
-import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Channel, UpdateChannelInput } from '../../../../core/models/channel.model';
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 @Component({
   selector: 'app-channel-details-dialog',

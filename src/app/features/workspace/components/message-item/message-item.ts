@@ -1,4 +1,3 @@
-import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 import {
   Component,
   EventEmitter,
@@ -25,6 +24,7 @@ import { UserService } from '../../../../core/services/user.service';
 import { messageTime } from '../../../../core/utils/timestamp.util';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 @Component({
   selector: 'app-message-item',

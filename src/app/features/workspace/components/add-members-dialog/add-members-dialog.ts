@@ -1,8 +1,8 @@
-import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 export interface AddMembersSelection {
   memberIds: string[];

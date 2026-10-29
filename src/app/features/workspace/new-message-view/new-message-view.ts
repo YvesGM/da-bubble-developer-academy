@@ -1,4 +1,3 @@
-import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
@@ -9,6 +8,7 @@ import { UserProfile } from '../../../core/models/user-profile.model';
 import { ChannelService } from '../../../core/services/channel.service';
 import { DirectMessageService } from '../../../core/services/direct-message.service';
 import { UserService } from '../../../core/services/user.service';
+import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
 @Component({
   selector: 'app-new-message-view',
