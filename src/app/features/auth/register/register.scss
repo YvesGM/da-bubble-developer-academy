@@ -26,7 +26,8 @@
     left: -21px;
     margin-left: 0;
 
-    img {
+    img,
+    .auth-back-icon {
       width: 24px;
       height: 24px;
     }
@@ -40,7 +41,7 @@
       font-size: 32px;
     }
 
-    .auth-back {
+    .auth-card-header:has(.auth-back) .auth-back {
       top: -5px;
       left: 2px;
     }
