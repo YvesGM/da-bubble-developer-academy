@@ -35,7 +35,7 @@
       <p class="deleted-message">Nachricht gelöscht</p>
     } @else if (editing()) {
       <div class="edit-row">
-        <input [ngModel]="editText()" (ngModelChange)="editText.set($event)" />
+        <input appInputCaret [ngModel]="editText()" (ngModelChange)="editText.set($event)" />
         <button type="button" (click)="saveEdit()">Speichern</button>
         <button type="button" (click)="editing.set(false)">Abbrechen</button>
       </div>

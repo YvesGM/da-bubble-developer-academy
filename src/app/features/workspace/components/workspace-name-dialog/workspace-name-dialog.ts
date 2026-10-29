@@ -1,9 +1,10 @@
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-workspace-name-dialog',
-  imports: [ReactiveFormsModule],
+  imports: [InputCaretDirective, ReactiveFormsModule],
   templateUrl: './workspace-name-dialog.html',
   styleUrl: './workspace-name-dialog.scss',
 })

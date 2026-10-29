@@ -21,7 +21,7 @@
         @if (editingName()) {
           <div class="field-row">
             <span>#</span>
-            <input type="text" formControlName="name" />
+            <input appInputCaret type="text" formControlName="name" />
           </div>
           @if (form.controls.name.touched && form.controls.name.invalid) {
             <p class="error">Bitte gib einen Channelnamen ein.</p>

@@ -1,3 +1,4 @@
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
@@ -12,7 +13,7 @@ import { firebaseErrorMessage } from '../../../../core/utils/firebase-error.util
 
 @Component({
   selector: 'app-channel-create-dialog',
-  imports: [ReactiveFormsModule, Avatar],
+  imports: [InputCaretDirective, ReactiveFormsModule, Avatar],
   templateUrl: './channel-create-dialog.html',
   styleUrl: './channel-create-dialog.scss',
 })

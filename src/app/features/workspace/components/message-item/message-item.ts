@@ -1,3 +1,4 @@
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 import {
   Component,
   EventEmitter,
@@ -27,7 +28,7 @@ import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-pi
 
 @Component({
   selector: 'app-message-item',
-  imports: [FormsModule, Avatar, EmojiPicker],
+  imports: [InputCaretDirective, FormsModule, Avatar, EmojiPicker],
   templateUrl: './message-item.html',
   styleUrl: './message-item.scss',
 })

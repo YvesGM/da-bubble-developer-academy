@@ -30,7 +30,7 @@
           Channel-Name
           <div class="channel-name-field">
             <span>#</span>
-            <input type="text" formControlName="name" placeholder="z. B. Entwicklerteam" />
+            <input appInputCaret type="text" formControlName="name" placeholder="z. B. Entwicklerteam" />
           </div>
         </label>
         @if (form.controls.name.touched && form.controls.name.hasError('required')) {
@@ -81,7 +81,7 @@
         </label>
 
         @if (memberMode() === 'selected') {
-          <input
+          <input appInputCaret
             type="search"
             placeholder="Name eingeben"
             [value]="query()"

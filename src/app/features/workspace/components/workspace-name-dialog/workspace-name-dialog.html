@@ -8,7 +8,7 @@
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <label>
         Workspace-Name
-        <input type="text" formControlName="workspaceName" />
+        <input appInputCaret type="text" formControlName="workspaceName" />
       </label>
 
       @if (errorMessage()) {
