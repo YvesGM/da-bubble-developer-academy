@@ -20,7 +20,7 @@
     }
   }
 
-  .auth-back {
+  .auth-card-header:has(.auth-back) .auth-back {
     position: absolute;
     top: 5px;
     left: -21px;
@@ -196,6 +196,7 @@
 
   &-content {
     --avatar-hero-size: 168px;
+    --avatar-option-size: 64px;
 
     display: flex;
     flex-direction: column;
@@ -272,6 +273,7 @@
   @include bp.mobile {
     &-content {
       --avatar-hero-size: 120px;
+      --avatar-option-size: 48px;
 
       width: 100%;
       margin-top: 24px;
