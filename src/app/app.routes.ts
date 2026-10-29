@@ -80,11 +80,7 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'splash',
-    loadComponent: () =>
-      import('./features/auth/splash/splash').then((module) => module.Splash),
-  },
-  { path: '', pathMatch: 'full', redirectTo: 'splash' },
+  { path: 'splash', redirectTo: 'login' },
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', redirectTo: 'login' },
 ];
