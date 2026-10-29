@@ -278,7 +278,6 @@
         }
       }
     }
-
     &--register-details {
       @include bp.mobile {
         padding-top: clamp(24px, calc(100dvh - 733px), 199px);
