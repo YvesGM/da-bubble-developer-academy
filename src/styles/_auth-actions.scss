@@ -154,48 +154,80 @@
   }
 
   &-privacy {
-    font-size: 16px;
-
     display: flex;
     align-items: center;
-
     gap: 8px;
+    font-size: 16px;
+    color: #42526e;
 
-    color: tokens.$text-gray;
-
-    input {
-      width: 18px;
-      height: 18px;
-      margin: 0;
-
-      accent-color: tokens.$purple-2;
+    span {
+      min-width: 0;
+      line-height: 1.5;
     }
 
-    @include bp.mobile {
-      font-size: 16px;
+    /* Native checkbox keeps keyboard/label behaviour; only its appearance changes. */
+    input[type='checkbox'] {
+      appearance: none;
+      flex: 0 0 16px;
+      width: 16px;
+      height: 16px;
+      margin: 0;
 
-      gap: 7px;
+      border: 2px solid tokens.$purple-2;
+      border-radius: 2px;
+      background: transparent;
+      cursor: pointer;
+      transition:
+        border-color tokens.$motion-fast,
+        background-color tokens.$motion-fast;
 
-      input {
-        width: 16px;
-        height: 16px;
+      &:hover {
+        border-color: tokens.$purple-1;
+        background-color: tokens.$background;
+      }
+
+      &:checked {
+        background-color: tokens.$purple-2;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m3 8 3.5 3.5L13 4' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+
+      &:checked:hover {
+        border-color: tokens.$purple-1;
+        background-color: tokens.$purple-1;
+      }
+
+      &:focus-visible {
+        outline: 2px solid tokens.$purple-1;
+        outline-offset: 3px;
       }
     }
 
     a {
+      padding: 2px;
+      margin: 0 -2px;
+      border-radius: 6px;
+
       text-decoration: none;
-
       color: tokens.$purple-2;
-
       transition:
         color tokens.$motion-fast,
-        text-decoration-color tokens.$motion-fast;
+        background-color tokens.$motion-fast,
+        text-shadow tokens.$motion-fast;
 
-      &:hover {
-        text-decoration: underline;
-
+      &:hover,
+      &:focus-visible {
         color: tokens.$purple-1;
+        background: tokens.$background;
+        text-shadow: 0.15px 0 currentColor, -0.15px 0 currentColor;
       }
+    }
+
+    @include bp.mobile {
+      gap: 7px;
+      font-size: 16px;
     }
   }
 }
