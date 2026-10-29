@@ -105,6 +105,9 @@ export class ResetPassword {
       await this.delay(300);
     }
     await this.openLogin();
+    document.documentElement.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: 400, easing: 'ease-out',
+    });
   }
 
   /** Propagates a cancelled navigation rather than silently treating it as success. */
