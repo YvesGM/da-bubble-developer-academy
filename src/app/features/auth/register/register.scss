@@ -1,5 +1,6 @@
 @use '../../../../styles/tokens' as tokens;
 @use '../../../../styles/breakpoints' as bp;
+@use './register-privacy' as privacy;
 
 .register-card,
 .avatar-card {
@@ -26,10 +27,25 @@
     left: -21px;
     margin-left: 0;
 
-    img,
+    transform: none;
+    transition:
+      background-color 100ms cubic-bezier(0, 0, 0.58, 1),
+      color 100ms cubic-bezier(0, 0, 0.58, 1);
+
     .auth-back-icon {
-      width: 24px;
-      height: 24px;
+      width: 16px;
+      height: 16px;
+      transition: transform 100ms cubic-bezier(0, 0, 0.58, 1);
+    }
+
+    &:hover {
+      color: #535af1;
+      background: tokens.$background;
+      transform: none;
+
+      .auth-back-icon {
+        transform: scale(1.07);
+      }
     }
   }
 
@@ -95,6 +111,13 @@
       padding-left: 86px;
     }
 
+    .auth-field-error {
+      margin-left: 0;
+      font-size: 14px;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
     .auth-privacy {
       width: 100%;
       margin-top: 32px;
@@ -114,6 +137,8 @@
         min-width: 0;
       }
     }
+
+    @include privacy.controls;
 
     .auth-action-row {
       margin-top: 40px;
