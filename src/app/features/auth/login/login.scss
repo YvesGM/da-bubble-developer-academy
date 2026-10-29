@@ -3,48 +3,192 @@
 
 .login {
   &-card {
+    width: min(606px, 100%);
     min-height: 0;
+    padding: 50px 53px;
+
+    white-space: normal;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+
+    .auth-description {
+      margin-top: 30px;
+    }
   }
 
   &-form {
-    margin-top: 40px;
-    gap: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 46px;
 
-    .forgot {
-      &-link {
-        align-self: center;
+    .auth-field-wrapper {
+      gap: 40px;
+    }
 
-        margin: -9px 0 -5px;
-        padding: 5px 15px;
+    .auth-field-icon {
+      left: 32px;
+      width: 24px;
+      height: 24px;
+      max-height: 24px;
+      object-fit: contain;
+    }
 
-        border-radius: 30px;
+    .auth-control {
+      padding-left: 86px;
+    }
 
-        &:hover,
-        &:focus-visible {
-          background: tokens.$background;
+    .forgot-link {
+      align-self: center;
+      margin: 0;
+      padding: 5px 15px;
+
+      line-height: 22px;
+      border-radius: 30px;
+
+      &:hover,
+      &:focus-visible {
+        background: tokens.$background;
+      }
+    }
+
+    .auth-divider {
+      height: 30px;
+      margin-top: 33px;
+    }
+
+    .auth-google-button {
+      margin-top: 43px;
+    }
+
+    .auth-button-row {
+      margin-top: 43px;
+    }
+
+    .auth-form-error {
+      margin-top: 16px;
+      white-space: normal;
+    }
+
+    @include bp.mobile {
+      margin-top: 20px;
+
+      .auth-field-wrapper {
+        gap: 20px;
+      }
+
+      .auth-field + .auth-field {
+        margin-top: 10px;
+      }
+
+      .auth-field-icon {
+        top: 25px;
+      }
+
+      .auth-control {
+        height: 50px;
+        padding: 13px 20px 13px 86px;
+        font-size: 18px;
+      }
+
+      .auth-field-error {
+        font-size: 14px;
+        overflow-wrap: anywhere;
+      }
+
+      .forgot-link {
+        font-size: 17px;
+        line-height: 20px;
+      }
+
+      .auth-divider {
+        font-size: 17px;
+        margin-top: 20px;
+
+        &::before,
+        &::after {
+          transform: none;
+        }
+      }
+
+      .auth-google-button {
+        height: 50px;
+        margin-top: 20px;
+        gap: 20px;
+        font-size: 17px;
+
+        img {
+          width: 38px;
+          height: 38px;
+        }
+      }
+
+      .auth-button-row {
+        margin-top: 20px;
+        gap: 20px;
+
+        .auth-button {
+          min-height: 49px;
+          padding: 12px 25px;
+          font-size: 18px;
+          white-space: nowrap;
         }
       }
     }
 
-    @include bp.mobile {
-      margin-top: 26px;
-      gap: 22px;
-
-      .auth-field-wrapper {
-        gap: 24px;
+    @media (max-width: 370px) {
+      .auth-field-icon {
+        left: 20px;
+        width: 20px;
+        height: 20px;
       }
 
-      .forgot-link {
-        margin-top: -3px;
+      .auth-control {
+        padding-left: 56px;
+        font-size: 16px;
+      }
+
+      .auth-google-button {
+        gap: 12px;
+        font-size: 15px;
+
+        img {
+          width: 32px;
+          height: 32px;
+        }
       }
 
       .auth-button-row {
-        flex-wrap: nowrap;
+        gap: 12px;
+
+        .auth-button {
+          min-width: 0;
+          padding-inline: 10px;
+          font-size: 15px;
+        }
       }
     }
+  }
 
-    @include bp.widescreen {
-      margin-top: 44px;
+  @include bp.mobile {
+    &-card {
+      width: 100%;
+      padding: 35px 20px;
+
+      .auth-description {
+        margin-top: 15px;
+        font-size: 17px;
+        line-height: 1.2;
+      }
+    }
+  }
+
+  @media (max-width: 370px) {
+    &-card {
+      padding: 28px 16px;
+
+      .auth-description {
+        font-size: 16px;
+      }
     }
   }
 }
