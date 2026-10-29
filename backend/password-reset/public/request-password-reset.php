@@ -29,6 +29,15 @@ try {
     if (!is_array($config)) {
         throw new RuntimeException('Invalid private config');
     }
+    $accountFile = (string) ($config['service_account_file'] ?? '');
+    $smtp = $config['smtp'] ?? [];
+    $required = ['host', 'username', 'password', 'from'];
+    if (!is_file($accountFile) || !is_array($smtp)) {
+        respond(503, 'Reset mail service is not configured');
+    }
+    foreach ($required as $key) {
+        if (empty($smtp[$key])) respond(503, 'Reset mail service is not configured');
+    }
     require $internal.'/vendor/autoload.php';
     require $internal.'/src/RequestGuard.php';
     require $internal.'/src/ResetMailer.php';

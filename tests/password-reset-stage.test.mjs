@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
@@ -23,9 +23,13 @@ test('staging only copies the public handler and protected backend', () => {
     ['vendor/autoload.php', '<?php'],
     ['internal.htaccess', 'Require all denied'],
   ]) writeFileSync(join(base, file), value);
+  writeFileSync(join(base, 'config.php'), 'SECRET');
+  writeFileSync(join(base, 'service-account.json'), 'SECRET');
   stageResetApi(root);
   const deployed = join(root, 'dist/dabubble/browser/api');
   assert.equal(readFileSync(join(deployed, 'request-password-reset.php'), 'utf8'), '<?php');
   assert.equal(readFileSync(join(deployed, '_internal/.htaccess'), 'utf8'), 'Require all denied');
   assert.equal(readFileSync(join(deployed, '_internal/vendor/autoload.php'), 'utf8'), '<?php');
+  assert.equal(existsSync(join(deployed, 'config.php')), false);
+  assert.equal(existsSync(join(deployed, 'service-account.json')), false);
 });

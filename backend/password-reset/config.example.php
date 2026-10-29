@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * Copy to ../dabubble-private/config.php, OUTSIDE the Angular document root.
+ * Copy to the sibling dabubble-private/config.php, not under any domain's public root.
  * Keep service-account.json next to this private config. Never commit secrets.
  */
 return [

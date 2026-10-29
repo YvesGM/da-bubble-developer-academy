@@ -59,34 +59,37 @@ Production credentials are stored as GitHub environment secrets and are not comm
 ## Passwort-Reset über ALL-INKL (FTP, PHP und Firebase)
 
 Der Login, die Registrierung und die Firebase-Authentifizierung bleiben unverändert.
-Nur \`AuthService.sendPasswordReset()\` ruft \`/api/request-password-reset.php\` auf.
-Der öffentliche PHP-Endpunkt verwendet serverseitig \`kreait/firebase-php\` zur
-Erzeugung eines echten Firebase-Reset-Codes und \`PHPMailer\` zum Versand über
+Nur `AuthService.sendPasswordReset()` ruft `/api/request-password-reset.php` auf.
+Der öffentliche PHP-Endpunkt verwendet serverseitig `kreait/firebase-php` zur
+Erzeugung eines echten Firebase-Reset-Codes und `PHPMailer` zum Versand über
 das vorhandene ALL-INKL-SMTP-Postfach. Die E-Mail verlinkt direkt auf
-\`https://dabubble.schniefs-portfolio.de/reset-password?mode=resetPassword&oobCode=...\`.
+`https://dabubble.schniefs-portfolio.de/reset-password?mode=resetPassword&oobCode=...`.
 Die Angular-Seite verarbeitet diesen Code wie bisher mit Firebase Authentication.
 
 ### Vor dem ersten produktiven Einsatz
 
 1. Stelle sicher, dass ALL-INKL PHP 8.5 und Composer-Abhängigkeiten unterstützt.
    Die GitHub-Action installiert Composer-Pakete bei jedem Build und legt PHP-Dateien
-   samt \`vendor\` im FTP-Bundle unter \`api/\` ab. \`api/_internal/.htaccess\`
+   samt `vendor` im FTP-Bundle unter `api/` ab. `api/_internal/.htaccess`
    sperrt öffentliche Zugriffe auf Implementierung und Libraries.
 2. Erstelle in Firebase / Google Cloud unter **Service Accounts** einen privaten
    Service-Account-Schlüssel mit den nötigen Firebase Authentication Rechten.
-   Niemals in \`public/\`, im Repository oder im Angular-Bundle ablegen.
+   Niemals in `public/`, im Repository oder im Angular-Bundle ablegen.
 3. Lege im FTP-Webspace **neben**, nicht **innerhalb** des DABubble-Webroots
-   den Ordner \`dabubble-private/\` an. Beispiel bei Webroot \`.../dabubble/\`:
-   \`.../dabubble-private/\`. Der PHP-Endpunkt sucht hier \`config.php\`.
-4. Kopiere \`backend/password-reset/config.example.php\` als \`config.php\` in
+   den Ordner `dabubble-private/` an. Beispiel bei Webroot `.../dabubble/`:
+   `.../dabubble-private/`. Der PHP-Endpunkt sucht hier `config.php`.
+   **Prüfe auch die Document Roots anderer Domains:** Das Verzeichnis darf über
+   keine andere Domain öffentlich erreichbar sein. Kopiere vorsorglich
+   `backend/password-reset/private-dir.htaccess` als `.htaccess` dorthin.
+4. Kopiere `backend/password-reset/config.example.php` als `config.php` in
    diesen privaten Ordner und setze SMTP-Host, Port, Postfach und Passwort ein.
-   Lege den privaten Firebase-Schlüssel dort als \`service-account.json\` ab.
+   Lege den privaten Firebase-Schlüssel dort als `service-account.json` ab.
    Setze die Zugriffsrechte so restriktiv wie beim Provider möglich.
 5. Erstelle im KAS unter **E-Mail → E-Mail-Postfach** ein Absenderpostfach.
-   ALL-INKL-SMTP-Host: \`<KAS-Login>.kasserver.com\`, Port 465 mit TLS
-   (alternativ Port 587 mit STARTTLS). Sender und SMTP-Benutzer in \`config.php\`
+   ALL-INKL-SMTP-Host: `<KAS-Login>.kasserver.com`, Port 465 mit TLS
+   (alternativ Port 587 mit STARTTLS). Sender und SMTP-Benutzer in `config.php`
    konfigurieren. **Keine Zugangsdaten in GitHub Secrets für den Browser-Build.**
-6. Erst dann \`chatgpt\` in den vorgesehenen Review-Branch übernehmen und
+6. Erst dann `chatgpt` in den vorgesehenen Review-Branch übernehmen und
    regulär deployen. Die Anwendung muss zwingend über HTTPS erreichbar sein.
 7. Mit einem dedizierten Testkonto einen neuen Reset-Link anfordern, aufrufen,
    Passwort ändern und anschließend mit dem neuen Passwort anmelden.
@@ -99,12 +102,12 @@ Die eigene E-Mail wird ausschließlich über den PHP-Endpunkt generiert.
 Im Angular-Entwicklungsserver ist PHP nicht ausführbar. Für echte lokale
 E-Mail-Tests zusätzlich den PHP-Server und einen Angular-Proxy konfigurieren
 oder den bereits bereitgestellten HTTPS-Endpunkt verwenden. Nicht einfach
-\`localhost\` als produktive Reset-URL eintragen.
+`localhost` als produktive Reset-URL eintragen.
 
-Zum Testen des Packaging-Skripts: \`npm run test:reset\`.
-Zum manuellen Staging nach \`npm run build\`:
-\`cd backend/password-reset && composer install --no-dev && cd ../..\`
-und danach \`node scripts/stage-password-reset.mjs\`.
+Zum Testen des Packaging-Skripts: `npm run test:reset`.
+Zum manuellen Staging nach `npm run build`:
+`cd backend/password-reset && composer install --no-dev && cd ../..`
+und danach `node scripts/stage-password-reset.mjs`.
 
 ### Sicherheitsverhalten
 
