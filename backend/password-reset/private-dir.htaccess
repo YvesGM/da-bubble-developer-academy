@@ -1,8 +1,0 @@
-# Copy as ".htaccess" into dabubble-private next to credentials.
-# Defense in depth: these secrets must not be reachable from any domain.
-<IfModule mod_authz_core.c>
-  Require all denied
-</IfModule>
-<IfModule !mod_authz_core.c>
-  Deny from all
-</IfModule>
