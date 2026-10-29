@@ -97,7 +97,7 @@ export class InputCaretDirective implements AfterViewInit {
     const style = this.view.getComputedStyle(this.input);
     const context = this.measurementContext();
     if (!context) return this.hide();
-    context.font = style.font;
+    context.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
     const prefix = this.input.type === 'password'
       ? '•'.repeat(position) : this.input.value.slice(0, position);
     const spacing = parseFloat(style.letterSpacing) || 0;
