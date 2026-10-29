@@ -289,11 +289,6 @@
         }
       }
     }
-    &--reset {
-      @include bp.mobile {
-        padding-top: clamp(24px, calc(100dvh - 698px), 234px);
-      }
-    }
     &--forgot {
       @include bp.mobile {
         padding-top: clamp(24px, calc(100dvh - 733px), 199px);
@@ -308,6 +303,11 @@
         .auth-shell-footer {
           margin-top: auto;
         }
+      }
+    }
+    &--reset {
+      @include bp.mobile {
+        padding-top: clamp(24px, calc(100dvh - 698px), 234px);
       }
     }
   }
