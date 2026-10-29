@@ -25,7 +25,10 @@
 
     gap: clamp(16px, 1.36vw, 26px);
     max-width: calc(100vw - 32px);
-    transform: translateX(clamp(0px, calc(3.43vw - 15px), 51px));
+    transform: translate(
+      clamp(0px, calc(3.43vw - 15px), 51px),
+      clamp(-5px, calc(-6.45px + 0.337vw), 0px)
+    );
   }
 
   &-mark {
