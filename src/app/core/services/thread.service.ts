@@ -1,14 +1,6 @@
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import {
-  Firestore,
-  addDoc,
-  collection,
-  collectionData,
-  orderBy,
-  query,
-  serverTimestamp,
-} from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, orderBy, query, serverTimestamp } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 import { ConversationTarget, conversationDocumentPath } from '../models/conversation.model';

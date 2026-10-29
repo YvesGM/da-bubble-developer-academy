@@ -1,16 +1,6 @@
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
 import { Auth, User, updateProfile } from '@angular/fire/auth';
-import {
-  Firestore,
-  collection,
-  collectionData,
-  doc,
-  docData,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, doc, docData, getDoc, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 
 import { DEFAULT_RECENT_EMOJIS } from '../constants/emoji.constants';

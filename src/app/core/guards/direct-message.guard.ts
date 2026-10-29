@@ -34,6 +34,7 @@ async function canReadConversation(
   try {
     const reference = runInInjectionContext(injector, () => doc(firestore, 'directMessages', dmId));
     const snapshot = await runInInjectionContext(injector, () => getDoc(reference));
+    
     return snapshot.exists() && hasAccess(snapshot.data(), uid);
   } catch {
     return false;
