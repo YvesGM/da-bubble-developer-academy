@@ -20,12 +20,12 @@
   }
 
   &.hero {
-    width: 136px;
-    height: 136px;
+    width: var(--avatar-hero-size, 136px);
+    height: var(--avatar-hero-size, 136px);
   }
 
   &.option {
-    width: 64px;
-    height: 64px;
+    width: var(--avatar-option-size, 64px);
+    height: var(--avatar-option-size, 64px);
   }
 }
