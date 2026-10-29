@@ -10,5 +10,6 @@ import { RouterLink } from '@angular/router';
 export class AuthShell {
   @Input() showSignup = false;
   @Input() showForgotPassword = false;
+  @Input() showResetPassword = false;
   @Input() registerStep: 'details' | 'avatar' | null = null;
 }
