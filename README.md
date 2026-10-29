@@ -75,11 +75,13 @@ Die Angular-Seite verarbeitet diesen Code wie bisher mit Firebase Authentication
 2. Erstelle in Firebase / Google Cloud unter **Service Accounts** einen privaten
    Service-Account-Schlüssel mit den nötigen Firebase Authentication Rechten.
    Niemals in `public/`, im Repository oder im Angular-Bundle ablegen.
-3. Lege im FTP-Webspace **neben**, nicht **innerhalb** des DABubble-Webroots
-   den Ordner `dabubble-private/` an. Beispiel bei Webroot `.../dabubble/`:
-   `.../dabubble-private/`. Der PHP-Endpunkt sucht hier `config.php`.
+3. Lege im FTP-Hauptverzeichnis den Ordner `dabubble-private/` an,
+   auf derselben Ebene wie `schniefs-portfolio/` (nicht innerhalb der Domain).
+   Der PHP-Endpunkt sucht die private Konfiguration von seinem eigenen Pfad
+   aus in den übergeordneten Verzeichnissen. Auch für lokale Tests funktioniert
+   ein `dabubble-private/` direkt oberhalb des Angular-Webroots.
    **Prüfe auch die Document Roots anderer Domains:** Das Verzeichnis darf über
-   keine andere Domain öffentlich erreichbar sein. Kopiere vorsorglich
+   keine Domain öffentlich erreichbar sein. Kopiere
    `backend/password-reset/private-dir.htaccess` als `.htaccess` dorthin.
 4. Kopiere `backend/password-reset/config.example.php` als `config.php` in
    diesen privaten Ordner und setze SMTP-Host, Port, Postfach und Passwort ein.

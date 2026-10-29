@@ -21,12 +21,16 @@ if (!$secure && (int) ($_SERVER['SERVER_PORT'] ?? 0) !== 443) {
     respond(403, 'HTTPS required');
 }
 
-$privateDir = dirname(__DIR__, 2).'/dabubble-private';
-$configFile = $privateDir.'/config.php';
 $internal = __DIR__.'/_internal';
-if (!is_file($configFile) || !is_file($internal.'/vendor/autoload.php')) {
+if (!is_file($internal.'/src/PrivateDirectory.php')) {
     respond(503, 'Reset mail service is not configured');
 }
+require_once $internal.'/src/PrivateDirectory.php';
+$privateDir = \DABubble\PrivateDirectory::find(__DIR__);
+if ($privateDir === null || !is_file($internal.'/vendor/autoload.php')) {
+    respond(503, 'Reset mail service is not configured');
+}
+$configFile = $privateDir.'/config.php';
 
 try {
     $config = require $configFile;

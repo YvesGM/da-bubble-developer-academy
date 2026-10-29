@@ -57,7 +57,9 @@ jobs:
         run: find backend/password-reset -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l
 
       - name: Validate Firebase reset link transformation
-        run: php backend/password-reset/tests/reset-link.test.php
+        run: |
+          php backend/password-reset/tests/reset-link.test.php
+          php backend/password-reset/tests/private-directory.test.php
 
       - name: Run reset staging tests and package PHP alongside Angular
         run: |
