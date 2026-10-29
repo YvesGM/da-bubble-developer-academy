@@ -195,6 +195,6 @@ interface RegistrationInput {
 }
 
 /** Browser-native crossfade is progressively enhanced; Firefox uses the fade fallback. */
-interface TransitionDocument extends Document {
+type TransitionDocument = Document & {
   startViewTransition?: (update: () => Promise<void>) => { finished: Promise<void> };
-}
+};
