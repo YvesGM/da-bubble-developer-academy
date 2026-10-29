@@ -1,3 +1,4 @@
+import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -8,7 +9,7 @@ import { AuthShell } from '../components/auth-shell/auth-shell';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [ReactiveFormsModule, RouterLink, AuthShell],
+  imports: [InputCaretDirective, ReactiveFormsModule, RouterLink, AuthShell],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',
 })

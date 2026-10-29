@@ -1,3 +1,4 @@
+import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { Component, inject, signal } from '@angular/core';
 import { FirebaseError } from 'firebase/app';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -9,7 +10,7 @@ import { AuthShell } from '../components/auth-shell/auth-shell';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, AuthShell],
+  imports: [InputCaretDirective, ReactiveFormsModule, RouterLink, AuthShell],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
