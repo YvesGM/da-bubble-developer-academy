@@ -1,4 +1,4 @@
-<app-auth-shell>
+<app-auth-shell [registerStep]="step()">
   @if (step() === 'details') {
     <section class="auth-card register-card">
       <header class="auth-card-header">
