@@ -160,6 +160,7 @@ export class InputCaretDirective implements AfterViewInit {
     if (x < left - 2 || x > right + 2) return this.hideIndicator();
     const ratio = this.view.devicePixelRatio || 1;
     const snap = (value: number): number => Math.round(value * ratio) / ratio;
+    this.caret.style.width = `${Math.max(2, 2 / ratio)}px`;
     this.caret.style.left = `${snap(Math.max(left, Math.min(right, x)))}px`;
     this.caret.style.top = `${snap(rect.top + (rect.height - 18) / 2)}px`;
     this.caret.hidden = rect.bottom < 0 || rect.top > this.view.innerHeight;
