@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
+import { Component, HostListener, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -40,6 +40,13 @@ export class ChannelCreateDialog {
     name: ['', Validators.required],
     description: [''],
   });
+
+  /** Closes the dialog on Escape; an already created channel is preserved. */
+  @HostListener('document:keydown.escape')
+  closeOnEscape(): void {
+    if (this.submitting()) return;
+    this.step() === 'details' ? this.closeRequested.emit() : this.finishWithoutMembers();
+  }
 
   /**
    * Validates the channel details step and starts channel creation.
