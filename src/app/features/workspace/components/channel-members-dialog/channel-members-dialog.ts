@@ -11,6 +11,12 @@ import { PresenceIndicator } from '../../../../shared/components/presence-indica
   styleUrl: './channel-members-dialog.scss',
 })
 export class ChannelMembersDialog {
+  /** Closes the member list via Escape. */
+  @HostListener('document:keydown.escape')
+  closeOnEscape(): void {
+    this.closeRequested.emit();
+  }
+
   @Input() members: UserProfile[] = [];
   @Input() guestAccess = false;
   @Input() currentUserId = '';
