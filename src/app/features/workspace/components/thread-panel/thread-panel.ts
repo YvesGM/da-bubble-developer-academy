@@ -42,6 +42,11 @@ export class ThreadPanel {
     { initialValue: [] as Message[] },
   );
 
+  /** Saves a selected emoji to the existing user's recent-emoji history. */
+  async rememberEmoji(emoji: string): Promise<void> {
+    await this.usersService.rememberEmoji(emoji);
+  }
+
   /**
    * Sends a reply to the currently selected thread.
    *
