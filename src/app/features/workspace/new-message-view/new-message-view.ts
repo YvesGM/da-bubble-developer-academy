@@ -1,12 +1,14 @@
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { Router, RouterLink } from '@angular/router';
 
 import { Channel } from '../../../core/models/channel.model';
+import { ConversationTarget, conversationRoute } from '../../../core/models/conversation.model';
 import { UserProfile } from '../../../core/models/user-profile.model';
 import { ChannelService } from '../../../core/services/channel.service';
 import { DirectMessageService } from '../../../core/services/direct-message.service';
+import { MessageService } from '../../../core/services/message.service';
 import { UserService } from '../../../core/services/user.service';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { MessageInput } from '../components/message-input/message-input';
@@ -18,95 +20,99 @@ import { MessageInput } from '../components/message-input/message-input';
   styleUrl: './new-message-view.scss',
 })
 export class NewMessageView {
-  @ViewChild(MessageInput) private composer?: MessageInput;
   private readonly auth = inject(Auth);
   private readonly channelsService = inject(ChannelService);
   private readonly directMessages = inject(DirectMessageService);
+  private readonly messages = inject(MessageService);
   private readonly router = inject(Router);
   private readonly usersService = inject(UserService);
 
   readonly query = signal('');
+  readonly selectedUser = signal<UserProfile | null>(null);
+  readonly selectedChannel = signal<Channel | null>(null);
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
+  readonly profile = toSignal(this.usersService.observeCurrentProfile());
   readonly mode = computed<'@' | '#'>(() => this.query().trim().startsWith('#') ? '#' : '@');
+  readonly recipientSelected = computed(() => !!(this.selectedUser() || this.selectedChannel()));
+  readonly sendAction = (text: string): Promise<void> => this.sendNewMessage(text);
 
-  /**
-   * Filters workspace users by the normalized new-message query.
-   *
-   * @returns User profiles matching the current query.
-   */
+  /** Clears the selected recipient when the user changes the address. */
+  updateQuery(value: string): void {
+    this.query.set(value);
+    this.selectedUser.set(null);
+    this.selectedChannel.set(null);
+  }
+
+  /** Filters workspace users by their display name or email address. */
   filteredUsers(): UserProfile[] {
     const query = this.normalizedQuery();
     return this.users().filter((user) => this.matchesUser(user, query));
   }
 
-  /**
-   * Filters visible channels by the normalized new-message query.
-   *
-   * @returns Channels whose names match the current query.
-   */
+  /** Filters accessible channels by their name. */
   filteredChannels(): Channel[] {
     const query = this.normalizedQuery();
     return this.channels().filter((channel) => channel.name.toLowerCase().includes(query));
   }
 
-  /**
-   * Opens or creates a direct-message conversation with the selected user.
-   *
-   * @param uid - Firebase user identifier to message.
-   * @returns A promise that resolves after navigation completes.
-   */
-  async selectUser(uid: string): Promise<void> {
-    const dmId = await this.directMessages.openConversation(uid);
-    await this.router.navigate(['/workspace/dm', dmId], { state: this.draftState() });
+  /** Selects a person without leaving the new-message composer. */
+  selectUser(uid: string): void {
+    const user = this.users().find((item) => item.uid === uid);
+    if (!user) return;
+    this.selectedUser.set(user);
+    this.selectedChannel.set(null);
+    this.query.set(`@${user.displayName}`);
   }
 
-  /**
-   * Navigates to the selected channel.
-   *
-   * @param channelId - Identifier of the selected channel.
-   * @returns A promise that resolves after navigation completes.
-   */
-  async selectChannel(channelId: string): Promise<void> {
-    await this.router.navigate(['/workspace/channel', channelId], { state: this.draftState() });
+  /** Selects a channel without losing the message draft. */
+  selectChannel(channelId: string): void {
+    const channel = this.channels().find((item) => item.id === channelId);
+    if (!channel) return;
+    this.selectedChannel.set(channel);
+    this.selectedUser.set(null);
+    this.query.set(`#${channel.name}`);
   }
 
-  /** Carries the unsent draft to the selected chat route without persisting it. */
-  private draftState(): { newMessageDraft: string } {
-    return { newMessageDraft: this.readComposerDraft() };
+  /** Uses the existing message service and navigates only after successful sending. */
+  async sendNewMessage(text: string): Promise<void> {
+    const target = await this.selectedTarget();
+    if (!target) throw new Error('recipient-required');
+    await this.messages.sendMessage(target, this.messageInput(text));
+    await this.router.navigate(conversationRoute(target));
   }
 
-  /** Returns the current draft from the existing message input component. */
-  private readComposerDraft(): string {
-    return this.composer?.text() ?? '';
+  /** Resolves the selected recipient to an existing channel or DM target. */
+  private async selectedTarget(): Promise<ConversationTarget | null> {
+    const channel = this.selectedChannel();
+    if (channel) return { type: 'channel', id: channel.id };
+    const user = this.selectedUser();
+    if (!user) return null;
+    const id = await this.directMessages.openConversation(user.uid);
+    return { type: 'directMessage', id };
   }
 
-  /**
-   * Normalizes the current query by removing an optional prefix and lowercasing it.
-   *
-   * @returns The normalized search query.
-   */
+  /** Builds the payload from the current authenticated user's existing profile. */
+  private messageInput(text: string) {
+    const user = this.auth.currentUser;
+    return {
+      text,
+      authorName: user?.displayName || 'Benutzer',
+      authorAvatarId: this.profile()?.avatarId ?? 'avatar-1',
+    };
+  }
+
+  /** Normalizes a search query without the optional channel or user prefix. */
   private normalizedQuery(): string {
     return this.query().trim().replace(/^[@#]/, '').toLowerCase();
   }
 
-  /**
-   * Checks whether a user identifier belongs to the current Firebase session.
-   *
-   * @param uid - User identifier to compare.
-   * @returns Whether the identifier belongs to the current user.
-   */
+  /** Labels the currently authenticated account in the recipient search. */
   isCurrentUser(uid: string): boolean {
     return uid === this.auth.currentUser?.uid;
   }
 
-  /**
-   * Checks whether a user profile matches the normalized query.
-   *
-   * @param user - User profile to inspect.
-   * @param query - Normalized query.
-   * @returns Whether the display name or email matches.
-   */
+  /** Matches both visible usernames and email addresses. */
   private matchesUser(user: UserProfile, query: string): boolean {
     if (!query) return true;
     return user.displayName.toLowerCase().includes(query)
