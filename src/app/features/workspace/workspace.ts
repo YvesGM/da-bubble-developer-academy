@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { Router, RouterOutlet } from '@angular/router';
@@ -54,6 +54,12 @@ export class Workspace {
    */
   constructor() {
     this.presence.start();
+    effect(() => {
+      const firstChannel = this.channels()[0];
+      if (firstChannel && this.router.url === '/workspace') {
+        void this.router.navigate(['/workspace/channel', firstChannel.id], { replaceUrl: true });
+      }
+    });
   }
 
   /**
