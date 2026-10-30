@@ -15,10 +15,11 @@ import { FormsModule } from '@angular/forms';
 import { Channel } from '../../../../core/models/channel.model';
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
+import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 @Component({
   selector: 'app-message-input',
-  imports: [FormsModule, EmojiPicker],
+  imports: [FormsModule, EmojiPicker, InputCaretDirective],
   templateUrl: './message-input.html',
   styleUrl: './message-input.scss',
 })
