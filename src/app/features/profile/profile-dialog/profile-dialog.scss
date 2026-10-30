@@ -13,6 +13,8 @@
   padding: 24px;
 
   background: #00000052;
+
+  @include bp.mobile { padding: 16px; }
 }
 
 .dialog {
