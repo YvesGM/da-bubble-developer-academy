@@ -16,11 +16,11 @@
 
 .dialog {
   animation: dialog-surface-in tokens.$motion-base both;
-  width: min(460px, 100%);
+  width: min(500px, 100%);
   padding: 30px 34px;
 
   background: tokens.$white;
-  border-radius: 20px;
+  border-radius: 30px;
   box-shadow: 0 8px 28px #00000024;
 
   header {
