@@ -3,9 +3,11 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   Output,
   ViewChild,
+  inject,
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +23,7 @@ import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-pi
   styleUrl: './message-input.scss',
 })
 export class MessageInput implements AfterViewInit {
+  private readonly host = inject(ElementRef<HTMLElement>);
   @Input() channels: Channel[] = [];
   @Input() users: UserProfile[] = [];
   @Input() recentEmojis: string[] = [];
@@ -44,6 +47,19 @@ export class MessageInput implements AfterViewInit {
   readonly showAddMenu = signal(false);
   readonly sending = signal(false);
   readonly sendError = signal('');
+
+  /** Closes transient input menus when a click occurs outside this composer. */
+  @HostListener('document:click', ['$event'])
+  closeOnOutsideClick(event: MouseEvent): void {
+    if (!this.host.nativeElement.contains(event.target as Node)) this.closeOverlays();
+  }
+
+  /** Closes suggestions and input menus on Escape. */
+  @HostListener('document:keydown.escape')
+  closeOnEscape(): void {
+    this.closeOverlays();
+    this.closeSuggestions();
+  }
 
   /**
    * Applies initial focus to the message field when autofocus is enabled.
