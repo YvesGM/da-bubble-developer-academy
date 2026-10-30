@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, HostListener, EventEmitter, Input, Output } from '@angular/core';
 
 import { UserProfile } from '../../../core/models/user-profile.model';
 import { Avatar } from '../../../shared/components/avatar/avatar';
@@ -11,6 +11,11 @@ import { PresenceIndicator } from '../../../shared/components/presence-indicator
   styleUrl: './profile-card.scss',
 })
 export class ProfileCard {
+  @HostListener('document:keydown.escape')
+  closeOnEscape(): void {
+    this.closeRequested.emit();
+  }
+
   @Input({ required: true }) user!: UserProfile;
   @Input() ownProfile = false;
   @Input() messageEnabled = true;
