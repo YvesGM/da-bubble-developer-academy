@@ -184,7 +184,7 @@
   .direct-messages .section-heading > button { display: none; }
 
   .sidebar-section { margin-top: 22px; }
-  .sidebar-section:first-of-type { margin-top: 0; }
+  .sidebar > .sidebar-section:first-of-type { margin-top: 0; }
 
   .sidebar .mobile-new-message {
     position: fixed;
