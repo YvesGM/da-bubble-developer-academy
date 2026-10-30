@@ -110,7 +110,7 @@
   height: auto;
   min-height: 36px;
   padding: 0 6px;
-  gap: 8px;
+  gap: 13px;
   font-size: 18px;
   font-weight: 700;
   border-radius: 12px;
@@ -146,7 +146,35 @@
 }
 
 .channel-link { width: fit-content; max-width: 100%; min-height: 36px; }
-.dm-link { min-height: 48px; }
+.sidebar button.dm-link {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 60px;
+  height: auto;
+  padding: 5px 14px;
+  gap: 12px;
+  color: tokens.$text;
+  text-align: left;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 400;
+  transform: none;
+}
+
+.sidebar button.dm-link:hover,
+.sidebar button.dm-link.active {
+  color: tokens.$purple-1;
+  background: tokens.$background;
+  transform: none;
+}
+
+.dm-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .channel-link:hover,
 .channel-link.active,
@@ -158,12 +186,19 @@
 
 .channel-hash { width: 18px; height: 18px; object-fit: contain; }
 
-.dm-avatar { position: relative; flex: 0 0 auto; }
+.dm-avatar {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 50px;
+  width: 50px;
+  height: 50px;
+  --avatar-medium-size: 50px;
+}
 
 .dm-avatar app-presence-indicator {
   position: absolute;
-  right: -1px;
-  bottom: 1px;
+  right: -2px;
+  bottom: -1px;
   display: grid;
   border: 2px solid tokens.$white;
   border-radius: 50%;
@@ -216,7 +251,5 @@
 
 @include bp.widescreen {
   .sidebar { padding: 28px 30px; }
-  .dm-avatar { --avatar-medium-size: 50px; }
-  .dm-link { min-height: 60px; }
   .workspace-name { max-width: 230px; font-size: 22px; }
 }
