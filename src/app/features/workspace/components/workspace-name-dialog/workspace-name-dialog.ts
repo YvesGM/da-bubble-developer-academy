@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
+import { Component, HostListener, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
@@ -21,6 +21,12 @@ export class WorkspaceNameDialog {
   readonly form = this.formBuilder.nonNullable.group({
     workspaceName: ['Workspace', Validators.required],
   });
+
+  /** Closes the existing workspace name editor via Escape. */
+  @HostListener('document:keydown.escape')
+  closeOnEscape(): void {
+    this.closeRequested.emit();
+  }
 
   /**
    * Validates the workspace-name form and emits the trimmed value when valid.
