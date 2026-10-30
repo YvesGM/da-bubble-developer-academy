@@ -32,7 +32,6 @@
     rows="3"
     [disabled]="sending()"
     aria-label="Nachricht verfassen"
-    (keydown.escape)="closeOverlays()"
     [placeholder]="placeholder"
     [ngModel]="text()"
     (ngModelChange)="updateText($event)"
