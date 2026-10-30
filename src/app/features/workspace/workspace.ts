@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, HostListener, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { Router, RouterOutlet } from '@angular/router';
@@ -48,6 +48,7 @@ export class Workspace {
   readonly showWorkspaceEditor = signal(false);
   readonly selectedUser = signal<UserProfile | null>(null);
   readonly sidebarCollapsed = signal(false);
+  readonly mobileViewport = signal(window.innerWidth <= 800);
 
   /**
    * Starts realtime presence tracking when the workspace shell is created.
@@ -56,10 +57,16 @@ export class Workspace {
     this.presence.start();
     effect(() => {
       const firstChannel = this.channels()[0];
-      if (firstChannel && this.router.url === '/workspace') {
+      if (firstChannel && !this.mobileViewport() && this.router.url === '/workspace') {
         void this.router.navigate(['/workspace/channel', firstChannel.id], { replaceUrl: true });
       }
     });
+  }
+
+  /** Keeps the desktop auto-selection from bypassing the Figma mobile main menu. */
+  @HostListener('window:resize')
+  updateViewport(): void {
+    this.mobileViewport.set(window.innerWidth <= 800);
   }
 
   /**
