@@ -77,6 +77,10 @@
 
   .replies { min-height: 0; overflow: auto; }
 
+  @media (min-width: 801px) and (max-width: 1199px) {
+    width: 100%;
+  }
+
   @include bp.widescreen { width: min(485px, 100%); }
 
   @include bp.mobile {
