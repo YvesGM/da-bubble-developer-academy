@@ -49,9 +49,11 @@ export class WorkspaceSidebar {
 
   /** Highlights the user whose existing conversation matches the current DM route. */
   isActiveUser(uid: string): boolean {
-    return this.directMessages.some((dm) =>
-      dm.participantIds.includes(uid) && this.router.url === `/workspace/dm/${dm.id}`,
-    );
+    return this.directMessages.some((dm) => {
+      const partner = dm.participantIds.find((id) => id !== this.currentUserId)
+        ?? this.currentUserId;
+      return partner === uid && this.router.url === `/workspace/dm/${dm.id}`;
+    });
   }
 
   /** Labels the current user's personal conversation as shown in the Figma menu. */
