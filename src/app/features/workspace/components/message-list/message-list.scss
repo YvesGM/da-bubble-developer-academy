@@ -26,7 +26,7 @@
         display: flex;
         align-items: center;
 
-        margin: 20px 35px;
+        margin: 20px 0;
         gap: 12px;
 
         color: tokens.$text-gray;
@@ -53,5 +53,5 @@
   }
 }
 @include bp.mobile {
-  .message-list .date-separator { margin: 20px 16px; }
+  .message-list .date-separator { margin: 20px 0; }
 }
