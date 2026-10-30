@@ -150,6 +150,16 @@
     box-shadow: 0 2px 8px #0000000a;
     overflow: hidden;
 
+    // The Figma desktop thread is a separate rounded surface, not an inner divider.
+    @media (min-width: 1200px) {
+      &:has(app-thread-panel) {
+        overflow: visible;
+        background: transparent;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+
     @include bp.mobile {
       min-height: 0;
       height: 100%;
