@@ -119,12 +119,23 @@ export class InputCaretDirective implements AfterViewInit {
     this.positionIndicator(style, width);
   }
 
-  /** Measures a textarea caret using the same font, wrapping and padding as the native field. */
+  /** Measures the textarea insertion point using its native wrapping and padding. */
   private positionTextareaCaret(style: CSSStyleDeclaration, position: number): void {
-    const mirror = this.ensureTextMirror();
     const field = this.input as HTMLTextAreaElement;
+    const mirror = this.ensureTextMirror();
+    this.styleTextMirror(mirror, field, style);
+    const marker = this.document.createElement('span');
+    marker.textContent = '\u200b';
+    mirror.replaceChildren(this.document.createTextNode(field.value.slice(0, position)), marker);
+    this.drawTextareaCaret(field, mirror, marker, style);
+  }
+
+  /** Keeps the single offscreen measurement mirror in sync with the textarea. */
+  private styleTextMirror(
+    mirror: HTMLDivElement, field: HTMLTextAreaElement, style: CSSStyleDeclaration,
+  ): void {
     mirror.style.width = `${field.clientWidth}px`;
-    mirror.style.font = style.font;
+    mirror.style.font = style.font || `${style.fontSize} ${style.fontFamily}`;
     mirror.style.lineHeight = style.lineHeight;
     mirror.style.letterSpacing = style.letterSpacing;
     mirror.style.padding = style.padding;
@@ -132,16 +143,20 @@ export class InputCaretDirective implements AfterViewInit {
     mirror.style.tabSize = style.tabSize;
     mirror.style.wordBreak = style.wordBreak;
     mirror.style.overflowWrap = style.overflowWrap;
-    const marker = this.document.createElement('span');
-    marker.textContent = '\u200b';
-    mirror.replaceChildren(this.document.createTextNode(field.value.slice(0, position)), marker);
+  }
+
+  /** Draws the shared indicator at the measured, vertically scrolled caret position. */
+  private drawTextareaCaret(
+    field: HTMLTextAreaElement, mirror: HTMLDivElement,
+    marker: HTMLElement, style: CSSStyleDeclaration,
+  ): void {
+    if (!this.caret) return;
     const bounds = field.getBoundingClientRect();
     const mirrorBounds = mirror.getBoundingClientRect();
     const markerBounds = marker.getBoundingClientRect();
     const x = bounds.left + markerBounds.left - mirrorBounds.left - field.scrollLeft;
     const y = bounds.top + markerBounds.top - mirrorBounds.top - field.scrollTop;
     const height = Math.min(parseFloat(style.lineHeight) || 18, 25);
-    if (!this.caret) return;
     this.caret.style.left = `${x}px`;
     this.caret.style.top = `${y}px`;
     this.caret.style.height = `${height}px`;
