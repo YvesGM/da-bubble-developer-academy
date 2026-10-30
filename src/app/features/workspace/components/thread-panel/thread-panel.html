@@ -7,7 +7,8 @@
     <button type="button" aria-label="Thread schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
   </header>
 
-  <app-message-item
+  <div class="thread-conversation">
+    <app-message-item
     [target]="target()"
     [message]="parent()"
     [recentEmojis]="recentEmojis()"
@@ -31,6 +32,8 @@
         (userRequested)="userRequested.emit($event)"
       />
     }
+  </div>
+
   </div>
 
   <app-message-input
