@@ -26,7 +26,6 @@ export class NewMessageView {
   private readonly usersService = inject(UserService);
 
   readonly query = signal('');
-  readonly placeholder = 'Nachricht schreiben';
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
   readonly mode = computed<'@' | '#'>(() => this.query().trim().startsWith('#') ? '#' : '@');
