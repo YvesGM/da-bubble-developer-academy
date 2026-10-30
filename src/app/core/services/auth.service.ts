@@ -140,19 +140,15 @@ export class AuthService {
   }
 
   /**
-   * Deletes anonymous accounts on logout; registered accounts are only signed out.
-   * If Firebase rejects guest deletion, signs out so logout stays functional.
-   * @throws If Firebase cannot sign out after a failed guest deletion.
+   * Deletes anonymous Firebase accounts before ending the guest session.
+   * Registered users are signed out without deleting their accounts.
+   * @throws If guest deletion or regular sign-out fails.
    */
   async logout(): Promise<void> {
     const user = this.auth.currentUser;
     if (user?.isAnonymous) {
-      try {
-        await this.run(() => deleteUser(user));
-        return;
-      } catch {
-        console.warn('Guest account deletion failed; signing out instead.');
-      }
+      await this.run(() => deleteUser(user));
+      return;
     }
     await this.run(() => signOut(this.auth));
   }

@@ -85,16 +85,18 @@ test('logout without a current user remains safe', async () => {
   assert.deepEqual(calls, [['signOut', auth]]);
 });
 
-test('failed guest deletion still signs out without touching registered users', async () => {
+test('failed guest deletion preserves the session instead of leaving an orphaned account', async () => {
   const guest = { uid: 'guest-2', isAnonymous: true };
   const { auth, calls, service } = createScenario(guest, { failDelete: true });
-  await service.logout();
-  assert.deepEqual(calls.map((call) => call[0]), ['deleteUser', 'warn', 'signOut']);
-  assert.equal(auth.currentUser, null);
+  await assert.rejects(service.logout(), /Delete rejected/);
+  assert.deepEqual(calls, [['deleteUser', guest]]);
+  assert.equal(auth.currentUser, guest);
 });
 
-test('a failed fallback sign-out propagates the Firebase error', async () => {
-  const guest = { uid: 'guest-3', isAnonymous: true };
-  const { service } = createScenario(guest, { failDelete: true, failSignOut: true });
+test('failed registered-user sign-out propagates its Firebase error', async () => {
+  const user = { uid: 'registered-2', isAnonymous: false };
+  const { auth, calls, service } = createScenario(user, { failSignOut: true });
   await assert.rejects(service.logout(), /Sign out rejected/);
+  assert.deepEqual(calls, [['signOut', auth]]);
+  assert.equal(auth.currentUser, user);
 });
