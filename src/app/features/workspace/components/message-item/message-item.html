@@ -71,8 +71,23 @@
         }
 
         @if (isOwnMessage() && !parentMessageId()) {
-          <button type="button" class="action-text" (click)="startEditing()">Bearbeiten</button>
-          <button type="button" class="action-text" (click)="removeMessage()">Löschen</button>
+          <div class="message-options">
+            <button
+              type="button"
+              class="icon-action options-toggle"
+              aria-label="Weitere Nachrichtenoptionen"
+              [attr.aria-expanded]="optionsOpen()"
+              (click)="optionsOpen.set(!optionsOpen())"
+            >
+              <span aria-hidden="true">&#8226;&#8226;&#8226;</span>
+            </button>
+            @if (optionsOpen()) {
+              <div class="options-menu">
+                <button type="button" (click)="editFromOptions()">Nachricht bearbeiten</button>
+                <button type="button" (click)="deleteFromOptions()">Nachricht löschen</button>
+              </div>
+            }
+          </div>
         }
       </div>
     }
