@@ -97,7 +97,7 @@ export class NewMessageView {
     const user = this.auth.currentUser;
     return {
       text,
-      authorName: user?.displayName || 'Benutzer',
+      authorName: this.profile()?.displayName || user?.displayName || 'Benutzer',
       authorAvatarId: this.profile()?.avatarId ?? 'avatar-1',
     };
   }
