@@ -142,7 +142,12 @@
             [attr.aria-label]="reactionSummary(reaction)"
             (click)="toggleReaction(reaction.emoji)"
           >
-            {{ reaction.emoji }} {{ reaction.userIds.length }}
+            @if (reaction.emoji === '✅') {
+              <span class="reaction-check" aria-hidden="true">✓</span>
+            } @else {
+              <span aria-hidden="true">{{ reaction.emoji }}</span>
+            }
+            {{ reaction.userIds.length }}
           </button>
         }
 
