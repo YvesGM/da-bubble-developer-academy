@@ -9,6 +9,10 @@
     aria-label="Benutzer, Channels und Nachrichten durchsuchen"
   />
 
+  @if (!query().trim() && !focused()) {
+    <span class="mobile-search-placeholder" aria-hidden="true">Gehe zu...</span>
+  }
+
   <img class="search-icon" src="/assets/search.svg" alt="" aria-hidden="true" />
 
   @if (focused() && query().trim()) {
