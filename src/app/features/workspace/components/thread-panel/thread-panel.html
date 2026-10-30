@@ -40,5 +40,6 @@
     placeholder="Antworten…"
     [focusKey]="parent().id"
     [sendAction]="submitReply"
+    (emojiUsed)="rememberEmoji($event)"
   />
 </aside>
