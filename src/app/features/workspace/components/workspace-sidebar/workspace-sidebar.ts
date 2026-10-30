@@ -54,7 +54,9 @@ export class WorkspaceSidebar {
    * @returns The participant display name or a fallback label.
    */
   directMessageName(dm: DirectMessage): string {
-    return this.directMessageUser(dm)?.displayName ?? 'Unbekannter Benutzer';
+    const user = this.directMessageUser(dm);
+    if (!user) return 'Unbekannter Benutzer';
+    return user.displayName + (user.uid === this.currentUserId ? ' (Du)' : '');
   }
 
   /**
