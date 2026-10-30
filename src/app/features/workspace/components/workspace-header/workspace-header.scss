@@ -146,39 +146,46 @@
     }
 
     @include bp.mobile {
-      grid-template-columns: auto 1fr;
-
-      min-height: auto;
-      padding: 12px 16px;
-      gap: 10px 14px;
+      position: relative;
+      z-index: 20;
+      grid-template-columns: minmax(0, 1fr) auto;
+      height: 80px;
+      min-height: 80px;
+      padding: 0 16px;
+      gap: 12px;
 
       .brand {
-        gap: 6px;
+        gap: 11px;
+
         &-mark {
-          width: 42px;
-          height: 42px;
+          width: 45px;
+          height: 45px;
         }
 
         &-name {
           display: block;
-          width: 112px;
+          width: 106px;
         }
+      }
+
+      app-search-box {
+        position: absolute;
+        z-index: 30;
+        top: calc(100% + 32px);
+        left: 16px;
+        width: calc(100% - 32px);
       }
 
       &:has(.mobile-conversation-name) app-search-box { display: none; }
-      app-search-box {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        width: 100%;
-      }
 
-      .profile {
-        &-button {
-          min-height: 50px;
-          padding: 2px 4px 2px 12px;
+      .profile-button {
+        min-height: 50px;
+        padding: 0;
 
-          .profile-name, .profile-chevron { display: none; }
-        }
+        .profile-name,
+        .profile-chevron { display: none; }
+
+        app-avatar { --avatar-large-size: 50px; }
       }
 
       .mobile-conversation-name {
@@ -187,21 +194,22 @@
         grid-column: 1;
         grid-row: 1;
         min-width: 0;
-        gap: 8px;
+        gap: 10px;
 
-        a img { width: 18px; height: 18px; }
-        > img { width: 34px; height: 34px; }
-        strong { font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      }
-      &:has(.mobile-conversation-name) .brand { display: none; }
-      .user-area { grid-column: 2; grid-row: 1; }
-      .user {
-        &-menu {
-          min-width: 190px;
+        a img { display: block; width: 25px; height: 25px; }
+        > img { width: 40px; height: 40px; }
+        strong {
+          overflow: hidden;
+          font-size: 18px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
-    }
 
+      &:has(.mobile-conversation-name) .brand { display: none; }
+      .user-area { grid-column: 2; grid-row: 1; }
+      .user-menu { min-width: 190px; }
+    }
 
     @include bp.widescreen {
       grid-template-columns: 366px minmax(0, 1fr) 342px;
