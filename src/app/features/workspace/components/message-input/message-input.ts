@@ -237,7 +237,7 @@ export class MessageInput implements AfterViewInit {
 
   /** Restores keyboard focus and caret position after a programmatic insertion. */
   private focusAt(position: number): void {
-    queueMicrotask(() => {
+    requestAnimationFrame(() => {
       this.field?.nativeElement.focus();
       this.field?.nativeElement.setSelectionRange(position, position);
     });
