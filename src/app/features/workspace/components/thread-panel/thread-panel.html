@@ -2,38 +2,41 @@
   <header>
     <div class="thread-title">
       <strong>Thread</strong>
-      @if (contextLabel()) { <span>{{ contextLabel() }}</span> }
+      @if (contextLabel()) {
+        <span>{{ contextLabel() }}</span>
+      }
     </div>
-    <button type="button" aria-label="Thread schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
+    <button type="button" aria-label="Thread schließen" (click)="closeRequested.emit()">
+      <img src="/assets/close.svg" alt="" />
+    </button>
   </header>
 
   <div class="thread-conversation">
     <app-message-item
-    [target]="target()"
-    [message]="parent()"
-    [recentEmojis]="recentEmojis()"
-    [compactReactions]="true"
-    [showThreadAction]="false"
-    (userRequested)="userRequested.emit($event)"
-  />
+      [target]="target()"
+      [message]="parent()"
+      [recentEmojis]="recentEmojis()"
+      [compactReactions]="true"
+      [showThreadAction]="false"
+      (userRequested)="userRequested.emit($event)"
+    />
 
-  <div class="divider">
-    <span>{{ replies().length }} {{ replies().length === 1 ? 'Antwort' : 'Antworten' }}</span>
-  </div>
+    <div class="divider">
+      <span>{{ replies().length }} {{ replies().length === 1 ? 'Antwort' : 'Antworten' }}</span>
+    </div>
 
-  <div class="replies">
-    @for (reply of replies(); track reply.id) {
-      <app-message-item
-        [target]="target()"
-        [message]="reply"
-        [parentMessageId]="parent().id"
-        [recentEmojis]="recentEmojis()"
-        [compactReactions]="true"
-        (userRequested)="userRequested.emit($event)"
-      />
-    }
-  </div>
-
+    <div class="replies">
+      @for (reply of replies(); track reply.id) {
+        <app-message-item
+          [target]="target()"
+          [message]="reply"
+          [parentMessageId]="parent().id"
+          [recentEmojis]="recentEmojis()"
+          [compactReactions]="true"
+          (userRequested)="userRequested.emit($event)"
+        />
+      }
+    </div>
   </div>
 
   <app-message-input
