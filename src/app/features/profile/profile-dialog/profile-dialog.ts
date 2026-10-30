@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
+import { Component, HostListener, EventEmitter, Output, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { take } from 'rxjs';
@@ -28,6 +28,12 @@ export class ProfileDialog {
     displayName: ['', Validators.required],
     avatarId: ['avatar-1', Validators.required],
   });
+
+  /** Closes the profile editor with Escape when no save is in progress. */
+  @HostListener('document:keydown.escape')
+  closeOnEscape(): void {
+    if (!this.saving()) this.closeRequested.emit();
+  }
 
   /**
    * Preloads the current user profile into the edit form.
