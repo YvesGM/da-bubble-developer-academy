@@ -38,6 +38,7 @@ export class MessageInput implements AfterViewInit {
   readonly trigger = signal<'@' | '#' | null>(null);
   readonly query = signal('');
   readonly showEmojiPicker = signal(false);
+  readonly showAddMenu = signal(false);
   readonly sending = signal(false);
   readonly sendError = signal('');
 
@@ -55,9 +56,10 @@ export class MessageInput implements AfterViewInit {
    */
   handleEnter(event: Event): void {
     const keyboardEvent = event as KeyboardEvent;
-    if (keyboardEvent.shiftKey) return;
+    if (keyboardEvent.shiftKey || keyboardEvent.isComposing) return;
     keyboardEvent.preventDefault();
-    this.submit();
+    if (this.trigger()) return this.chooseFirstSuggestion();
+    void this.submit();
   }
 
   /**
@@ -74,6 +76,7 @@ export class MessageInput implements AfterViewInit {
       await this.sendAction(value);
       this.text.set('');
       this.closeSuggestions();
+      this.closeOverlays();
     } catch {
       this.sendError.set('Die Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.');
     } finally {
@@ -90,7 +93,7 @@ export class MessageInput implements AfterViewInit {
   updateText(value: string): void {
     this.text.set(value);
     this.sendError.set('');
-    this.updateSuggestions(value);
+    this.updateSuggestions(value, this.field?.nativeElement.selectionStart ?? value.length);
   }
 
   /**
@@ -99,17 +102,39 @@ export class MessageInput implements AfterViewInit {
    * @param emoji - Emoji selected from the picker.
    */
   insertEmoji(emoji: string): void {
-    this.text.update((value) => value + emoji);
+    this.insertAtCaret(emoji);
     this.emojiUsed.emit(emoji);
-    this.showEmojiPicker.set(false);
-    queueMicrotask(() => this.field?.nativeElement.focus());
+    this.closeOverlays();
   }
 
   /** Inserts a mention trigger and opens the existing user suggestions. */
   insertMentionTrigger(): void {
-    const value = this.text();
-    this.updateText(value + (value && !/\s$/.test(value) ? ' ' : '') + '@');
-    queueMicrotask(() => this.field?.nativeElement.focus());
+    this.insertAtCaret('@');
+    this.closeOverlays();
+  }
+
+  /** Inserts a channel trigger at the current cursor position. */
+  insertChannelTrigger(): void {
+    this.insertAtCaret('#');
+    this.closeOverlays();
+  }
+
+  /** Toggles existing input options without adding a second picker implementation. */
+  toggleAddMenu(): void {
+    this.showEmojiPicker.set(false);
+    this.showAddMenu.update((opened) => !opened);
+  }
+
+  /** Toggles the existing emoji picker and closes the alternate input menu. */
+  toggleEmojiPicker(): void {
+    this.showAddMenu.set(false);
+    this.showEmojiPicker.update((opened) => !opened);
+  }
+
+  /** Closes the optional input overlays. */
+  closeOverlays(): void {
+    this.showAddMenu.set(false);
+    this.showEmojiPicker.set(false);
   }
 
   /**
@@ -155,8 +180,8 @@ export class MessageInput implements AfterViewInit {
    *
    * @param value - Current message text.
    */
-  private updateSuggestions(value: string): void {
-    const match = value.match(/(?:^|\s)([@#])([^@#\s]*)$/);
+  private updateSuggestions(value: string, caret = value.length): void {
+    const match = value.slice(0, caret).match(/(?:^|\s)([@#])([^@#\s]*)$/);
     this.trigger.set((match?.[1] as '@' | '#' | undefined) ?? null);
     this.query.set(match?.[2] ?? '');
   }
@@ -167,9 +192,45 @@ export class MessageInput implements AfterViewInit {
    * @param replacement - Replacement text including the mention or channel prefix.
    */
   private replaceTrigger(replacement: string): void {
-    this.text.update((value) => value.replace(/([@#])([^@#\s]*)$/, `${replacement} `));
+    const field = this.field?.nativeElement;
+    const caret = field?.selectionStart ?? this.text().length;
+    const prefix = this.text().slice(0, caret);
+    const match = prefix.match(/([@#])([^@#\s]*)$/);
+    if (!match) return;
+    const next = prefix.slice(0, -match[0].length) + replacement + ' ';
+    this.text.set(next + this.text().slice(caret));
     this.closeSuggestions();
-    queueMicrotask(() => this.field?.nativeElement.focus());
+    this.focusAt(next.length);
+  }
+
+  /** Inserts text at the current selection while preserving surrounding content. */
+  private insertAtCaret(inserted: string): void {
+    const field = this.field?.nativeElement;
+    const start = field?.selectionStart ?? this.text().length;
+    const end = field?.selectionEnd ?? start;
+    const value = this.text().slice(0, start) + inserted + this.text().slice(end);
+    this.text.set(value);
+    this.updateSuggestions(value, start + inserted.length);
+    this.focusAt(start + inserted.length);
+  }
+
+  /** Restores keyboard focus and caret position after a programmatic insertion. */
+  private focusAt(position: number): void {
+    queueMicrotask(() => {
+      this.field?.nativeElement.focus();
+      this.field?.nativeElement.setSelectionRange(position, position);
+    });
+  }
+
+  /** Applies the first available mention/channel suggestion on Enter. */
+  private chooseFirstSuggestion(): void {
+    if (this.trigger() === '@') {
+      const user = this.matchingUsers()[0];
+      if (user) this.chooseUser(user);
+    } else {
+      const channel = this.matchingChannels()[0];
+      if (channel) this.chooseChannel(channel);
+    }
   }
 
   /**
