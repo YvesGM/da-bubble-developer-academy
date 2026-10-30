@@ -38,6 +38,7 @@
       [guest]="isGuest"
       (createRequested)="showCreateChannel.set(true)"
       (newMessageRequested)="openNewMessage()"
+      (userRequested)="startDirectMessage($event)"
       (workspaceEditRequested)="showWorkspaceEditor.set(true)"
     />
 
