@@ -185,8 +185,16 @@
 
   .chat-area {
     min-height: 0;
-
     overflow: hidden;
+
+    &:has(app-thread-panel) { overflow: visible; }
+  }
+
+  &:has(app-thread-panel) { --thread-header-offset: 96px; }
+
+  @include bp.mobile {
+    &:has(app-thread-panel) .channel-header { display: none; }
+    &:has(app-thread-panel) { --thread-header-offset: 0px; }
   }
 
   .mobile-back {
