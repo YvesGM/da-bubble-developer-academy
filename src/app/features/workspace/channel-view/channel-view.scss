@@ -112,14 +112,16 @@
   }
 
   app-avatar,
-  .guest-avatar { margin-left: -8px; }
+  .guest-avatar { margin-left: -10px; }
+  app-avatar { --avatar-small-size: 40px; }
   app-avatar:first-child { margin-left: 0; }
   strong { margin-left: 8px; color: tokens.$text; }
 
   @include bp.mobile {
     min-height: 34px;
     padding: 2px 6px;
-    app-avatar:nth-of-type(n + 3) { display: none; }
+    app-avatar { display: none; }
+    .guest-avatar { display: none; }
     strong { font-size: 14px; }
   }
 }
