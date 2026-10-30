@@ -22,6 +22,7 @@ export class WorkspaceSidebar {
   @Input() currentUserId = '';
   @Input() workspaceName = 'Workspace';
   @Input() guest = false;
+  @Input() directMessageError = '';
   @Output() readonly createRequested = new EventEmitter<void>();
   @Output() readonly newMessageRequested = new EventEmitter<void>();
   @Output() readonly workspaceEditRequested = new EventEmitter<void>();
