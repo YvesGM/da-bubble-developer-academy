@@ -1,4 +1,4 @@
-<article class="message" [class.own-message]="isOwnMessage()" [class.thread-message]="compactReactions()">
+<article class="message" [class.own-message]="isOwnMessage()" [class.thread-message]="compactReactions()" [class.is-editing]="editing()">
   <button
     type="button"
     class="message-avatar"
@@ -14,6 +14,7 @@
   </button>
 
   <div class="message-body">
+    @if (!editing()) {
     <div class="meta">
       <button
         type="button"
@@ -31,13 +32,40 @@
       }
     </div>
 
+    }
+
     @if (message().deleted) {
       <p class="deleted-message">Nachricht gelöscht</p>
     } @else if (editing()) {
-      <div class="edit-row">
-        <input appInputCaret [ngModel]="editText()" (ngModelChange)="editText.set($event)" />
-        <button type="button" (click)="saveEdit()">Speichern</button>
-        <button type="button" (click)="editing.set(false)">Abbrechen</button>
+      <div class="edit-composer">
+        <textarea
+          #editField
+          appInputCaret
+          rows="3"
+          aria-label="Nachricht bearbeiten"
+          [ngModel]="editText()"
+          (ngModelChange)="editText.set($event)"
+        ></textarea>
+        <div class="edit-controls">
+          <div class="edit-emoji-control">
+            <button
+              type="button"
+              class="edit-emoji-button"
+              aria-label="Emoji zur Nachricht hinzufügen"
+              [attr.aria-expanded]="editEmojiPickerOpen()"
+              (click)="editEmojiPickerOpen.set(!editEmojiPickerOpen())"
+            >
+              <img src="/assets/emoji.svg" alt="" />
+            </button>
+            @if (editEmojiPickerOpen()) {
+              <div class="edit-emoji-picker">
+                <app-emoji-picker [recent]="recentEmojis()" (emojiSelected)="insertEditEmoji($event)" />
+              </div>
+            }
+          </div>
+          <button type="button" class="edit-cancel" (click)="cancelEditing()">Abbrechen</button>
+          <button type="button" class="edit-save" [disabled]="!editText().trim()" (click)="saveEdit()">Speichern</button>
+        </div>
       </div>
     } @else {
       <p class="message-text">{{ message().text }}</p>
@@ -52,8 +80,14 @@
 
     @if (canInteract()) {
       <div class="actions" aria-label="Nachrichtenaktionen">
-        @for (emoji of recentEmojis().slice(0, 2); track emoji) {
-          <button type="button" class="icon-action" [attr.aria-label]="'Mit ' + emoji + ' reagieren'" (click)="toggleReaction(emoji)">{{ emoji }}</button>
+        @for (emoji of quickReactions; track emoji) {
+          <button type="button" class="icon-action quick-reaction" [attr.aria-label]="'Mit ' + emoji + ' reagieren'" (click)="toggleReaction(emoji)">
+            @if (emoji === '✅') {
+              <span class="quick-check" aria-hidden="true">✓</span>
+            } @else {
+              <span aria-hidden="true">{{ emoji }}</span>
+            }
+          </button>
         }
 
         <button
@@ -80,7 +114,7 @@
               [attr.aria-expanded]="optionsOpen()"
               (click)="optionsOpen.set(!optionsOpen())"
             >
-              <span aria-hidden="true">&#8226;&#8226;&#8226;</span>
+              <img src="/assets/message-settings.svg" alt="" />
             </button>
             @if (optionsOpen()) {
               <div class="options-menu">
@@ -104,7 +138,8 @@
         @for (reaction of visibleReactions(); track reaction.emoji) {
           <button
             type="button"
-            [title]="reactionNames(reaction)"
+            [title]="reactionSummary(reaction)"
+            [attr.aria-label]="reactionSummary(reaction)"
             (click)="toggleReaction(reaction.emoji)"
           >
             {{ reaction.emoji }} {{ reaction.userIds.length }}
