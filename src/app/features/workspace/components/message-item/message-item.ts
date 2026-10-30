@@ -139,13 +139,19 @@ export class MessageItem {
     return messageTime(this.message().createdAt);
   }
 
+  /** Returns the time of the most recent thread reply, if available. */
+  lastReplyTime(): string {
+    const replies = this.replies();
+    return replies.length ? messageTime(replies[replies.length - 1].createdAt) : '';
+  }
+
   /**
    * Resolves the avatar identifier for the message author.
    *
    * @returns The author's avatar identifier, or an empty string when unavailable.
    */
   authorAvatarId(): string {
-    return this.users().find((user) => user.uid === this.message().authorId)?.avatarId ?? '';
+    return this.users().find((user) => user.uid === this.message().authorId)?.avatarId ?? this.message().authorAvatarId ?? '';
   }
 
   /**
