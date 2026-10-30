@@ -7,7 +7,7 @@
 
   position: relative;
 
-  padding: 10px 35px;
+  padding: 10px 0;
   gap: 30px;
 
   transition: background-color tokens.$motion-base;
@@ -31,7 +31,7 @@
     .meta { justify-content: flex-end; }
     .message-text { align-self: flex-end; color: tokens.$white; background: tokens.$purple-2; border-radius: 20px 0 20px 20px; }
     .reactions { justify-content: flex-end; }
-    .actions { right: auto; left: 45px; }
+    .actions { right: auto; left: 10px; }
   }
 
   &-avatar {
@@ -51,6 +51,18 @@
 
   &-body {
     min-width: 0;
+  }
+
+  &.thread-message {
+    grid-template-columns: 50px minmax(0, 1fr);
+    gap: 12px;
+
+    &.own-message { grid-template-columns: minmax(0, 1fr) 50px; }
+    .message-avatar { width: 50px; height: 50px; --avatar-medium-size: 50px; }
+    .message-text { font-size: 16px; }
+    .meta { gap: 10px; }
+    .author-button { font-size: 16px; }
+    .meta span { font-size: 12px; }
   }
 
   &-text {
@@ -138,7 +150,7 @@
     position: absolute;
     z-index: 3;
     top: -18px;
-    right: 45px;
+    right: 10px;
 
     min-height: 46px;
     padding: 3px 8px;
@@ -215,7 +227,7 @@
     position: absolute;
     z-index: 5;
     top: 35px;
-    right: 45px;
+    right: 10px;
   }
 
   .reactions {
@@ -251,6 +263,10 @@
   }
 
   .replies-link {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
     font-weight: 700;
 
     padding: 0;
@@ -260,6 +276,12 @@
     border: 0;
 
     transition: color tokens.$motion-fast;
+
+    .last-reply {
+      font-size: 12px;
+      font-weight: 400;
+      color: tokens.$text-gray;
+    }
 
     &:hover {
       color: tokens.$purple-1;
@@ -279,7 +301,7 @@
   @include bp.mobile {
     grid-template-columns: 50px minmax(0, 1fr);
 
-    padding: 10px 16px;
+    padding: 10px 0;
     gap: 16px;
 
     &.own-message { grid-template-columns: minmax(0, 1fr) 50px; }
@@ -298,17 +320,17 @@
 
     .actions {
       top: -18px;
-      right: 24px;
+      right: 0;
       padding: 3px 6px;
     }
 
-    &.own-message .actions { right: auto; left: 24px; }
+    &.own-message .actions { right: auto; left: 0; }
 
     .author-button { font-size: 16px; }
     .meta { gap: 10px; }
     .meta span { font-size: 13px; }
     .message-text { padding: 15px; }
-    .reaction-picker { right: 16px; }
+    .reaction-picker { right: 0; }
 
     @media (hover: none) {
       .actions {
