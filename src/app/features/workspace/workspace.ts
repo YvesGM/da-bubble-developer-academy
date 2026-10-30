@@ -47,6 +47,7 @@ export class Workspace {
   readonly showProfileEditor = signal(false);
   readonly showWorkspaceEditor = signal(false);
   readonly selectedUser = signal<UserProfile | null>(null);
+  readonly directMessageError = signal('');
   readonly sidebarCollapsed = signal(false);
   readonly mobileViewport = signal(window.innerWidth <= 800);
 
@@ -193,9 +194,14 @@ export class Workspace {
    * @returns A promise that resolves after conversation creation and navigation complete.
    */
   async startDirectMessage(userId: string): Promise<void> {
-    const dmId = await this.directMessagesService.openConversation(userId);
-    this.selectedUser.set(null);
-    await this.router.navigate(['/workspace/dm', dmId]);
+    this.directMessageError.set('');
+    try {
+      const dmId = await this.directMessagesService.openConversation(userId);
+      this.selectedUser.set(null);
+      await this.router.navigate(['/workspace/dm', dmId]);
+    } catch {
+      this.directMessageError.set('Die Direktnachricht konnte nicht geöffnet werden.');
+    }
   }
 
   /**
