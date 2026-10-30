@@ -2,7 +2,7 @@
   <header>
     <div class="thread-title">
       <strong>Thread</strong>
-      <span>{{ parent().authorName }}</span>
+      @if (contextLabel()) { <span>{{ contextLabel() }}</span> }
     </div>
     <button type="button" aria-label="Thread schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
   </header>
