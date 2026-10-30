@@ -3,17 +3,17 @@
 
 .message {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr);
+  grid-template-columns: 70px minmax(0, 1fr);
 
   position: relative;
 
-  padding: 12px 28px;
-  gap: 14px;
+  padding: 10px 35px;
+  gap: 30px;
 
   transition: background-color tokens.$motion-base;
 
   &:hover {
-    background: #f7f7fc;
+    background: tokens.$background;
 
     .actions {
       opacity: 1;
@@ -23,18 +23,20 @@
   }
 
   &.own-message {
-    grid-template-columns: minmax(0, 1fr) 48px;
+    grid-template-columns: minmax(0, 1fr) 70px;
 
     .message-avatar { grid-column: 2; grid-row: 1; }
     .message-body { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: flex-end; }
     .meta { justify-content: flex-end; }
     .message-text { align-self: flex-end; color: tokens.$white; background: tokens.$purple-2; border-radius: 20px 0 20px 20px; }
     .reactions { justify-content: flex-end; }
+    .actions { right: auto; left: 45px; }
   }
 
   &-avatar {
-    width: 48px;
-    height: 48px;
+    width: 70px;
+    height: 70px;
+    --avatar-medium-size: 70px;
     padding: 0;
 
     background: transparent;
@@ -52,13 +54,15 @@
 
   &-text {
     display: inline-block;
-    padding: 10px 14px;
+    padding: 15px;
 
     max-width: min(680px, 100%);
-    margin: 5px 0 7px;
+    margin: 8px 0 8px;
 
     background: tokens.$background;
     border-radius: 0 20px 20px 20px;
+    font-size: 18px;
+    line-height: 1.4;
 
     white-space: pre-wrap;
     overflow-wrap: anywhere;
@@ -94,10 +98,10 @@
     align-items: center;
     flex-wrap: wrap;
 
-    gap: 8px;
+    gap: 20px;
 
     span {
-      font-size: 12px;
+      font-size: 14px;
 
       color: tokens.$text-gray;
     }
@@ -105,7 +109,7 @@
 
   .author {
     &-button {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
 
       padding: 0;
@@ -132,15 +136,16 @@
 
     position: absolute;
     z-index: 3;
-    top: -14px;
-    right: 28px;
+    top: -18px;
+    right: 45px;
 
-    padding: 4px 8px;
+    min-height: 46px;
+    padding: 3px 8px;
     gap: 4px;
 
     background: tokens.$white;
     border: 1px solid tokens.$border;
-    border-radius: 22px 22px 0 22px;
+    border-radius: 25px 25px 0 25px;
     box-shadow: 0 2px 8px #0000000d;
 
     opacity: 0;
@@ -157,8 +162,8 @@
     }
 
     button {
-      min-width: 32px;
-      height: 32px;
+      min-width: 36px;
+      height: 36px;
       padding: 0 8px;
 
       background: transparent;
@@ -179,14 +184,37 @@
       font-size: 14px;
     }
 
+    .message-options { position: relative; }
+    .options-toggle { letter-spacing: 2px; font-size: 18px; font-weight: 700; }
+    .options-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      display: grid;
+      width: max-content;
+      min-width: 205px;
+      padding: 8px;
+      background: tokens.$white;
+      border-radius: 16px 0 16px 16px;
+      box-shadow: 0 4px 18px #00000026;
+    }
+    .options-menu button {
+      text-align: left;
+      width: 100%;
+      height: auto;
+      padding: 10px 14px;
+      font-size: 15px;
+      border-radius: 12px;
+    }
+
     img { display: block; width: 19px; height: 19px; object-fit: contain; }
   }
 
   .reaction-picker {
     position: absolute;
     z-index: 5;
-    top: 34px;
-    right: 28px;
+    top: 35px;
+    right: 45px;
   }
 
   .reactions {
@@ -248,36 +276,38 @@
   }
 
   @include bp.mobile {
-    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-columns: 50px minmax(0, 1fr);
 
     padding: 10px 16px;
-    gap: 10px;
+    gap: 16px;
 
-    &.own-message { grid-template-columns: minmax(0, 1fr) 40px; }
+    &.own-message { grid-template-columns: minmax(0, 1fr) 50px; }
 
     .message-avatar {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
+      --avatar-medium-size: 50px;
     }
 
     .message-text {
-      font-size: 15px;
+      font-size: 17px;
 
       max-width: 100%;
     }
 
     .actions {
-      position: static;
-
-      width: fit-content;
-      margin-top: 5px;
-      padding: 0;
-
-      border: 0;
-      box-shadow: none;
-      opacity: 1;
-      transform: none;
-      pointer-events: auto;
+      top: -18px;
+      right: 24px;
+      padding: 3px 6px;
     }
+
+    &.own-message .actions { right: auto; left: 24px; }
+
+    .author-button { font-size: 16px; }
+    .meta { gap: 10px; }
+    .meta span { font-size: 13px; }
+    .message-text { padding: 15px; }
+    .reaction-picker { right: 16px; }
+
   }
 }
