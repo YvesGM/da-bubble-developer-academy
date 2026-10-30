@@ -98,18 +98,47 @@
     }
   }
 
+  .mobile-search-placeholder { display: none; }
+
   @include bp.mobile {
-    input { height: 42px; font-size: 15px; border: 1px solid tokens.$border; }
+    input {
+      height: 48px;
+      padding: 0 56px 0 24px;
+      font-size: 17px;
+      border: 1px solid tokens.$border;
+      border-radius: 42px;
+
+      &::placeholder { opacity: 0; }
+    }
+
+    .mobile-search-placeholder {
+      position: absolute;
+      top: 50%;
+      left: 24px;
+      display: block;
+      color: tokens.$text-gray;
+      font-size: 17px;
+      line-height: 32px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .search-icon {
+      right: 16px;
+      width: 32px;
+      height: 32px;
+    }
+
     .results {
       position: fixed;
-      top: 136px;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      top: 170px;
+      right: 16px;
+      bottom: 20px;
+      left: 16px;
       max-height: none;
       align-content: start;
-      border-radius: 0;
-      box-shadow: none;
+      border-radius: 20px;
+      box-shadow: 0 8px 28px #0000001c;
     }
   }
 }
