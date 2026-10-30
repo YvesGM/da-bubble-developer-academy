@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, computed, inject, input, signal } from '@angular/core';
+import { Component, EventEmitter, Output, computed, effect, inject, input, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { switchMap } from 'rxjs';
@@ -40,11 +40,30 @@ export class ChatPanel {
     { initialValue: [] as Message[] },
   );
   readonly threadMessage = signal<Message | null>(null);
+  private previousTarget = '';
   readonly submitMessage = (text: string): Promise<void> => this.sendMessage(text);
+  readonly threadLabel = computed(() => {
+    const target = this.target();
+    if (target.type === 'channel') {
+      const channel = this.channels().find((item) => item.id === target.id);
+      return channel ? `#${channel.name}` : '';
+    }
+    const partnerId = target.id.split('__').find((id) => id !== this.auth.currentUser?.uid);
+    return this.users().find((user) => user.uid === partnerId)?.displayName ?? '';
+  });
   readonly availableMentionUsers = computed(() => this.mentionUsers() ?? this.users());
   readonly recentEmojis = computed(() =>
     this.profile()?.recentEmojis?.length ? this.profile()!.recentEmojis : [...DEFAULT_RECENT_EMOJIS],
   );
+
+  constructor() {
+    effect(() => {
+      const target = this.target();
+      const key = `${target.type}:${target.id}`;
+      if (this.previousTarget && this.previousTarget !== key) this.threadMessage.set(null);
+      this.previousTarget = key;
+    });
+  }
 
   /**
    * Sends a message to the currently selected conversation target.
