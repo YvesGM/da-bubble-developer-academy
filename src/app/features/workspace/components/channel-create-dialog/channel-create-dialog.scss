@@ -11,7 +11,7 @@
   padding: 24px;
   background: #00000052;
 
-  @include bp.mobile { padding: 16px; }
+  @include bp.mobile { padding: 0; place-items: start stretch; }
 }
 
 .dialog {
@@ -268,9 +268,9 @@
 
   @include bp.mobile {
     width: 100%;
-    max-height: calc(100dvh - 32px);
-    padding: 24px 20px;
-    border-radius: 20px;
+    max-height: 100dvh;
+    padding: 30px 20px;
+    border-radius: 0;
   }
 }
 
