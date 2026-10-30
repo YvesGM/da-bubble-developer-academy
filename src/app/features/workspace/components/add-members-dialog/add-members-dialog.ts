@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, HostListener, EventEmitter, Input, Output, signal } from '@angular/core';
 
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
@@ -24,6 +24,12 @@ export class AddMembersDialog {
   readonly query = signal('');
   readonly selectedIds = signal(new Set<string>());
   readonly guestSelected = signal(false);
+
+  /** Closes the member selection dialog via Escape. */
+  @HostListener('document:keydown.escape')
+  closeOnEscape(): void {
+    this.closeRequested.emit();
+  }
 
   /**
    * Filters available users by the current search query.
