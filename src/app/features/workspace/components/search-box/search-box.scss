@@ -108,7 +108,9 @@
       border: 1px solid tokens.$border;
       border-radius: 42px;
 
-      &::placeholder { opacity: 0; }
+      &::placeholder { opacity: 1; }
+
+      &:not(:focus)::placeholder { opacity: 0; }
     }
 
     .mobile-search-placeholder {
