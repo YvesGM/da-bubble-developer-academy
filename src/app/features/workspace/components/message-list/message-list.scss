@@ -25,7 +25,7 @@
         display: flex;
         align-items: center;
 
-        margin: 22px 24px;
+        margin: 20px 35px;
         gap: 12px;
 
         color: tokens.$text-gray;
@@ -45,9 +45,12 @@
 
           background: tokens.$white;
           border: 1px solid tokens.$border;
-          border-radius: 14px;
+          border-radius: 18px;
         }
       }
     }
   }
+}
+@media (max-width: 800px) {
+  .message-list .date-separator { margin: 20px 16px; }
 }
