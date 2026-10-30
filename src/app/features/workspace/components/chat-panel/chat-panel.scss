@@ -9,6 +9,17 @@
 
   &:has(app-thread-panel) { column-gap: 20px; }
 
+  // At intermediate desktop widths, the existing side panel would crush the main chat.
+  @media (min-width: 801px) and (max-width: 1199px) {
+    &:has(app-thread-panel) {
+      grid-template-columns: minmax(0, 1fr);
+      column-gap: 0;
+    }
+
+    &:has(app-thread-panel) .chat-main { display: none; }
+    app-thread-panel { grid-column: 1; width: 100%; }
+  }
+
   .chat-main {
     display: grid;
     grid-template-rows: minmax(0, 1fr) auto;
