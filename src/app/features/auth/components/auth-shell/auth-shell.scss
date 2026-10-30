@@ -308,6 +308,20 @@
     &--reset {
       @include bp.mobile {
         padding-top: clamp(24px, calc(100dvh - 698px), 234px);
+
+        // Figma mobile reset (430px): 56px logo + 12.8px gap + 135.29px wordmark.
+        .auth-brand {
+          gap: 12.8px;
+
+          &-mark {
+            width: 56px;
+            height: 56px;
+          }
+
+          &-name {
+            width: 135.29px;
+          }
+        }
       }
     }
   }

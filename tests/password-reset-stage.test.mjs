@@ -59,3 +59,22 @@ test('frontend rejects non-JSON responses from the password-reset endpoint', () 
   assert.match(source, /response\.json\(\)/);
   assert.match(source, /Invalid password reset endpoint response/);
 });
+
+/** Figma's auth notices have three rounded corners and a square bottom-right tip. */
+test('all auth notices use the Figma chat-bubble corner radii', () => {
+  const source = readFileSync(new URL('../src/styles/_auth-actions.scss', import.meta.url), 'utf8');
+  const notice = source.slice(source.indexOf('.auth-notice {'));
+  assert.match(notice, /border-radius: 30px 30px 0 30px;/);
+});
+
+/** The mobile reset logo is 56px, restoring Figma's 88px logo-to-card distance. */
+test('mobile reset header uses the Figma-specific logo dimensions', () => {
+  const source = readFileSync(new URL(
+    '../src/app/features/auth/components/auth-shell/auth-shell.scss', import.meta.url,
+  ), 'utf8');
+  const reset = source.slice(source.indexOf('&--reset {'));
+  assert.match(reset, /width: 56px;/);
+  assert.match(reset, /height: 56px;/);
+  assert.match(reset, /gap: 12\\.8px;/);
+  assert.match(reset, /width: 135\\.29px;/);
+});
