@@ -83,7 +83,7 @@
   &:has(app-thread-panel) { --thread-header-offset: 110px; }
 
   @include bp.mobile {
-    &:has(app-thread-panel) header { display: none; }
+    &:has(app-thread-panel) > header { display: none; }
     &:has(app-thread-panel) { --thread-header-offset: 0px; }
   }
 
