@@ -188,17 +188,23 @@
 
   .sidebar .mobile-new-message {
     position: fixed;
-    right: 22px;
-    bottom: 22px;
+    right: 16px;
+    bottom: 57px;
     z-index: 15;
     display: grid;
     place-items: center;
-    width: 52px;
-    height: 52px;
+    width: 60px;
+    height: 60px;
     color: tokens.$white;
     background: tokens.$purple-1;
     border-radius: 50%;
     box-shadow: 0 3px 10px #00000029;
+
+    &:hover,
+    &:focus-visible {
+      background: tokens.$purple-2;
+      transform: scale(1.05);
+    }
   }
 
   .mobile-new-message img {
