@@ -13,6 +13,14 @@
     </div>
   }
 
+  @if (showAddMenu()) {
+    <div class="add-menu" aria-label="Weitere Eingabeoptionen">
+      <button type="button" (click)="insertChannelTrigger()">Channel verlinken</button>
+      <button type="button" (click)="insertMentionTrigger()">Person erwähnen</button>
+      <button type="button" (click)="toggleEmojiPicker()">Emoji einfügen</button>
+    </div>
+  }
+
   @if (showEmojiPicker()) {
     <div class="picker">
       <app-emoji-picker [recent]="recentEmojis" (emojiSelected)="insertEmoji($event)" />
@@ -23,6 +31,8 @@
     #messageField
     rows="3"
     [disabled]="sending()"
+    aria-label="Nachricht verfassen"
+    (keydown.escape)="closeOverlays()"
     [placeholder]="placeholder"
     [ngModel]="text()"
     (ngModelChange)="updateText($event)"
@@ -36,9 +46,20 @@
   <div class="composer-actions">
     <button
       type="button"
+      class="icon-button add-button"
+      aria-label="Weitere Eingabeoptionen"
+      [attr.aria-expanded]="showAddMenu()"
+      (click)="toggleAddMenu()"
+    >
+      <img src="/assets/add.svg" alt="" />
+    </button>
+    <span class="action-divider" aria-hidden="true"></span>
+    <button
+      type="button"
       class="icon-button"
       aria-label="Emoji auswählen"
-      (click)="showEmojiPicker.set(!showEmojiPicker())"
+      [attr.aria-expanded]="showEmojiPicker()"
+      (click)="toggleEmojiPicker()"
     >
       <img src="/assets/emoji.svg" alt="" />
     </button>
