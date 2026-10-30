@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { Channel } from '../../../../core/models/channel.model';
 import { DirectMessage } from '../../../../core/models/direct-message.model';
@@ -14,6 +14,8 @@ import { PresenceIndicator } from '../../../../shared/components/presence-indica
   styleUrl: './workspace-sidebar.scss',
 })
 export class WorkspaceSidebar {
+  private readonly router = inject(Router);
+
   @Input({ required: true }) channels: Channel[] = [];
   @Input() directMessages: DirectMessage[] = [];
   @Input() users: UserProfile[] = [];
@@ -23,6 +25,7 @@ export class WorkspaceSidebar {
   @Output() readonly createRequested = new EventEmitter<void>();
   @Output() readonly newMessageRequested = new EventEmitter<void>();
   @Output() readonly workspaceEditRequested = new EventEmitter<void>();
+  @Output() readonly userRequested = new EventEmitter<string>();
 
   readonly channelsExpanded = signal(true);
   readonly directMessagesExpanded = signal(true);
@@ -32,40 +35,27 @@ export class WorkspaceSidebar {
     this.channelsExpanded.update((expanded) => !expanded);
   }
 
-  /** Toggles the visibility of the direct-message list. */
+  /** Toggles the visibility of all visible workspace users. */
   toggleDirectMessages(): void {
     this.directMessagesExpanded.update((expanded) => !expanded);
   }
 
-  /**
-   * Resolves the other participant of a direct-message conversation.
-   *
-   * @param dm - Direct-message conversation to resolve.
-   * @returns The matching user profile when available.
-   */
-  directMessageUser(dm: DirectMessage): UserProfile | undefined {
-    return this.users.find((user) => user.uid === this.directMessagePartnerId(dm));
+  /** Shows the signed-in user first, followed by the existing sorted user list. */
+  visibleUsers(): UserProfile[] {
+    const self = this.users.find((user) => user.uid === this.currentUserId);
+    const others = this.users.filter((user) => user.uid !== this.currentUserId);
+    return self ? [self, ...others] : others;
   }
 
-  /**
-   * Resolves the display name shown for a direct-message conversation.
-   *
-   * @param dm - Direct-message conversation to label.
-   * @returns The participant display name or a fallback label.
-   */
-  directMessageName(dm: DirectMessage): string {
-    const user = this.directMessageUser(dm);
-    if (!user) return 'Unbekannter Benutzer';
+  /** Highlights the user whose existing conversation matches the current DM route. */
+  isActiveUser(uid: string): boolean {
+    return this.directMessages.some((dm) =>
+      dm.participantIds.includes(uid) && this.router.url === `/workspace/dm/${dm.id}`,
+    );
+  }
+
+  /** Labels the current user's personal conversation as shown in the Figma menu. */
+  userLabel(user: UserProfile): string {
     return user.displayName + (user.uid === this.currentUserId ? ' (Du)' : '');
-  }
-
-  /**
-   * Resolves the participant identifier represented by a direct-message entry.
-   *
-   * @param dm - Direct-message conversation to inspect.
-   * @returns The other participant identifier, or the current user's identifier for a self conversation.
-   */
-  directMessagePartnerId(dm: DirectMessage): string {
-    return dm.participantIds.find((uid) => uid !== this.currentUserId) ?? this.currentUserId;
   }
 }
