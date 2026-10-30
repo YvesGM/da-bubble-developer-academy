@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
+import { Component, HostListener, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Channel, UpdateChannelInput } from '../../../../core/models/channel.model';
@@ -30,6 +30,12 @@ export class ChannelDetailsDialog {
     name: ['', Validators.required],
     description: [''],
   });
+
+  /** Closes the channel details dialog via Escape. */
+  @HostListener('document:keydown.escape')
+  closeOnEscape(): void {
+    this.closeRequested.emit();
+  }
 
   /**
    * Validates and emits the edited channel name together with the current description.
