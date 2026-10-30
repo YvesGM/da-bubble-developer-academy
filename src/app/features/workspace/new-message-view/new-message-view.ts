@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { Router, RouterLink } from '@angular/router';
@@ -9,14 +9,16 @@ import { ChannelService } from '../../../core/services/channel.service';
 import { DirectMessageService } from '../../../core/services/direct-message.service';
 import { UserService } from '../../../core/services/user.service';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
+import { MessageInput } from '../components/message-input/message-input';
 
 @Component({
   selector: 'app-new-message-view',
-  imports: [InputCaretDirective, RouterLink],
+  imports: [InputCaretDirective, RouterLink, MessageInput],
   templateUrl: './new-message-view.html',
   styleUrl: './new-message-view.scss',
 })
 export class NewMessageView {
+  @ViewChild(MessageInput) private composer?: MessageInput;
   private readonly auth = inject(Auth);
   private readonly channelsService = inject(ChannelService);
   private readonly directMessages = inject(DirectMessageService);
@@ -24,6 +26,7 @@ export class NewMessageView {
   private readonly usersService = inject(UserService);
 
   readonly query = signal('');
+  readonly placeholder = 'Nachricht schreiben';
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
   readonly mode = computed<'@' | '#'>(() => this.query().trim().startsWith('#') ? '#' : '@');
@@ -56,7 +59,7 @@ export class NewMessageView {
    */
   async selectUser(uid: string): Promise<void> {
     const dmId = await this.directMessages.openConversation(uid);
-    await this.router.navigate(['/workspace/dm', dmId]);
+    await this.router.navigate(['/workspace/dm', dmId], { state: this.draftState() });
   }
 
   /**
@@ -66,7 +69,17 @@ export class NewMessageView {
    * @returns A promise that resolves after navigation completes.
    */
   async selectChannel(channelId: string): Promise<void> {
-    await this.router.navigate(['/workspace/channel', channelId]);
+    await this.router.navigate(['/workspace/channel', channelId], { state: this.draftState() });
+  }
+
+  /** Carries the unsent draft to the selected chat route without persisting it. */
+  private draftState(): { newMessageDraft: string } {
+    return { newMessageDraft: this.readComposerDraft() };
+  }
+
+  /** Returns the current draft from the existing message input component. */
+  private readComposerDraft(): string {
+    return this.composer?.text() ?? '';
   }
 
   /**
