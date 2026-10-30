@@ -36,6 +36,7 @@
       [currentUserId]="currentUserId"
       [workspaceName]="workspaceName"
       [guest]="isGuest"
+      [directMessageError]="directMessageError()"
       (createRequested)="showCreateChannel.set(true)"
       (newMessageRequested)="openNewMessage()"
       (userRequested)="startDirectMessage($event)"
