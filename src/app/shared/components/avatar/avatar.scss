@@ -5,8 +5,8 @@
   object-fit: cover;
 
   &.small {
-    width: 32px;
-    height: 32px;
+    width: var(--avatar-small-size, 32px);
+    height: var(--avatar-small-size, 32px);
   }
 
   &.medium {
