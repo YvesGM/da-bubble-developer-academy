@@ -342,7 +342,10 @@
     gap: 8px;
 
     button {
+      display: inline-flex;
+      align-items: center;
       padding: 4px 9px;
+      gap: 5px;
 
       background: tokens.$white;
       border: 1px solid tokens.$border;
@@ -356,6 +359,19 @@
         background: tokens.$background;
         border-color: tokens.$purple-2;
       }
+    }
+
+    .reaction-check {
+      display: inline-grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      color: tokens.$white;
+      background: #24c782;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
     }
 
     .reaction-more {
