@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, computed, effect, inject, input, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 import { switchMap } from 'rxjs';
 
 import { DEFAULT_RECENT_EMOJIS } from '../../../../core/constants/emoji.constants';
@@ -22,6 +23,7 @@ import { ThreadPanel } from '../thread-panel/thread-panel';
 })
 export class ChatPanel {
   private readonly auth = inject(Auth);
+  private readonly router = inject(Router);
   private readonly channelsService = inject(ChannelService);
   private readonly messagesService = inject(MessageService);
   private readonly usersService = inject(UserService);
@@ -40,6 +42,7 @@ export class ChatPanel {
     { initialValue: [] as Message[] },
   );
   readonly threadMessage = signal<Message | null>(null);
+  readonly initialDraft = this.router.getCurrentNavigation()?.extras.state?.['newMessageDraft'] ?? '';
   private previousTarget = '';
   readonly submitMessage = (text: string): Promise<void> => this.sendMessage(text);
   readonly threadLabel = computed(() => {
