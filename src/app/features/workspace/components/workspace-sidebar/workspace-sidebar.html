@@ -35,6 +35,7 @@
           <a
             [routerLink]="['/workspace/channel', channel.id]"
             routerLinkActive="active"
+            ariaCurrentWhenActive="page"
             class="channel-link"
           >
             <img class="channel-hash" src="/assets/channel-hash.svg" alt="" />
@@ -72,6 +73,7 @@
             <a
               [routerLink]="['/workspace/dm', dm.id]"
               routerLinkActive="active"
+              ariaCurrentWhenActive="page"
               class="dm-link"
             >
               @if (directMessageUser(dm); as user) {
