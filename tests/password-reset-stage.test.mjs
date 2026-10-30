@@ -75,6 +75,6 @@ test('mobile reset header uses the Figma-specific logo dimensions', () => {
   const reset = source.slice(source.indexOf('&--reset {'));
   assert.match(reset, /width: 56px;/);
   assert.match(reset, /height: 56px;/);
-  assert.match(reset, /gap: 12\\.8px;/);
-  assert.match(reset, /width: 135\\.29px;/);
+  assert.ok(reset.includes('gap: 12.8px;'));
+  assert.ok(reset.includes('width: 135.29px;'));
 });
