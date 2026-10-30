@@ -12,15 +12,15 @@
       display: flex;
       align-items: center;
 
-      min-height: 88px;
-      padding: 14px 28px;
+      min-height: 110px;
+      padding: 20px 35px;
       gap: 12px;
 
       border-bottom: 1px solid tokens.$background;
       box-shadow: 0 2px 5px #00000008;
 
       @include bp.mobile {
-        min-height: 58px;
+        min-height: 60px;
         padding: 10px 14px;
       }
     }
