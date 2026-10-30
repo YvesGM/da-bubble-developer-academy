@@ -11,11 +11,11 @@
 
     .channel-header {
       display: flex;
-      min-height: 88px;
+      min-height: 96px;
       align-items: center;
       justify-content: space-between;
 
-      padding: 16px 28px;
+      padding: 20px 35px;
       gap: 18px;
 
       border-bottom: 1px solid tokens.$background;
@@ -24,8 +24,8 @@
       @include bp.mobile {
         display: flex;
 
-        min-height: 58px;
-        padding: 10px 14px;
+        min-height: 60px;
+        padding: 10px 16px;
         gap: 8px;
       }
     }
