@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
@@ -19,6 +19,7 @@ export class SearchBox {
   private readonly router = inject(Router);
   private readonly searchService = inject(SearchService);
 
+  @Input() placeholder = 'Workspace durchsuchen';
   @Output() readonly userSelected = new EventEmitter<UserProfile>();
 
   readonly query = signal('');
