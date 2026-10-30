@@ -56,6 +56,7 @@
   &.thread-message {
     grid-template-columns: 70px minmax(0, 1fr);
     min-height: 150px;
+    padding-top: 27px;
     gap: 20px;
 
     &.own-message { grid-template-columns: minmax(0, 1fr) 70px; }
@@ -310,6 +311,7 @@
     &.thread-message {
       grid-template-columns: 50px minmax(0, 1fr);
       min-height: 0;
+      padding-top: 10px;
       gap: 16px;
 
       &.own-message { grid-template-columns: minmax(0, 1fr) 50px; }
