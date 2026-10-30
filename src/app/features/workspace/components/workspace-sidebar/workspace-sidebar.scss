@@ -145,7 +145,7 @@
   transition: background-color tokens.$motion-base, color tokens.$motion-fast;
 }
 
-.channel-link { min-height: 36px; }
+.channel-link { width: fit-content; max-width: 100%; min-height: 36px; }
 .dm-link { min-height: 48px; }
 
 .channel-link:hover,
