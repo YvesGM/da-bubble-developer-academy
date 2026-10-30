@@ -2,40 +2,43 @@
 @use '../../../../../styles/breakpoints' as bp;
 
 .composer {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 40px;
   position: relative;
+  height: 145px;
+  min-width: 0;
+  padding: 19px 20px 20px;
+  gap: 15px;
+  background: tokens.$white;
   border: 1px solid tokens.$border;
   border-radius: 20px;
-  padding: 10px 12px 9px;
-  background: tokens.$white;
-  transition:
-    border-color tokens.$motion-base,
-    box-shadow tokens.$motion-base;
+  transition: border-color tokens.$motion-base;
 
-  &:focus-within {
-    border-color: tokens.$purple-2;
-    box-shadow: 0 2px 8px #444df212;
+  &:focus-within { border-color: tokens.$purple-2; }
+
+  textarea {
+    width: 100%;
+    min-height: 0;
+    height: 100%;
+    padding: 0;
+    resize: none;
+    color: tokens.$text;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    font-size: 18px;
+    line-height: 25px;
+
+    &::placeholder { color: tokens.$text-gray; }
   }
 
   &-actions {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 8px;
-  }
-
-  textarea {
-    width: 100%;
-    min-height: 78px;
-    resize: none;
-    border: 0;
-    padding: 8px 10px;
-    outline: 0;
-    color: tokens.$text;
-    font: inherit;
-
-    &::placeholder {
-      color: tokens.$text-gray;
-    }
+    min-width: 0;
+    gap: 5px;
   }
 
   button {
@@ -46,102 +49,92 @@
       transform tokens.$motion-base;
   }
 
-  .icon {
-    &-button {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: transparent;
-      font-size: 22px;
-      display: grid;
-      place-items: center;
-
-      img { width: 22px; height: 22px; }
-
-      &:hover {
-        background: tokens.$background;
-        color: tokens.$purple-1;
-        transform: scale(1.05);
-      }
-    }
-  }
-
-  .send {
-    &-button {
-      min-width: 40px;
-      width: 40px;
-      height: 40px;
-      margin-left: auto;
-      border-radius: 20px;
-      padding: 0 18px;
-      background: tokens.$purple-1;
-      color: tokens.$white;
-      font-weight: 700;
-      display: grid;
-      place-items: center;
-
-      img { width: 23px; height: 23px; }
-
-      &:hover:not(:disabled) {
-        background: tokens.$purple-2;
-      }
-
-      &:disabled {
-        cursor: default;
-        opacity: 0.45;
-      }
-    }
-  }
-
-  .picker {
-    position: absolute;
-    z-index: 15;
-    bottom: calc(100% + 8px);
-    left: 12px;
-  }
-
-  .suggestions {
+  .icon-button,
+  .send-button {
     display: grid;
+    place-items: center;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    color: tokens.$text;
+    background: transparent;
+    border-radius: 50%;
 
+    img { width: 24px; height: 24px; object-fit: contain; }
+
+    &:hover:not(:disabled),
+    &:focus-visible {
+      background: tokens.$background;
+      transform: scale(1.05);
+    }
+
+    &:focus-visible { outline: 2px solid tokens.$purple-2; }
+  }
+
+  .action-divider {
+    width: 1px;
+    height: 40px;
+    margin: 0 5px 0 0;
+    background: tokens.$border;
+  }
+
+  .send-button {
+    margin-left: auto;
+
+    img { width: 30px; height: 30px; }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.45;
+    }
+  }
+
+  .picker,
+  .suggestions,
+  .add-menu {
     position: absolute;
     z-index: 15;
     bottom: calc(100% + 8px);
     left: 12px;
+  }
 
-    width: min(320px, calc(100vw - 48px));
-    max-height: 240px;
+  .suggestions,
+  .add-menu {
+    display: grid;
+    width: min(350px, calc(100vw - 48px));
+    max-height: 300px;
     padding: 8px;
-
+    gap: 2px;
+    overflow: auto;
     background: tokens.$white;
     border-radius: 18px;
     box-shadow: 0 6px 24px #0000001f;
 
-    overflow: auto;
-
     button {
       text-align: left;
-
-      padding: 9px 12px;
-
+      padding: 10px 14px;
       background: transparent;
       border-radius: 14px;
 
-      &:hover {
+      &:hover,
+      &:focus-visible {
         color: tokens.$purple-1;
         background: tokens.$background;
       }
     }
   }
 
+  .add-menu { width: min(240px, calc(100vw - 48px)); }
+
   @include bp.mobile {
-    border-radius: 16px;
-    textarea { min-height: 60px; }
-    .icon-button { width: 32px; height: 32px; }
-    .send-button { width: 36px; height: 36px; min-width: 36px; padding: 0; }
-
-
+    padding: 19px 20px 20px;
+    border-radius: 20px;
+    .icon-button,
+    .send-button { flex-basis: 40px; }
   }
 }
+
 .composer-error {
   margin: 0 10px 8px;
   font-size: 14px;
