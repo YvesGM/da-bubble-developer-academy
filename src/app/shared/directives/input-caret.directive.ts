@@ -3,7 +3,7 @@ import { AfterViewInit, DestroyRef, Directive, ElementRef, Renderer2, inject } f
 
 /** Draws the compact Figma caret without changing native editing or selection. */
 @Directive({
-  selector: 'input[appInputCaret]',
+  selector: 'input[appInputCaret], textarea[appInputCaret]',
   standalone: true,
   host: {
     '(focus)': 'show()',
@@ -20,7 +20,7 @@ import { AfterViewInit, DestroyRef, Directive, ElementRef, Renderer2, inject } f
   },
 })
 export class InputCaretDirective implements AfterViewInit {
-  private readonly input = inject<ElementRef<HTMLInputElement>>(ElementRef).nativeElement;
+  private readonly input = inject<ElementRef<HTMLInputElement | HTMLTextAreaElement>>(ElementRef).nativeElement;
   private readonly document = inject(DOCUMENT);
   private readonly renderer = inject(Renderer2);
   private readonly view = this.document.defaultView;
@@ -29,6 +29,7 @@ export class InputCaretDirective implements AfterViewInit {
   private caret: HTMLElement | null = null;
   private context: CanvasRenderingContext2D | null = null;
   private passwordMirror: HTMLInputElement | null = null;
+  private textMirror: HTMLDivElement | null = null;
   private frame = 0;
   private active = false;
   private originalColor = '';
@@ -85,9 +86,10 @@ export class InputCaretDirective implements AfterViewInit {
     });
   }
 
-  /** Only text/search/tel/url/password provide a usable selectionStart API. */
+  /** Supported inputs and textareas expose a stable selectionStart API. */
   private canMeasure(): boolean {
-    return ['text', 'search', 'tel', 'url', 'password'].includes(this.input.type)
+    return (this.input.tagName === 'TEXTAREA'
+      || ['text', 'search', 'tel', 'url', 'password'].includes(this.input.type))
       && this.input.selectionStart !== null;
   }
 
@@ -106,6 +108,7 @@ export class InputCaretDirective implements AfterViewInit {
     const position = this.input.selectionStart;
     if (position === null || position !== this.input.selectionEnd) return this.hideIndicator();
     const style = this.view.getComputedStyle(this.input);
+    if (this.input.tagName === 'TEXTAREA') return this.positionTextareaCaret(style, position);
     const context = this.measurementContext();
     if (!context) return this.hide();
     context.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
@@ -114,6 +117,45 @@ export class InputCaretDirective implements AfterViewInit {
       ? this.passwordAdvance(position, style, context)
       : this.textAdvance(context, position, spacing);
     this.positionIndicator(style, width);
+  }
+
+  /** Measures a textarea caret using the same font, wrapping and padding as the native field. */
+  private positionTextareaCaret(style: CSSStyleDeclaration, position: number): void {
+    const mirror = this.ensureTextMirror();
+    const field = this.input as HTMLTextAreaElement;
+    mirror.style.width = `${field.clientWidth}px`;
+    mirror.style.font = style.font;
+    mirror.style.lineHeight = style.lineHeight;
+    mirror.style.letterSpacing = style.letterSpacing;
+    mirror.style.padding = style.padding;
+    mirror.style.textIndent = style.textIndent;
+    mirror.style.tabSize = style.tabSize;
+    mirror.style.wordBreak = style.wordBreak;
+    mirror.style.overflowWrap = style.overflowWrap;
+    const marker = this.document.createElement('span');
+    marker.textContent = '\u200b';
+    mirror.replaceChildren(this.document.createTextNode(field.value.slice(0, position)), marker);
+    const bounds = field.getBoundingClientRect();
+    const mirrorBounds = mirror.getBoundingClientRect();
+    const markerBounds = marker.getBoundingClientRect();
+    const x = bounds.left + markerBounds.left - mirrorBounds.left - field.scrollLeft;
+    const y = bounds.top + markerBounds.top - mirrorBounds.top - field.scrollTop;
+    const height = Math.min(parseFloat(style.lineHeight) || 18, 25);
+    if (!this.caret) return;
+    this.caret.style.left = `${x}px`;
+    this.caret.style.top = `${y}px`;
+    this.caret.style.height = `${height}px`;
+    this.caret.hidden = x < bounds.left || x > bounds.right || y < bounds.top
+      || y + height > bounds.bottom || y < 0 || y > (this.view?.innerHeight ?? 0);
+  }
+
+  /** Creates a single offscreen multiline mirror for the current directive instance. */
+  private ensureTextMirror(): HTMLDivElement {
+    if (this.textMirror) return this.textMirror;
+    const mirror = this.document.createElement('div');
+    mirror.style.cssText = 'position:fixed;top:0;left:-10000px;box-sizing:border-box;white-space:pre-wrap;overflow-wrap:break-word;visibility:hidden;pointer-events:none';
+    this.renderer.appendChild(this.document.body, mirror);
+    return (this.textMirror = mirror);
   }
 
   /** Measures password masks using the browser's actual native input renderer. */
@@ -183,5 +225,6 @@ export class InputCaretDirective implements AfterViewInit {
     if (this.frame) this.view?.cancelAnimationFrame(this.frame);
     if (this.caret) this.renderer.removeChild(this.document.body, this.caret);
     if (this.passwordMirror) this.renderer.removeChild(this.document.body, this.passwordMirror);
+    if (this.textMirror) this.renderer.removeChild(this.document.body, this.textMirror);
   }
 }
