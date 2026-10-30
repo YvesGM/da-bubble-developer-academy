@@ -4,12 +4,12 @@
 .workspace {
   &-header {
     display: grid;
-    grid-template-columns: 220px minmax(280px, 1fr) auto;
+    grid-template-columns: minmax(170px, 220px) minmax(0, 1fr) auto;
     align-items: center;
 
     min-height: 96px;
     padding: 14px 28px;
-    gap: 24px;
+    gap: clamp(12px, 1.8vw, 24px);
 
     background: tokens.$background;
 
@@ -22,12 +22,12 @@
       cursor: default;
 
       &-mark {
-        width: 54px;
-        height: 54px;
+        width: clamp(40px, 4vw, 54px);
+        height: clamp(40px, 4vw, 54px);
       }
 
       &-name {
-        width: 150px;
+        width: clamp(112px, 12vw, 150px);
         height: auto;
       }
     }
