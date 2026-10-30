@@ -12,7 +12,8 @@
 
   transition: background-color tokens.$motion-base;
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     background: tokens.$background;
 
     .actions {
@@ -308,6 +309,14 @@
     .meta span { font-size: 13px; }
     .message-text { padding: 15px; }
     .reaction-picker { right: 16px; }
+
+    @media (hover: none) {
+      .actions {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+    }
 
   }
 }
