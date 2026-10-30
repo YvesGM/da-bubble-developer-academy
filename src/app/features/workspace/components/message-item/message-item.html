@@ -1,4 +1,4 @@
-<article class="message" [class.own-message]="isOwnMessage()">
+<article class="message" [class.own-message]="isOwnMessage()" [class.thread-message]="compactReactions()">
   <button
     type="button"
     class="message-avatar"
@@ -46,6 +46,7 @@
     @if (!parentMessageId() && replies().length) {
       <button type="button" class="replies-link" (click)="threadRequested.emit(message())">
         {{ replies().length }} {{ replies().length === 1 ? 'Antwort' : 'Antworten' }}
+        @if (lastReplyTime()) { <span class="last-reply">Letzte Antwort {{ lastReplyTime() }}</span> }
       </button>
     }
 
