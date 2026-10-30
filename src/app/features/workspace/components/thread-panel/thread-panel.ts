@@ -25,6 +25,7 @@ export class ThreadPanel {
 
   readonly target = input.required<ConversationTarget>();
   readonly parent = input.required<Message>();
+  readonly contextLabel = input('');
   readonly users = input<UserProfile[]>([]);
   readonly channels = input<Channel[]>([]);
   readonly recentEmojis = input<string[]>([]);
