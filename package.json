@@ -11,6 +11,7 @@
     "prewatch": "npm run env:generate",
     "watch": "ng build --watch --configuration development",
     "test:reset": "node --test tests/password-reset-stage.test.mjs",
+    "test:auth": "node --test tests/auth-guest-logout.test.mjs",
     "start:reset": "ng serve --proxy-config proxy.reset.json",
     "serve:reset": "php -S 127.0.0.1:8000 -t dist/dabubble/browser"
   },

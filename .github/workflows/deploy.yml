@@ -60,6 +60,7 @@ jobs:
       - name: Test and stage PHP sources without Composer dependencies
         run: |
           npm run test:reset
+          npm run test:auth
           node --test tests/deploy-allinkl.test.mjs
           node scripts/stage-password-reset.mjs
           test ! -e dist/dabubble/browser/api/_internal/vendor
