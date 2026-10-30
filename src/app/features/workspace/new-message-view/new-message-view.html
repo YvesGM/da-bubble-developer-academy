@@ -16,6 +16,7 @@
   </label>
 
   <div class="results">
+    @if (query().trim()) {
     @if (mode() === '#') {
       @for (channel of filteredChannels(); track channel.id) {
         <button type="button" (click)="selectChannel(channel.id)">
@@ -35,5 +36,15 @@
         <p>Keine passenden Personen.</p>
       }
     }
+    }
+  </div>
+
+  <div class="new-message-composer">
+    <app-message-input
+      [users]="users()"
+      [channels]="channels()"
+      [autoFocus]="false"
+      placeholder="Nachricht schreiben"
+    />
   </div>
 </section>
