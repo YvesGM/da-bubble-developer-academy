@@ -17,11 +17,11 @@
 
 .dialog {
   animation: dialog-surface-in tokens.$motion-base both;
-  width: min(420px, 100%);
-  padding: 30px 34px;
+  width: min(415px, 100%);
+  padding: 40px;
 
   background: tokens.$white;
-  border-radius: 20px;
+  border-radius: 30px;
   box-shadow: 0 8px 28px #00000024;
 
   header {
@@ -135,7 +135,6 @@
     width: 100%;
     max-height: calc(100dvh - 32px);
     overflow-y: auto;
-    width: min(100%, 390px);
     padding: 26px 22px;
   }
 }
