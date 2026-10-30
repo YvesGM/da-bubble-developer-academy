@@ -60,6 +60,7 @@ export class MessageInput implements AfterViewInit {
   handleEnter(event: Event): void {
     const keyboardEvent = event as KeyboardEvent;
     if (keyboardEvent.shiftKey || keyboardEvent.isComposing) return;
+    if (!this.sendAction && !this.trigger()) return;
     keyboardEvent.preventDefault();
     if (this.trigger()) return this.chooseFirstSuggestion();
     void this.submit();
