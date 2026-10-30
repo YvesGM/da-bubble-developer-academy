@@ -10,7 +10,6 @@ import {
   UserCredential,
   confirmPasswordReset,
   createUserWithEmailAndPassword,
-  deleteUser,
   signInAnonymously,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -140,16 +139,11 @@ export class AuthService {
   }
 
   /**
-   * Deletes anonymous Firebase accounts before ending the guest session.
-   * Registered users are signed out without deleting their accounts.
-   * @throws If guest deletion or regular sign-out fails.
+   * Signs the current Firebase Authentication session out.
+   *
+   * @throws If Firebase cannot terminate the session.
    */
   async logout(): Promise<void> {
-    const user = this.auth.currentUser;
-    if (user?.isAnonymous) {
-      await this.run(() => deleteUser(user));
-      return;
-    }
     await this.run(() => signOut(this.auth));
   }
 

@@ -1,7 +1,4 @@
 <main class="workspace">
-  @if (logoutError()) {
-    <p class="workspace-logout-error" role="alert">{{ logoutError() }}</p>
-  }
   <app-workspace-header
     [conversationOpen]="conversationOpen"
     [workspaceName]="workspaceName"

@@ -48,7 +48,6 @@ export class Workspace {
   readonly showWorkspaceEditor = signal(false);
   readonly selectedUser = signal<UserProfile | null>(null);
   readonly sidebarCollapsed = signal(false);
-  readonly logoutError = signal('');
 
   /**
    * Starts realtime presence tracking when the workspace shell is created.
@@ -187,21 +186,13 @@ export class Workspace {
   }
 
   /**
-   * Deletes guest identities before navigating away; failed deletion keeps the session.
-   * Registered users retain the original sign-out behavior.
+   * Stops presence tracking, signs the current session out and returns to login.
+   *
+   * @returns A promise that resolves after cleanup, sign-out and navigation complete.
    */
   async logout(): Promise<void> {
-    const guest = this.isGuest;
-    this.logoutError.set('');
-    try {
-      await this.presence.stop();
-      await this.authService.logout();
-      await this.router.navigateByUrl('/login');
-    } catch (error) {
-      console.error('DABubble sign-out failed:', error);
-      this.logoutError.set(guest
-        ? 'Gastkonto konnte nicht gelöscht werden. Bitte erneut versuchen.'
-        : 'Abmeldung fehlgeschlagen. Bitte erneut versuchen.');
-    }
+    await this.presence.stop();
+    await this.authService.logout();
+    await this.router.navigateByUrl('/login');
   }
 }
