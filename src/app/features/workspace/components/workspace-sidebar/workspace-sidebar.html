@@ -85,6 +85,9 @@
             <p class="empty">Noch keine registrierten Benutzer.</p>
           }
         </nav>
+        @if (directMessageError) {
+          <p class="dm-error" role="alert">{{ directMessageError }}</p>
+        }
       }
       </div></div>
     </section>
