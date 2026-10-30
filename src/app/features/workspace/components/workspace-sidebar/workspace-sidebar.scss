@@ -7,7 +7,7 @@
   padding: 24px 20px;
   overflow-y: auto;
   background: tokens.$white;
-  border-radius: 20px;
+  border-radius: 30px;
 }
 
 .sidebar-top {
@@ -175,15 +175,16 @@
 
 @include bp.mobile {
   .sidebar {
-    min-height: calc(100dvh - 132px);
-    padding: 20px 18px;
-    border-radius: 0;
+    min-height: 0;
+    padding: 91px 20px 20px;
+    border-radius: 20px;
   }
 
   .sidebar-top,
   .direct-messages .section-heading > button { display: none; }
 
-  .sidebar-section { margin-top: 18px; }
+  .sidebar-section { margin-top: 22px; }
+  .sidebar-section:first-of-type { margin-top: 0; }
 
   .sidebar .mobile-new-message {
     position: fixed;
