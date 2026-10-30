@@ -58,9 +58,6 @@
             <img class="section-icon" src="/assets/direct-messages.svg" alt="" />Direktnachrichten
           </button>
         </h2>
-        @if (!guest) {
-          <button type="button" aria-label="Neue Nachricht" (click)="newMessageRequested.emit()"><img class="sidebar-action-icon" src="/assets/add.svg" alt="" /></button>
-        }
       </div>
 
       <div id="dm-section-content" class="section-body" [class.is-closed]="!directMessagesExpanded()"
@@ -69,23 +66,23 @@
         <p class="empty">Direktnachrichten sind nur mit einem Konto verfügbar.</p>
       } @else {
         <nav aria-label="Direktnachrichten">
-          @for (dm of directMessages; track dm.id) {
-            <a
-              [routerLink]="['/workspace/dm', dm.id]"
-              routerLinkActive="active"
-              ariaCurrentWhenActive="page"
+          @for (user of visibleUsers(); track user.uid) {
+            <button
+              type="button"
               class="dm-link"
+              [class.active]="isActiveUser(user.uid)"
+              [attr.aria-current]="isActiveUser(user.uid) ? 'page' : null"
+              [attr.aria-label]="'Direktnachricht mit ' + userLabel(user) + ' öffnen'"
+              (click)="userRequested.emit(user.uid)"
             >
-              @if (directMessageUser(dm); as user) {
-                <span class="dm-avatar">
-                  <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
-                  <app-presence-indicator [userId]="user.uid" />
-                </span>
-              }
-              <span>{{ directMessageName(dm) }}</span>
-            </a>
+              <span class="dm-avatar">
+                <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
+                <app-presence-indicator [userId]="user.uid" />
+              </span>
+              <span class="dm-name">{{ userLabel(user) }}</span>
+            </button>
           } @empty {
-            <p class="empty">Noch keine Direktnachrichten.</p>
+            <p class="empty">Noch keine registrierten Benutzer.</p>
           }
         </nav>
       }
