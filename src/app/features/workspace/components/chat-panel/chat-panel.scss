@@ -1,24 +1,13 @@
+@use '../../../../../styles/tokens' as tokens;
 @use '../../../../../styles/breakpoints' as bp;
 
 .chat-panel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   position: relative;
   height: 100%;
   min-height: 0;
-
-  &:has(app-thread-panel) { column-gap: 20px; }
-
-  // At intermediate desktop widths, the existing side panel would crush the main chat.
-  @media (min-width: 801px) and (max-width: 1199px) {
-    &:has(app-thread-panel) {
-      grid-template-columns: minmax(0, 1fr);
-      column-gap: 0;
-    }
-
-    &:has(app-thread-panel) .chat-main { display: none; }
-    app-thread-panel { grid-column: 1; width: 100%; }
-  }
+  min-width: 0;
 
   .chat-main {
     display: grid;
@@ -29,13 +18,49 @@
     gap: 10px;
   }
 
-  @include bp.mobile {
-    grid-template-columns: minmax(0, 1fr);
-    column-gap: 0;
+  &:has(app-thread-panel) {
+    --thread-panel-width: 440px;
+    grid-template-columns: minmax(0, 1fr) var(--thread-panel-width);
+    column-gap: 20px;
+
+    .chat-main {
+      padding-top: var(--conversation-header-height, 96px);
+      background: tokens.$white;
+      border-radius: 30px;
+    }
+  }
+
+  app-thread-panel {
+    display: block;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+  }
+
+  @include bp.widescreen {
+    &:has(app-thread-panel) { --thread-panel-width: 485px; }
+  }
+
+  @media (min-width: 801px) and (max-width: 1199px) {
+    &:has(app-thread-panel) {
+      grid-template-columns: minmax(0, 1fr);
+      column-gap: 0;
+    }
 
     &:has(app-thread-panel) .chat-main { display: none; }
-    app-thread-panel { grid-column: 1; min-width: 0; }
+    app-thread-panel { grid-column: 1; }
+  }
 
+  @include bp.mobile {
+    grid-template-columns: minmax(0, 1fr);
+
+    &:has(app-thread-panel) {
+      grid-template-columns: minmax(0, 1fr);
+      column-gap: 0;
+    }
+
+    &:has(app-thread-panel) .chat-main { display: none; }
+    app-thread-panel { grid-column: 1; }
     .chat-main { padding: 0 16px 30px; }
   }
 }
