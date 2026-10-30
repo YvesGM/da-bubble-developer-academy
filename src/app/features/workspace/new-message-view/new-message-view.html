@@ -10,13 +10,13 @@
       type="search"
       placeholder="@ für Personen oder # für Channels"
       [value]="query()"
-      (input)="query.set($any($event.target).value)"
+      (input)="updateQuery($any($event.target).value)"
       autofocus
     />
   </label>
 
   <div class="results">
-    @if (query().trim()) {
+    @if (query().trim() && !recipientSelected()) {
     @if (mode() === '#') {
       @for (channel of filteredChannels(); track channel.id) {
         <button type="button" (click)="selectChannel(channel.id)">
@@ -44,6 +44,7 @@
       [users]="users()"
       [channels]="channels()"
       [autoFocus]="false"
+      [sendAction]="recipientSelected() ? sendAction : undefined"
       placeholder="Nachricht schreiben"
     />
   </div>
