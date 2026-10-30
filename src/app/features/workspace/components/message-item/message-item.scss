@@ -61,9 +61,13 @@
     padding-top: 27px;
     gap: 20px;
 
-    &.own-message { grid-template-columns: minmax(0, 1fr) 70px; }
+    &.own-message {
+      grid-template-columns: minmax(0, 1fr) 70px;
+      .actions { width: max-content; }
+    }
     .message-avatar { width: 70px; height: 70px; --avatar-medium-size: 70px; }
     .message-text { font-size: 18px; }
+    .actions { width: max-content; }
     .meta { gap: 10px; }
     .author-button { font-size: 18px; }
     .meta span { font-size: 14px; }
