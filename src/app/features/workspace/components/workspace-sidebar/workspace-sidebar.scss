@@ -33,6 +33,7 @@
 .section-chevron {
   width: 12px;
   height: 12px;
+  margin-right: 5px;
   object-fit: contain;
   transition: transform tokens.$motion-base;
 }
@@ -110,7 +111,7 @@
   height: auto;
   min-height: 36px;
   padding: 0 6px;
-  gap: 13px;
+  gap: 8px;
   font-size: 18px;
   font-weight: 700;
   border-radius: 12px;
