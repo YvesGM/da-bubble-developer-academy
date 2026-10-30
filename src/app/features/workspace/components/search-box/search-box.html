@@ -1,7 +1,7 @@
 <div class="search">
   <input appInputCaret
     type="search"
-    placeholder="DABubble durchsuchen"
+    [placeholder]="placeholder"
     [value]="query()"
     (input)="query.set($any($event.target).value)"
     (focus)="focused.set(true)"
