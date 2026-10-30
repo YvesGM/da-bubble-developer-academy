@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   HostListener,
   Output,
@@ -33,6 +34,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
   styleUrl: './message-item.scss',
 })
 export class MessageItem {
+  private readonly element = inject(ElementRef<HTMLElement>);
   private readonly auth = inject(Auth);
   private readonly messages = inject(MessageService);
   private readonly reactionsService = inject(ReactionService);
@@ -53,6 +55,7 @@ export class MessageItem {
   readonly editText = signal('');
   readonly showEmojiPicker = signal(false);
   readonly showAllReactions = signal(false);
+  readonly optionsOpen = signal(false);
   readonly mobileViewport = signal(window.innerWidth <= 800);
   readonly reactionContext = computed(() => ({
     target: this.target(),
@@ -85,6 +88,30 @@ export class MessageItem {
    */
   updateViewport(): void {
     this.mobileViewport.set(window.innerWidth <= 800);
+  }
+
+  /** Closes the message options when clicking outside the current message. */
+  @HostListener('document:click', ['$event'])
+  closeOptionsOnOutsideClick(event: MouseEvent): void {
+    if (!this.element.nativeElement.contains(event.target as Node)) this.optionsOpen.set(false);
+  }
+
+  /** Closes the message options on Escape. */
+  @HostListener('document:keydown.escape')
+  closeOptionsOnEscape(): void {
+    this.optionsOpen.set(false);
+  }
+
+  /** Opens inline editing from the contextual options menu. */
+  editFromOptions(): void {
+    this.optionsOpen.set(false);
+    this.startEditing();
+  }
+
+  /** Removes a message after closing its contextual options menu. */
+  async deleteFromOptions(): Promise<void> {
+    this.optionsOpen.set(false);
+    await this.removeMessage();
   }
 
   /**
@@ -134,6 +161,7 @@ export class MessageItem {
    * Copies the current message text into edit state and opens inline editing.
    */
   startEditing(): void {
+    this.optionsOpen.set(false);
     this.editText.set(this.message().text);
     this.editing.set(true);
   }
