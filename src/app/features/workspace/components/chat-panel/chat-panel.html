@@ -16,6 +16,7 @@
       [recentEmojis]="recentEmojis()"
       [placeholder]="inputPlaceholder()"
       [autoFocus]="!threadMessage()"
+      [initialText]="initialDraft"
       [focusKey]="target().id"
       [sendAction]="submitMessage"
       (emojiUsed)="rememberEmoji($event)"
