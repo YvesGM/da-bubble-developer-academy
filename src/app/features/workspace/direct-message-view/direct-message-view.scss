@@ -21,7 +21,7 @@
 
       @include bp.mobile {
         min-height: 60px;
-        padding: 10px 14px;
+        padding: 10px 16px;
       }
     }
 
@@ -53,6 +53,8 @@
       display: inline-flex;
       position: relative;
 
+      @include bp.mobile { --avatar-large-size: 50px; }
+
       app-presence-indicator {
         display: grid;
         position: absolute;
@@ -74,7 +76,15 @@
       min-height: 0;
 
       overflow: hidden;
+      &:has(app-thread-panel) { overflow: visible; }
     }
+  }
+
+  &:has(app-thread-panel) { --thread-header-offset: 110px; }
+
+  @include bp.mobile {
+    &:has(app-thread-panel) header { display: none; }
+    &:has(app-thread-panel) { --thread-header-offset: 0px; }
   }
 
   .mobile {
