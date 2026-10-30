@@ -29,7 +29,10 @@ export class MessageInput implements AfterViewInit {
   @Input() set focusKey(value: string) {
     if (value && this.autoFocus) queueMicrotask(() => this.field?.nativeElement.focus());
   }
-  @Input({ required: true }) sendAction!: (text: string) => Promise<void>;
+  @Input() sendAction?: (text: string) => Promise<void>;
+  @Input() set initialText(value: string) {
+    if (value && !this.text()) this.updateText(value);
+  }
   @Output() readonly emojiUsed = new EventEmitter<string>();
 
   @ViewChild('messageField') private field?: ElementRef<HTMLTextAreaElement>;
@@ -69,11 +72,12 @@ export class MessageInput implements AfterViewInit {
    */
   async submit(): Promise<void> {
     const value = this.text().trim();
-    if (!value || this.sending()) return;
+    const send = this.sendAction;
+    if (!value || this.sending() || !send) return;
     this.sending.set(true);
     this.sendError.set('');
     try {
-      await this.sendAction(value);
+      await send(value);
       this.text.set('');
       this.closeSuggestions();
       this.closeOverlays();
