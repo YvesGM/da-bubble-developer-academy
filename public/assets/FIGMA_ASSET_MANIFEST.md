@@ -15,12 +15,13 @@ Export the **original Figma symbols as SVG** and save under these exact names in
 | `close.svg` | Thread and channel/member dialogs |
 | `add-member.svg` | Add channel members |
 | `thread.svg` | Start a thread from message actions |
+| `message-settings.svg` | Open existing message edit/delete options |
 | `reaction-add.svg` | Open reaction picker |
 | `emoji.svg` | Message composer |
 | `mention.svg` | Message composer @ action |
 | `send.svg` | Message composer send action |
 
-Only these confirmed references are included here. Further files may be needed after complete template/asset validation. Never substitute arbitrary third-party icons for Figma originals.
+These entries reflect the confirmed references in message and workspace templates. Further files may be needed after complete template/asset validation. Never substitute arbitrary third-party icons for Figma originals.
 
 The left sidebar's expansion state currently reuses `sidebar-collapse.svg` mirrored in CSS, because the original `sidebar-expand.svg` is missing. Export `sidebar-expand.svg` if the Figma variants are not exact mirrors.
 
