@@ -4,6 +4,7 @@ import {
   EventEmitter,
   HostListener,
   Output,
+  ViewChild,
   computed,
   inject,
   input,
@@ -35,6 +36,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
 })
 export class MessageItem {
   private readonly element = inject(ElementRef<HTMLElement>);
+  @ViewChild('editField') private editField?: ElementRef<HTMLTextAreaElement>;
   private readonly auth = inject(Auth);
   private readonly messages = inject(MessageService);
   private readonly reactionsService = inject(ReactionService);
@@ -56,6 +58,8 @@ export class MessageItem {
   readonly showEmojiPicker = signal(false);
   readonly showAllReactions = signal(false);
   readonly optionsOpen = signal(false);
+  readonly editEmojiPickerOpen = signal(false);
+  readonly quickReactions = DEFAULT_RECENT_EMOJIS;
   readonly mobileViewport = signal(window.innerWidth <= 800);
   readonly reactionContext = computed(() => ({
     target: this.target(),
@@ -170,6 +174,7 @@ export class MessageItem {
     this.optionsOpen.set(false);
     this.editText.set(this.message().text);
     this.editing.set(true);
+    requestAnimationFrame(() => this.editField?.nativeElement.focus());
   }
 
   /**
@@ -181,7 +186,23 @@ export class MessageItem {
     const value = this.editText().trim();
     if (!value || this.parentMessageId()) return;
     await this.messages.updateMessage(this.target(), this.message().id, value);
+    this.cancelEditing();
+  }
+
+  /** Cancels editing without persisting the current draft. */
+  cancelEditing(): void {
     this.editing.set(false);
+    this.editEmojiPickerOpen.set(false);
+  }
+
+  /** Inserts an emoji into the existing editing textarea. */
+  insertEditEmoji(emoji: string): void {
+    const field = this.editField?.nativeElement;
+    const start = field?.selectionStart ?? this.editText().length;
+    const end = field?.selectionEnd ?? start;
+    this.editText.set(this.editText().slice(0, start) + emoji + this.editText().slice(end));
+    this.editEmojiPickerOpen.set(false);
+    requestAnimationFrame(() => { field?.focus(); field?.setSelectionRange(start + emoji.length, start + emoji.length); });
   }
 
   /**
@@ -220,6 +241,12 @@ export class MessageItem {
    */
   reactionNames(group: ReactionGroup): string {
     return group.userIds.map((uid) => this.userName(uid)).join(', ');
+  }
+
+  /** Describes a persisted reaction without creating a separate chat message. */
+  reactionSummary(group: ReactionGroup): string {
+    const names = this.reactionNames(group);
+    return `${names} ${group.userIds.length === 1 ? 'hat' : 'haben'} mit ${group.emoji} reagiert`;
   }
 
   /**
