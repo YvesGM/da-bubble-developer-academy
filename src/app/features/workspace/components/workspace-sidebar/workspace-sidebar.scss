@@ -171,7 +171,7 @@
 
 .empty { margin: 12px 14px; color: tokens.$text-gray; font-size: 16px; }
 
-.mobile-new-message { display: none; }
+.sidebar button.mobile-new-message { display: none; }
 
 @include bp.mobile {
   .sidebar {
@@ -186,7 +186,7 @@
   .sidebar-section { margin-top: 22px; }
   .sidebar > .sidebar-section:first-of-type { margin-top: 0; }
 
-  .sidebar .mobile-new-message {
+  .sidebar button.mobile-new-message {
     position: fixed;
     right: 16px;
     bottom: 57px;
@@ -215,6 +215,8 @@
 }
 
 @include bp.widescreen {
-  .sidebar { padding: 28px 24px; }
+  .sidebar { padding: 28px 30px; }
+  .dm-avatar { --avatar-medium-size: 50px; }
+  .dm-link { min-height: 60px; }
   .workspace-name { max-width: 230px; font-size: 22px; }
 }
