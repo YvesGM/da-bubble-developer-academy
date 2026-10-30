@@ -4,7 +4,7 @@
     <img class="brand-name" src="/assets/logo-name.svg" alt="DABubble" />
   </div>
 
-  <app-search-box (userSelected)="userSelected.emit($event)" />
+  <app-search-box [placeholder]="workspaceName + ' durchsuchen'" (userSelected)="userSelected.emit($event)" />
   @if (conversationOpen) {
     <div class="mobile-conversation-name"><a routerLink="/workspace" aria-label="Zurück zum Hauptmenü"><img src="/assets/arrow-back.svg" alt="" /></a><img src="/assets/workspace-icon.svg" alt="" /><strong>{{ workspaceName }}</strong></div>
   }
