@@ -56,7 +56,7 @@
               class="edit-emoji-button"
               aria-label="Emoji zur Nachricht hinzufügen"
               [attr.aria-expanded]="editEmojiPickerOpen()"
-              (click)="editEmojiPickerOpen.set(!editEmojiPickerOpen())"
+              (click)="toggleEditPicker()"
             >
               <img src="/assets/emoji.svg" alt="" />
             </button>
@@ -88,9 +88,9 @@
 
         <button
           type="button"
-          class="icon-action"
+          class="icon-action reaction-trigger"
           aria-label="Weitere Reaktionen"
-          (click)="showEmojiPicker.set(!showEmojiPicker())"
+          (click)="toggleReactionPicker()"
         >
           <img src="/assets/reaction-add.svg" alt="" />
         </button>
@@ -120,7 +120,6 @@
               (toggle)="syncOptionsState($event)"
             >
               <button type="button" (click)="editFromOptions()">Nachricht bearbeiten</button>
-              <button type="button" (click)="deleteFromOptions()">Nachricht löschen</button>
             </div>
           </div>
         }
@@ -167,10 +166,10 @@
         } @else {
           <button
             type="button"
-            class="footer-reaction-button"
+            class="footer-reaction-button reaction-trigger"
             aria-label="Emoji-Reaktion hinzufügen"
             [attr.aria-expanded]="showEmojiPicker()"
-            (click)="showEmojiPicker.set(!showEmojiPicker())"
+            (click)="toggleReactionPicker()"
           >
             <img src="/assets/reaction-add.svg" alt="" />
           </button>
