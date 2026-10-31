@@ -14,12 +14,14 @@ import { FormsModule } from '@angular/forms';
 
 import { Channel } from '../../../../core/models/channel.model';
 import { UserProfile } from '../../../../core/models/user-profile.model';
+import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
+import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 @Component({
   selector: 'app-message-input',
-  imports: [FormsModule, EmojiPicker, InputCaretDirective],
+  imports: [FormsModule, EmojiPicker, InputCaretDirective, Avatar, PresenceIndicator],
   templateUrl: './message-input.html',
   styleUrl: './message-input.scss',
 })
