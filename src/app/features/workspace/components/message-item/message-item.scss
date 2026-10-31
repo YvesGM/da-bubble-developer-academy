@@ -77,6 +77,16 @@
     white-space: pre-wrap;
     overflow-wrap: anywhere;
   }
+  .message-mention {
+    padding: 0;
+    color: tokens.$purple-1;
+    font: inherit;
+    background: transparent;
+    border: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  &.own-message .message-mention { color: tokens.$white; }
   &.is-editing {
     background: tokens.$background;
     .message-body { width: min(678px, 100%); }
