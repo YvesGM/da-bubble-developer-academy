@@ -8,7 +8,7 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
-  padding: 0 20px 40px;
+  padding: 0 20px clamp(40px, 2.083vw, 64px);
   background: tokens.$white;
   border-radius: 30px;
 
