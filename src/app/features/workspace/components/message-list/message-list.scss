@@ -18,14 +18,22 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    isolation: isolate;
+    z-index: 1;
     min-height: 35px;
     margin: 20px 0;
     color: tokens.$text;
-    // Draw a continuous line behind the opaque date pill without stacking layers.
-    background: linear-gradient(tokens.$border, tokens.$border) center / 100% 1px no-repeat;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1 1 0;
+      min-width: 0;
+      height: 1px;
+      background: tokens.$border;
+    }
 
     span {
+      flex: 0 0 auto;
       display: inline-flex;
       align-items: center;
       justify-content: center;
