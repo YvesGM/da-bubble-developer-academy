@@ -18,7 +18,7 @@
     justify-content: space-between;
     min-width: 0;
     margin: 0 -20px;
-    padding: 0 40px;
+    padding: 0 clamp(40px, 2.083vw, 64px);
     border-bottom: 1px solid tokens.$background;
 
     .thread-title {
@@ -59,9 +59,9 @@
     button {
       display: grid;
       place-items: center;
-      flex: 0 0 40px;
-      width: 40px;
-      height: 40px;
+      flex: 0 0 var(--ws-action, 40px);
+      width: var(--ws-action, 40px);
+      height: var(--ws-action, 40px);
       margin-left: 12px;
       padding: 0;
       border: 0;
@@ -69,7 +69,7 @@
       background: transparent;
       transition: background-color tokens.$motion-base;
 
-      img { width: 16px; height: 16px; }
+      img { width: clamp(16px, .833vw, 26px); height: clamp(16px, .833vw, 26px); }
 
       &:hover,
       &:focus-visible { background: tokens.$background; }
