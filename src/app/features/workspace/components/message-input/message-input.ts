@@ -57,9 +57,10 @@ export class MessageInput implements AfterViewInit {
     if (!this.host.nativeElement.contains(target)) {
       this.closeOverlays();
       this.closeSuggestions();
-    } else if (!target.closest('textarea, .suggestions')) {
-      this.closeSuggestions();
+      return;
     }
+    if (!target.closest('.picker, [aria-label="Emoji auswählen"]')) this.closeOverlays();
+    if (!target.closest('textarea, .suggestions')) this.closeSuggestions();
   }
 
   /** Closes suggestions and input menus on Escape. */
