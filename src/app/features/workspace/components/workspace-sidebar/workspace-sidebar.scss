@@ -266,6 +266,19 @@
 }
 
 @include bp.widescreen {
-  .sidebar { padding: 28px 30px; }
-  .workspace-name { max-width: 230px; font-size: 22px; }
+  .sidebar { padding: clamp(28px, 1.46vw, 45px) clamp(30px, 1.56vw, 48px); }
+  .sidebar .section-toggle { font-size: var(--ws-sidebar-label); }
+  .sidebar nav { gap: clamp(13px, .677vw, 21px); }
+  .sidebar button.dm-link {
+    height: var(--ws-sidebar-row);
+    min-height: var(--ws-sidebar-row);
+    font-size: var(--ws-sidebar-item);
+  }
+  .sidebar .dm-avatar {
+    flex-basis: var(--ws-sidebar-avatar);
+    width: var(--ws-sidebar-avatar);
+    height: var(--ws-sidebar-avatar);
+    --avatar-medium-size: var(--ws-sidebar-avatar);
+  }
+  .workspace-name { max-width: 230px; font-size: clamp(22px, 1.146vw, 35px); }
 }
