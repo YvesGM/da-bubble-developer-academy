@@ -4,6 +4,8 @@
   display: grid;
   grid-template-columns: 70px minmax(0, 1fr);
   position: relative;
+  min-height: 141px;
+  margin-inline: 20px;
   padding: 10px 0;
   gap: 30px;
   transition: background-color tokens.$motion-base;
@@ -19,6 +21,7 @@
   }
   &.own-message {
     grid-template-columns: minmax(0, 1fr) 70px;
+    min-height: 200px;
     .actions { width: 255px; }
     .message-avatar { grid-column: 2; grid-row: 1; }
     .message-body { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: flex-end; }
@@ -28,8 +31,8 @@
     .reactions { justify-content: flex-end; }
     .actions {
       right: auto;
-      left: 10px;
-      border-radius: 20px 20px 20px 0;
+      left: 45px;
+      border-radius: 20px 20px 0 20px;
     }
   }
   &-avatar {
@@ -50,6 +53,7 @@
   &.thread-message {
     grid-template-columns: 70px minmax(0, 1fr);
     min-height: 150px;
+    margin-inline: 0;
     padding-top: 27px;
     gap: 20px;
     &.own-message {
@@ -183,7 +187,7 @@
     }
   }
   &:not(.own-message) .actions {
-    right: 0;
+    right: 43px;
     left: auto;
     border-radius: 20px 20px 0 20px;
   }
@@ -193,14 +197,14 @@
     position: absolute;
     z-index: 3;
     top: -18px;
-    right: 10px;
+    right: 43px;
     width: 210px;
     min-height: 46px;
     padding: 3px 5px;
     gap: 5px;
     background: tokens.$white;
     border: 1px solid tokens.$border;
-    border-radius: 25px 25px 0 25px;
+    border-radius: 20px 20px 0 20px;
     box-shadow: 0 2px 8px #0000000d;
     opacity: 0;
     transform: translateY(4px);
@@ -291,6 +295,11 @@
     right: 0;
     left: auto;
   }
+  // The sender's bubble stays violet; incoming bubbles turn white on hover.
+  &:not(.own-message):is(:hover, :focus-within) .message-text {
+    background: tokens.$white;
+  }
+
   .message-footer {
     display: flex;
     align-items: center;
@@ -388,9 +397,14 @@
   }
   @include bp.mobile {
     grid-template-columns: 50px minmax(0, 1fr);
+    min-height: 0;
+    margin-inline: 0;
     padding: 10px 0;
     gap: 16px;
-    &.own-message { grid-template-columns: minmax(0, 1fr) 50px; }
+    &.own-message {
+      grid-template-columns: minmax(0, 1fr) 50px;
+      min-height: 0;
+    }
     &.thread-message {
       grid-template-columns: 50px minmax(0, 1fr);
       min-height: 0;
@@ -413,11 +427,11 @@
     }
     .actions {
       top: -18px;
-      right: 0;
+      right: 12px;
       padding: 3px 6px;
     }
-    &.own-message .actions { right: auto; left: 0; }
-    &:not(.own-message) .actions { right: 0; left: auto; }
+    &.own-message .actions { right: auto; left: 12px; }
+    &:not(.own-message) .actions { right: 12px; left: auto; }
     .edit-composer { height: 180px; padding: 15px; }
     .edit-composer textarea { font-size: 16px; }
     .edit-controls { gap: 6px; }
