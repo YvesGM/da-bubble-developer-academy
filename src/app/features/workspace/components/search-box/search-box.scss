@@ -93,9 +93,9 @@
 
   @include bp.widescreen {
     input {
-      font-size: 24px;
-      height: 70px;
-      border-radius: 35px;
+      font-size: var(--ws-heading, 24px);
+      height: clamp(70px, 3.646vw, 112px);
+      border-radius: 50px;
     }
   }
 
