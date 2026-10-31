@@ -63,6 +63,7 @@ export class MessageItem {
   readonly editEmojiPickerOpen = signal(false);
   readonly quickReactions = DEFAULT_RECENT_EMOJIS;
   readonly mobileViewport = signal(window.innerWidth <= 800);
+  readonly mobileActionsOpen = signal(false);
   readonly reactionContext = computed(() => ({
     target: this.target(),
     messageId: this.parentMessageId() || this.message().id,
@@ -105,6 +106,19 @@ export class MessageItem {
     this.editEmojiPickerOpen.set(false);
   }
 
+  /** Opens message actions on tap without showing desktop hover controls by default. */
+  toggleMobileActions(): void {
+    if (this.mobileViewport()) this.mobileActionsOpen.update((value) => !value);
+  }
+
+  /** Dismisses mobile message actions when another item is selected. */
+  @HostListener('document:click', ['$event'])
+  closeMobileActionsOnOutside(event: MouseEvent): void {
+    if (!this.host.nativeElement.contains(event.target as Node)) {
+      this.mobileActionsOpen.set(false);
+    }
+  }
+
   /** Toggles the reaction picker without keeping a second picker open. */
   toggleReactionPicker(): void {
     this.editEmojiPickerOpen.set(false);
@@ -123,6 +137,7 @@ export class MessageItem {
    */
   updateViewport(): void {
     this.mobileViewport.set(window.innerWidth <= 800);
+    if (!this.mobileViewport()) this.mobileActionsOpen.set(false);
   }
 
   /** Syncs the existing menu state with native popover dismissal. */
