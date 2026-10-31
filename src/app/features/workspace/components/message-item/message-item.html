@@ -74,13 +74,6 @@
       <p class="message-text">{{ message().text }}</p>
     }
 
-    @if (!parentMessageId() && replies().length) {
-      <button type="button" class="replies-link" (click)="threadRequested.emit(message())">
-        {{ replies().length }} {{ replies().length === 1 ? 'Antwort' : 'Antworten' }}
-        @if (lastReplyTime()) { <span class="last-reply">Letzte Antwort {{ lastReplyTime() }}</span> }
-      </button>
-    }
-
     @if (canInteract()) {
       <div class="actions" aria-label="Nachrichtenaktionen">
         @for (emoji of quickReactions; track emoji) {
@@ -134,38 +127,58 @@
       </div>
     }
 
-    @if (showEmojiPicker() && canInteract()) {
-      <div class="reaction-picker">
-        <app-emoji-picker [recent]="recentEmojis()" (emojiSelected)="toggleReaction($event)" />
-      </div>
-    }
-
-    @if (reactions().length) {
-      <div class="reactions">
-        @for (reaction of visibleReactions(); track reaction.emoji) {
+    @if (canInteract() && !editing()) {
+      <div class="message-footer">
+        @if (reactions().length) {
+          <div class="reactions">
+            @for (reaction of visibleReactions(); track reaction.emoji) {
+              <button
+                type="button"
+                [title]="reactionSummary(reaction)"
+                [attr.aria-label]="reactionSummary(reaction)"
+                (click)="toggleReaction(reaction.emoji)"
+              >
+                @if (reaction.emoji === '✅') {
+                  <span class="reaction-check" aria-hidden="true">✓</span>
+                } @else {
+                  <span aria-hidden="true">{{ reaction.emoji }}</span>
+                }
+                {{ reaction.userIds.length }}
+              </button>
+            }
+            @if (hiddenReactionCount()) {
+              <button type="button" class="reaction-more" (click)="toggleReactionExpansion()">
+                + {{ hiddenReactionCount() }} weitere
+              </button>
+            } @else if (showAllReactions() && reactions().length > reactionLimit()) {
+              <button type="button" class="reaction-more" (click)="toggleReactionExpansion()">
+                Weniger anzeigen
+              </button>
+            }
+          </div>
+        }
+        @if (!compactReactions() && !parentMessageId() && replies().length) {
+          <button type="button" class="replies-link" (click)="threadRequested.emit(message())">
+            {{ replies().length }} {{ replies().length === 1 ? 'Antwort' : 'Antworten' }}
+            @if (lastReplyTime()) {
+              <span class="last-reply">Letzte Antwort {{ lastReplyTime() }}</span>
+            }
+          </button>
+        } @else {
           <button
             type="button"
-            [title]="reactionSummary(reaction)"
-            [attr.aria-label]="reactionSummary(reaction)"
-            (click)="toggleReaction(reaction.emoji)"
+            class="footer-reaction-button"
+            aria-label="Emoji-Reaktion hinzufügen"
+            [attr.aria-expanded]="showEmojiPicker()"
+            (click)="showEmojiPicker.set(!showEmojiPicker())"
           >
-            @if (reaction.emoji === '✅') {
-              <span class="reaction-check" aria-hidden="true">✓</span>
-            } @else {
-              <span aria-hidden="true">{{ reaction.emoji }}</span>
-            }
-            {{ reaction.userIds.length }}
+            <img src="/assets/reaction-add.svg" alt="" />
           </button>
         }
-
-        @if (hiddenReactionCount()) {
-          <button type="button" class="reaction-more" (click)="toggleReactionExpansion()">
-            + {{ hiddenReactionCount() }} weitere
-          </button>
-        } @else if (showAllReactions() && reactions().length > reactionLimit()) {
-          <button type="button" class="reaction-more" (click)="toggleReactionExpansion()">
-            Weniger anzeigen
-          </button>
+        @if (showEmojiPicker()) {
+          <div class="reaction-picker">
+            <app-emoji-picker [recent]="recentEmojis()" (emojiSelected)="toggleReaction($event)" />
+          </div>
         }
       </div>
     }
