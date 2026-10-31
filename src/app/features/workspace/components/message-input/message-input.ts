@@ -51,7 +51,13 @@ export class MessageInput implements AfterViewInit {
   /** Closes transient input menus when a click occurs outside this composer. */
   @HostListener('document:click', ['$event'])
   closeOnOutsideClick(event: MouseEvent): void {
-    if (!this.host.nativeElement.contains(event.target as Node)) this.closeOverlays();
+    const target = event.target as Element;
+    if (!this.host.nativeElement.contains(target)) {
+      this.closeOverlays();
+      this.closeSuggestions();
+    } else if (!target.closest('textarea, .suggestions')) {
+      this.closeSuggestions();
+    }
   }
 
   /** Closes suggestions and input menus on Escape. */
