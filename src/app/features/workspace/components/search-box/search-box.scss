@@ -97,6 +97,8 @@
       height: clamp(70px, 3.646vw, 112px);
       border-radius: 50px;
     }
+    .results span,
+    .results p { font-size: var(--ws-sidebar-item, 16px); }
   }
 
   .mobile-search-placeholder { display: none; }
