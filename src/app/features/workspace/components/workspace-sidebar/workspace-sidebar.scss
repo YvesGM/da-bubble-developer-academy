@@ -19,12 +19,13 @@
   gap: 14px;
 }
 
-.sidebar-section { margin-top: 24px; }
+.sidebar-section { margin-top: 25px; }
 
 .section-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 46px;
   gap: 14px;
 }
 
@@ -117,7 +118,15 @@
   border-radius: 12px;
 }
 
-.sidebar nav { display: grid; margin-top: 10px; gap: 4px; }
+.sidebar nav {
+  display: grid;
+  align-content: start;
+  margin-top: 25px;
+  gap: 13px;
+}
+
+.sidebar nav[aria-label='Channels'] { margin-left: 25px; }
+.sidebar nav[aria-label='Direktnachrichten'] { margin-left: 33px; }
 
 .sidebar button.sidebar-add-channel {
   display: flex;
@@ -125,7 +134,8 @@
   justify-content: flex-start;
   width: auto;
   height: auto;
-  margin-top: 6px;
+  margin-top: 13px;
+  margin-left: 25px;
   padding: 8px 14px;
   gap: 8px;
   font-size: 15px;
@@ -146,14 +156,18 @@
   transition: background-color tokens.$motion-base, color tokens.$motion-fast;
 }
 
-.channel-link { width: fit-content; max-width: 100%; min-height: 36px; }
+.channel-link {
+  width: fit-content;
+  max-width: 100%;
+  min-height: 33px;
+}
 .sidebar button.dm-link {
   display: flex;
   justify-content: flex-start;
   width: 100%;
-  min-height: 60px;
-  height: auto;
-  padding: 5px 14px;
+  min-height: 58px;
+  height: 58px;
+  padding: 4px 0;
   gap: 12px;
   color: tokens.$text;
   text-align: left;
@@ -222,6 +236,9 @@
 
   .sidebar-section { margin-top: 22px; }
   .sidebar > .sidebar-section:first-of-type { margin-top: 0; }
+  .sidebar nav[aria-label='Channels'],
+  .sidebar nav[aria-label='Direktnachrichten'] { margin-left: 0; }
+  .sidebar button.sidebar-add-channel { margin-left: 0; }
 
   .sidebar button.mobile-new-message {
     position: fixed;
