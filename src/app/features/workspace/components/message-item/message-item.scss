@@ -2,12 +2,12 @@
 @use '../../../../../styles/breakpoints' as bp;
 .message {
   display: grid;
-  grid-template-columns: 70px minmax(0, 1fr);
+  grid-template-columns: var(--ws-avatar, 70px) minmax(0, 1fr);
   position: relative;
   min-height: 0;
   margin-inline: 0;
-  padding: 10px 45px;
-  gap: 30px;
+  padding: 10px var(--ws-message-inset, 45px);
+  gap: var(--ws-message-gap, 30px);
   transition: background-color tokens.$motion-base;
   &:hover,
   &:focus-within,
@@ -20,7 +20,7 @@
     }
   }
   &.own-message {
-    grid-template-columns: minmax(0, 1fr) 70px;
+    grid-template-columns: minmax(0, 1fr) var(--ws-avatar, 70px);
     .actions { width: 255px; }
     .message-avatar { grid-column: 2; grid-row: 1; }
     .message-body { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: flex-end; }
@@ -30,14 +30,14 @@
     .reactions { justify-content: flex-end; }
     .actions {
       right: auto;
-      left: 45px;
+      left: var(--ws-message-inset, 45px);
       border-radius: 20px 20px 0 20px;
     }
   }
   &-avatar {
-    width: 70px;
-    height: 70px;
-    --avatar-medium-size: 70px;
+    width: var(--ws-avatar, 70px);
+    height: var(--ws-avatar, 70px);
+    --avatar-medium-size: var(--ws-avatar, 70px);
     padding: 0;
     background: transparent;
     border: 0;
@@ -50,20 +50,20 @@
     min-width: 0;
   }
   &.thread-message {
-    grid-template-columns: 70px minmax(0, 1fr);
+    grid-template-columns: var(--ws-avatar, 70px) minmax(0, 1fr);
     min-height: 150px;
     padding: 27px 0 10px;
     gap: 20px;
     &.own-message {
-      grid-template-columns: minmax(0, 1fr) 70px;
+      grid-template-columns: minmax(0, 1fr) var(--ws-avatar, 70px);
       .actions { width: max-content; }
     }
-    .message-avatar { width: 70px; height: 70px; --avatar-medium-size: 70px; }
-    .message-text { font-size: 18px; }
+    .message-avatar { width: var(--ws-avatar, 70px); height: var(--ws-avatar, 70px); --avatar-medium-size: var(--ws-avatar, 70px); }
+    .message-text { font-size: var(--ws-text, 18px); }
     .actions { width: max-content; }
     .meta { gap: 10px; }
-    .author-button { font-size: 18px; }
-    .meta span { font-size: 14px; }
+    .author-button { font-size: var(--ws-text, 18px); }
+    .meta span { font-size: var(--ws-meta, 14px); }
   }
   &-text {
     display: inline-block;
@@ -72,7 +72,7 @@
     margin: 5px 0;
     background: tokens.$background;
     border-radius: 0 20px 20px 20px;
-    font-size: 18px;
+    font-size: var(--ws-text, 18px);
     line-height: 1.4;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
@@ -101,7 +101,7 @@
       padding: 0;
       resize: none;
       font: inherit;
-      font-size: 18px;
+      font-size: var(--ws-text, 18px);
       line-height: 1.4;
       color: tokens.$text;
       background: transparent;
@@ -163,13 +163,13 @@
     flex-wrap: wrap;
     gap: 20px;
     span {
-      font-size: 14px;
+      font-size: var(--ws-meta, 14px);
       color: tokens.$text-gray;
     }
   }
   .author {
     &-button {
-      font-size: 18px;
+      font-size: var(--ws-text, 18px);
       font-weight: 700;
       padding: 0;
       color: tokens.$text;
@@ -185,7 +185,7 @@
     }
   }
   &:not(.own-message) .actions {
-    right: 43px;
+    right: clamp(43px, 2.24vw, 69px);
     left: auto;
     border-radius: 20px 20px 0 20px;
   }
@@ -195,7 +195,7 @@
     position: absolute;
     z-index: 3;
     top: -18px;
-    right: 43px;
+    right: clamp(43px, 2.24vw, 69px);
     width: 210px;
     min-height: 46px;
     padding: 3px 5px;
