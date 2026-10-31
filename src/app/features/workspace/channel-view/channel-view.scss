@@ -107,12 +107,10 @@
   }
   .channel-chevron {
     flex: 0 0 auto;
-    width: 9px;
+    width: 14px;
     height: 9px;
-    margin: -5px 4px 0 2px;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    transform: rotate(45deg);
+    margin-left: 2px;
+    object-fit: contain;
   }
 
   @include bp.mobile {
