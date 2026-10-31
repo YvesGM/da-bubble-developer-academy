@@ -207,6 +207,20 @@
       }
       .toggle-label { font-size: 20px; }
     }
+
+    @media (min-width: 1921px) {
+      width: clamp(56px, 2.92vw, 90px);
+      height: clamp(347px, 18.073vw, 555px);
+      padding: clamp(20px, 1.04vw, 32px);
+      &.is-collapsed { height: clamp(310px, 16.146vw, 496px); }
+      .toggle-label { font-size: var(--ws-icon); }
+      .toggle-icon {
+        width: var(--ws-action);
+        height: var(--ws-action);
+        flex-basis: var(--ws-action);
+      }
+      .toggle-icon img { width: var(--ws-icon); height: var(--ws-icon); }
+    }
   }
 
   &-content {
