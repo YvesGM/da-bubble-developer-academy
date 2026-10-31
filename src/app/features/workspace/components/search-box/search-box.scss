@@ -101,7 +101,34 @@
     .results p { font-size: var(--ws-sidebar-item, 16px); }
   }
 
-  .mobile-search-placeholder { display: none; }
+  .mobile-search-placeholder,
+  .mobile-search-header { display: none; }
+
+  .result-avatar {
+    display: inline-flex;
+    position: relative;
+    width: 42px;
+    height: 42px;
+    --avatar-medium-size: 42px;
+
+    app-presence-indicator {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      border: 2px solid tokens.$white;
+      border-radius: 50%;
+    }
+  }
+
+  .results .search-result:has(.result-avatar) {
+    grid-template-columns: 42px minmax(0, 1fr);
+    align-items: center;
+    column-gap: 12px;
+
+    .result-avatar { grid-row: span 2; }
+    .result-email { grid-column: 2; }
+  }
+
 
   @include bp.mobile {
     input {
@@ -144,6 +171,80 @@
       align-content: start;
       border-radius: 20px;
       box-shadow: 0 8px 28px #0000001c;
+    }
+
+    &.mobile-open {
+      position: fixed;
+      z-index: 42;
+      inset: 80px 0 0;
+      display: block;
+      width: 100%;
+      padding: 60px 16px 20px;
+      overflow: hidden;
+      background: tokens.$white;
+
+      .mobile-search-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 60px;
+        padding: 0 16px;
+        border-bottom: 1px solid tokens.$background;
+
+        strong { font-size: 18px; }
+
+        button {
+          display: grid;
+          place-items: center;
+          width: 36px;
+          height: 36px;
+          padding: 0;
+          background: transparent;
+          border: 0;
+
+          img { width: 16px; height: 16px; }
+        }
+      }
+
+      input {
+        width: 100%;
+        background: tokens.$white;
+        &::placeholder { opacity: 1; }
+      }
+
+      .search-icon { top: 84px; transform: none; }
+      .mobile-search-placeholder { display: none; }
+
+      .results {
+        position: absolute;
+        top: 122px;
+        right: 16px;
+        bottom: 0;
+        left: 16px;
+        max-height: none;
+        padding: 10px 0;
+        border-radius: 0;
+        box-shadow: none;
+
+        .search-result {
+          min-height: 60px;
+          padding: 5px 14px;
+          align-items: center;
+          font-size: 16px;
+          border-radius: 24px;
+        }
+        .search-result:has(.result-avatar) {
+          grid-template-columns: 50px minmax(0, 1fr);
+          .result-avatar { width: 50px; height: 50px; --avatar-medium-size: 50px; }
+        }
+        .result-email,
+        .result-description { display: none; }
+        .result-channel { font-weight: 400; }
+      }
     }
   }
 }
