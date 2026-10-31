@@ -85,11 +85,12 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     width: 46px;
-    min-height: 300px;
-    padding: 18px 8px 12px;
-    gap: 12px;
+    height: 300px;
+    min-height: 0;
+    padding: 20px 8px;
+    gap: 8px;
     color: tokens.$text;
     background: tokens.$white;
     border: 0;
@@ -124,8 +125,10 @@
       }
     }
 
-    &.is-collapsed .toggle-icon img {
-      transform: scaleX(-1);
+    &.is-collapsed {
+      height: 270px;
+
+      .toggle-icon img { transform: scaleX(-1); }
     }
 
     .toggle-label {
@@ -142,9 +145,11 @@
 
     @include bp.widescreen {
       width: 56px;
-      min-height: 347px;
-      padding: 23px 12px 9px;
+      height: 347px;
+      padding: 20px 12px;
       border-radius: 0 30px 30px 0;
+
+      &.is-collapsed { height: 310px; }
 
       .toggle-icon {
         flex-basis: 32px;
