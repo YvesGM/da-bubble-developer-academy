@@ -225,35 +225,35 @@
     }
 
     @include bp.widescreen {
-      grid-template-columns: 366px minmax(0, 1fr) 342px;
-      min-height: 115px;
+      grid-template-columns: var(--ws-sidebar) minmax(0, 1fr) clamp(342px, 17.81vw, 550px);
+      min-height: var(--ws-header);
       padding: 25px 34px 20px 20px;
-      gap: 20px;
+      gap: var(--ws-gap);
 
       .brand {
         margin-left: 25px;
 
         &-mark {
-          width: 70px;
-          height: 70px;
+          width: var(--ws-avatar);
+          height: var(--ws-avatar);
         }
 
         &-name {
-          width: 160px;
+          width: clamp(160px, 8.333vw, 256px);
         }
       }
 
       app-search-box {
         justify-self: start;
-        width: min(100%, 989px);
+        width: min(100%, clamp(989px, 51.51vw, 1582px));
       }
 
       .profile-button {
         width: 100%;
-        min-height: 70px;
+        min-height: var(--ws-avatar);
         justify-content: flex-end;
 
-        .profile-name { font-size: 24px; }
+        .profile-name { font-size: var(--ws-heading); }
       }
     }
   }
