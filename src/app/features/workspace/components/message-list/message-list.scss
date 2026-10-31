@@ -2,8 +2,11 @@
 @use '../../../../../styles/breakpoints' as bp;
 
 .message-list {
-  min-height: 240px;
-  overflow: auto;
+  min-height: 0;
+  padding-top: clamp(16px, 12dvh, 130px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 
   .empty-state {
     display: grid;
@@ -46,13 +49,15 @@
       background: tokens.$white;
       border: 1px solid tokens.$border;
       border-radius: 30px;
-      font-size: 18px;
+      font-size: var(--ws-text, 18px);
       line-height: 25px;
       white-space: nowrap;
     }
   }
 
   @include bp.mobile {
+    padding-top: clamp(16px, 5.2dvh, 49px);
+
     .date-separator {
       margin: 16px 0;
       span { font-size: 14px; }
