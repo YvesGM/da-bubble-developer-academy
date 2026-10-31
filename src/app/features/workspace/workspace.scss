@@ -9,6 +9,35 @@
   position: relative;
   background: tokens.$background;
 
+  // Scale only the workspace beyond the Figma 1920px desktop reference.
+  --ws-sidebar: 366px;
+  --ws-gap: 20px;
+  --ws-header: 115px;
+  --ws-channel-header: 96px;
+  --ws-thread: 485px;
+  --ws-thread-header: 104px;
+  --ws-avatar: 70px;
+  --ws-composer: 145px;
+  --ws-text: 18px;
+  --ws-heading: 24px;
+  --ws-meta: 14px;
+  --ws-inset: 35px;
+
+  @media (min-width: 1921px) {
+    --ws-sidebar: clamp(366px, 19.06vw, 586px);
+    --ws-gap: clamp(20px, 1.04vw, 32px);
+    --ws-header: clamp(115px, 5.99vw, 184px);
+    --ws-channel-header: clamp(96px, 5vw, 154px);
+    --ws-thread: clamp(485px, 25.26vw, 776px);
+    --ws-thread-header: clamp(104px, 5.42vw, 166px);
+    --ws-avatar: clamp(70px, 3.65vw, 112px);
+    --ws-composer: clamp(145px, 7.55vw, 232px);
+    --ws-text: clamp(18px, .9375vw, 28px);
+    --ws-heading: clamp(24px, 1.25vw, 38px);
+    --ws-meta: clamp(14px, .73vw, 22px);
+    --ws-inset: clamp(35px, 1.82vw, 56px);
+  }
+
   &-body {
     display: grid;
     grid-template-columns: 280px minmax(0, 1fr);
@@ -71,9 +100,9 @@
     }
 
     @include bp.widescreen {
-      grid-template-columns: 366px minmax(0, 1fr);
-      padding: 0 20px 25px;
-      gap: 20px;
+      grid-template-columns: var(--ws-sidebar) minmax(0, 1fr);
+      padding: 0 var(--ws-gap) 25px;
+      gap: var(--ws-gap);
 
       &.collapsed {
         grid-template-columns: 0 minmax(0, 1fr);
