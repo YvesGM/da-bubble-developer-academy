@@ -4,9 +4,9 @@
   display: grid;
   grid-template-columns: 70px minmax(0, 1fr);
   position: relative;
-  min-height: 141px;
+  min-height: 0;
   margin-inline: 20px;
-  padding: 10px 0;
+  padding: 16px 0 12px;
   gap: 30px;
   transition: background-color tokens.$motion-base;
   &:hover,
@@ -21,7 +21,6 @@
   }
   &.own-message {
     grid-template-columns: minmax(0, 1fr) 70px;
-    min-height: 200px;
     .actions { width: 255px; }
     .message-avatar { grid-column: 2; grid-row: 1; }
     .message-body { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: flex-end; }
@@ -202,6 +201,7 @@
     min-height: 46px;
     padding: 3px 5px;
     gap: 5px;
+    justify-content: space-evenly;
     background: tokens.$white;
     border: 1px solid tokens.$border;
     border-radius: 20px 20px 0 20px;
@@ -217,10 +217,15 @@
       transform: translateY(0);
       pointer-events: auto;
     }
-    button {
+    > button,
+    .message-options > button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 36px;
+      width: 36px;
       min-width: 36px;
       height: 36px;
-      padding: 0 8px;
+      padding: 0;
       background: transparent;
       border: 0;
       border-radius: 16px;
@@ -246,7 +251,13 @@
       font-weight: 700;
       line-height: 1;
     }
-    .message-options { position: relative; flex: 0 0 40px; }
+    .message-options {
+      position: relative;
+      display: grid;
+      place-items: center;
+      flex: 0 0 36px;
+      width: 36px;
+    }
     .options-toggle img { width: 18px; height: 18px; }
     // A top-layer popover is not clipped by the scrollable message list.
     .options-menu {
@@ -285,14 +296,17 @@
     }
     img { display: block; width: 19px; height: 19px; object-fit: contain; }
   }
+  // Anchor the existing picker to the message, never to the narrow footer.
   .reaction-picker {
     position: absolute;
     z-index: 5;
-    bottom: calc(100% + 8px);
-    left: 0;
+    top: 44px;
+    bottom: auto;
+    left: 90px;
+    width: min(244px, calc(100% - 90px));
   }
   &.own-message .reaction-picker {
-    right: 0;
+    right: 90px;
     left: auto;
   }
   // The sender's bubble stays violet; incoming bubbles turn white on hover.
@@ -305,7 +319,7 @@
     align-items: center;
     align-self: flex-start;
     flex-wrap: wrap;
-    position: relative;
+    position: static;
     min-height: 34px;
     gap: 8px;
     &.has-replies { min-height: 25px; }
@@ -337,8 +351,12 @@
     button {
       display: inline-flex;
       align-items: center;
-      padding: 4px 9px;
+      min-height: 28px;
+      padding: 2px 9px;
       gap: 5px;
+      font-size: 16px;
+
+      > span { font-size: 20px; }
       background: tokens.$white;
       border: 1px solid tokens.$border;
       border-radius: 16px;
@@ -353,12 +371,12 @@
     .reaction-check {
       display: inline-grid;
       place-items: center;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       color: tokens.$white;
       background: tokens.$reaction-green;
       border-radius: 50%;
-      font-size: 12px;
+      font-size: 15px;
       font-weight: 700;
       line-height: 1;
     }
@@ -442,8 +460,13 @@
     .meta { gap: 10px; }
     .meta span { font-size: 13px; }
     .message-text { padding: 15px; }
-    .reaction-picker { right: auto; left: 0; }
-    &.own-message .reaction-picker { right: 0; left: auto; }
+    .reaction-picker {
+      top: 44px;
+      right: auto;
+      left: 50px;
+      width: min(244px, calc(100% - 50px));
+    }
+    &.own-message .reaction-picker { right: 50px; left: auto; }
     @media (hover: none) {
       .actions {
         opacity: 1;
