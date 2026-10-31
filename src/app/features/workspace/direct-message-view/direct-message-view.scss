@@ -7,6 +7,7 @@
 
     height: 100%;
     min-height: 0;
+    min-width: 0;
 
     header {
       display: flex;
@@ -21,6 +22,7 @@
 
       @include bp.mobile {
         min-height: 60px;
+        height: 60px;
         padding: 10px 16px;
       }
     }
@@ -32,6 +34,7 @@
     display: flex;
     align-items: center;
 
+    min-width: 0;
     padding: 4px 10px 4px 4px;
     gap: 12px;
 
@@ -106,7 +109,7 @@
     &:has(app-thread-panel) { --thread-panel-width: 485px; }
   }
 
-  @media (min-width: 801px) and (max-width: 1199px) {
+  @media (min-width: 801px) and (max-width: 1359px) {
     &:has(app-thread-panel) > header { display: none; }
   }
 
