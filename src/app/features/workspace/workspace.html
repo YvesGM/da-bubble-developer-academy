@@ -17,11 +17,10 @@
     [attr.aria-label]="sidebarCollapsed() ? 'Workspace-Menü öffnen' : 'Workspace-Menü schließen'"
     (click)="toggleSidebar()"
   >
-    <img
-      src="/assets/sidebar-collapse.svg"
-      alt=""
-    />
-    <span>{{ sidebarCollapsed() ? 'Workspace-Menü öffnen' : 'Workspace-Menü schließen' }}</span>
+    <span class="toggle-icon" aria-hidden="true">
+      <img src="/assets/sidebar-collapse.svg" alt="" />
+    </span>
+    <span class="toggle-label">{{ sidebarCollapsed() ? 'Workspace-Menü öffnen' : 'Workspace-Menü schließen' }}</span>
   </button>
 
   <div
