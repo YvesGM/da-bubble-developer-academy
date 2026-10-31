@@ -5,8 +5,8 @@
   grid-template-columns: 70px minmax(0, 1fr);
   position: relative;
   min-height: 0;
-  margin-inline: 20px;
-  padding: 16px 0 12px;
+  margin-inline: 0;
+  padding: 10px 45px;
   gap: 30px;
   transition: background-color tokens.$motion-base;
   &:hover,
@@ -52,8 +52,7 @@
   &.thread-message {
     grid-template-columns: 70px minmax(0, 1fr);
     min-height: 150px;
-    margin-inline: 0;
-    padding-top: 27px;
+    padding: 27px 0 10px;
     gap: 20px;
     &.own-message {
       grid-template-columns: minmax(0, 1fr) 70px;
