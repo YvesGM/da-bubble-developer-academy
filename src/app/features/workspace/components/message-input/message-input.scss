@@ -3,11 +3,11 @@
 
 .composer {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) 40px;
+  grid-template-rows: minmax(0, 1fr) var(--ws-action, 40px);
   position: relative;
   height: var(--ws-composer, 145px);
   min-width: 0;
-  padding: 19px 20px 20px;
+  padding: clamp(19px, .99vw, 30px) clamp(20px, 1.04vw, 32px) clamp(20px, 1.04vw, 32px);
   gap: 15px;
   background: tokens.$white;
   border: 1px solid tokens.$border;
@@ -75,7 +75,7 @@
   .send-button {
     margin-left: auto;
 
-    img { width: 30px; height: 30px; }
+    img { width: clamp(30px, 1.563vw, 48px); height: clamp(30px, 1.563vw, 48px); }
 
     &:disabled {
       cursor: default;
