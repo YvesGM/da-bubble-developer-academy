@@ -22,16 +22,8 @@
     min-height: 35px;
     margin: 20px 0;
     color: tokens.$text;
-
-    // One continuous line avoids flex pseudo-elements collapsing beside long dates.
-    &::before {
-      position: absolute;
-      z-index: 0;
-      inset: 50% 0 auto;
-      height: 1px;
-      content: '';
-      background: tokens.$border;
-    }
+    // Draw a continuous line behind the opaque date pill without stacking layers.
+    background: linear-gradient(tokens.$border, tokens.$border) center / 100% 1px no-repeat;
 
     span {
       display: inline-flex;
