@@ -33,6 +33,8 @@ export class ChatPanel {
   readonly inputPlaceholder = input('Nachricht schreiben');
   readonly emptyTitle = input('Noch keine Nachrichten.');
   readonly emptyText = input('Starte die Unterhaltung unten.');
+  readonly emptyAvatarId = input('');
+  readonly emptyAvatarName = input('');
   readonly mentionUsers = input<UserProfile[] | null>(null);
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
