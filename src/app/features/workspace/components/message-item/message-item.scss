@@ -299,6 +299,7 @@
     position: relative;
     min-height: 34px;
     gap: 8px;
+    &.has-replies { min-height: 25px; }
   }
   .footer-reaction-button {
     display: grid;
