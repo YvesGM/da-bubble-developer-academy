@@ -445,9 +445,16 @@
       max-width: 100%;
     }
     .actions {
+      display: none;
       top: -18px;
       right: 12px;
       padding: 3px 6px;
+    }
+    &.mobile-actions-open .actions {
+      display: flex;
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
     }
     &.own-message .actions { right: auto; left: 12px; }
     &:not(.own-message) .actions { right: 12px; left: auto; }
@@ -468,12 +475,6 @@
       width: min(244px, calc(100% - 50px));
     }
     &.own-message .reaction-picker { right: 50px; left: auto; }
-    @media (hover: none) {
-      .actions {
-        opacity: 1;
-        transform: none;
-        pointer-events: auto;
-      }
-    }
+
   }
 }
