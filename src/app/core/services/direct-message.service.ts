@@ -53,8 +53,21 @@ export class DirectMessageService {
     const currentUserId = this.currentRegisteredUserId();
     if (!currentUserId) throw new Error('guest-direct-message-not-available');
     const id = this.conversationId(currentUserId, otherUserId);
-    if (await this.conversationExists(id)) return id;
+    try {
+      if (await this.conversationExists(id)) return id;
+    } catch (error) {
+      if (!this.isMissingDocumentReadDenied(error)) throw error;
+    }
     return this.createConversation(currentUserId, otherUserId);
+  }
+
+  /**
+   * Firestore may deny reading a missing DM because its read rule checks
+   * resource.data.participantIds. Creation is separately authorized.
+   */
+  private isMissingDocumentReadDenied(error: unknown): boolean {
+    return error instanceof Error && 'code' in error
+      && error.code === 'permission-denied';
   }
 
   /**
