@@ -3,10 +3,10 @@
 
 .new-message-view {
   display: grid;
-  grid-template-rows: 80px 80px minmax(0, 1fr) 145px;
+  grid-template-rows: clamp(80px, 4.17vw, 128px) clamp(80px, 4.17vw, 128px) minmax(0, 1fr) var(--ws-composer, 145px);
   height: 100%;
   min-height: 0;
-  padding: 0 45px 40px;
+  padding: 0 clamp(45px, 2.34vw, 72px) clamp(40px, 2.083vw, 64px);
   background: tokens.$white;
 
   header {
@@ -14,7 +14,7 @@
     align-items: center;
     min-width: 0;
 
-    h1 { margin: 0; font-size: 24px; }
+    h1 { margin: 0; font-size: var(--ws-heading, 24px); }
   }
 
   .mobile-back { display: none; }
@@ -31,7 +31,7 @@
     input {
       flex: 1;
       min-width: 0;
-      height: 55px;
+      height: clamp(55px, 2.86vw, 88px);
       padding: 0 18px;
       outline: 0;
       border: 1px solid tokens.$border;
@@ -73,7 +73,7 @@
     p { color: tokens.$text-gray; }
   }
 
-  .new-message-composer { min-width: 0; margin: 0 26px; }
+  .new-message-composer { min-width: 0; margin: 0 clamp(26px, 1.35vw, 42px); }
 
   @include bp.mobile {
     grid-template-rows: 60px 65px minmax(0, 1fr) min(145px, max(110px, 16dvh));
