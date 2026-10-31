@@ -280,5 +280,13 @@
     height: var(--ws-sidebar-avatar);
     --avatar-medium-size: var(--ws-sidebar-avatar);
   }
-  .workspace-name { max-width: 230px; font-size: clamp(22px, 1.146vw, 35px); }
+  .workspace-name { max-width: clamp(230px, 12vw, 368px); font-size: clamp(22px, 1.146vw, 35px); }
+  .workspace-identity-mark {
+    width: clamp(42px, 2.19vw, 67px);
+    height: clamp(42px, 2.19vw, 67px);
+  }
+  .section-icon,
+  .sidebar-action-icon { width: var(--ws-icon); height: var(--ws-icon); }
+  .channel-link,
+  .sidebar-add-channel { font-size: var(--ws-sidebar-item); }
 }
