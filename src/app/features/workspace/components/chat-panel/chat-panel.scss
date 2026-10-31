@@ -39,6 +39,11 @@
 
   @include bp.widescreen {
     &:has(app-thread-panel) { --thread-panel-width: var(--ws-thread, 485px); }
+
+    // Without a thread Figma places the composer 10px inside the date-line gutter.
+    &:not(:has(app-thread-panel)) .chat-main > app-message-input {
+      margin-inline: clamp(10px, .521vw, 16px);
+    }
   }
 
   @media (min-width: 801px) and (max-width: 1359px) {
