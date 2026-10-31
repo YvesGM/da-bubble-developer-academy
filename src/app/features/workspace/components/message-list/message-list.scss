@@ -31,7 +31,20 @@
     text-align: left;
     color: tokens.$text-gray;
 
-    strong { color: tokens.$text; }
+    strong {
+      color: tokens.$text;
+      font-size: 19px;
+    }
+    app-avatar {
+      --avatar-large-size: 80px;
+      display: block;
+      margin-bottom: 10px;
+    }
+    @include bp.mobile {
+      padding: 0 0 20px;
+      strong { font-size: 18px; }
+      app-avatar { --avatar-large-size: 60px; }
+    }
   }
 
   .date-separator {
