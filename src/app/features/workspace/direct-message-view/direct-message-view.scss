@@ -28,7 +28,7 @@
     }
 
   .partner {
-    font-size: 22px;
+    font-size: clamp(22px, 1.146vw, 35px);
     font-weight: 700;
 
     display: flex;
@@ -54,6 +54,7 @@
 
     &-avatar {
       display: inline-flex;
+      --avatar-large-size: var(--ws-avatar, 70px);
       position: relative;
 
       @include bp.mobile { --avatar-large-size: 50px; }
