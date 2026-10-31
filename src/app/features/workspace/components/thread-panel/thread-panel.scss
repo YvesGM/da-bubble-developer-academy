@@ -113,8 +113,8 @@
     gap: 10px;
   }
 
-  @media (min-width: 801px) and (max-width: 1199px) {
-    border-radius: 0;
+  @media (min-width: 801px) and (max-width: 1359px) {
+    border-radius: 30px;
   }
 
   @include bp.mobile {
@@ -134,7 +134,10 @@
       }
     }
 
-    .thread-conversation { padding: 0; }
+    .thread-conversation {
+      padding: 0;
+      overscroll-behavior: contain;
+    }
     .divider { margin: 12px 5px; gap: 10px; }
   }
 }
