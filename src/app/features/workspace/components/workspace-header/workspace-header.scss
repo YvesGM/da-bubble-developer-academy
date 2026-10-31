@@ -249,6 +249,7 @@
       }
 
       .profile-button {
+        --avatar-large-size: var(--ws-avatar);
         width: 100%;
         min-height: var(--ws-avatar);
         justify-content: flex-end;
