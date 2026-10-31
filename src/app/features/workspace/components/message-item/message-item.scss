@@ -13,7 +13,8 @@
   transition: background-color tokens.$motion-base;
 
   &:hover,
-  &:focus-within {
+  &:focus-within,
+  &:has(.options-menu:popover-open) {
     background: tokens.$background;
 
     .actions {
@@ -304,6 +305,7 @@
       padding: 10px 20px;
       gap: 2px;
       overflow-y: auto;
+      pointer-events: auto;
       background: tokens.$white;
       border: 1px solid tokens.$border;
       border-radius: 20px 0 20px 20px;
