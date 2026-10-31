@@ -9,6 +9,7 @@ import { ChannelService } from '../../core/services/channel.service';
 import { DirectMessageService } from '../../core/services/direct-message.service';
 import { PresenceService } from '../../core/services/presence.service';
 import { UserService } from '../../core/services/user.service';
+import { firebaseErrorMessage } from '../../core/utils/firebase-error.util';
 import { ProfileCard } from '../profile/profile-card/profile-card';
 import { ProfileDialog } from '../profile/profile-dialog/profile-dialog';
 import { ChannelCreateDialog } from './components/channel-create-dialog/channel-create-dialog';
@@ -203,8 +204,10 @@ export class Workspace {
       const dmId = await this.directMessagesService.openConversation(userId);
       this.selectedUser.set(null);
       await this.router.navigate(['/workspace/dm', dmId]);
-    } catch {
-      this.directMessageError.set('Die Direktnachricht konnte nicht geöffnet werden.');
+    } catch (error) {
+      this.directMessageError.set(firebaseErrorMessage(
+        error, 'Die Direktnachricht konnte nicht geöffnet werden.',
+      ));
     }
   }
 
