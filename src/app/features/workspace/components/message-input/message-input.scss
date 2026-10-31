@@ -177,10 +177,16 @@
   }
 
   @include bp.mobile {
+    height: min(145px, max(110px, 16dvh));
     padding: 19px 20px 20px;
     border-radius: 20px;
     .icon-button,
-    .send-button { flex-basis: 40px; }
+    .send-button {
+      flex-basis: 40px;
+      width: 40px;
+      height: 40px;
+    }
+    .icon-button img { width: 20px; height: 20px; }
   }
 }
 
