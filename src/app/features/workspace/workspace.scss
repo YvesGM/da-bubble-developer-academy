@@ -22,6 +22,14 @@
   --ws-heading: 24px;
   --ws-meta: 14px;
   --ws-inset: 35px;
+  --ws-message-inset: 45px;
+  --ws-message-gap: 30px;
+  --ws-sidebar-item: 16px;
+  --ws-sidebar-label: 18px;
+  --ws-sidebar-avatar: 50px;
+  --ws-sidebar-row: 58px;
+  --ws-icon: 20px;
+  --ws-action: 40px;
 
   @media (min-width: 1921px) {
     --ws-sidebar: clamp(366px, 19.06vw, 586px);
@@ -36,6 +44,14 @@
     --ws-heading: clamp(24px, 1.25vw, 38px);
     --ws-meta: clamp(14px, .73vw, 22px);
     --ws-inset: clamp(35px, 1.82vw, 56px);
+    --ws-message-inset: clamp(45px, 2.34vw, 72px);
+    --ws-message-gap: clamp(30px, 1.56vw, 48px);
+    --ws-sidebar-item: clamp(16px, .833vw, 26px);
+    --ws-sidebar-label: clamp(18px, .9375vw, 29px);
+    --ws-sidebar-avatar: clamp(50px, 2.6vw, 80px);
+    --ws-sidebar-row: clamp(58px, 3.02vw, 93px);
+    --ws-icon: clamp(20px, 1.04vw, 32px);
+    --ws-action: clamp(40px, 2.083vw, 64px);
   }
 
   &-body {
