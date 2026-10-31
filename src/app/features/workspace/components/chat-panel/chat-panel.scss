@@ -41,7 +41,7 @@
     &:has(app-thread-panel) { --thread-panel-width: 485px; }
   }
 
-  @media (min-width: 801px) and (max-width: 1199px) {
+  @media (min-width: 801px) and (max-width: 1359px) {
     &:has(app-thread-panel) {
       grid-template-columns: minmax(0, 1fr);
       column-gap: 0;
@@ -52,6 +52,8 @@
   }
 
   @include bp.mobile {
+    min-width: 0;
+    width: 100%;
     grid-template-columns: minmax(0, 1fr);
 
     &:has(app-thread-panel) {
@@ -61,6 +63,10 @@
 
     &:has(app-thread-panel) .chat-main { display: none; }
     app-thread-panel { grid-column: 1; }
-    .chat-main { padding: 0 16px 30px; }
+    .chat-main {
+      grid-template-rows: minmax(0, 1fr) auto;
+      padding: 0 16px 30px;
+      gap: 10px;
+    }
   }
 }
