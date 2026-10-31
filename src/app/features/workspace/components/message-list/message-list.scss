@@ -39,8 +39,10 @@
       justify-content: center;
       position: relative;
       z-index: 1;
+      box-sizing: border-box;
+      height: 35px;
       min-height: 35px;
-      padding: 5px 15px;
+      padding: 0 15px;
       background: tokens.$white;
       border: 1px solid tokens.$border;
       border-radius: 30px;
