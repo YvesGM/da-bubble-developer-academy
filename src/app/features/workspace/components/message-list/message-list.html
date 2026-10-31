@@ -13,6 +13,9 @@
     />
   } @empty {
     <div class="empty-state">
+      @if (emptyAvatarName) {
+        <app-avatar [avatarId]="emptyAvatarId" [name]="emptyAvatarName" size="large" />
+      }
       <strong>{{ emptyTitle }}</strong>
       <span>{{ emptyText }}</span>
     </div>
