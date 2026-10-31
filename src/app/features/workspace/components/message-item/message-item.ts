@@ -35,6 +35,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
   styleUrl: './message-item.scss',
 })
 export class MessageItem {
+  private readonly host = inject(ElementRef<HTMLElement>);
   @ViewChild('editField') private editField?: ElementRef<HTMLTextAreaElement>;
   @ViewChild('optionsButton') private optionsButton?: ElementRef<HTMLButtonElement>;
   @ViewChild('optionsMenu') private optionsMenu?: ElementRef<HTMLDivElement>;
@@ -86,6 +87,35 @@ export class MessageItem {
     ),
     { initialValue: [] as Message[] },
   );
+
+  /** Closes reaction/edit pickers when interacting outside their own controls. */
+  @HostListener('document:click', ['$event'])
+  closePickersOnOutsideClick(event: MouseEvent): void {
+    const target = event.target as Element;
+    if (this.host.nativeElement.contains(target) &&
+        target.closest('.reaction-picker, .edit-emoji-picker, .reaction-trigger, .edit-emoji-button')) return;
+    this.showEmojiPicker.set(false);
+    this.editEmojiPickerOpen.set(false);
+  }
+
+  /** Dismisses both existing emoji pickers using the Escape key. */
+  @HostListener('document:keydown.escape')
+  closePickersOnEscape(): void {
+    this.showEmojiPicker.set(false);
+    this.editEmojiPickerOpen.set(false);
+  }
+
+  /** Toggles the reaction picker without keeping a second picker open. */
+  toggleReactionPicker(): void {
+    this.editEmojiPickerOpen.set(false);
+    this.showEmojiPicker.update((value) => !value);
+  }
+
+  /** Toggles the editor picker without keeping a reaction picker open. */
+  toggleEditPicker(): void {
+    this.showEmojiPicker.set(false);
+    this.editEmojiPickerOpen.update((value) => !value);
+  }
 
   @HostListener('window:resize')
   /**
