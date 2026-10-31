@@ -149,9 +149,14 @@
       place-items: center;
       flex: 0 0 26px;
       width: 26px;
-      color: tokens.$purple-1;
+      color: tokens.$text;
       font-size: 24px;
       font-weight: 700;
+    }
+
+    .suggestion-option:first-child .suggestion-hash,
+    .suggestion-option:is(:hover, :focus-visible) .suggestion-hash {
+      color: tokens.$purple-1;
     }
   }
 
