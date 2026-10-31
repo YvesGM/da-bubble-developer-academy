@@ -13,8 +13,8 @@
       display: flex;
       align-items: center;
 
-      min-height: 110px;
-      padding: 20px 35px;
+      min-height: clamp(110px, 5.729vw, 176px);
+      padding: 20px var(--ws-inset, 35px);
       gap: 12px;
 
       border-bottom: 1px solid tokens.$background;
@@ -87,7 +87,7 @@
   }
 
   &:has(app-thread-panel) {
-    --conversation-header-height: 110px;
+    --conversation-header-height: clamp(110px, 5.729vw, 176px);
     position: relative;
     grid-template-rows: minmax(0, 1fr);
 
@@ -96,8 +96,8 @@
       top: 0;
       left: 0;
       z-index: 2;
-      width: calc(100% - var(--thread-panel-width, 440px) - 20px);
-      height: 110px;
+      width: calc(100% - var(--thread-panel-width, 440px) - var(--ws-gap, 20px));
+      height: var(--conversation-header-height);
       background: tokens.$white;
       border-radius: 30px 30px 0 0;
     }
@@ -106,7 +106,7 @@
   }
 
   @include bp.widescreen {
-    &:has(app-thread-panel) { --thread-panel-width: 485px; }
+    &:has(app-thread-panel) { --thread-panel-width: var(--ws-thread, 485px); }
   }
 
   @media (min-width: 801px) and (max-width: 1359px) {
