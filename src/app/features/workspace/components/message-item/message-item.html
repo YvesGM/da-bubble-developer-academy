@@ -128,7 +128,7 @@
     }
 
     @if (canInteract() && !editing()) {
-      <div class="message-footer">
+      <div class="message-footer" [class.has-replies]="!compactReactions() && !parentMessageId() && replies().length > 0">
         @if (reactions().length) {
           <div class="reactions">
             @for (reaction of visibleReactions(); track reaction.emoji) {
