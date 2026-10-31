@@ -72,13 +72,6 @@
     &:focus-visible { outline: 2px solid tokens.$purple-2; }
   }
 
-  .action-divider {
-    width: 1px;
-    height: 40px;
-    margin: 0 5px 0 0;
-    background: tokens.$border;
-  }
-
   .send-button {
     margin-left: auto;
 
@@ -91,16 +84,14 @@
   }
 
   .picker,
-  .suggestions,
-  .add-menu {
+  .suggestions {
     position: absolute;
     z-index: 15;
     bottom: calc(100% + 8px);
     left: 12px;
   }
 
-  .suggestions,
-  .add-menu {
+  .suggestions {
     display: grid;
     width: min(350px, calc(100vw - 48px));
     max-height: 300px;
@@ -124,8 +115,6 @@
       }
     }
   }
-
-  .add-menu { width: min(240px, calc(100vw - 48px)); }
 
   @include bp.mobile {
     padding: 19px 20px 20px;
