@@ -9,7 +9,7 @@
     gap: 4px;
     border-radius: 14px;
     background: tokens.$white;
-    box-shadow: 0 4px 18px #0000001f;
+    box-shadow: tokens.$overlay-shadow;
 
     button {
       width: 34px;
