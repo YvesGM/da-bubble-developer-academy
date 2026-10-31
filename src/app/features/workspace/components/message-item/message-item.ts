@@ -64,32 +64,38 @@ export class MessageItem {
   readonly quickReactions = DEFAULT_RECENT_EMOJIS;
   readonly mobileViewport = signal(window.innerWidth <= 800);
   readonly mobileActionsOpen = signal(false);
-  /** Splits stored text into plain text and clickable known-user mentions. */
+  /** Splits stored text into plain text and recognized user mentions. */
   readonly messageParts = computed(() => {
     const source = this.message().text;
-    const users = [...this.users()].filter((user) => user.displayName);
-    if (!users.length) return [{ text: source }];
-    const names = users.sort((a, b) => b.displayName.length - a.displayName.length);
-    const pattern = names.map((user) => user.displayName.replace(/[.*+?^${}()|[\]\\]/g, '\\  readonly mobileActionsOpen = signal(false);')).join('|');
-    const regex = new RegExp('@(' + pattern + ')(?=$|[\\s.,!?;:])', 'gi');
+    const users = [...this.users()].sort((a, b) => b.displayName.length - a.displayName.length);
     const parts: { text: string; userId?: string }[] = [];
-    let end = 0;
-    for (const match of source.matchAll(regex)) {
-      const start = match.index ?? 0;
-      if (start && /[\\w@]/.test(source[start - 1])) continue;
-      if (start > end) parts.push({ text: source.slice(end, start) });
-      const user = names.find((item) => item.displayName.toLowerCase() === match[1].toLowerCase());
-      parts.push({ text: match[0], userId: user?.uid });
-      end = start + match[0].length;
+    let cursor = 0;
+    let plainStart = 0;
+    while (cursor < source.length) {
+      const user = users.find((item) => this.mentionAt(source, cursor, item.displayName));
+      if (!user) { cursor++; continue; }
+      if (cursor > plainStart) parts.push({ text: source.slice(plainStart, cursor) });
+      const end = cursor + user.displayName.length + 1;
+      parts.push({ text: source.slice(cursor, end), userId: user.uid });
+      plainStart = cursor = end;
     }
-    if (end < source.length) parts.push({ text: source.slice(end) });
+    if (plainStart < source.length) parts.push({ text: source.slice(plainStart) });
     return parts.length ? parts : [{ text: source }];
   });
+
+  /** Restricts mentions to complete names with word boundaries. */
+  private mentionAt(text: string, index: number, name: string): boolean {
+    const token = '@' + name;
+    if (!name || text.slice(index, index + token.length).toLowerCase() !== token.toLowerCase()) return false;
+    return (index === 0 || /\s/.test(text[index - 1]))
+      && (index + token.length === text.length || /[\s.,!?;:]/.test(text[index + token.length]));
+  }
 
   /** Opens the existing profile card for a recognized mention. */
   openMention(userId?: string): void {
     if (userId) this.userRequested.emit(userId);
   }
+
   readonly reactionContext = computed(() => ({
     target: this.target(),
     messageId: this.parentMessageId() || this.message().id,
