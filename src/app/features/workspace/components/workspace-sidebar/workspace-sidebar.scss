@@ -227,8 +227,8 @@
 @include bp.mobile {
   .sidebar {
     min-height: 0;
-    padding: 78px 20px 20px;
-    border-radius: 0;
+    padding: 91px 20px 20px;
+    border-radius: 20px;
   }
 
   .sidebar .section-heading > button[aria-label='Channel erstellen'] img,
