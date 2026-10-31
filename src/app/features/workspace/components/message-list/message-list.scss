@@ -1,57 +1,58 @@
 @use '../../../../../styles/tokens' as tokens;
 @use '../../../../../styles/breakpoints' as bp;
 
-.message {
-  &-list {
+.message-list {
+  min-height: 240px;
+  overflow: auto;
+
+  .empty-state {
+    display: grid;
+    place-content: center;
     min-height: 240px;
-    overflow: auto;
+    text-align: center;
+    color: tokens.$text-gray;
+  }
 
-    .empty {
-      &-state {
-        text-align: center;
+  .date-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    isolation: isolate;
+    min-height: 35px;
+    margin: 20px 0;
+    color: tokens.$text;
 
-        display: grid;
-        place-content: center;
-
-        min-height: 240px;
-
-        color: tokens.$text-gray;
-      }
+    // One continuous line avoids flex pseudo-elements collapsing beside long dates.
+    &::before {
+      position: absolute;
+      z-index: -1;
+      inset: 50% 0 auto;
+      height: 1px;
+      content: '';
+      background: tokens.$border;
     }
 
-    .date {
-      &-separator {
-        font-size: 14px;
-
-        display: flex;
-        align-items: center;
-
-        margin: 20px 0;
-        gap: 0;
-
-        color: tokens.$text-gray;
-
-        &::before,
-        &::after {
-          flex: 1;
-
-          height: 1px;
-          content: '';
-
-          background: tokens.$border;
-        }
-
-        span {
-          padding: 4px 12px;
-
-          background: tokens.$white;
-          border: 1px solid tokens.$border;
-          border-radius: 18px;
-        }
-      }
+    span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-height: 35px;
+      padding: 5px 15px;
+      background: tokens.$white;
+      border: 1px solid tokens.$border;
+      border-radius: 30px;
+      font-size: 18px;
+      line-height: 25px;
+      white-space: nowrap;
     }
   }
-}
-@include bp.mobile {
-  .message-list .date-separator { margin: 20px 0; }
+
+  @include bp.mobile {
+    .date-separator {
+      margin: 16px 0;
+      span { font-size: 14px; }
+    }
+  }
 }
