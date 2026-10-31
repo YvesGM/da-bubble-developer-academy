@@ -87,7 +87,11 @@
   .suggestions {
     display: grid;
     align-content: start;
-    width: min(350px, calc(100vw - 48px));
+    position: absolute;
+    z-index: 12;
+    bottom: calc(100% + 8px);
+    left: 20px;
+    width: min(350px, calc(100% - 40px));
     max-height: min(380px, 55dvh);
     padding: 12px;
     gap: 3px;
@@ -158,6 +162,18 @@
     .suggestion-option:is(:hover, :focus-visible) .suggestion-hash {
       color: tokens.$purple-1;
     }
+  }
+
+  // The shared emoji picker already draws its own white surface and shadow.
+  .picker {
+    display: block;
+    width: max-content;
+    max-width: calc(100% - 40px);
+    padding: 0;
+    overflow: visible;
+    background: transparent;
+    border-radius: 14px;
+    box-shadow: none;
   }
 
   @include bp.mobile {
