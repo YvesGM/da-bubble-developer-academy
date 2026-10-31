@@ -1,67 +1,57 @@
 @use '../../../../../styles/tokens' as tokens;
 @use '../../../../../styles/breakpoints' as bp;
-
 .message {
   display: grid;
   grid-template-columns: 70px minmax(0, 1fr);
-
   position: relative;
-
   padding: 10px 0;
   gap: 30px;
-
   transition: background-color tokens.$motion-base;
-
   &:hover,
   &:focus-within,
   &:has(.options-menu:popover-open) {
     background: tokens.$background;
-
     .actions {
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
     }
   }
-
   &.own-message {
     grid-template-columns: minmax(0, 1fr) 70px;
-
     .actions { width: 255px; }
-
     .message-avatar { grid-column: 2; grid-row: 1; }
     .message-body { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: flex-end; }
     .meta { justify-content: flex-end; }
     .message-text { align-self: flex-end; color: tokens.$white; background: tokens.$purple-2; border-radius: 20px 0 20px 20px; }
+    .message-footer { align-self: flex-end; justify-content: flex-end; }
     .reactions { justify-content: flex-end; }
-    .actions { right: auto; left: 10px; }
+    .actions {
+      right: auto;
+      left: 10px;
+      border-radius: 20px 20px 20px 0;
+    }
   }
-
   &-avatar {
     width: 70px;
     height: 70px;
     --avatar-medium-size: 70px;
     padding: 0;
-
     background: transparent;
     border: 0;
     border-radius: 50%;
-
     &:disabled {
       cursor: default;
     }
   }
-
   &-body {
     min-width: 0;
   }
-
   &.thread-message {
     grid-template-columns: 70px minmax(0, 1fr);
     min-height: 150px;
     padding-top: 27px;
     gap: 20px;
-
     &.own-message {
       grid-template-columns: minmax(0, 1fr) 70px;
       .actions { width: max-content; }
@@ -73,29 +63,23 @@
     .author-button { font-size: 18px; }
     .meta span { font-size: 14px; }
   }
-
   &-text {
     display: inline-block;
     padding: 15px;
-
     max-width: min(680px, 100%);
     margin: 8px 0 8px;
-
     background: tokens.$background;
     border-radius: 0 20px 20px 20px;
     font-size: 18px;
     line-height: 1.4;
-
     white-space: pre-wrap;
     overflow-wrap: anywhere;
   }
-
   &.is-editing {
     background: tokens.$background;
     .message-body { width: min(678px, 100%); }
     .actions { display: none; }
   }
-
   .edit-composer {
     display: grid;
     grid-template-rows: minmax(0, 1fr) 45px;
@@ -107,9 +91,7 @@
     border: 1px solid tokens.$border;
     border-radius: 20px;
     transition: border-color tokens.$motion-base;
-
     &:focus-within { border-color: tokens.$purple-2; }
-
     textarea {
       width: 100%;
       min-width: 0;
@@ -125,13 +107,11 @@
       outline: 0;
     }
   }
-
   .edit-controls {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 10px;
-
     button {
       min-height: 40px;
       padding: 8px 18px;
@@ -142,9 +122,7 @@
       transition: background-color tokens.$motion-base, color tokens.$motion-fast;
     }
   }
-
   .edit-emoji-control { position: relative; margin-right: auto; }
-
   .edit-controls .edit-emoji-button {
     display: grid;
     place-items: center;
@@ -153,129 +131,104 @@
     padding: 0;
     border-radius: 50%;
     background: transparent;
-
     img { width: 24px; height: 24px; }
-
     &:hover,
     &:focus-visible { background: tokens.$background; }
   }
-
   .edit-emoji-picker {
     position: absolute;
     z-index: 8;
     bottom: calc(100% + 8px);
     left: 0;
   }
-
   .edit-controls .edit-cancel {
     color: tokens.$purple-1;
     background: tokens.$white;
     box-shadow: inset 0 0 0 1px tokens.$purple-2;
-
     &:hover,
     &:focus-visible { background: tokens.$background; }
   }
-
   .edit-controls .edit-save {
     color: tokens.$white;
     background: tokens.$purple-1;
-
     &:hover:not(:disabled),
     &:focus-visible:not(:disabled) { background: tokens.$purple-2; }
-
     &:disabled { cursor: not-allowed; opacity: 0.5; }
   }
-
   .meta {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-
     gap: 20px;
-
     span {
       font-size: 14px;
-
       color: tokens.$text-gray;
     }
   }
-
   .author {
     &-button {
       font-size: 18px;
       font-weight: 700;
-
       padding: 0;
-
       color: tokens.$text;
       background: transparent;
       border: 0;
-
       transition: color tokens.$motion-fast;
-
       &:hover:not(:disabled) {
         color: tokens.$purple-1;
       }
-
       &:disabled {
         cursor: default;
       }
     }
   }
-
+  &:not(.own-message) .actions {
+    right: 0;
+    left: auto;
+    border-radius: 20px 20px 0 20px;
+  }
   .actions {
     display: flex;
     align-items: center;
-
     position: absolute;
     z-index: 3;
     top: -18px;
     right: 10px;
-
     width: 210px;
     min-height: 46px;
     padding: 3px 5px;
     gap: 5px;
-
     background: tokens.$white;
     border: 1px solid tokens.$border;
     border-radius: 25px 25px 0 25px;
     box-shadow: 0 2px 8px #0000000d;
-
     opacity: 0;
     transform: translateY(4px);
     pointer-events: none;
     transition:
       opacity tokens.$motion-fast,
       transform tokens.$motion-base;
-
     &:focus-within {
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
     }
-
     button {
       min-width: 36px;
       height: 36px;
       padding: 0 8px;
-
       background: transparent;
       border: 0;
       border-radius: 16px;
-
       transition:
         background-color tokens.$motion-base,
         color tokens.$motion-fast;
-
       &:hover {
         color: tokens.$purple-1;
         background: tokens.$background;
       }
     }
-
     .action-text { font-size: 14px; }
-
     .quick-reaction { font-size: 20px; }
     .quick-check {
       display: grid;
@@ -289,10 +242,8 @@
       font-weight: 700;
       line-height: 1;
     }
-
     .message-options { position: relative; flex: 0 0 40px; }
     .options-toggle img { width: 18px; height: 18px; }
-
     // A top-layer popover is not clipped by the scrollable message list.
     .options-menu {
       position: fixed;
@@ -310,10 +261,8 @@
       border: 1px solid tokens.$border;
       border-radius: 20px 0 20px 20px;
       box-shadow: 0 4px 18px #00000026;
-
       &:popover-open { display: grid; }
     }
-
     .options-menu button {
       width: 100%;
       height: 53px;
@@ -324,51 +273,73 @@
       font-weight: 400;
       border-radius: 100px;
       white-space: nowrap;
-
       &:hover,
       &:focus-visible {
         color: tokens.$purple-1;
         background: tokens.$background;
       }
     }
-
     img { display: block; width: 19px; height: 19px; object-fit: contain; }
   }
-
   .reaction-picker {
     position: absolute;
     z-index: 5;
-    top: 35px;
-    right: 10px;
+    bottom: calc(100% + 8px);
+    left: 0;
   }
-
+  &.own-message .reaction-picker {
+    right: 0;
+    left: auto;
+  }
+  .message-footer {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    flex-wrap: wrap;
+    position: relative;
+    min-height: 34px;
+    gap: 8px;
+  }
+  .footer-reaction-button {
+    display: grid;
+    place-items: center;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    transition: background-color tokens.$motion-base, transform tokens.$motion-fast;
+    img { width: 24px; height: 24px; object-fit: contain; }
+    &:hover,
+    &:focus-visible {
+      background: tokens.$background;
+      transform: scale(1.05);
+    }
+  }
   .reactions {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    margin-top: 6px;
+    margin-top: 0;
     gap: 8px;
-
     button {
       display: inline-flex;
       align-items: center;
       padding: 4px 9px;
       gap: 5px;
-
       background: tokens.$white;
       border: 1px solid tokens.$border;
       border-radius: 16px;
-
       transition:
         background-color tokens.$motion-base,
         border-color tokens.$motion-base;
-
       &:hover {
         background: tokens.$background;
         border-color: tokens.$purple-2;
       }
     }
-
     .reaction-check {
       display: inline-grid;
       place-items: center;
@@ -381,105 +352,83 @@
       font-weight: 700;
       line-height: 1;
     }
-
     .reaction-more {
       font-weight: 700;
-
       color: tokens.$purple-1;
       border-color: transparent;
     }
   }
-
   .replies-link {
     display: inline-flex;
     align-items: baseline;
     flex-wrap: wrap;
     gap: 10px;
     font-weight: 700;
-
     padding: 0;
-
     color: tokens.$purple-2;
     background: transparent;
     border: 0;
-
     transition: color tokens.$motion-fast;
-
     .last-reply {
       font-size: 12px;
       font-weight: 400;
       color: tokens.$text-gray;
     }
-
     &:hover {
       color: tokens.$purple-1;
     }
   }
-
   .deleted {
     &-message {
       font-style: italic;
-
       margin: 5px 0;
-
       color: tokens.$text-gray;
     }
   }
-
   @include bp.mobile {
     grid-template-columns: 50px minmax(0, 1fr);
-
     padding: 10px 0;
     gap: 16px;
-
     &.own-message { grid-template-columns: minmax(0, 1fr) 50px; }
-
     &.thread-message {
       grid-template-columns: 50px minmax(0, 1fr);
       min-height: 0;
       padding-top: 10px;
       gap: 16px;
-
       &.own-message { grid-template-columns: minmax(0, 1fr) 50px; }
       .message-avatar { width: 50px; height: 50px; --avatar-medium-size: 50px; }
       .message-text { font-size: 17px; }
       .author-button { font-size: 16px; }
       .meta span { font-size: 13px; }
     }
-
     .message-avatar {
       width: 50px;
       height: 50px;
       --avatar-medium-size: 50px;
     }
-
     .message-text {
       font-size: 17px;
-
       max-width: 100%;
     }
-
     .actions {
       top: -18px;
       right: 0;
       padding: 3px 6px;
     }
-
     &.own-message .actions { right: auto; left: 0; }
-
+    &:not(.own-message) .actions { right: 0; left: auto; }
     .edit-composer { height: 180px; padding: 15px; }
     .edit-composer textarea { font-size: 16px; }
     .edit-controls { gap: 6px; }
     .edit-controls button { padding: 8px 12px; font-size: 14px; }
     .actions .options-menu { width: min(308px, calc(100vw - 32px)); }
     .options-menu button { font-size: 18px; }
-
     .author-button { font-size: 16px; }
     .meta { gap: 10px; }
     .meta span { font-size: 13px; }
     .message-text { padding: 15px; }
-    .reaction-picker { right: 0; }
-
+    .reaction-picker { right: auto; left: 0; }
+    &.own-message .reaction-picker { right: 0; left: auto; }
     @media (hover: none) {
       .actions {
         opacity: 1;
@@ -487,6 +436,5 @@
         pointer-events: auto;
       }
     }
-
   }
 }
