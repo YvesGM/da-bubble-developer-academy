@@ -21,7 +21,7 @@
   }
   &.own-message {
     grid-template-columns: minmax(0, 1fr) var(--ws-avatar, 70px);
-    .actions { width: 255px; }
+    .actions { width: clamp(255px, 13.28vw, 408px); }
     .message-avatar { grid-column: 2; grid-row: 1; }
     .message-body { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: flex-end; }
     .meta { justify-content: flex-end; }
@@ -196,8 +196,8 @@
     z-index: 3;
     top: -18px;
     right: clamp(43px, 2.24vw, 69px);
-    width: 210px;
-    min-height: 46px;
+    width: clamp(210px, 10.94vw, 336px);
+    min-height: clamp(46px, 2.4vw, 74px);
     padding: 3px 5px;
     gap: 5px;
     justify-content: space-evenly;
@@ -220,10 +220,10 @@
     .message-options > button {
       display: grid;
       place-items: center;
-      flex: 0 0 36px;
-      width: 36px;
+      flex: 0 0 clamp(36px, 1.875vw, 58px);
+      width: clamp(36px, 1.875vw, 58px);
       min-width: 36px;
-      height: 36px;
+      height: clamp(36px, 1.875vw, 58px);
       padding: 0;
       background: transparent;
       border: 0;
@@ -237,7 +237,7 @@
       }
     }
     .action-text { font-size: 14px; }
-    .quick-reaction { font-size: 20px; }
+    .quick-reaction { font-size: var(--ws-icon, 20px); }
     .quick-check {
       display: grid;
       place-items: center;
@@ -295,7 +295,7 @@
         background: tokens.$background;
       }
     }
-    img { display: block; width: 19px; height: 19px; object-fit: contain; }
+    img { display: block; width: clamp(19px, .99vw, 30px); height: clamp(19px, .99vw, 30px); object-fit: contain; }
   }
   // Anchor the existing picker to the message, never to the narrow footer.
   .reaction-picker {
@@ -336,7 +336,7 @@
     border: 0;
     border-radius: 50%;
     transition: background-color tokens.$motion-base, transform tokens.$motion-fast;
-    img { width: 24px; height: 24px; object-fit: contain; }
+    img { width: clamp(24px, 1.25vw, 38px); height: clamp(24px, 1.25vw, 38px); object-fit: contain; }
     &:hover,
     &:focus-visible {
       background: tokens.$background;
