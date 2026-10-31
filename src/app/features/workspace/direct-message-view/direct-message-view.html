@@ -22,8 +22,10 @@
       [target]="target()"
       [mentionUsers]="participantUsers()"
       [inputPlaceholder]="isSelfConversation() ? 'Notiz an dich selbst' : 'Nachricht an ' + (partner()?.displayName ?? '')"
-      [emptyTitle]="isSelfConversation() ? 'Dein persönlicher Bereich' : 'Noch keine Nachrichten.'"
-      [emptyText]="isSelfConversation() ? 'Hier kannst du Notizen, Links und To-dos für dich festhalten.' : 'Starte die Unterhaltung unten.'"
+      [emptyTitle]="isSelfConversation() ? 'Dein persönlicher Bereich' : (partner()?.displayName ?? 'Direktnachricht')"
+      [emptyText]="isSelfConversation() ? 'Hier kannst du Notizen, Links und To-dos für dich festhalten.' : 'Diese Unterhaltung findet nur zwischen @' + (partner()?.displayName ?? 'einem Mitglied') + ' und dir statt.'"
+      [emptyAvatarId]="partner()?.avatarId ?? ''"
+      [emptyAvatarName]="partner()?.displayName ?? ''"
       (userRequested)="openProfile($event)"
     />
   </div>
