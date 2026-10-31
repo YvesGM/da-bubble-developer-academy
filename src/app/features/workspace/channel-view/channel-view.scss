@@ -93,7 +93,12 @@
 
   &:disabled { cursor: default; }
 
-  .channel-hash { width: 24px; height: 24px; object-fit: contain; }
+  .channel-hash {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    filter: grayscale(1) brightness(0);
+  }
   .channel-name {
     min-width: 0;
     overflow: hidden;
@@ -123,33 +128,51 @@
 }
 
 .member-stack {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
   min-height: 46px;
-  padding: 4px 10px;
+  padding: 2px 0;
   gap: 0;
   color: tokens.$text;
-  background: tokens.$background;
+  background: transparent;
   border: 0;
   border-radius: 24px;
-  transition: background-color tokens.$motion-base, transform tokens.$motion-base;
+  transition: color tokens.$motion-fast;
 
-  &:hover {
-    background: #e1e4ff;
-    transform: translateY(-1px);
-  }
+  &:hover,
+  &:focus-visible { color: tokens.$purple-1; }
 
   app-avatar,
-  .guest-avatar { margin-left: -10px; }
-  app-avatar { --avatar-small-size: 40px; }
+  .guest-avatar {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 40px;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-left: -10px;
+    overflow: hidden;
+    border: 2px solid tokens.$white;
+    border-radius: 50%;
+    box-sizing: border-box;
+  }
+
+  app-avatar { --avatar-small-size: 36px; }
   app-avatar:first-child { margin-left: 0; }
-  strong { margin-left: 8px; color: tokens.$text; }
+  strong {
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: inherit;
+  }
 
   @include bp.mobile {
     min-height: 34px;
-    padding: 2px 6px;
-    app-avatar { display: none; }
+    padding: 2px 0;
+
+    app-avatar,
     .guest-avatar { display: none; }
     strong { font-size: 14px; }
   }
