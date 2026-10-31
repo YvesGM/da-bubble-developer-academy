@@ -256,6 +256,12 @@
 
         .profile-name { font-size: var(--ws-heading); }
       }
+
+      .user-menu {
+        min-width: clamp(282px, 14.69vw, 450px);
+        min-height: clamp(181px, 9.43vw, 290px);
+        button { font-size: var(--ws-text); }
+      }
     }
   }
 }
