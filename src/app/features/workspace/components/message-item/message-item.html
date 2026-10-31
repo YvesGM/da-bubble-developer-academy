@@ -1,4 +1,5 @@
-<article class="message" [class.own-message]="isOwnMessage()" [class.thread-message]="compactReactions()" [class.is-editing]="editing()">
+<article class="message" [class.own-message]="isOwnMessage()" [class.thread-message]="compactReactions()" [class.is-editing]="editing()"
+  [class.mobile-actions-open]="mobileActionsOpen()">
   <button
     type="button"
     class="message-avatar"
@@ -71,7 +72,7 @@
         </div>
       </div>
     } @else {
-      <p class="message-text">{{ message().text }}</p>
+      <p class="message-text" (click)="toggleMobileActions()">{{ message().text }}</p>
     }
 
     @if (canInteract()) {
@@ -128,7 +129,7 @@
 
     @if (canInteract() && !editing()) {
       <div class="message-footer" [class.has-replies]="!compactReactions() && !parentMessageId() && replies().length > 0">
-        @if (reactions().length) {
+        @if (reactions().length && !(mobileViewport() && !compactReactions() && !parentMessageId() && replies().length)) {
           <div class="reactions">
             @for (reaction of visibleReactions(); track reaction.emoji) {
               <button
