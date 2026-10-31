@@ -1,7 +1,15 @@
 @use '../../../../../styles/tokens' as tokens;
 @use '../../../../../styles/breakpoints' as bp;
 
+:host {
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .message-list {
+  height: 100%;
   min-height: 0;
   padding-top: clamp(16px, min(12dvh, 6.77vw), 260px);
   overflow-x: hidden;
