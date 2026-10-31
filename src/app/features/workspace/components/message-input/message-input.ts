@@ -45,7 +45,6 @@ export class MessageInput implements AfterViewInit {
   readonly trigger = signal<'@' | '#' | null>(null);
   readonly query = signal('');
   readonly showEmojiPicker = signal(false);
-  readonly showAddMenu = signal(false);
   readonly sending = signal(false);
   readonly sendError = signal('');
 
@@ -135,27 +134,13 @@ export class MessageInput implements AfterViewInit {
     this.closeOverlays();
   }
 
-  /** Inserts a channel trigger at the current cursor position. */
-  insertChannelTrigger(): void {
-    this.insertAtCaret('#');
-    this.closeOverlays();
-  }
-
-  /** Toggles existing input options without adding a second picker implementation. */
-  toggleAddMenu(): void {
-    this.showEmojiPicker.set(false);
-    this.showAddMenu.update((opened) => !opened);
-  }
-
-  /** Toggles the existing emoji picker and closes the alternate input menu. */
+  /** Toggles the existing emoji picker. */
   toggleEmojiPicker(): void {
-    this.showAddMenu.set(false);
     this.showEmojiPicker.update((opened) => !opened);
   }
 
-  /** Closes the optional input overlays. */
+  /** Closes the existing emoji picker. */
   closeOverlays(): void {
-    this.showAddMenu.set(false);
     this.showEmojiPicker.set(false);
   }
 
