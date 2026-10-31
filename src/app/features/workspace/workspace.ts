@@ -48,7 +48,8 @@ export class Workspace {
   readonly showWorkspaceEditor = signal(false);
   readonly selectedUser = signal<UserProfile | null>(null);
   readonly directMessageError = signal('');
-  readonly sidebarCollapsed = signal(false);
+  private compactDesktop = window.innerWidth > 800 && window.innerWidth <= 1100;
+  readonly sidebarCollapsed = signal(this.compactDesktop);
   readonly mobileViewport = signal(window.innerWidth <= 800);
 
   /**
@@ -68,6 +69,9 @@ export class Workspace {
   @HostListener('window:resize')
   updateViewport(): void {
     this.mobileViewport.set(window.innerWidth <= 800);
+    const compact = window.innerWidth > 800 && window.innerWidth <= 1100;
+    if (compact !== this.compactDesktop) this.sidebarCollapsed.set(compact);
+    this.compactDesktop = compact;
   }
 
   /**
