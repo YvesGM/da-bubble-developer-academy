@@ -26,13 +26,31 @@
       align-items: baseline;
       flex-wrap: nowrap;
       min-width: 0;
-      gap: 10px;
+      gap: 5px;
 
       strong { flex: 0 0 auto; font-size: 24px; }
-      span {
-        overflow: hidden;
-        color: tokens.$purple-2;
+
+      .thread-channel {
+        display: inline-flex;
+        align-items: center;
+        min-width: 0;
+        gap: 5px;
+      }
+
+      .thread-tag {
+        flex: 0 0 16px;
+        width: 16px;
         font-size: 16px;
+        font-weight: 700;
+        text-align: center;
+        color: tokens.$purple-2;
+      }
+
+      .thread-context {
+        overflow: hidden;
+        min-width: 0;
+        color: tokens.$purple-2;
+        font-size: 14px;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
@@ -51,7 +69,7 @@
       background: transparent;
       transition: background-color tokens.$motion-base;
 
-      img { width: 24px; height: 24px; }
+      img { width: 16px; height: 16px; }
 
       &:hover,
       &:focus-visible { background: tokens.$background; }
@@ -109,9 +127,10 @@
       padding: 0 16px;
 
       .thread-title {
-        gap: 7px;
+        gap: 5px;
         strong { font-size: 20px; }
-        span { font-size: 14px; }
+        .thread-tag { width: 14px; flex-basis: 14px; font-size: 14px; }
+        .thread-context { font-size: 14px; }
       }
     }
 
