@@ -3,7 +3,7 @@
 
 .message-list {
   min-height: 0;
-  padding-top: clamp(16px, 12dvh, 130px);
+  padding-top: clamp(16px, min(12dvh, 6.77vw), 260px);
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -43,7 +43,7 @@
       position: relative;
       z-index: 1;
       box-sizing: border-box;
-      height: 35px;
+      height: clamp(35px, 1.823vw, 56px);
       min-height: 35px;
       padding: 0 15px;
       background: tokens.$white;
