@@ -16,12 +16,22 @@
   overflow-y: auto;
   overscroll-behavior: contain;
 
+  &:has(.empty-state) {
+    display: flex;
+    align-items: flex-end;
+  }
+
   .empty-state {
     display: grid;
-    place-content: center;
-    min-height: 240px;
-    text-align: center;
+    align-content: end;
+    min-height: 0;
+    width: 100%;
+    padding: 0 12px 18px;
+    gap: 6px;
+    text-align: left;
     color: tokens.$text-gray;
+
+    strong { color: tokens.$text; }
   }
 
   .date-separator {
