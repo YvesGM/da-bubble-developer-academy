@@ -97,8 +97,8 @@
   &:disabled { cursor: default; }
 
   .channel-hash {
-    width: 24px;
-    height: 24px;
+    width: clamp(24px, 1.25vw, 38px);
+    height: clamp(24px, 1.25vw, 38px);
     object-fit: contain;
     filter: grayscale(1) brightness(0);
   }
@@ -110,8 +110,8 @@
   }
   .channel-chevron {
     flex: 0 0 auto;
-    width: 14px;
-    height: 9px;
+    width: clamp(14px, .729vw, 22px);
+    height: clamp(9px, .469vw, 14px);
     margin-left: 2px;
     object-fit: contain;
   }
@@ -156,11 +156,11 @@
   .guest-avatar {
     position: relative;
     display: inline-flex;
-    flex: 0 0 40px;
+    flex: 0 0 clamp(40px, 2.083vw, 64px);
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: clamp(40px, 2.083vw, 64px);
+    height: clamp(40px, 2.083vw, 64px);
     margin-left: -10px;
     overflow: hidden;
     border: 2px solid tokens.$white;
@@ -168,11 +168,11 @@
     box-sizing: border-box;
   }
 
-  app-avatar { --avatar-small-size: 36px; }
+  app-avatar { --avatar-small-size: clamp(36px, 1.875vw, 58px); }
   app-avatar:first-child { margin-left: 0; }
   strong {
     margin-left: 10px;
-    font-size: 20px;
+    font-size: var(--ws-icon, 20px);
     font-weight: 700;
     color: inherit;
   }
@@ -201,9 +201,9 @@
 .add-member {
   display: grid;
   place-items: center;
-  flex: 0 0 40px;
-  width: 40px;
-  height: 40px;
+  flex: 0 0 var(--ws-action, 40px);
+  width: var(--ws-action, 40px);
+  height: var(--ws-action, 40px);
   padding: 0;
   color: tokens.$text;
   background: tokens.$background;
