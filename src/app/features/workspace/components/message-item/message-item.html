@@ -78,7 +78,7 @@
             <button type="button" class="message-mention"
               (click)="$event.stopPropagation(); openMention(part.userId)">{{ part.text }}</button>
           } @else {
-            {{ part.text }}
+            <span>{{ part.text }}</span>
           }
         }
       </p>
