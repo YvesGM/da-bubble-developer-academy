@@ -6,6 +6,7 @@
   grid-template-rows: auto minmax(0, 1fr);
   height: 100%;
   min-height: 0;
+  min-width: 0;
 
   .channel-header {
     display: flex;
@@ -54,16 +55,18 @@
     &:has(app-thread-panel) { --thread-panel-width: 485px; }
   }
 
-  @media (min-width: 801px) and (max-width: 1199px) {
+  @media (min-width: 801px) and (max-width: 1359px) {
     &:has(app-thread-panel) .channel-header { display: none; }
   }
 
   @include bp.mobile {
     .channel-header {
       min-height: 60px;
+      height: 60px;
       padding: 10px 16px;
       gap: 8px;
     }
+    .chat-area { min-width: 0; overflow: hidden; }
 
     &:has(app-thread-panel) .channel-header { display: none; }
     &:has(app-thread-panel) .chat-area { overflow: hidden; }
