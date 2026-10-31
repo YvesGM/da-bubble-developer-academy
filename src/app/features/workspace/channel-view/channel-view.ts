@@ -64,10 +64,13 @@ export class ChannelView {
   readonly memberCount = computed(() => this.members().length + (this.channel()?.guestAccess ? 1 : 0));
   readonly overflowCount = computed(() => Math.max(0, this.memberCount() - 5));
   readonly target = computed<ConversationTarget>(() => ({ type: 'channel', id: this.channelId() }));
-  readonly emptyTitle = computed(() =>
-    this.channel()?.creatorId === this.currentUserId() ? 'Du hast diesen Channel erstellt.' : 'Channel wurde erstellt.',
-  );
-  readonly emptyText = computed(() => `Das ist der Anfang des Channels #${this.channel()?.name ?? ''}.`);
+  readonly emptyTitle = computed(() => `# ${this.channel()?.name ?? ''}`);
+  readonly emptyText = computed(() => {
+    const name = this.channel()?.name ?? '';
+    return this.channel()?.creatorId === this.currentUserId()
+      ? `Du hast diesen Channel erstellt. Das ist der Anfang des Channels #${name}.`
+      : `Das ist der Anfang des Channels #${name}.`;
+  });
 
   readonly showDetails = signal(false);
   readonly showMembers = signal(false);
