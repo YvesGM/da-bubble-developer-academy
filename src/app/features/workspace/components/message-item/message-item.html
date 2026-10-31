@@ -16,6 +16,9 @@
   <div class="message-body">
     @if (!editing()) {
     <div class="meta">
+      @if (isOwnMessage() && timeLabel()) {
+        <span class="time-label">{{ timeLabel() }} Uhr</span>
+      }
       <button
         type="button"
         class="author-button"
@@ -27,8 +30,8 @@
       @if (message().authorIsGuest) {
         <span>Gast</span>
       }
-      @if (timeLabel()) {
-        <span>{{ timeLabel() }} Uhr</span>
+      @if (!isOwnMessage() && timeLabel()) {
+        <span class="time-label">{{ timeLabel() }} Uhr</span>
       }
     </div>
 
@@ -108,20 +111,24 @@
         @if (isOwnMessage() && !parentMessageId()) {
           <div class="message-options">
             <button
+              #optionsButton
               type="button"
               class="icon-action options-toggle"
               aria-label="Weitere Nachrichtenoptionen"
               [attr.aria-expanded]="optionsOpen()"
-              (click)="optionsOpen.set(!optionsOpen())"
+              (click)="toggleOptions()"
             >
               <img src="/assets/message-settings.svg" alt="" />
             </button>
-            @if (optionsOpen()) {
-              <div class="options-menu">
-                <button type="button" (click)="editFromOptions()">Nachricht bearbeiten</button>
-                <button type="button" (click)="deleteFromOptions()">Nachricht löschen</button>
-              </div>
-            }
+            <div
+              #optionsMenu
+              class="options-menu"
+              popover="auto"
+              (toggle)="syncOptionsState($event)"
+            >
+              <button type="button" (click)="editFromOptions()">Nachricht bearbeiten</button>
+              <button type="button" (click)="deleteFromOptions()">Nachricht löschen</button>
+            </div>
           </div>
         }
       </div>
