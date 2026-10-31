@@ -35,8 +35,9 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
   styleUrl: './message-item.scss',
 })
 export class MessageItem {
-  private readonly element = inject(ElementRef<HTMLElement>);
   @ViewChild('editField') private editField?: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('optionsButton') private optionsButton?: ElementRef<HTMLButtonElement>;
+  @ViewChild('optionsMenu') private optionsMenu?: ElementRef<HTMLDivElement>;
   private readonly auth = inject(Auth);
   private readonly messages = inject(MessageService);
   private readonly reactionsService = inject(ReactionService);
@@ -94,27 +95,49 @@ export class MessageItem {
     this.mobileViewport.set(window.innerWidth <= 800);
   }
 
-  /** Closes the message options when clicking outside the current message. */
-  @HostListener('document:click', ['$event'])
-  closeOptionsOnOutsideClick(event: MouseEvent): void {
-    if (!this.element.nativeElement.contains(event.target as Node)) this.optionsOpen.set(false);
+  /** Syncs the existing menu state with native popover dismissal. */
+  syncOptionsState(event: Event): void {
+    this.optionsOpen.set((event.target as HTMLElement).matches(':popover-open'));
   }
 
-  /** Closes the message options on Escape. */
-  @HostListener('document:keydown.escape')
-  closeOptionsOnEscape(): void {
+  /** Displays the contextual menu in the top layer, beyond message-list clipping. */
+  toggleOptions(): void {
+    const menu = this.optionsMenu?.nativeElement;
+    if (!menu) return;
+    if (menu.matches(':popover-open')) return this.closeOptions();
+    menu.showPopover();
+    this.positionOptions(menu);
+  }
+
+  /** Positions the existing menu next to its toggle within the visible viewport. */
+  private positionOptions(menu: HTMLDivElement): void {
+    const button = this.optionsButton?.nativeElement;
+    if (!button) return;
+    const anchor = button.getBoundingClientRect();
+    const bounds = menu.getBoundingClientRect();
+    const left = Math.max(8, Math.min(anchor.right - bounds.width, window.innerWidth - bounds.width - 8));
+    const below = anchor.bottom + bounds.height + 8 < window.innerHeight;
+    const top = below ? anchor.bottom + 8 : Math.max(8, anchor.top - bounds.height - 8);
+    menu.style.left = `${left}px`;
+    menu.style.top = `${top}px`;
+  }
+
+  /** Closes the menu before editing, deleting or navigating away. */
+  private closeOptions(): void {
+    const menu = this.optionsMenu?.nativeElement;
+    if (menu?.matches(':popover-open')) menu.hidePopover();
     this.optionsOpen.set(false);
   }
 
-  /** Opens inline editing from the contextual options menu. */
+  /** Opens the existing inline editor from the contextual options menu. */
   editFromOptions(): void {
-    this.optionsOpen.set(false);
+    this.closeOptions();
     this.startEditing();
   }
 
-  /** Removes a message after closing its contextual options menu. */
+  /** Uses the existing soft-delete method from the contextual options menu. */
   async deleteFromOptions(): Promise<void> {
-    this.optionsOpen.set(false);
+    this.closeOptions();
     await this.removeMessage();
   }
 
@@ -171,7 +194,7 @@ export class MessageItem {
    * Copies the current message text into edit state and opens inline editing.
    */
   startEditing(): void {
-    this.optionsOpen.set(false);
+    this.closeOptions();
     this.editText.set(this.message().text);
     this.editing.set(true);
     requestAnimationFrame(() => this.editField?.nativeElement.focus());
