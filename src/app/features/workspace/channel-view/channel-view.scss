@@ -13,8 +13,8 @@
     align-items: center;
     justify-content: space-between;
     min-width: 0;
-    min-height: 96px;
-    padding: 20px 35px;
+    min-height: var(--ws-channel-header, 96px);
+    padding: 20px var(--ws-inset, 35px);
     gap: 18px;
     border-bottom: 1px solid tokens.$background;
     box-shadow: 0 2px 5px #00000008;
@@ -30,7 +30,7 @@
 
   // Keep the channel heading on the main card while the thread starts at the top.
   &:has(app-thread-panel) {
-    --conversation-header-height: 96px;
+    --conversation-header-height: var(--ws-channel-header, 96px);
     position: relative;
     grid-template-rows: minmax(0, 1fr);
 
@@ -39,8 +39,8 @@
       top: 0;
       left: 0;
       z-index: 2;
-      width: calc(100% - var(--thread-panel-width, 440px) - 20px);
-      height: 96px;
+      width: calc(100% - var(--thread-panel-width, 440px) - var(--ws-gap, 20px));
+      height: var(--ws-channel-header, 96px);
       background: tokens.$white;
       border-radius: 30px 30px 0 0;
     }
@@ -52,7 +52,7 @@
   }
 
   @include bp.widescreen {
-    &:has(app-thread-panel) { --thread-panel-width: 485px; }
+    &:has(app-thread-panel) { --thread-panel-width: var(--ws-thread, 485px); }
   }
 
   @media (min-width: 801px) and (max-width: 1359px) {
@@ -85,7 +85,7 @@
   background: transparent;
   border: 0;
   border-radius: 24px;
-  font-size: 24px;
+  font-size: var(--ws-heading, 24px);
   font-weight: 700;
   transition: background-color tokens.$motion-base, color tokens.$motion-fast;
 
