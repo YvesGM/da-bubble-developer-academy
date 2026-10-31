@@ -118,7 +118,7 @@
   }
 
   @include bp.mobile {
-    grid-template-rows: 60px minmax(0, 1fr) 145px;
+    grid-template-rows: 60px minmax(0, 1fr) min(145px, max(110px, 16dvh));
     padding: 0 16px 30px;
     border-radius: 0;
 
