@@ -3,11 +3,20 @@
     <div class="suggestions">
       @if (trigger() === '@') {
         @for (user of matchingUsers(); track user.uid) {
-          <button type="button" (click)="chooseUser(user)">@{{ user.displayName }}</button>
+          <button type="button" class="suggestion-option" (click)="chooseUser(user)">
+            <span class="suggestion-avatar">
+              <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
+              <app-presence-indicator [userId]="user.uid" />
+            </span>
+            <span class="suggestion-label">{{ user.displayName }}</span>
+          </button>
         }
       } @else {
         @for (channel of matchingChannels(); track channel.id) {
-          <button type="button" (click)="chooseChannel(channel)">#{{ channel.name }}</button>
+          <button type="button" class="suggestion-option" (click)="chooseChannel(channel)">
+            <span class="suggestion-hash" aria-hidden="true">#</span>
+            <span class="suggestion-label">{{ channel.name }}</span>
+          </button>
         }
       }
     </div>
