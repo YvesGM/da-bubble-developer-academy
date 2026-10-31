@@ -5,7 +5,7 @@
   display: grid;
   grid-template-rows: minmax(0, 1fr) 40px;
   position: relative;
-  height: 145px;
+  height: var(--ws-composer, 145px);
   min-width: 0;
   padding: 19px 20px 20px;
   gap: 15px;
@@ -27,8 +27,8 @@
     border: 0;
     outline: 0;
     font: inherit;
-    font-size: 18px;
-    line-height: 25px;
+    font-size: var(--ws-text, 18px);
+    line-height: 1.4;
 
     &::placeholder { color: tokens.$text-gray; }
   }
@@ -53,15 +53,15 @@
   .send-button {
     display: grid;
     place-items: center;
-    flex: 0 0 40px;
-    width: 40px;
-    height: 40px;
+    flex: 0 0 var(--ws-action, 40px);
+    width: var(--ws-action, 40px);
+    height: var(--ws-action, 40px);
     padding: 0;
     color: tokens.$text;
     background: transparent;
     border-radius: 50%;
 
-    img { width: 20px; height: 20px; object-fit: contain; }
+    img { width: var(--ws-icon, 20px); height: var(--ws-icon, 20px); object-fit: contain; }
 
     &:hover:not(:disabled),
     &:focus-visible {
