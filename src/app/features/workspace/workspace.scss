@@ -117,7 +117,7 @@
 
     @include bp.widescreen {
       grid-template-columns: var(--ws-sidebar) minmax(0, 1fr);
-      padding: 0 var(--ws-gap) 25px;
+      padding: 0 var(--ws-gap) clamp(25px, 1.302vw, 40px);
       gap: var(--ws-gap);
 
       &.collapsed {
