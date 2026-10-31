@@ -61,8 +61,12 @@
         display: none;
       }
 
-      &:not(.conversation-open) .workspace-content {
-        display: none;
+      &:not(.conversation-open) .workspace-content { display: none; }
+
+      &.conversation-open .workspace-content {
+        min-height: 0;
+        min-width: 0;
+        overflow: hidden;
       }
     }
 
@@ -169,7 +173,7 @@
     overflow: hidden;
 
     // The Figma desktop thread is a separate rounded surface, not an inner divider.
-    @media (min-width: 1200px) {
+    @media (min-width: 1360px) {
       &:has(app-thread-panel) {
         overflow: visible;
         background: transparent;
