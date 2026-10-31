@@ -1,10 +1,19 @@
-<div class="search">
+<div class="search" [class.mobile-open]="mobileOpen()">
+  @if (mobileOpen()) {
+    <div class="mobile-search-header">
+      <strong>Search</strong>
+      <button type="button" aria-label="Suche schließen" (click)="closeMobileSearch()">
+        <img src="/assets/close.svg" alt="" />
+      </button>
+    </div>
+  }
+
   <input appInputCaret
     type="search"
     [placeholder]="placeholder"
     [value]="query()"
     (input)="query.set($any($event.target).value)"
-    (focus)="focused.set(true)"
+    (focus)="activateSearch()"
     (blur)="focused.set(false)"
     aria-label="Benutzer, Channels und Nachrichten durchsuchen"
   />
@@ -12,20 +21,26 @@
   @if (!query().trim() && !focused()) {
     <span class="mobile-search-placeholder" aria-hidden="true">Gehe zu...</span>
   }
-
   <img class="search-icon" src="/assets/search.svg" alt="" aria-hidden="true" />
 
-  @if (focused() && query().trim()) {
+  @if ((focused() || mobileOpen()) && query().trim()) {
     <div class="results">
       @for (result of results(); track result.type + result.id) {
-        <button type="button" (mousedown)="$event.preventDefault()" (click)="openResult(result)">
-          <strong>{{ result.label }}</strong>
+        <button type="button" class="search-result"
+          (mousedown)="$event.preventDefault()" (click)="openResult(result)">
           @if (result.type === 'user') {
-            <span>{{ result.user.email }}</span>
+            <span class="result-avatar">
+              <app-avatar [avatarId]="result.user.avatarId" [name]="result.user.displayName" size="medium" />
+              <app-presence-indicator [userId]="result.user.uid" />
+            </span>
+            <strong>{{ result.user.displayName }}</strong>
+            <span class="result-email">{{ result.user.email }}</span>
           } @else if (result.type === 'channel') {
-            <span>Channel</span>
+            <strong class="result-channel">{{ result.label }}</strong>
+            <span class="result-description">Channel</span>
           } @else {
-            <span>{{ result.message.authorName }}: {{ result.message.text }}</span>
+            <strong>{{ result.label }}</strong>
+            <span class="result-description">{{ result.message.authorName }}: {{ result.message.text }}</span>
           }
         </button>
       } @empty {
