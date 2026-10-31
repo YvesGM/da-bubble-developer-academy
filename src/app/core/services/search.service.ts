@@ -128,8 +128,10 @@ export class SearchService {
    * @returns Matching user results.
    */
   private userResults(query: string, users: UserProfile[]): SearchResult[] {
+    const self = this.auth.currentUser?.uid;
     return users
       .filter((user) => this.userMatches(user, query))
+      .sort((first, second) => Number(second.uid === self) - Number(first.uid === self))
       .map((user) => ({ type: 'user', id: user.uid, label: user.displayName, user }));
   }
 
