@@ -2,8 +2,13 @@
   <header>
     <div class="thread-title">
       <strong>Thread</strong>
-      @if (contextLabel()) {
-        <span>{{ contextLabel() }}</span>
+      @if (contextLabel().startsWith('#')) {
+        <span class="thread-channel">
+          <span class="thread-tag" aria-hidden="true">#</span>
+          <span class="thread-context">{{ contextLabel().slice(1) }}</span>
+        </span>
+      } @else if (contextLabel()) {
+        <span class="thread-context">{{ contextLabel() }}</span>
       }
     </div>
     <button type="button" aria-label="Thread schließen" (click)="closeRequested.emit()">
