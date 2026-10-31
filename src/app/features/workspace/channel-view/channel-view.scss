@@ -105,7 +105,15 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .channel-chevron { flex: 0 0 auto; width: 18px; height: 18px; object-fit: contain; }
+  .channel-chevron {
+    flex: 0 0 auto;
+    width: 9px;
+    height: 9px;
+    margin: -5px 4px 0 2px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+  }
 
   @include bp.mobile {
     min-height: 40px;
