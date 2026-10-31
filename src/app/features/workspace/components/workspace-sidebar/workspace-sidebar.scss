@@ -227,9 +227,22 @@
 @include bp.mobile {
   .sidebar {
     min-height: 0;
-    padding: 91px 20px 20px;
-    border-radius: 20px;
+    padding: 78px 20px 20px;
+    border-radius: 0;
   }
+
+  .sidebar .section-heading > button[aria-label='Channel erstellen'] img,
+  .sidebar .sidebar-add-channel img {
+    filter: invert(29%) sepia(92%) saturate(3130%) hue-rotate(230deg)
+      brightness(100%) contrast(95%);
+  }
+
+  .sidebar .sidebar-add-channel {
+    color: tokens.$purple-1;
+    &:hover { color: tokens.$purple-2; }
+  }
+
+  .sidebar button.mobile-new-message { bottom: 56px; }
 
   .sidebar-top,
   .direct-messages .section-heading > button { display: none; }
