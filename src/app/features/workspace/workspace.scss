@@ -85,15 +85,15 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     width: 46px;
-    min-height: 260px;
-    padding: 18px 8px;
-    gap: 8px;
+    min-height: 300px;
+    padding: 18px 8px 12px;
+    gap: 12px;
     color: tokens.$text;
     background: tokens.$white;
     border: 0;
-    border-radius: 0 14px 14px 0;
+    border-radius: 0 26px 26px 0;
     box-shadow: 0 2px 8px #00000026;
     cursor: pointer;
     transform: translateY(-50%);
@@ -110,8 +110,8 @@
     }
 
     img {
-      width: 18px;
-      height: 18px;
+      width: 26px;
+      height: 26px;
       object-fit: contain;
       transition: transform tokens.$motion-base;
     }
@@ -135,10 +135,11 @@
     @include bp.widescreen {
       width: 56px;
       min-height: 347px;
+      padding: 23px 12px 9px;
+      border-radius: 0 30px 30px 0;
 
-      &.is-collapsed {
-        min-height: 310px;
-      }
+      img { width: 32px; height: 32px; }
+      span { font-size: 20px; }
     }
   }
 
