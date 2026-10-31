@@ -64,6 +64,32 @@ export class MessageItem {
   readonly quickReactions = DEFAULT_RECENT_EMOJIS;
   readonly mobileViewport = signal(window.innerWidth <= 800);
   readonly mobileActionsOpen = signal(false);
+  /** Splits stored text into plain text and clickable known-user mentions. */
+  readonly messageParts = computed(() => {
+    const source = this.message().text;
+    const users = [...this.users()].filter((user) => user.displayName);
+    if (!users.length) return [{ text: source }];
+    const names = users.sort((a, b) => b.displayName.length - a.displayName.length);
+    const pattern = names.map((user) => user.displayName.replace(/[.*+?^${}()|[\]\\]/g, '\\  readonly mobileActionsOpen = signal(false);')).join('|');
+    const regex = new RegExp('@(' + pattern + ')(?=$|[\\s.,!?;:])', 'gi');
+    const parts: { text: string; userId?: string }[] = [];
+    let end = 0;
+    for (const match of source.matchAll(regex)) {
+      const start = match.index ?? 0;
+      if (start && /[\\w@]/.test(source[start - 1])) continue;
+      if (start > end) parts.push({ text: source.slice(end, start) });
+      const user = names.find((item) => item.displayName.toLowerCase() === match[1].toLowerCase());
+      parts.push({ text: match[0], userId: user?.uid });
+      end = start + match[0].length;
+    }
+    if (end < source.length) parts.push({ text: source.slice(end) });
+    return parts.length ? parts : [{ text: source }];
+  });
+
+  /** Opens the existing profile card for a recognized mention. */
+  openMention(userId?: string): void {
+    if (userId) this.userRequested.emit(userId);
+  }
   readonly reactionContext = computed(() => ({
     target: this.target(),
     messageId: this.parentMessageId() || this.message().id,
