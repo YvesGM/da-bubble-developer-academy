@@ -72,7 +72,16 @@
         </div>
       </div>
     } @else {
-      <p class="message-text" (click)="toggleMobileActions()">{{ message().text }}</p>
+      <p class="message-text" (click)="toggleMobileActions()">
+        @for (part of messageParts(); track $index) {
+          @if (part.userId) {
+            <button type="button" class="message-mention"
+              (click)="$event.stopPropagation(); openMention(part.userId)">{{ part.text }}</button>
+          } @else {
+            {{ part.text }}
+          }
+        }
+      </p>
     }
 
     @if (canInteract()) {
