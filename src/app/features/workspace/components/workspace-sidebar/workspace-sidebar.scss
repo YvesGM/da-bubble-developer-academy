@@ -236,9 +236,6 @@
 
   .sidebar-section { margin-top: 22px; }
   .sidebar > .sidebar-section:first-of-type { margin-top: 0; }
-  .sidebar nav[aria-label='Channels'],
-  .sidebar nav[aria-label='Direktnachrichten'] { margin-left: 0; }
-  .sidebar button.sidebar-add-channel { margin-left: 0; }
 
   .sidebar button.mobile-new-message {
     position: fixed;
