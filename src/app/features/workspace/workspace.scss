@@ -109,18 +109,26 @@
       box-shadow: 0 4px 16px #0000002b;
     }
 
-    img {
-      width: 26px;
-      height: 26px;
-      object-fit: contain;
-      transition: transform tokens.$motion-base;
+    .toggle-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 28px;
+      width: 28px;
+      height: 28px;
+
+      img {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        transition: transform tokens.$motion-base;
+      }
     }
 
-    &.is-collapsed img {
+    &.is-collapsed .toggle-icon img {
       transform: scaleX(-1);
     }
 
-    span {
+    .toggle-label {
       font-size: 16px;
       line-height: 1.2;
       white-space: nowrap;
@@ -138,8 +146,12 @@
       padding: 23px 12px 9px;
       border-radius: 0 30px 30px 0;
 
-      img { width: 32px; height: 32px; }
-      span { font-size: 20px; }
+      .toggle-icon {
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
+      }
+      .toggle-label { font-size: 20px; }
     }
   }
 
