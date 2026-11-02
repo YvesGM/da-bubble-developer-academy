@@ -16,6 +16,7 @@ import { Observable } from 'rxjs';
 import { ConversationTarget, conversationDocumentPath } from '../models/conversation.model';
 import { CreateMessageInput, Message } from '../models/message.model';
 
+/** Persists and observes messages in channels and private conversations. */
 @Injectable({ providedIn: 'root' })
 export class MessageService {
   private readonly auth = inject(Auth);

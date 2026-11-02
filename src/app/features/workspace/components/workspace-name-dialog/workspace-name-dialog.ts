@@ -2,6 +2,7 @@ import { Component, HostListener, EventEmitter, Input, Output, inject, signal } 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
+/** Edits the current user's displayed workspace name. */
 @Component({
   selector: 'app-workspace-name-dialog',
   imports: [InputCaretDirective, ReactiveFormsModule],
@@ -11,6 +12,11 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
 export class WorkspaceNameDialog {
   private readonly formBuilder = inject(FormBuilder);
 
+  /**
+   * Updates the displayed workspace name while retaining the default fallback.
+   *
+   * @param value - Current workspace name supplied by the parent component.
+   */
   @Input() set workspaceName(value: string) {
     this.form.controls.workspaceName.setValue(value || 'Workspace');
   }

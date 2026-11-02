@@ -19,6 +19,7 @@ import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-pi
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
+/** Composes messages with emoji and mention suggestions. */
 @Component({
   selector: 'app-message-input',
   imports: [FormsModule, EmojiPicker, InputCaretDirective, Avatar, PresenceIndicator],
@@ -32,10 +33,20 @@ export class MessageInput implements AfterViewInit {
   @Input() recentEmojis: string[] = [];
   @Input() placeholder = 'Write a message';
   @Input() autoFocus = true;
+  /**
+   * Refocuses the message field when the containing conversation changes.
+   *
+   * @param value - Nonempty identifier of the active conversation.
+   */
   @Input() set focusKey(value: string) {
     if (value && this.autoFocus) queueMicrotask(() => this.field?.nativeElement.focus());
   }
   @Input() sendAction?: (text: string) => Promise<void>;
+  /**
+   * Prefills an otherwise empty draft, such as one carried from recipient selection.
+   *
+   * @param value - Initial message text to preserve until edited.
+   */
   @Input() set initialText(value: string) {
     if (value && !this.text()) this.updateText(value);
   }
@@ -50,7 +61,11 @@ export class MessageInput implements AfterViewInit {
   readonly sending = signal(false);
   readonly sendError = signal('');
 
-  /** Closes transient input menus when a click occurs outside this composer. */
+  /**
+   * Closes transient input menus when a click occurs outside this composer.
+   *
+   * @param event - Document click whose target determines which overlays remain.
+   */
   @HostListener('document:click', ['$event'])
   closeOnOutsideClick(event: MouseEvent): void {
     const target = event.target as Element;
@@ -100,19 +115,34 @@ export class MessageInput implements AfterViewInit {
     const value = this.text().trim();
     const send = this.sendAction;
     if (!value || this.sending() || !send) return;
-    this.sending.set(true);
-    this.sendError.set('');
+    this.beginSending();
     try {
       await send(value);
-      this.text.set('');
-      this.closeSuggestions();
-      this.closeOverlays();
+      this.clearSentDraft();
     } catch {
       this.sendError.set('Die Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.');
     } finally {
-      this.sending.set(false);
-      queueMicrotask(() => this.field?.nativeElement.focus());
+      this.finishSending();
     }
+  }
+
+  /** Resets transient error state while a message is being persisted. */
+  private beginSending(): void {
+    this.sending.set(true);
+    this.sendError.set('');
+  }
+
+  /** Clears the draft and transient pickers after successful delivery. */
+  private clearSentDraft(): void {
+    this.text.set('');
+    this.closeSuggestions();
+    this.closeOverlays();
+  }
+
+  /** Restores composer availability and keyboard focus after a send attempt. */
+  private finishSending(): void {
+    this.sending.set(false);
+    queueMicrotask(() => this.field?.nativeElement.focus());
   }
 
   /**
@@ -195,6 +225,7 @@ export class MessageInput implements AfterViewInit {
    * Parses the latest mention or channel trigger at the caret end of the message.
    *
    * @param value - Current message text.
+   * @param caret - Selection offset used to delimit the active trigger.
    */
   private updateSuggestions(value: string, caret = value.length): void {
     const match = value.slice(0, caret).match(/(?:^|\s)([@#])([^@#\s]*)$/);
@@ -219,7 +250,11 @@ export class MessageInput implements AfterViewInit {
     this.focusAt(next.length);
   }
 
-  /** Inserts text at the current selection while preserving surrounding content. */
+  /**
+   * Inserts text at the current selection while preserving surrounding content.
+   *
+   * @param inserted - Emoji, mention marker, or other text to insert.
+   */
   private insertAtCaret(inserted: string): void {
     const field = this.field?.nativeElement;
     const start = field?.selectionStart ?? this.text().length;
@@ -230,7 +265,11 @@ export class MessageInput implements AfterViewInit {
     this.focusAt(start + inserted.length);
   }
 
-  /** Restores keyboard focus and caret position after a programmatic insertion. */
+  /**
+   * Restores keyboard focus and caret position after a programmatic insertion.
+   *
+   * @param position - Desired caret offset in the updated textarea.
+   */
   private focusAt(position: number): void {
     requestAnimationFrame(() => {
       this.field?.nativeElement.focus();

@@ -13,6 +13,7 @@ import { UserService } from '../../../core/services/user.service';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { MessageInput } from '../components/message-input/message-input';
 
+/** Selects recipients and prepares a message for a new conversation. */
 @Component({
   selector: 'app-new-message-view',
   imports: [InputCaretDirective, RouterLink, MessageInput],
@@ -37,26 +38,42 @@ export class NewMessageView {
   readonly recipientSelected = computed(() => !!(this.selectedUser() || this.selectedChannel()));
   readonly sendAction = (text: string): Promise<void> => this.sendNewMessage(text);
 
-  /** Clears the selected recipient when the user changes the address. */
+  /**
+   * Clears the selected recipient when the user changes the address.
+   *
+   * @param value - Recipient search text, optionally starting with @ or #.
+   */
   updateQuery(value: string): void {
     this.query.set(value);
     this.selectedUser.set(null);
     this.selectedChannel.set(null);
   }
 
-  /** Filters workspace users by their display name or email address. */
+  /**
+   * Filters workspace users by their display name or email address.
+   *
+   * @returns User profiles matching the current recipient query.
+   */
   filteredUsers(): UserProfile[] {
     const query = this.normalizedQuery();
     return this.users().filter((user) => this.matchesUser(user, query));
   }
 
-  /** Filters accessible channels by their name. */
+  /**
+   * Filters accessible channels by their name.
+   *
+   * @returns Channels matching the current recipient query.
+   */
   filteredChannels(): Channel[] {
     const query = this.normalizedQuery();
     return this.channels().filter((channel) => channel.name.toLowerCase().includes(query));
   }
 
-  /** Selects a person without leaving the new-message composer. */
+  /**
+   * Selects a person without leaving the new-message composer.
+   *
+   * @param uid - User ID from the recipient search results.
+   */
   selectUser(uid: string): void {
     const user = this.users().find((item) => item.uid === uid);
     if (!user) return;
@@ -65,7 +82,11 @@ export class NewMessageView {
     this.query.set(`@${user.displayName}`);
   }
 
-  /** Selects a channel without losing the message draft. */
+  /**
+   * Selects a channel without losing the message draft.
+   *
+   * @param channelId - Channel ID from the accessible search results.
+   */
   selectChannel(channelId: string): void {
     const channel = this.channels().find((item) => item.id === channelId);
     if (!channel) return;
@@ -74,7 +95,12 @@ export class NewMessageView {
     this.query.set(`#${channel.name}`);
   }
 
-  /** Uses the existing message service and navigates only after successful sending. */
+  /**
+   * Uses the existing message service and navigates only after successful sending.
+   *
+   * @param text - Composed message content.
+   * @returns Promise that resolves after delivery and navigation.
+   */
   async sendNewMessage(text: string): Promise<void> {
     const target = await this.selectedTarget();
     if (!target) throw new Error('recipient-required');
@@ -82,7 +108,11 @@ export class NewMessageView {
     await this.router.navigate(conversationRoute(target));
   }
 
-  /** Resolves the selected recipient to an existing channel or DM target. */
+  /**
+   * Resolves the selected recipient to an existing channel or DM target.
+   *
+   * @returns Selected conversation target, or null without a recipient.
+   */
   private async selectedTarget(): Promise<ConversationTarget | null> {
     const channel = this.selectedChannel();
     if (channel) return { type: 'channel', id: channel.id };
@@ -92,7 +122,12 @@ export class NewMessageView {
     return { type: 'directMessage', id };
   }
 
-  /** Builds the payload from the current authenticated user's existing profile. */
+  /**
+   * Builds the payload from the current authenticated user's existing profile.
+   *
+   * @param text - Content of the new message.
+   * @returns Message payload with an author name and avatar.
+   */
   private messageInput(text: string) {
     const user = this.auth.currentUser;
     return {
@@ -102,17 +137,32 @@ export class NewMessageView {
     };
   }
 
-  /** Normalizes a search query without the optional channel or user prefix. */
+  /**
+   * Normalizes a search query without the optional channel or user prefix.
+   *
+   * @returns Trimmed lowercase search text without its leading @ or # marker.
+   */
   private normalizedQuery(): string {
     return this.query().trim().replace(/^[@#]/, '').toLowerCase();
   }
 
-  /** Labels the currently authenticated account in the recipient search. */
+  /**
+   * Labels the currently authenticated account in the recipient search.
+   *
+   * @param uid - User ID to compare against the authenticated session.
+   * @returns Whether the ID belongs to the signed-in user.
+   */
   isCurrentUser(uid: string): boolean {
     return uid === this.auth.currentUser?.uid;
   }
 
-  /** Matches both visible usernames and email addresses. */
+  /**
+   * Matches both visible usernames and email addresses.
+   *
+   * @param user - Candidate profile from the workspace directory.
+   * @param query - Lowercase recipient search text without the @ prefix.
+   * @returns Whether the user matches the normalized query.
+   */
   private matchesUser(user: UserProfile, query: string): boolean {
     if (!query) return true;
     return user.displayName.toLowerCase().includes(query)

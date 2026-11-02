@@ -10,7 +10,7 @@ import { CanActivateFn, Router } from '@angular/router';
  * restore its state and then reads the corresponding Firestore document. The
  * Firestore security rules remain the authoritative permission boundary.
  *
- * @param route Angular route snapshot containing the `channelId` parameter.
+ * @param route - Angular route snapshot containing the `channelId` parameter.
  * @returns `true` when the channel document exists and is readable; otherwise
  * a URL tree redirecting to the workspace.
  */
@@ -24,13 +24,26 @@ export const channelAccessGuard: CanActivateFn = async (route) => {
   
   const channelId = route.paramMap.get('channelId') ?? '';
   if (!channelId) return router.createUrlTree(['/workspace']);
+  return await channelExists(firestore, injector, channelId)
+    ? true : router.createUrlTree(['/workspace']);
+};
 
+/**
+ * Checks whether a channel document can be read by the current Firebase session.
+ *
+ * @param firestore - Firestore instance used for the channel lookup.
+ * @param injector - Injection context required by AngularFire.
+ * @param channelId - Identifier of the requested channel.
+ * @returns Whether the document exists and is readable.
+ */
+async function channelExists(
+  firestore: Firestore, injector: EnvironmentInjector, channelId: string,
+): Promise<boolean> {
   try {
     const reference = runInInjectionContext(injector, () => doc(firestore, 'channels', channelId));
     const snapshot = await runInInjectionContext(injector, () => getDoc(reference));
-    
-    return snapshot.exists() ? true : router.createUrlTree(['/workspace']);
+    return snapshot.exists();
   } catch {
-    return router.createUrlTree(['/workspace']);
+    return false;
   }
-};
+}

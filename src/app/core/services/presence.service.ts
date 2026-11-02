@@ -11,6 +11,7 @@ import {
 } from '@angular/fire/database';
 import { Observable } from 'rxjs';
 
+/** Publishes and observes registered users' online presence. */
 @Injectable({ providedIn: 'root' })
 export class PresenceService {
   private readonly auth = inject(Auth);

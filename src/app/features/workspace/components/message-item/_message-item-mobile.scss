@@ -1,0 +1,69 @@
+@use '../../../../../styles/tokens' as tokens;
+@use '../../../../../styles/breakpoints' as bp;
+
+// Mobile message layout and action placement.
+@mixin styles {
+  @include bp.mobile {
+    grid-template-columns: 50px minmax(0, 1fr);
+    min-height: 0;
+    margin-inline: 0;
+    padding: 10px 0;
+    gap: 16px;
+    &.own-message {
+      grid-template-columns: minmax(0, 1fr) 50px;
+      min-height: 0;
+    }
+    &.thread-message {
+      grid-template-columns: 50px minmax(0, 1fr);
+      min-height: 0;
+      padding-top: 10px;
+      gap: 16px;
+      &.own-message { grid-template-columns: minmax(0, 1fr) 50px; }
+      .message-avatar { width: 50px; height: 50px; --avatar-medium-size: 50px; }
+      .message-text { font-size: 17px; }
+      .author-button { font-size: 16px; }
+      .meta span { font-size: 13px; }
+    }
+    .message-avatar {
+      width: 50px;
+      height: 50px;
+      --avatar-medium-size: 50px;
+    }
+    .message-text {
+      font-size: 17px;
+      max-width: 100%;
+    }
+    .actions {
+      display: none;
+      top: -18px;
+      right: 12px;
+      padding: 3px 6px;
+    }
+    &.mobile-actions-open .actions {
+      display: flex;
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+    &.own-message .actions { right: auto; left: 12px; }
+    &:not(.own-message) .actions { right: 12px; left: auto; }
+    .edit-composer { height: 180px; padding: 15px; }
+    .edit-composer textarea { font-size: 16px; }
+    .edit-controls { gap: 6px; }
+    .edit-controls button { padding: 8px 12px; font-size: 14px; }
+    .actions .options-menu { width: min(265px, calc(100vw - 32px)); }
+    .options-menu button { font-size: 18px; }
+    .author-button { font-size: 16px; }
+    .meta { gap: 10px; }
+    .meta span { font-size: 13px; }
+    .message-text { padding: 15px; }
+    .reaction-picker {
+      top: 44px;
+      right: auto;
+      left: 50px;
+      width: min(244px, calc(100% - 50px));
+    }
+    &.own-message .reaction-picker { right: 50px; left: auto; }
+
+  }
+}

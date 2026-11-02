@@ -13,6 +13,7 @@ import { Avatar } from '../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../shared/components/presence-indicator/presence-indicator';
 import { ChatPanel } from '../components/chat-panel/chat-panel';
 
+/** Connects a direct-message route to its conversation panel. */
 @Component({
   selector: 'app-direct-message-view',
   imports: [ChatPanel, RouterLink, ProfileCard, ProfileDialog, Avatar, PresenceIndicator],

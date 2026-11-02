@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { EMOJI_OPTIONS } from '../../../core/constants/emoji.constants';
 
+/** Provides the shared emoji selection interface. */
 @Component({
   selector: 'app-emoji-picker',
   templateUrl: './emoji-picker.html',

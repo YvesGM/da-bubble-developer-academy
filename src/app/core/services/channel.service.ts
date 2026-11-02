@@ -29,18 +29,17 @@ import {
   sortChannels,
 } from '../utils/channel.util';
 
+/** Manages channel queries, membership changes, and unique-name transactions. */
 @Injectable({ providedIn: 'root' })
 export class ChannelService {
   private readonly auth = inject(Auth);
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
-
   /**
    * Observes the channels accessible to the current registered user or anonymous guest.
    *
    * @returns An observable that emits the accessible channels sorted by creation time and name.
-
    */
   observeCurrentUserChannels(): Observable<Channel[]> {
     const request = this.currentUserChannelQuery();
@@ -48,13 +47,11 @@ export class ChannelService {
     return (channels as Observable<Channel[]>).pipe(map((items) => sortChannels(items)));
   }
 
-
   /**
    * Observes a single channel document.
    *
    * @param channelId - Firestore identifier of the channel to observe.
    * @returns An observable that emits the channel when it exists.
-
    */
   observeChannel(channelId: string): Observable<Channel | undefined> {
     const reference = this.channelReference(channelId);
@@ -63,14 +60,12 @@ export class ChannelService {
     >;
   }
 
-
   /**
    * Creates a channel and atomically reserves its normalized name to prevent duplicates.
    *
    * @param input - Name, description, membership and guest-access settings for the new channel.
    * @returns The Firestore identifier of the created channel.
    * @throws If the normalized channel name is already reserved or the transaction fails.
-
    */
   async createChannel(input: CreateChannelInput): Promise<string> {
     const creatorId = this.currentUserId();
@@ -80,21 +75,18 @@ export class ChannelService {
     return channelRef.id;
   }
 
-
   /**
    * Updates channel metadata and moves the unique-name registry entry when the channel name changes.
    *
    * @param channelId - Identifier of the channel to update.
    * @param input - Updated channel name and description.
    * @throws If the channel does not exist, the name is already taken or the transaction fails.
-
    */
   async updateChannel(channelId: string, input: UpdateChannelInput): Promise<void> {
     const channelRef = this.channelReference(channelId);
     const name = cleanChannelName(input.name);
     await this.run(() => this.updateChannelTransaction(channelRef, input, name));
   }
-
 
   /**
    * Adds registered members to a channel and optionally enables guest access.
@@ -103,7 +95,6 @@ export class ChannelService {
    * @param memberIds - User identifiers to add to the member list.
    * @param guestAccess - Whether guest access should be enabled.
    * @throws If Firestore rejects the update.
-
    */
   async addMembers(channelId: string, memberIds: string[], guestAccess: boolean): Promise<void> {
     if (!memberIds.length && !guestAccess) return;
@@ -112,13 +103,11 @@ export class ChannelService {
     await this.run(() => updateDoc(reference, changes));
   }
 
-
   /**
    * Removes the current registered user from a channel.
    *
    * @param channelId - Identifier of the channel to leave.
    * @throws If the user is unauthenticated or Firestore rejects the update.
-
    */
   async leaveChannel(channelId: string): Promise<void> {
     if (this.auth.currentUser?.isAnonymous) return;
@@ -131,7 +120,6 @@ export class ChannelService {
    * Builds the Firestore query used to load channels visible to the current session.
    *
    * @returns A query filtered either by membership or guest access.
-
    */
   private currentUserChannelQuery() {
     const reference = this.channelsCollection();
@@ -149,7 +137,6 @@ export class ChannelService {
    * @param memberIds - User identifiers to add.
    * @param guestAccess - Whether guest access should be enabled.
    * @returns A Firestore update object.
-
    */
   private memberChanges(memberIds: string[], guestAccess: boolean) {
     const changes: Record<string, unknown> = { updatedAt: serverTimestamp() };
@@ -166,7 +153,6 @@ export class ChannelService {
    * @param name - Sanitized channel name.
    * @param creatorId - Identifier of the creating user.
    * @throws If the name is already reserved or the transaction fails.
-
    */
   private async createChannelTransaction(
     channelRef: DocumentReference,
@@ -188,7 +174,6 @@ export class ChannelService {
    * @param name - Sanitized channel name.
    * @param creatorId - Identifier of the creating user.
    * @throws If the normalized name already exists.
-
    */
   private async writeNewChannel(
     transaction: Transaction,
@@ -211,7 +196,6 @@ export class ChannelService {
    * @param input - Updated channel values.
    * @param name - Sanitized new channel name.
    * @throws If the channel does not exist or the update fails.
-
    */
   private async updateChannelTransaction(
     channelRef: DocumentReference,
@@ -235,7 +219,6 @@ export class ChannelService {
    * @param current - Current channel data.
    * @param name - Sanitized new channel name.
    * @throws If the new name is already reserved.
-
    */
   private async moveNameRegistry(
     transaction: Transaction,
@@ -256,7 +239,6 @@ export class ChannelService {
    * @param previousKey - Current normalized registry key.
    * @param name - New sanitized channel name.
    * @throws If the next registry entry already exists.
-
    */
   private async replaceNameRegistry(
     transaction: Transaction,
@@ -277,7 +259,6 @@ export class ChannelService {
    * @param name - Sanitized channel name.
    * @param creatorId - Identifier of the creating user.
    * @returns The complete channel document payload.
-
    */
   private buildChannelData(input: CreateChannelInput, name: string, creatorId: string) {
     return {
@@ -299,7 +280,6 @@ export class ChannelService {
    * @param input - Partial update values.
    * @param name - Sanitized channel name.
    * @returns The partial channel update payload.
-
    */
   private channelChanges(input: Partial<UpdateChannelInput>, name: string) {
     return {
@@ -316,7 +296,6 @@ export class ChannelService {
    *
    * @returns The authenticated user's identifier.
    * @throws If no Firebase user is authenticated.
-
    */
   private currentUserId(): string {
     const uid = this.auth.currentUser?.uid;

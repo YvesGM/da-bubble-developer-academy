@@ -36,6 +36,7 @@ export class InputCaretDirective implements AfterViewInit {
   private originalPriority = '';
   private readonly onScroll = () => this.queueUpdate();
 
+  /** Registers caret cleanup with the directive's Angular destruction lifecycle. */
   constructor() {
     this.destroyRef.onDestroy(() => this.dispose());
   }
@@ -86,7 +87,11 @@ export class InputCaretDirective implements AfterViewInit {
     });
   }
 
-  /** Supported inputs and textareas expose a stable selectionStart API. */
+  /**
+   * Checks whether the input type exposes a stable selectionStart API.
+   *
+   * @returns Whether a custom caret can be measured reliably.
+   */
   private canMeasure(): boolean {
     return (this.input.tagName === 'TEXTAREA'
       || ['text', 'search', 'tel', 'url', 'password'].includes(this.input.type))
@@ -109,17 +114,34 @@ export class InputCaretDirective implements AfterViewInit {
     if (position === null || position !== this.input.selectionEnd) return this.hideIndicator();
     const style = this.view.getComputedStyle(this.input);
     if (this.input.tagName === 'TEXTAREA') return this.positionTextareaCaret(style, position);
-    const context = this.measurementContext();
-    if (!context) return this.hide();
-    context.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
-    const spacing = parseFloat(style.letterSpacing) || 0;
-    const width = this.input.type === 'password'
-      ? this.passwordAdvance(position, style, context)
-      : this.textAdvance(context, position, spacing);
+    const width = this.singleLineAdvance(style, position);
+    if (width === null) return this.hide();
     this.positionIndicator(style, width);
   }
 
-  /** Measures the textarea insertion point using its native wrapping and padding. */
+  /**
+   * Returns the rendered width preceding the caret in a single-line input.
+   *
+   * @param style - Computed font and letter-spacing information.
+   * @param position - Native selection start in the input.
+   * @returns Width in pixels, or null if measurement is unavailable.
+   */
+  private singleLineAdvance(style: CSSStyleDeclaration, position: number): number | null {
+    const context = this.measurementContext();
+    if (!context) return null;
+    context.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    const spacing = parseFloat(style.letterSpacing) || 0;
+    return this.input.type === 'password'
+      ? this.passwordAdvance(position, style, context)
+      : this.textAdvance(context, position, spacing);
+  }
+
+  /**
+   * Measures the textarea insertion point using its native wrapping and padding.
+   *
+   * @param style - Computed textarea typography and spacing.
+   * @param position - Native selection start in the textarea.
+   */
   private positionTextareaCaret(style: CSSStyleDeclaration, position: number): void {
     const field = this.input as HTMLTextAreaElement;
     const mirror = this.ensureTextMirror();
@@ -130,7 +152,13 @@ export class InputCaretDirective implements AfterViewInit {
     this.drawTextareaCaret(field, mirror, marker, style);
   }
 
-  /** Keeps the single offscreen measurement mirror in sync with the textarea. */
+  /**
+   * Keeps the single offscreen measurement mirror in sync with the textarea.
+   *
+   * @param mirror - Reused offscreen element used for text layout.
+   * @param field - Actual textarea whose geometry is being mirrored.
+   * @param style - Current computed textarea styles.
+   */
   private styleTextMirror(
     mirror: HTMLDivElement, field: HTMLTextAreaElement, style: CSSStyleDeclaration,
   ): void {
@@ -145,26 +173,66 @@ export class InputCaretDirective implements AfterViewInit {
     mirror.style.overflowWrap = style.overflowWrap;
   }
 
-  /** Draws the shared indicator at the measured, vertically scrolled caret position. */
+  /**
+   * Draws the shared indicator at the measured, vertically scrolled caret position.
+   *
+   * @param field - Actual textarea that owns the selection.
+   * @param mirror - Offscreen element reproducing textarea line wrapping.
+   * @param marker - Span indicating the current insertion position.
+   * @param style - Computed line height and typography.
+   */
   private drawTextareaCaret(
     field: HTMLTextAreaElement, mirror: HTMLDivElement,
     marker: HTMLElement, style: CSSStyleDeclaration,
   ): void {
     if (!this.caret) return;
+    const { x, y } = this.textareaCaretPoint(field, mirror, marker);
+    const height = Math.min(parseFloat(style.lineHeight) || 18, 25);
+    this.caret.style.left = `${x}px`;
+    this.caret.style.top = `${y}px`;
+    this.caret.style.height = `${height}px`;
+    this.caret.hidden = !this.textareaCaretVisible(field, x, y, height);
+  }
+
+  /**
+   * Resolves the caret position relative to the viewport and textarea scroll offset.
+   *
+   * @param field - Actual textarea with its current scroll offsets.
+   * @param mirror - Offscreen element reproducing the text layout.
+   * @param marker - Measured span at the text insertion point.
+   * @returns Caret x/y coordinates in viewport pixels.
+   */
+  private textareaCaretPoint(
+    field: HTMLTextAreaElement, mirror: HTMLDivElement, marker: HTMLElement,
+  ): { x: number; y: number } {
     const bounds = field.getBoundingClientRect();
     const mirrorBounds = mirror.getBoundingClientRect();
     const markerBounds = marker.getBoundingClientRect();
     const x = bounds.left + markerBounds.left - mirrorBounds.left - field.scrollLeft;
     const y = bounds.top + markerBounds.top - mirrorBounds.top - field.scrollTop;
-    const height = Math.min(parseFloat(style.lineHeight) || 18, 25);
-    this.caret.style.left = `${x}px`;
-    this.caret.style.top = `${y}px`;
-    this.caret.style.height = `${height}px`;
-    this.caret.hidden = x < bounds.left || x > bounds.right || y < bounds.top
-      || y + height > bounds.bottom || y < 0 || y > (this.view?.innerHeight ?? 0);
+    return { x, y };
   }
 
-  /** Creates a single offscreen multiline mirror for the current directive instance. */
+  /**
+   * Checks that the indicator is inside the textarea and the visible viewport.
+   *
+   * @param field - Textarea establishing the clipping rectangle.
+   * @param x - Caret's viewport x-coordinate.
+   * @param y - Caret's viewport y-coordinate.
+   * @param height - Indicator height in pixels.
+   * @returns Whether the indicator can be shown without clipping.
+   */
+  private textareaCaretVisible(field: HTMLTextAreaElement, x: number, y: number, height: number): boolean {
+    const bounds = field.getBoundingClientRect();
+    return x >= bounds.left && x <= bounds.right && y >= bounds.top
+      && y + height <= bounds.bottom && y >= 0 && y <= (this.view?.innerHeight ?? 0);
+  }
+
+  /**
+   * Creates a single offscreen multiline mirror for the current directive instance.
+   *
+   * @returns The reusable mirror element for textarea layout measurements.
+   */
   private ensureTextMirror(): HTMLDivElement {
     if (this.textMirror) return this.textMirror;
     const mirror = this.document.createElement('div');
@@ -173,7 +241,14 @@ export class InputCaretDirective implements AfterViewInit {
     return (this.textMirror = mirror);
   }
 
-  /** Measures password masks using the browser's actual native input renderer. */
+  /**
+   * Measures password masks using the browser's actual native input renderer.
+   *
+   * @param count - Number of masked characters preceding the caret.
+   * @param style - Computed font and letter spacing of the password field.
+   * @param context - Canvas fallback for browsers without scroll-width measurement.
+   * @returns Width of the obscured character prefix in pixels.
+   */
   private passwordAdvance(
     count: number, style: CSSStyleDeclaration, context: CanvasRenderingContext2D,
   ): number {
@@ -187,7 +262,11 @@ export class InputCaretDirective implements AfterViewInit {
     return nativeWidth > 1 ? nativeWidth : context.measureText('•'.repeat(count)).width;
   }
 
-  /** The mirror never receives real password characters or keyboard focus. */
+  /**
+   * Creates an offscreen password input without exposing typed characters.
+   *
+   * @returns The reusable password mask measurement field.
+   */
   private ensurePasswordMirror(): HTMLInputElement {
     if (this.passwordMirror) return this.passwordMirror;
     const mirror = this.document.createElement('input');
@@ -201,13 +280,25 @@ export class InputCaretDirective implements AfterViewInit {
     return (this.passwordMirror = mirror);
   }
 
-  /** Measures editable text with its current font and character spacing. */
+  /**
+   * Measures editable text with its current font and character spacing.
+   *
+   * @param context - Canvas context configured with the input's font.
+   * @param count - Number of characters preceding the insertion point.
+   * @param spacing - Letter spacing in pixels.
+   * @returns Width of the rendered text prefix.
+   */
   private textAdvance(context: CanvasRenderingContext2D, count: number, spacing: number): number {
     const prefix = this.input.value.slice(0, count);
     return context.measureText(prefix).width + Math.max(0, prefix.length - 1) * spacing;
   }
 
-  /** Positions the indicator within the visible, horizontally scrolling input. */
+  /**
+   * Positions the indicator within the visible, horizontally scrolling input.
+   *
+   * @param style - Computed padding and typography of the input.
+   * @param advance - Rendered width preceding the insertion point in pixels.
+   */
   private positionIndicator(style: CSSStyleDeclaration, advance: number): void {
     if (!this.caret || !this.view) return;
     const rect = this.input.getBoundingClientRect();
@@ -228,7 +319,11 @@ export class InputCaretDirective implements AfterViewInit {
     if (this.caret) this.caret.hidden = true;
   }
 
-  /** Reuses one canvas rather than creating a measurement element per keystroke. */
+  /**
+   * Reuses one canvas rather than creating a measurement element per keystroke.
+   *
+   * @returns Canvas context for text metrics, or null if unavailable.
+   */
   private measurementContext(): CanvasRenderingContext2D | null {
     this.context ??= this.document.createElement('canvas').getContext('2d');
     return this.context;

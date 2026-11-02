@@ -1,0 +1,85 @@
+@use '../../../../../styles/tokens' as tokens;
+
+// Message editing layout and controls.
+@mixin styles {
+  &.is-editing {
+    background: tokens.$background;
+    .message-body { width: min(678px, 100%); }
+    .actions { display: none; }
+  }
+  .edit-composer {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) 45px;
+    width: 100%;
+    height: 180px;
+    padding: 18px 20px 15px;
+    gap: 12px;
+    background: tokens.$white;
+    border: 1px solid tokens.$border;
+    border-radius: 20px;
+    transition: border-color tokens.$motion-base;
+    &:focus-within { border-color: tokens.$purple-2; }
+    textarea {
+      width: 100%;
+      min-width: 0;
+      min-height: 0;
+      padding: 0;
+      resize: none;
+      font: inherit;
+      font-size: var(--ws-text, 18px);
+      line-height: 1.4;
+      color: tokens.$text;
+      background: transparent;
+      border: 0;
+      outline: 0;
+    }
+  }
+  .edit-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    button {
+      min-height: 40px;
+      padding: 8px 18px;
+      border: 0;
+      border-radius: 22px;
+      font-weight: 700;
+      font-size: 16px;
+      transition: background-color tokens.$motion-base, color tokens.$motion-fast;
+    }
+  }
+  .edit-emoji-control { position: relative; margin-right: auto; }
+  .edit-controls .edit-emoji-button {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    min-height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    background: transparent;
+    img { width: 24px; height: 24px; }
+    &:hover,
+    &:focus-visible { background: tokens.$background; }
+  }
+  .edit-emoji-picker {
+    position: absolute;
+    z-index: 8;
+    bottom: calc(100% + 8px);
+    left: 0;
+  }
+  .edit-controls .edit-cancel {
+    color: tokens.$purple-1;
+    background: tokens.$white;
+    box-shadow: inset 0 0 0 1px tokens.$purple-2;
+    &:hover,
+    &:focus-visible { background: tokens.$background; }
+  }
+  .edit-controls .edit-save {
+    color: tokens.$white;
+    background: tokens.$purple-1;
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) { background: tokens.$purple-2; }
+    &:disabled { cursor: not-allowed; opacity: 0.5; }
+  }
+}

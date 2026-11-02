@@ -22,8 +22,8 @@ const FIREBASE_MESSAGES: Record<string, string> = {
  * Unknown values and unsupported Firebase codes fall back to the caller-provided
  * message so UI components do not have to duplicate error-type checks.
  *
- * @param error Error value caught from a Firebase operation.
- * @param fallback Message used when no specific mapping exists.
+ * @param error - Error value caught from a Firebase operation.
+ * @param fallback - Message used when no specific mapping exists.
  * @returns Localized error message suitable for display in the UI.
  */
 export function firebaseErrorMessage(error: unknown, fallback: string): string {

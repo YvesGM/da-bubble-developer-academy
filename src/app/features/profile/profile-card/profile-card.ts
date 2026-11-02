@@ -4,6 +4,7 @@ import { UserProfile } from '../../../core/models/user-profile.model';
 import { Avatar } from '../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../shared/components/presence-indicator/presence-indicator';
 
+/** Displays profile details and exposes the available profile actions. */
 @Component({
   selector: 'app-profile-card',
   imports: [Avatar, PresenceIndicator],
@@ -11,6 +12,7 @@ import { PresenceIndicator } from '../../../shared/components/presence-indicator
   styleUrl: './profile-card.scss',
 })
 export class ProfileCard {
+  /** Dismisses the displayed profile card when Escape is pressed. */
   @HostListener('document:keydown.escape')
   closeOnEscape(): void {
     this.closeRequested.emit();

@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 
 import { ChannelNameTakenError } from '../../../core/errors/channel-name-taken.error';
@@ -23,10 +23,10 @@ import { ChannelDetailsDialog } from '../components/channel-details-dialog/chann
 import { ChannelMembersDialog } from '../components/channel-members-dialog/channel-members-dialog';
 import { ChatPanel } from '../components/chat-panel/chat-panel';
 
+/** Connects a channel route to its messages and membership controls. */
 @Component({
   selector: 'app-channel-view',
   imports: [
-    RouterLink,
     Avatar,
     ProfileCard,
     ProfileDialog,

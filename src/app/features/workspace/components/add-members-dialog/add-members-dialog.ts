@@ -4,11 +4,13 @@ import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
+/** Members and guest-access preference submitted when changing channel access. */
 export interface AddMembersSelection {
   memberIds: string[];
   guestAccess: boolean;
 }
 
+/** Selects additional members for an existing channel. */
 @Component({
   selector: 'app-add-members-dialog',
   imports: [InputCaretDirective, Avatar],

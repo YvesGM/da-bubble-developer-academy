@@ -9,6 +9,9 @@ final class PrivateDirectory
     /**
      * Supports FTP-root/schniefs-portfolio/.../api and local Angular layouts.
      * Never reads secrets from inside the web application itself.
+     *
+     * @param string $apiDirectory Public API entry directory.
+     * @return string|null Private configuration directory, if one exists.
      */
     public static function find(string $apiDirectory): ?string
     {

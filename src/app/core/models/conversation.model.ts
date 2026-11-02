@@ -1,5 +1,7 @@
+/** Supported conversation kinds and their Firestore collection mapping. */
 export type ConversationType = 'channel' | 'directMessage';
 
+/** Identifies an existing channel or direct-message conversation. */
 export interface ConversationTarget {
   type: ConversationType;
   id: string;

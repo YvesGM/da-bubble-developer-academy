@@ -12,6 +12,7 @@ import { UserService } from '../../../../core/services/user.service';
 import { MessageInput } from '../message-input/message-input';
 import { MessageItem } from '../message-item/message-item';
 
+/** Renders the selected thread and its reply composer. */
 @Component({
   selector: 'app-thread-panel',
   imports: [MessageInput, MessageItem],
@@ -42,7 +43,12 @@ export class ThreadPanel {
     { initialValue: [] as Message[] },
   );
 
-  /** Saves a selected emoji to the existing user's recent-emoji history. */
+  /**
+   * Saves a selected emoji to the existing user's recent-emoji history.
+   *
+   * @param emoji - Emoji chosen from the thread composer.
+   * @returns Promise that resolves after the preference is saved.
+   */
   async rememberEmoji(emoji: string): Promise<void> {
     await this.usersService.rememberEmoji(emoji);
   }

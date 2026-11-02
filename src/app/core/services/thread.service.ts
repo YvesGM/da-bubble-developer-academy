@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { ConversationTarget, conversationDocumentPath } from '../models/conversation.model';
 import { CreateMessageInput, Message } from '../models/message.model';
 
+/** Observes and creates replies associated with a parent message. */
 @Injectable({ providedIn: 'root' })
 export class ThreadService {
   private readonly auth = inject(Auth);

@@ -8,6 +8,7 @@ import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { AuthShell } from '../components/auth-shell/auth-shell';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
+/** Authenticates users through the supported Firebase sign-in options. */
 @Component({
   selector: 'app-login',
   imports: [InputCaretDirective, ReactiveFormsModule, RouterLink, AuthShell],

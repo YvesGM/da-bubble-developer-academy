@@ -1,0 +1,121 @@
+@use '../../../../../styles/tokens' as tokens;
+
+// Message reaction, reply, and deletion indicators.
+@mixin styles {
+  .reaction-picker {
+    position: absolute;
+    z-index: 5;
+    top: 44px;
+    bottom: auto;
+    left: 90px;
+    width: min(244px, calc(100% - 90px));
+  }
+  &.own-message .reaction-picker {
+    right: 90px;
+    left: auto;
+  }
+  // The sender's bubble stays violet; incoming bubbles turn white on hover.
+  &:not(.own-message):is(:hover, :focus-within) .message-text {
+    background: tokens.$white;
+  }
+
+  .message-footer {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    flex-wrap: wrap;
+    position: static;
+    min-height: 34px;
+    gap: 8px;
+    &.has-replies { min-height: 25px; }
+  }
+  .footer-reaction-button {
+    display: grid;
+    place-items: center;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    transition: background-color tokens.$motion-base, transform tokens.$motion-fast;
+    img { width: clamp(24px, 1.25vw, 38px); height: clamp(24px, 1.25vw, 38px); object-fit: contain; }
+    &:hover,
+    &:focus-visible {
+      background: tokens.$background;
+      transform: scale(1.05);
+    }
+  }
+  .reactions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 0;
+    gap: 8px;
+    button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 2px 9px;
+      gap: 5px;
+      font-size: 16px;
+
+      > span { font-size: 20px; }
+      background: tokens.$white;
+      border: 1px solid tokens.$border;
+      border-radius: 16px;
+      transition:
+        background-color tokens.$motion-base,
+        border-color tokens.$motion-base;
+      &:hover {
+        background: tokens.$background;
+        border-color: tokens.$purple-2;
+      }
+    }
+    .reaction-check {
+      display: inline-grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      color: tokens.$white;
+      background: tokens.$reaction-green;
+      border-radius: 50%;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .reaction-more {
+      font-weight: 700;
+      color: tokens.$purple-1;
+      border-color: transparent;
+    }
+  }
+  .replies-link {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-weight: 700;
+    padding: 0;
+    color: tokens.$purple-2;
+    background: transparent;
+    border: 0;
+    transition: color tokens.$motion-fast;
+    .last-reply {
+      font-size: 12px;
+      font-weight: 400;
+      color: tokens.$text-gray;
+    }
+    &:hover {
+      color: tokens.$purple-1;
+    }
+  }
+  .deleted {
+    &-message {
+      font-style: italic;
+      margin: 5px 0;
+      color: tokens.$text-gray;
+    }
+  }
+}

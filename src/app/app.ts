@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 
 import { Splash } from './features/auth/splash/splash';
 
+/** Renders the application shell and coordinates the initial splash transition. */
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, Splash],
@@ -17,7 +18,11 @@ export class App {
     this.showSplash.set(false);
   }
 
-  /** Only the initial app entry and the legacy splash URL trigger the intro. */
+  /**
+   * Only the initial app entry and the legacy splash URL trigger the intro.
+   *
+   * @returns Whether the splash overlay should be displayed.
+   */
   private isSplashEntry(): boolean {
     const path = window.location.pathname.replace(/\/+$/, '');
     return path === '' || path === '/splash';

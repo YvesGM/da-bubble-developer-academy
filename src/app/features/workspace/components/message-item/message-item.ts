@@ -23,11 +23,13 @@ import { MessageService } from '../../../../core/services/message.service';
 import { ReactionService } from '../../../../core/services/reaction.service';
 import { ThreadService } from '../../../../core/services/thread.service';
 import { UserService } from '../../../../core/services/user.service';
+import { splitMessageMentions } from '../../../../core/utils/message-mention.util';
 import { messageTime } from '../../../../core/utils/timestamp.util';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
+/** Renders and manages the interactions of one message or thread reply. */
 @Component({
   selector: 'app-message-item',
   imports: [InputCaretDirective, FormsModule, Avatar, EmojiPicker],
@@ -64,34 +66,14 @@ export class MessageItem {
   readonly quickReactions = DEFAULT_RECENT_EMOJIS;
   readonly mobileViewport = signal(window.innerWidth <= 800);
   readonly mobileActionsOpen = signal(false);
-  /** Splits stored text into plain text and recognized user mentions. */
-  readonly messageParts = computed(() => {
-    const source = this.message().text;
-    const users = [...this.users()].sort((a, b) => b.displayName.length - a.displayName.length);
-    const parts: { text: string; userId?: string }[] = [];
-    let cursor = 0;
-    let plainStart = 0;
-    while (cursor < source.length) {
-      const user = users.find((item) => this.mentionAt(source, cursor, item.displayName));
-      if (!user) { cursor++; continue; }
-      if (cursor > plainStart) parts.push({ text: source.slice(plainStart, cursor) });
-      const end = cursor + user.displayName.length + 1;
-      parts.push({ text: source.slice(cursor, end), userId: user.uid });
-      plainStart = cursor = end;
-    }
-    if (plainStart < source.length) parts.push({ text: source.slice(plainStart) });
-    return parts.length ? parts : [{ text: source }];
-  });
+  /** Recomputes display spans whenever the message or available profiles change. */
+  readonly messageParts = computed(() => splitMessageMentions(this.message().text, this.users()));
 
-  /** Restricts mentions to complete names with word boundaries. */
-  private mentionAt(text: string, index: number, name: string): boolean {
-    const token = '@' + name;
-    if (!name || text.slice(index, index + token.length).toLowerCase() !== token.toLowerCase()) return false;
-    return (index === 0 || /\s/.test(text[index - 1]))
-      && (index + token.length === text.length || /[\s.,!?;:]/.test(text[index + token.length]));
-  }
-
-  /** Opens the existing profile card for a recognized mention. */
+  /**
+   * Opens the existing profile card for a recognized mention.
+   *
+   * @param userId - Firebase user ID associated with the recognized mention.
+   */
   openMention(userId?: string): void {
     if (userId) this.userRequested.emit(userId);
   }
@@ -121,7 +103,11 @@ export class MessageItem {
     { initialValue: [] as Message[] },
   );
 
-  /** Closes reaction/edit pickers when interacting outside their own controls. */
+  /**
+   * Closes reaction/edit pickers when interacting outside their own controls.
+   *
+   * @param event - Document click to evaluate against this message's controls.
+   */
   @HostListener('document:click', ['$event'])
   closePickersOnOutsideClick(event: MouseEvent): void {
     const target = event.target as Element;
@@ -143,7 +129,11 @@ export class MessageItem {
     if (this.mobileViewport()) this.mobileActionsOpen.update((value) => !value);
   }
 
-  /** Dismisses mobile message actions when another item is selected. */
+  /**
+   * Dismisses mobile message actions when another item is selected.
+   *
+   * @param event - Document click to check against the message container.
+   */
   @HostListener('document:click', ['$event'])
   closeMobileActionsOnOutside(event: MouseEvent): void {
     if (!this.host.nativeElement.contains(event.target as Node)) {
@@ -163,16 +153,20 @@ export class MessageItem {
     this.editEmojiPickerOpen.update((value) => !value);
   }
 
-  @HostListener('window:resize')
   /**
-   * Updates the responsive reaction limit when the browser viewport changes.
+   * Updates mobile interaction state when the browser viewport changes.
    */
+  @HostListener('window:resize')
   updateViewport(): void {
     this.mobileViewport.set(window.innerWidth <= 800);
     if (!this.mobileViewport()) this.mobileActionsOpen.set(false);
   }
 
-  /** Syncs the existing menu state with native popover dismissal. */
+  /**
+   * Syncs the existing menu state with native popover dismissal.
+   *
+   * @param event - Popover toggle event originating from the menu element.
+   */
   syncOptionsState(event: Event): void {
     this.optionsOpen.set((event.target as HTMLElement).matches(':popover-open'));
   }
@@ -186,7 +180,11 @@ export class MessageItem {
     this.positionOptions(menu);
   }
 
-  /** Positions the existing menu next to its toggle within the visible viewport. */
+  /**
+   * Positions the existing menu next to its toggle within the visible viewport.
+   *
+   * @param menu - Visible native popover element to position.
+   */
   private positionOptions(menu: HTMLDivElement): void {
     const button = this.optionsButton?.nativeElement;
     if (!button) return;
@@ -243,7 +241,11 @@ export class MessageItem {
     return messageTime(this.message().createdAt);
   }
 
-  /** Returns the time of the most recent thread reply, if available. */
+  /**
+   * Returns the time of the most recent thread reply, if available.
+   *
+   * @returns Formatted reply time or an empty string for a thread without replies.
+   */
   lastReplyTime(): string {
     const replies = this.replies();
     return replies.length ? messageTime(replies[replies.length - 1].createdAt) : '';
@@ -295,7 +297,11 @@ export class MessageItem {
     this.editEmojiPickerOpen.set(false);
   }
 
-  /** Inserts an emoji into the existing editing textarea. */
+  /**
+   * Inserts an emoji at the active selection in the editing textarea.
+   *
+   * @param emoji - Emoji string chosen in the editing picker.
+   */
   insertEditEmoji(emoji: string): void {
     const field = this.editField?.nativeElement;
     const start = field?.selectionStart ?? this.editText().length;
@@ -343,7 +349,12 @@ export class MessageItem {
     return group.userIds.map((uid) => this.userName(uid)).join(', ');
   }
 
-  /** Describes a persisted reaction without creating a separate chat message. */
+  /**
+   * Describes a persisted reaction without creating a separate chat message.
+   *
+   * @param group - Reaction group and its participating user IDs.
+   * @returns Localized description of the users and selected emoji.
+   */
   reactionSummary(group: ReactionGroup): string {
     const names = this.reactionNames(group);
     return `${names} ${group.userIds.length === 1 ? 'hat' : 'haben'} mit ${group.emoji} reagiert`;

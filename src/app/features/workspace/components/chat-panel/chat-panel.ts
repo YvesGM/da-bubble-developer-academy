@@ -15,6 +15,7 @@ import { MessageInput } from '../message-input/message-input';
 import { MessageList } from '../message-list/message-list';
 import { ThreadPanel } from '../thread-panel/thread-panel';
 
+/** Coordinates a conversation's messages, composer, and optional thread. */
 @Component({
   selector: 'app-chat-panel',
   imports: [MessageInput, MessageList, ThreadPanel],
@@ -61,6 +62,7 @@ export class ChatPanel {
     this.profile()?.recentEmojis?.length ? this.profile()!.recentEmojis : [...DEFAULT_RECENT_EMOJIS],
   );
 
+  /** Clears a previously opened thread when the active conversation changes. */
   constructor() {
     effect(() => {
       const target = this.target();

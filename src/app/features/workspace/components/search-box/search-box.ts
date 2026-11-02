@@ -11,6 +11,7 @@ import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
+/** Provides workspace-wide search input and result selection. */
 @Component({
   selector: 'app-search-box',
   imports: [InputCaretDirective, Avatar, PresenceIndicator],

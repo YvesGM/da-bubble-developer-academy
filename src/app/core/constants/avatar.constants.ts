@@ -1,3 +1,4 @@
+/** Immutable identifiers of the six selectable built-in avatars. */
 export const AVATAR_IDS = [
   'avatar-1',
   'avatar-2',
@@ -7,4 +8,5 @@ export const AVATAR_IDS = [
   'avatar-6',
 ] as const;
 
+/** Union of the built-in avatar identifiers accepted by profile settings. */
 export type AvatarId = (typeof AVATAR_IDS)[number];

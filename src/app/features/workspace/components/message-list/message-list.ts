@@ -6,6 +6,7 @@ import { messageDateLabel, sameMessageDay } from '../../../../core/utils/timesta
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { MessageItem } from '../message-item/message-item';
 
+/** Renders the message stream and forwards message-level actions. */
 @Component({
   selector: 'app-message-list',
   imports: [MessageItem, Avatar],

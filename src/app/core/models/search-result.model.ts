@@ -2,6 +2,7 @@ import { ConversationTarget } from './conversation.model';
 import { Message } from './message.model';
 import { UserProfile } from './user-profile.model';
 
+/** Search entry for a user, channel, or accessible message. */
 export type SearchResult =
   | {
       type: 'user';

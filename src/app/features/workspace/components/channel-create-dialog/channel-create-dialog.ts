@@ -11,6 +11,7 @@ import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { firebaseErrorMessage } from '../../../../core/utils/firebase-error.util';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
+/** Collects and validates the data required to create a channel. */
 @Component({
   selector: 'app-channel-create-dialog',
   imports: [InputCaretDirective, ReactiveFormsModule, Avatar],

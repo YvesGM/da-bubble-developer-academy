@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+/** Renders a user avatar from the application's configured avatar assets. */
 @Component({
   selector: 'app-avatar',
   templateUrl: './avatar.html',

@@ -25,6 +25,12 @@ const target = resolve(root, 'src/environments/environment.generated.ts');
 mkdirSync(dirname(target), { recursive: true });
 writeFileSync(target, renderConfig(values), 'utf8');
 
+/**
+ * Merges local environment files in order, letting later files override earlier ones.
+ *
+ * @param {string[]} paths - Environment-file paths relative to the project root.
+ * @returns {Record<string, string>} Parsed environment variables.
+ */
 function loadEnvFiles(paths) {
   return paths.reduce((result, path) => {
     const fullPath = resolve(root, path);
@@ -33,6 +39,12 @@ function loadEnvFiles(paths) {
   }, {});
 }
 
+/**
+ * Parses simple KEY=VALUE environment lines while ignoring comments and blank lines.
+ *
+ * @param {string} content - Raw contents of a local environment file.
+ * @returns {Record<string, string>} Parsed keys and unquoted values.
+ */
 function parseEnv(content) {
   return Object.fromEntries(
     content
@@ -46,6 +58,12 @@ function parseEnv(content) {
   );
 }
 
+/**
+ * Removes a matching pair of surrounding single or double quotation marks.
+ *
+ * @param {string} value - Raw environment variable value.
+ * @returns {string} Value without matching surrounding quotes.
+ */
 function unquote(value) {
   if (value.length < 2) return value;
   const quoted = (value.startsWith('"') && value.endsWith('"'))
@@ -53,6 +71,12 @@ function unquote(value) {
   return quoted ? value.slice(1, -1) : value;
 }
 
+/**
+ * Renders the frontend Firebase configuration without exposing other env values.
+ *
+ * @param {Record<string, string>} env - Validated environment variable map.
+ * @returns {string} Generated TypeScript source for the Firebase config.
+ */
 function renderConfig(env) {
   const config = {
     apiKey: env.FIREBASE_API_KEY,

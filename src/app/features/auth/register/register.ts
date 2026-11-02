@@ -9,6 +9,7 @@ import { Avatar } from '../../../shared/components/avatar/avatar';
 import { AuthShell } from '../components/auth-shell/auth-shell';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
+/** Handles account registration and avatar selection. */
 @Component({
   selector: 'app-register',
   host: { '[class.register-leaving]': 'leaving()' },
@@ -148,12 +149,21 @@ export class Register {
     }
   }
 
-  /** Respects the OS preference for reduced motion. */
+  /**
+   * Respects the OS preference for reduced motion.
+   *
+   * @returns Whether navigation animations should be minimized.
+   */
   private reducedMotion(): boolean {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  /** Keeps the success notice readable independently of Firebase response speed. */
+  /**
+   * Keeps the success notice readable independently of Firebase response speed.
+   *
+   * @param milliseconds - Minimum display time for the notice.
+   * @returns Promise that resolves after the configured delay.
+   */
   private delay(milliseconds: number): Promise<void> {
     return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   }

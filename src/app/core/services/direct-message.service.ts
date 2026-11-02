@@ -15,6 +15,7 @@ import { Observable, map } from 'rxjs';
 
 import { DirectMessage } from '../models/direct-message.model';
 
+/** Reads and creates private conversations for registered Firebase users. */
 @Injectable({ providedIn: 'root' })
 export class DirectMessageService {
   private readonly auth = inject(Auth);
@@ -64,6 +65,9 @@ export class DirectMessageService {
   /**
    * Firestore may deny reading a missing DM because its read rule checks
    * resource.data.participantIds. Creation is separately authorized.
+   *
+   * @param error - Firestore error raised while checking a missing conversation.
+   * @returns Whether the error matches the known permission-denied case.
    */
   private isMissingDocumentReadDenied(error: unknown): boolean {
     return error instanceof Error && 'code' in error

@@ -6,6 +6,7 @@ import { Observable, map } from 'rxjs';
 import { DEFAULT_RECENT_EMOJIS } from '../constants/emoji.constants';
 import { UserProfile } from '../models/user-profile.model';
 
+/** Synchronizes Firebase user identities with application profiles. */
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private readonly auth = inject(Auth);

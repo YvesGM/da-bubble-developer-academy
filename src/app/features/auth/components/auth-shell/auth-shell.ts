@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+/** Provides the shared responsive layout for authentication screens. */
 @Component({
   selector: 'app-auth-shell',
   imports: [RouterLink],

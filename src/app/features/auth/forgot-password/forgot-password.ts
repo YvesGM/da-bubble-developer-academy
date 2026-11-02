@@ -7,6 +7,7 @@ import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { AuthShell } from '../components/auth-shell/auth-shell';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
+/** Submits password-reset requests and displays neutral delivery feedback. */
 @Component({
   selector: 'app-forgot-password',
   imports: [InputCaretDirective, ReactiveFormsModule, RouterLink, AuthShell],

@@ -2,7 +2,11 @@ import { cpSync, mkdirSync, rmSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-/** Stages server-side PHP files after Angular builds without copying credentials. */
+/**
+ * Stages server-side PHP files after Angular builds without copying credentials.
+ *
+ * @param {string} projectRoot - Absolute or relative DABubble project directory.
+ */
 export function stageResetApi(projectRoot) {
   const base = resolve(projectRoot, 'backend/password-reset');
   const output = resolve(projectRoot, 'dist/dabubble/browser/api');

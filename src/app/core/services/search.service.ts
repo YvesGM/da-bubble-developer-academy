@@ -12,6 +12,7 @@ import { DirectMessageService } from './direct-message.service';
 import { MessageService } from './message.service';
 import { UserService } from './user.service';
 
+/** Builds search results from accessible users, channels, and messages. */
 @Injectable({ providedIn: 'root' })
 export class SearchService {
   private readonly auth = inject(Auth);

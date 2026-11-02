@@ -15,6 +15,7 @@ import { Observable, map } from 'rxjs';
 import { ConversationTarget, conversationDocumentPath } from '../models/conversation.model';
 import { MessageReaction, ReactionGroup } from '../models/reaction.model';
 
+/** Persists and groups emoji reactions on messages and replies. */
 @Injectable({ providedIn: 'root' })
 export class ReactionService {
   private readonly auth = inject(Auth);

@@ -4,6 +4,7 @@ import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 
+/** Displays the members of a channel. */
 @Component({
   selector: 'app-channel-members-dialog',
   imports: [Avatar, PresenceIndicator],

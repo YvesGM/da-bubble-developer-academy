@@ -6,8 +6,8 @@ import { CanActivateFn, Router, UrlTree } from '@angular/router';
 /**
  * Evaluates participant membership on a direct-message document.
  *
- * @param data Raw Firestore document data.
- * @param uid Firebase uid of the user requesting access.
+ * @param data - Raw Firestore document data.
+ * @param uid - Firebase uid of the user requesting access.
  * @returns `true` when `participantIds` is an array containing the uid.
  */
 function hasAccess(data: unknown, uid: string): boolean {
@@ -19,10 +19,10 @@ function hasAccess(data: unknown, uid: string): boolean {
 /**
  * Reads a direct-message document inside the Firebase injection context.
  *
- * @param firestore Firebase Firestore instance.
- * @param injector Angular environment injector.
- * @param dmId Requested conversation identifier.
- * @param uid Current registered user's identifier.
+ * @param firestore - Firebase Firestore instance.
+ * @param injector - Angular environment injector.
+ * @param dmId - Requested conversation identifier.
+ * @param uid - Current registered user's identifier.
  * @returns Whether the user is a participant in this conversation.
  */
 async function canReadConversation(
@@ -34,7 +34,6 @@ async function canReadConversation(
   try {
     const reference = runInInjectionContext(injector, () => doc(firestore, 'directMessages', dmId));
     const snapshot = await runInInjectionContext(injector, () => getDoc(reference));
-    
     return snapshot.exists() && hasAccess(snapshot.data(), uid);
   } catch {
     return false;
@@ -44,7 +43,7 @@ async function canReadConversation(
 /**
  * Allows registered users to open only their own direct-message conversations.
  *
- * @param route Route snapshot containing the direct-message identifier.
+ * @param route - Route snapshot containing the direct-message identifier.
  * @returns True for members; otherwise a redirect to the workspace.
  */
 export const directMessageGuard: CanActivateFn = async (route): Promise<boolean | UrlTree> => {

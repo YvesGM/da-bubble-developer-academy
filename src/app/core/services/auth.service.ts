@@ -20,6 +20,7 @@ import {
 
 import { UserService } from './user.service';
 
+/** Coordinates Firebase authentication and password-reset operations. */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly auth = inject(Auth);
@@ -92,6 +93,9 @@ export class AuthService {
   /**
    * Sends reset requests to ALL-INKL from both the Akademie and portfolio sites.
    * Local development still uses the existing /api proxy.
+   *
+   * @param email - Account email address for the password-reset request.
+   * @throws If the endpoint fails or returns an unexpected response.
    */
   async sendPasswordReset(email: string): Promise<void> {
     const response = await fetch(this.passwordResetEndpoint(), {
@@ -99,6 +103,16 @@ export class AuthService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     });
+    await this.validatePasswordResetResponse(response);
+  }
+
+  /**
+   * Validates the neutral response contract of the password-reset API.
+   *
+   * @param response - HTTP response returned by the configured endpoint.
+   * @throws If transport or response validation fails.
+   */
+  private async validatePasswordResetResponse(response: Response): Promise<void> {
     if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) {
       throw new Error('Password reset endpoint unavailable');
     }
@@ -109,7 +123,11 @@ export class AuthService {
     }
   }
 
-  /** Returns the remote API, keeping the local PHP development proxy intact. */
+  /**
+   * Returns the remote API, keeping the local PHP development proxy intact.
+   *
+   * @returns Password-reset endpoint for the current deployment environment.
+   */
   private passwordResetEndpoint(): string {
     const local = ['localhost', '127.0.0.1'].includes(window.location.hostname);
     return local ? '/api/request-password-reset.php'

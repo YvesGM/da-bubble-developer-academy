@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Channel, UpdateChannelInput } from '../../../../core/models/channel.model';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
+/** Displays and manages channel details and settings. */
 @Component({
   selector: 'app-channel-details-dialog',
   imports: [InputCaretDirective, ReactiveFormsModule],
@@ -13,6 +14,11 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
 export class ChannelDetailsDialog {
   private readonly formBuilder = inject(FormBuilder);
 
+  /**
+   * Refreshes the editor when a different channel is displayed.
+   *
+   * @param value - Channel whose name and description populate the form.
+   */
   @Input({ required: true }) set channel(value: Channel) {
     this.form.setValue({ name: value.name, description: value.description });
     this.editingName.set(false);

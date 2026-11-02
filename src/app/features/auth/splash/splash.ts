@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 type LogoTargets = [HTMLImageElement, HTMLImageElement];
 
+/** Animates the application intro while authentication state is restored. */
 @Component({
   selector: 'app-splash',
   templateUrl: './splash.html',
@@ -28,11 +29,7 @@ export class Splash implements AfterViewInit {
   private async continue(): Promise<void> {
     try {
       await Promise.all([this.auth.authStateReady(), this.delay(1500)]);
-      const destination = this.auth.currentUser ? '/workspace' : '/login';
-      if (this.router.url !== destination) {
-        const navigated = await this.router.navigateByUrl(destination);
-        if (!navigated) throw new Error('Splash destination navigation was cancelled');
-      }
+      await this.navigateToDestination();
       await this.waitForLayout();
       await this.playOutro();
     } catch (error) {
@@ -40,6 +37,14 @@ export class Splash implements AfterViewInit {
     } finally {
       this.finished.emit();
     }
+  }
+
+  /** Navigates underneath the splash overlay after Firebase restores the session. */
+  private async navigateToDestination(): Promise<void> {
+    const destination = this.auth.currentUser ? '/workspace' : '/login';
+    if (this.router.url === destination) return;
+    const navigated = await this.router.navigateByUrl(destination);
+    if (!navigated) throw new Error('Splash destination navigation was cancelled');
   }
 
   /** Fades the backdrop while each logo asset travels to its real header slot. */
@@ -58,7 +63,11 @@ export class Splash implements AfterViewInit {
     }
   }
 
-  /** Identifies the actual auth or workspace header logo, including responsive sizes. */
+  /**
+   * Identifies the actual auth or workspace header logo, including responsive sizes.
+   *
+   * @returns Both destination elements, or null when neither can be animated.
+   */
   private findLogoTargets(): LogoTargets | null {
     const mark = document.querySelector<HTMLImageElement>(
       '.auth-brand-mark, .workspace-header .brand-mark',
@@ -71,7 +80,13 @@ export class Splash implements AfterViewInit {
     return [mark, name];
   }
 
-  /** Animates the two logo elements independently to avoid distorted scaling. */
+  /**
+   * Animates the two logo elements independently to avoid distorted scaling.
+   *
+   * @param targets - Visible destination logo elements.
+   * @param animations - Shared collection of running animations.
+   * @param duration - Transition duration in milliseconds.
+   */
   private animateLogo(targets: LogoTargets, animations: Animation[], duration: number): void {
     targets.forEach((target) => { target.style.visibility = 'hidden'; });
     animations.push(this.moveTo(this.mark.nativeElement, targets[0], duration));
@@ -82,7 +97,12 @@ export class Splash implements AfterViewInit {
     ));
   }
 
-  /** Gracefully fades the logo if the destination has no visible header brand. */
+  /**
+   * Fades the logo if the destination has no visible header brand.
+   *
+   * @param animations - Shared collection of running animations.
+   * @param duration - Fade duration in milliseconds.
+   */
   private fadeLogo(animations: Animation[], duration: number): void {
     for (const element of [this.mark.nativeElement, this.nameWindow.nativeElement]) {
       animations.push(element.animate(
@@ -91,7 +111,14 @@ export class Splash implements AfterViewInit {
     }
   }
 
-  /** Computes translation and scale from current bounds to target bounds. */
+  /**
+   * Computes translation and scale from current bounds to target bounds.
+   *
+   * @param source - Splash-screen logo element.
+   * @param target - Final header logo element.
+   * @param duration - Transition duration in milliseconds.
+   * @returns Browser animation representing the movement.
+   */
   private moveTo(source: HTMLElement, target: HTMLElement, duration: number): Animation {
     const start = source.getBoundingClientRect();
     const end = target.getBoundingClientRect();
@@ -105,7 +132,12 @@ export class Splash implements AfterViewInit {
     );
   }
 
-  /** Shared easing ensures text and symbol arrive at the same time. */
+  /**
+   * Uses shared easing so text and symbol arrive at the same time.
+   *
+   * @param duration - Animation duration in milliseconds.
+   * @returns Shared keyframe timing and fill options.
+   */
   private animationOptions(duration: number): KeyframeAnimationOptions {
     return { duration, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'forwards' };
   }
@@ -117,7 +149,12 @@ export class Splash implements AfterViewInit {
     });
   }
 
-  /** Preserves the existing minimum intro duration. */
+  /**
+   * Preserves the existing minimum intro duration.
+   *
+   * @param milliseconds - Minimum wait time before proceeding.
+   * @returns Promise that resolves when the wait has elapsed.
+   */
   private delay(milliseconds: number): Promise<void> {
     return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   }

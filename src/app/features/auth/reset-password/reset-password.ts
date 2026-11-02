@@ -8,6 +8,7 @@ import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { AuthShell } from '../components/auth-shell/auth-shell';
 
+/** Validates and completes Firebase password-reset actions. */
 @Component({
   selector: 'app-reset-password',
   host: { '[class.reset-leaving]': 'leaving()' },
@@ -83,24 +84,37 @@ export class ResetPassword {
       await this.delay(1600);
       await this.navigateToLogin();
     } catch (error) {
-      if (this.completed()) {
-        this.errorMessage.set('Passwort geändert. Bitte zur Anmeldung wechseln.');
-      } else {
-        this.errorMessage.set(firebaseErrorMessage(error, 'Das Passwort konnte nicht geändert werden.'));
-      }
+      this.reportResetFailure(error);
     } finally {
       this.submitting.set(false);
     }
   }
 
+  /**
+   * Reports reset failures without falsely presenting a completed password change as failed.
+   *
+   * @param error - Firebase or navigation error raised during the reset flow.
+   */
+  private reportResetFailure(error: unknown): void {
+    const message = this.completed()
+      ? 'Passwort geändert. Bitte zur Anmeldung wechseln.'
+      : firebaseErrorMessage(error, 'Das Passwort konnte nicht geändert werden.');
+    this.errorMessage.set(message);
+  }
+
   /** Displays the success overlay before a reduced-motion-aware route change. */
   private async navigateToLogin(): Promise<void> {
     const page = document as ViewTransitionDocument;
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && page.startViewTransition) {
+    if (!this.prefersReducedMotion() && page.startViewTransition) {
       await page.startViewTransition(() => this.openLogin()).finished;
       return;
     }
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    await this.navigateWithoutViewTransition();
+  }
+
+  /** Runs the existing CSS and Web Animations fallback for route transitions. */
+  private async navigateWithoutViewTransition(): Promise<void> {
+    if (!this.prefersReducedMotion()) {
       this.leaving.set(true);
       await this.delay(300);
     }
@@ -110,6 +124,15 @@ export class ResetPassword {
     });
   }
 
+  /**
+   * Checks whether the operating system requests reduced motion.
+   *
+   * @returns Whether transition animations should be skipped.
+   */
+  private prefersReducedMotion(): boolean {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
   /** Propagates a cancelled navigation rather than silently treating it as success. */
   private async openLogin(): Promise<void> {
     if (!await this.router.navigateByUrl('/login')) {
@@ -117,17 +140,30 @@ export class ResetPassword {
     }
   }
 
-  /** Returns the code from the Firebase reset link without persisting it. */
+  /**
+   * Reads the code from the Firebase reset link without persisting it.
+   *
+   * @returns One-time Firebase action code from the current route.
+   */
   private resetCode(): string {
     return this.route.snapshot.queryParamMap.get('oobCode') ?? '';
   }
 
-  /** Matches the button's enabled state to Figma's confirmed-password state. */
+  /**
+   * Matches the button's enabled state to Figma's confirmed-password state.
+   *
+   * @returns Whether both submitted password values are identical.
+   */
   passwordsMatch(): boolean {
     return this.form.controls.password.value === this.form.controls.confirmPassword.value;
   }
 
-  /** Keeps the status toast readable before leaving the screen. */
+  /**
+   * Keeps the status toast readable before leaving the screen.
+   *
+   * @param ms - Minimum duration in milliseconds.
+   * @returns Promise that resolves after the delay.
+   */
   private delay(ms: number): Promise<void> {
     return new Promise((resolve) => window.setTimeout(resolve, ms));
   }

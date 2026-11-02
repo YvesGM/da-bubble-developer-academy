@@ -5,6 +5,7 @@ import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { SearchBox } from '../search-box/search-box';
 
+/** Displays workspace navigation and the current user's controls. */
 @Component({
   selector: 'app-workspace-header',
   imports: [Avatar, RouterLink, SearchBox],

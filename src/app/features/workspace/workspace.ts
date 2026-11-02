@@ -17,6 +17,7 @@ import { WorkspaceHeader } from './components/workspace-header/workspace-header'
 import { WorkspaceNameDialog } from './components/workspace-name-dialog/workspace-name-dialog';
 import { WorkspaceSidebar } from './components/workspace-sidebar/workspace-sidebar';
 
+/** Coordinates workspace navigation, search, and responsive panels. */
 @Component({
   selector: 'app-workspace',
   imports: [

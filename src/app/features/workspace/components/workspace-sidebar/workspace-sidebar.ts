@@ -7,6 +7,7 @@ import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 
+/** Navigates channels and direct-message conversations. */
 @Component({
   selector: 'app-workspace-sidebar',
   imports: [RouterLink, RouterLinkActive, Avatar, PresenceIndicator],
@@ -41,14 +42,23 @@ export class WorkspaceSidebar {
     this.directMessagesExpanded.update((expanded) => !expanded);
   }
 
-  /** Shows the signed-in user first, followed by the existing sorted user list. */
+  /**
+   * Shows the signed-in user first, followed by the existing sorted user list.
+   *
+   * @returns User profiles in the sidebar's display order.
+   */
   visibleUsers(): UserProfile[] {
     const self = this.users.find((user) => user.uid === this.currentUserId);
     const others = this.users.filter((user) => user.uid !== this.currentUserId);
     return self ? [self, ...others] : others;
   }
 
-  /** Highlights the user whose existing conversation matches the current DM route. */
+  /**
+   * Highlights the user whose existing conversation matches the current DM route.
+   *
+   * @param uid - User ID from the sidebar.
+   * @returns Whether the current route opens this user's conversation.
+   */
   isActiveUser(uid: string): boolean {
     return this.directMessages.some((dm) => {
       const partner = dm.participantIds.find((id) => id !== this.currentUserId)
@@ -57,7 +67,12 @@ export class WorkspaceSidebar {
     });
   }
 
-  /** Labels the current user's personal conversation as shown in the Figma menu. */
+  /**
+   * Labels the current user's personal conversation as shown in the Figma menu.
+   *
+   * @param user - Profile to display in the sidebar.
+   * @returns Display name with the current-user suffix when applicable.
+   */
   userLabel(user: UserProfile): string {
     return user.displayName + (user.uid === this.currentUserId ? ' (Du)' : '');
   }

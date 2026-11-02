@@ -8,6 +8,7 @@ import { UserService } from '../../../core/services/user.service';
 import { Avatar } from '../../../shared/components/avatar/avatar';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
+/** Edits the authenticated user's public profile information. */
 @Component({
   selector: 'app-profile-dialog',
   imports: [InputCaretDirective, ReactiveFormsModule, Avatar],

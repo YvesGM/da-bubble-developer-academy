@@ -4,6 +4,7 @@ import { of, switchMap } from 'rxjs';
 
 import { PresenceService } from '../../../core/services/presence.service';
 
+/** Displays the live presence state of a workspace user. */
 @Component({
   selector: 'app-presence-indicator',
   templateUrl: './presence-indicator.html',
