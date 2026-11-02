@@ -86,7 +86,7 @@
 
     @if (canInteract()) {
       <div class="actions" aria-label="Nachrichtenaktionen">
-        @for (emoji of quickReactions; track emoji) {
+        @for (emoji of quickReactions(); track emoji) {
           <button type="button" class="icon-action quick-reaction" [attr.aria-label]="'Mit ' + emoji + ' reagieren'" (click)="toggleReaction(emoji)">
             @if (emoji === '✅') {
               <span class="quick-check" aria-hidden="true">✓</span>
