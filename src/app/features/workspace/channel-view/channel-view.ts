@@ -24,7 +24,12 @@ import { ChannelDetailsDialog } from '../components/channel-details-dialog/chann
 import { ChannelMembersDialog } from '../components/channel-members-dialog/channel-members-dialog';
 import { ChatPanel } from '../components/chat-panel/chat-panel';
 
-/** Connects a channel route to its messages and membership controls. */
+/**
+ * Loads a channel from the route and connects it to chat and membership controls.
+ *
+ * Signals derive visible members, access options, and empty-state copy;
+ * channel details and member dialogs are managed here for this route.
+ */
 @Component({
   selector: 'app-channel-view',
   imports: [
@@ -50,25 +55,37 @@ export class ChannelView {
   private readonly router = inject(Router);
   private readonly usersService = inject(UserService);
 
+  /** Channel identifier derived reactively from the current route. */
   readonly channelId = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('channelId') ?? '')),
     { initialValue: this.route.snapshot.paramMap.get('channelId') ?? '' },
   );
+  /** Metadata stream for the selected channel. */
   readonly channel = toSignal(
     this.route.paramMap.pipe(
       map((params) => params.get('channelId') ?? ''),
       switchMap((id) => this.channels.observeChannel(id)),
     ),
   );
+  /** Current workspace profiles used to resolve member names and avatars. */
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
+  /** Profiles currently belonging to the selected channel. */
   readonly members = computed(() => this.users().filter((user) => this.isChannelMember(user.uid)));
+  /** Registered profiles eligible to be invited to this channel. */
   readonly availableUsers = computed(() => this.users().filter((user) => !user.isGuest && !this.isChannelMember(user.uid)));
+  /** Subset of members displayed in the compact header avatar stack. */
   readonly visibleMembers = computed(() => this.members().slice(0, 5));
+  /** Display name of the user who created this channel. */
   readonly creatorName = computed(() => this.findUser(this.channel()?.creatorId)?.displayName ?? 'Unbekannter Benutzer');
+  /** Total number of visible members, including enabled guest access. */
   readonly memberCount = computed(() => this.members().length + (this.channel()?.guestAccess ? 1 : 0));
+  /** Count of members beyond the compact avatar-stack limit. */
   readonly overflowCount = computed(() => Math.max(0, this.memberCount() - 5));
+  /** Conversation target passed to messaging, reactions, and navigation. */
   readonly target = computed<ConversationTarget>(() => ({ type: 'channel', id: this.channelId() }));
+  /** Heading shown when the conversation has no messages. */
   readonly emptyTitle = computed(() => `# ${this.channel()?.name ?? ''}`);
+  /** Explanatory copy for a newly created or empty conversation. */
   readonly emptyText = computed(() => {
     const channel = this.channel();
     const introduction = 'Das ist der Anfang des Channels';
@@ -77,14 +94,23 @@ export class ChannelView {
     return `Du hast diesen Channel${when ? ' ' + when : ''} erstellt. ${introduction}`;
   });
 
+  /** Whether the channel details editor is open. */
   readonly showDetails = signal(false);
+  /** Whether the channel member list popover is open. */
   readonly showMembers = signal(false);
+  /** Whether the add-members selection dialog is open. */
   readonly showAddMembers = signal(false);
+  /** Viewport anchor coordinates for the add-members dialog. */
   readonly addMembersPosition = signal({ top: 100, right: 24 });
+  /** Viewport anchor coordinates for the member-list popover. */
   readonly membersPosition = signal({ top: 100, right: 24 });
+  /** Viewport anchor coordinates for the channel details editor. */
   readonly detailsPosition = signal({ top: 100, left: 24 });
+  /** Channel member selected for a profile preview. */
   readonly selectedUser = signal<UserProfile | null>(null);
+  /** Whether the current user's profile editing dialog is open. */
   readonly showProfileEditor = signal(false);
+  /** Channel-operation failure shown in the channel UI. */
   readonly channelError = signal('');
 
   /**
