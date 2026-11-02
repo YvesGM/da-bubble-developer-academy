@@ -26,8 +26,11 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
 export class ChannelCreateDialog {
   /** Firebase auth context used to identify the current channel creator. */
   readonly auth = inject(Auth);
+  /** Channel service used to load membership and update the current channel. */
   private readonly channels = inject(ChannelService);
+  /** Angular form builder used to create typed and validated controls. */
   private readonly formBuilder = inject(FormBuilder);
+  /** User service used to load candidates and persist profile data. */
   private readonly userService = inject(UserService);
 
   /** Workspace display name shown in headings and dialogs. */
