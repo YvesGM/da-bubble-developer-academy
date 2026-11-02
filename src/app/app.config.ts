@@ -13,7 +13,11 @@ import { firebaseConfig } from '../environments/environment.generated';
 import { routes } from './app.routes';
 
 /**
- * Configures global routing, error handling, and Firebase services.
+ * Provides the application-wide services required by the Angular root.
+ *
+ * Routing uses the protected route definitions from `app.routes`. A single
+ * Firebase web app initializes Authentication, Firestore, and Realtime Database
+ * with the configuration generated during the local or CI build.
  */
 export const appConfig: ApplicationConfig = {
   providers: [
