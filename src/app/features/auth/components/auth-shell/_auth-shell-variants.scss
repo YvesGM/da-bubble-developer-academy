@@ -2,103 +2,105 @@
 @use '../../../../../styles/breakpoints' as bp;
 
 // Auth-shell variants for login, registration, and password recovery.
-@mixin styles {
-    &--login,
-    &--register {
-      padding: 72px 24px 48px;
+@mixin login-register-layout($mobile-brand-gap, $mobile-name-width) {
+  padding: 72px 24px 48px;
 
-      .auth-shell-header {
-        top: 75px;
-        left: 75px;
+  .auth-shell-header {
+    top: 75px;
+    left: 75px;
+  }
+
+  .auth-brand {
+    gap: 16px;
+    &-mark {
+      width: 70px;
+      height: 70px;
+    }
+
+    &-name {
+      width: 156px;
+    }
+  }
+
+  .auth-shell-stage {
+    flex: 1 0 auto;
+  }
+
+  .auth-shell-footer {
+    margin-top: 32px;
+  }
+
+  @media (min-width: 801px) and (max-width: 1599px) {
+    padding-top: 48px;
+
+    .auth-shell-header {
+      top: 48px;
+      left: 48px;
+    }
+    .auth-brand {
+      gap: 12px;
+
+      &-mark {
+        width: 56px;
+        height: 56px;
       }
 
-      .auth-brand {
-        gap: 16px;
-        &-mark {
-          width: 70px;
-          height: 70px;
-        }
-
-        &-name {
-          width: 156px;
-        }
-      }
-
-      .auth-shell-stage {
-        flex: 1 0 auto;
-      }
-
-      .auth-shell-footer {
-        margin-top: 32px;
-      }
-
-      @media (min-width: 801px) and (max-width: 1599px) {
-        padding-top: 48px;
-
-        .auth-shell-header {
-          top: 48px;
-          left: 48px;
-        }
-        .auth-brand {
-          gap: 12px;
-
-          &-mark {
-            width: 56px;
-            height: 56px;
-          }
-
-          &-name {
-            width: 145px;
-          }
-        }
-      }
-
-      @include bp.mobile {
-        padding: 24px 16px 30px;
-
-        .auth-shell-header {
-          position: static;
-          justify-content: center;
-          flex: none;
-          width: 100%;
-        }
-
-        .auth-brand {
-          gap: 13px;
-          &-mark {
-            width: 56px;
-            height: 56px;
-          }
-
-          &-name {
-            width: 135px;
-          }
-        }
-
-        .auth-shell-stage {
-          display: block;
-          flex: none;
-          width: min(398px, 100%);
-          min-height: 0;
-          padding: 0;
-        }
-
-        .auth-shell-footer {
-          flex: none;
-          margin: 0;
-          gap: 16px;
-        }
-      }
-
-      @media (max-width: 370px) {
-        padding-inline: 12px;
-
-        .auth-shell-footer {
-          gap: 4px;
-        }
+      &-name {
+        width: 145px;
       }
     }
+  }
+
+  @include bp.mobile {
+    padding: 24px 16px 30px;
+
+    .auth-shell-header {
+      position: static;
+      justify-content: center;
+      flex: none;
+      width: 100%;
+    }
+
+    .auth-brand {
+      gap: $mobile-brand-gap;
+      &-mark {
+        width: 56px;
+        height: 56px;
+      }
+
+      &-name {
+        width: $mobile-name-width;
+      }
+    }
+
+    .auth-shell-stage {
+      display: block;
+      flex: none;
+      width: min(398px, 100%);
+      min-height: 0;
+      padding: 0;
+    }
+
+    .auth-shell-footer {
+      flex: none;
+      margin: 0;
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 370px) {
+    padding-inline: 12px;
+
+    .auth-shell-footer {
+      gap: 4px;
+    }
+  }
+}
+
+@mixin styles {
+
     &--login {
+      @include login-register-layout(12.8px, 135.3px);
       @include bp.widescreen {
         .auth-shell-stage {
           padding-top: 52px;
@@ -133,14 +135,6 @@
       @include bp.mobile {
         gap: 32px;
         padding-top: clamp(24px, calc(100dvh - 860px), 72px);
-
-        .auth-brand {
-          gap: 12.8px;
-
-          &-name {
-            width: 135.3px;
-          }
-        }
 
         .auth-signup-prompt {
           position: static;
@@ -180,6 +174,7 @@
     }
 
     &--register {
+      @include login-register-layout(13px, 135px);
       @include bp.widescreen {
         .auth-shell-stage {
           padding-top: 84px;
