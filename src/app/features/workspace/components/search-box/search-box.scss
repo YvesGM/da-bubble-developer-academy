@@ -84,10 +84,13 @@
       }
     }
 
-    span,
+    span {
+      font-size: 16px;
+      color: tokens.$text-gray;
+    }
+
     p {
       font-size: 16px;
-
       color: tokens.$text-gray;
     }
   }
@@ -98,12 +101,24 @@
       height: clamp(70px, 3.646vw, 112px);
       border-radius: 50px;
     }
-    .results span,
-    .results p { font-size: var(--ws-sidebar-item, 16px); }
+    .results {
+      span {
+        font-size: var(--ws-sidebar-item, 16px);
+      }
+
+      p {
+        font-size: var(--ws-sidebar-item, 16px);
+      }
+    }
   }
 
-  .mobile-search-placeholder,
-  .mobile-search-header { display: none; }
+  .mobile-search-placeholder {
+    display: none;
+  }
+
+  .mobile-search-header {
+    display: none;
+  }
 
   .result-avatar {
     display: inline-flex;
