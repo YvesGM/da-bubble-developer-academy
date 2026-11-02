@@ -25,20 +25,34 @@ import { AfterViewInit, DestroyRef, Directive, ElementRef, Renderer2, inject } f
   },
 })
 export class InputCaretDirective implements AfterViewInit {
+  /** Native input or textarea controlled by this caret directive. */
   private readonly input = inject<ElementRef<HTMLInputElement | HTMLTextAreaElement>>(ElementRef).nativeElement;
+  /** Injected document used for caret elements and global event listeners. */
   private readonly document = inject(DOCUMENT);
+  /** Angular renderer used to create and remove the visual caret node. */
   private readonly renderer = inject(Renderer2);
+  /** Current browser window, or null when running without a DOM. */
   private readonly view = this.document.defaultView;
+  /** Angular lifecycle reference used to cancel timers or subscriptions on teardown. */
   private readonly destroyRef = inject(DestroyRef);
 
+  /** Single visual caret indicator inserted into the document body. */
   private caret: HTMLElement | null = null;
+  /** Canvas text-measurement context for single-line caret placement. */
   private context: CanvasRenderingContext2D | null = null;
+  /** Hidden input used when measuring masked password character widths. */
   private passwordMirror: HTMLInputElement | null = null;
+  /** Offscreen element reproducing textarea line breaks for caret coordinates. */
   private textMirror: HTMLDivElement | null = null;
+  /** Pending animation-frame request ID used to coalesce position updates. */
   private frame = 0;
+  /** Whether the custom caret is currently replacing the native indicator. */
   private active = false;
+  /** Original inline caret-color value restored when the directive deactivates. */
   private originalColor = '';
+  /** Original CSS priority of caret-color restored after deactivation. */
   private originalPriority = '';
+  /** Stable listener that schedules a visual caret reposition after scrolling. */
   private readonly onScroll = () => this.queueUpdate();
 
   /** Registers caret cleanup with the directive's Angular destruction lifecycle. */
