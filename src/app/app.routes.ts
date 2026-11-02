@@ -11,8 +11,7 @@ import { registeredUserGuard } from './core/guards/registered-user.guard';
 export const routes: Routes = [
   {
     path: 'login',
-    loadComponent: () =>
-      import('./features/auth/login/login').then((module) => module.Login),
+    loadComponent: () => import('./features/auth/login/login').then((module) => module.Login),
   },
   {
     path: 'register',
