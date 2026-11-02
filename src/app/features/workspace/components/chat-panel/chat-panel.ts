@@ -36,6 +36,7 @@ export class ChatPanel {
   readonly emptyText = input('Starte die Unterhaltung unten.');
   readonly emptyAvatarId = input('');
   readonly emptyAvatarName = input('');
+  readonly emptyMentionUser = input<UserProfile | null>(null);
   readonly mentionUsers = input<UserProfile[] | null>(null);
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });

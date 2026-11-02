@@ -26,6 +26,7 @@
       [emptyText]="isSelfConversation() ? 'Hier kannst du Notizen, Links und To-dos für dich festhalten.' : 'Diese Unterhaltung findet nur zwischen @' + (partner()?.displayName ?? 'einem Mitglied') + ' und dir statt.'"
       [emptyAvatarId]="partner()?.avatarId ?? ''"
       [emptyAvatarName]="partner()?.displayName ?? ''"
+      [emptyMentionUser]="isSelfConversation() ? null : (partner() ?? null)"
       (userRequested)="openProfile($event)"
     />
   </div>

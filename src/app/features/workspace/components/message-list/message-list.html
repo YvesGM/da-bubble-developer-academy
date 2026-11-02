@@ -17,7 +17,11 @@
         <app-avatar [avatarId]="emptyAvatarId" [name]="emptyAvatarName" size="large" />
       }
       <strong>{{ emptyTitle }}</strong>
-      <span>{{ emptyText }}</span>
+      @if (emptyMentionUser; as user) {
+        <span class="empty-description">Diese Unterhaltung findet nur zwischen <button type="button" class="empty-mention" (click)="userRequested.emit(user.uid)">&#64;{{ user.displayName }}</button> und dir statt.</span>
+      } @else {
+        <span>{{ emptyText }}</span>
+      }
     </div>
   }
 </section>

@@ -18,7 +18,7 @@
     background: tokens.$background;
     .actions {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateX(0) scale(1);
       pointer-events: auto;
     }
   }
@@ -34,7 +34,7 @@
     .actions {
       right: auto;
       left: var(--ws-message-inset, 45px);
-      border-radius: 20px 20px 0 20px;
+      border-radius: 30px 30px 0 30px;
     }
   }
   &-avatar {
@@ -121,7 +121,7 @@
   &:not(.own-message) .actions {
     right: clamp(43px, 2.24vw, 69px);
     left: auto;
-    border-radius: 20px 20px 0 20px;
+    border-radius: 30px 30px 0 30px;
   }
   .actions {
     display: flex;
@@ -137,17 +137,18 @@
     justify-content: space-evenly;
     background: tokens.$white;
     border: 1px solid tokens.$border;
-    border-radius: 20px 20px 0 20px;
+    border-radius: 30px 30px 0 30px;
     box-shadow: 0 2px 8px #0000000d;
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateX(10px) scale(0.96);
+    transform-origin: right center;
     pointer-events: none;
     transition:
       opacity tokens.$motion-fast,
       transform tokens.$motion-base;
     &:focus-within {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateX(0) scale(1);
       pointer-events: auto;
     }
     > button,

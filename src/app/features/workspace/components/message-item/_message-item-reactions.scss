@@ -39,11 +39,12 @@
     background: transparent;
     border: 0;
     border-radius: 50%;
-    transition: background-color tokens.$motion-base, transform tokens.$motion-fast;
+    transition: background-color tokens.$motion-base, box-shadow tokens.$motion-fast, transform tokens.$motion-fast;
     img { width: clamp(24px, 1.25vw, 38px); height: clamp(24px, 1.25vw, 38px); object-fit: contain; }
     &:hover,
     &:focus-visible {
-      background: tokens.$background;
+      background: tokens.$white;
+      box-shadow: 0 0 0 2px tokens.$white;
       transform: scale(1.05);
     }
   }

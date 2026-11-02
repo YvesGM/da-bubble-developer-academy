@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { ConversationTarget } from '../../../../core/models/conversation.model';
 import { Message } from '../../../../core/models/message.model';
+import { UserProfile } from '../../../../core/models/user-profile.model';
 import { messageDateLabel, sameMessageDay } from '../../../../core/utils/timestamp.util';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { MessageItem } from '../message-item/message-item';
@@ -21,6 +22,8 @@ export class MessageList {
   @Input() emptyText = 'Starte die Unterhaltung unten.';
   @Input() emptyAvatarId = '';
   @Input() emptyAvatarName = '';
+  /** Optional user mentioned in the empty-conversation introduction. */
+  @Input() emptyMentionUser: UserProfile | null = null;
   @Output() readonly threadRequested = new EventEmitter<Message>();
   @Output() readonly userRequested = new EventEmitter<string>();
 

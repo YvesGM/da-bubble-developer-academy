@@ -35,6 +35,20 @@
       color: tokens.$text;
       font-size: 19px;
     }
+    .empty-description { font-size: var(--ws-text, 18px); line-height: 1.4; }
+    .empty-mention {
+      padding: 0;
+      color: tokens.$purple-1;
+      background: transparent;
+      border: 0;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color tokens.$motion-fast;
+
+      &:hover,
+      &:focus-visible { color: tokens.$purple-2; text-decoration: underline; }
+    }
     app-avatar {
       --avatar-large-size: 80px;
       display: block;
