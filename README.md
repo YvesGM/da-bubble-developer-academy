@@ -28,6 +28,15 @@ npm start
 
 The application is available at `http://localhost:4200/`.
 
+### Firebase configuration
+
+Copy `.env.example` to `.env` and fill in the Firebase web-app configuration for local development.
+`npm start` and `npm run build` invoke `scripts/generate-environment.mjs` automatically.
+It creates `src/environments/environment.generated.ts`, which is **ignored by Git** and must not be committed.
+In GitHub Actions, the same values come from repository or environment secrets at build time.
+Firebase web-app configuration is shipped with the browser bundle by design; it is not a server credential.
+Keep Firebase Admin service-account keys, SMTP passwords, and other private credentials out of the frontend and the repository.
+
 ## Production build
 
 Create a production build with:
@@ -213,7 +222,6 @@ End-to-End-Test nach `npm run build` und `composer install`:
 
 Im Produktionsbetrieb **kein** `localhost` in `allowed_origins` aufnehmen.
 
-Zum Testen des Packaging-Skripts: `npm run test:reset`.
 Zum manuellen Staging nach `npm run build`:
 `node scripts/stage-password-reset.mjs`. Das Staging benötigt keinen lokalen
 `vendor/`-Ordner und enthält niemals Composer-Abhängigkeiten.
