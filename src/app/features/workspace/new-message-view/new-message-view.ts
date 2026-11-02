@@ -13,7 +13,12 @@ import { UserService } from '../../../core/services/user.service';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { MessageInput } from '../components/message-input/message-input';
 
-/** Selects recipients and prepares a message for a new conversation. */
+/**
+ * Lets a user choose a person or channel before starting a conversation.
+ *
+ * Recipient search, the initial draft, and subsequent navigation are coordinated
+ * here so messages reach the correct channel or direct-message target.
+ */
 @Component({
   selector: 'app-new-message-view',
   imports: [InputCaretDirective, RouterLink, MessageInput],
@@ -28,14 +33,23 @@ export class NewMessageView {
   private readonly router = inject(Router);
   private readonly usersService = inject(UserService);
 
+  /** Current search or mention query typed by the user. */
   readonly query = signal('');
+  /** User selected as the recipient of a new private conversation. */
   readonly selectedUser = signal<UserProfile | null>(null);
+  /** Channel selected as the destination of a new message. */
   readonly selectedChannel = signal<Channel | null>(null);
+  /** Workspace user profiles used to resolve visible names and avatar data. */
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
+  /** Channels accessible to the current account in this workspace. */
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
+  /** Profile stream for the currently authenticated account. */
   readonly profile = toSignal(this.usersService.observeCurrentProfile());
+  /** Recipient search mode inferred from @ or # query prefixes. */
   readonly mode = computed<'@' | '#'>(() => this.query().trim().startsWith('#') ? '#' : '@');
+  /** Whether a valid recipient is selected before composing. */
   readonly recipientSelected = computed(() => !!(this.selectedUser() || this.selectedChannel()));
+  /** Parent-provided asynchronous callback that sends a composed message. */
   readonly sendAction = (text: string): Promise<void> => this.sendNewMessage(text);
 
   /**
