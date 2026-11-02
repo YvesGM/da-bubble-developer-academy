@@ -9,7 +9,12 @@ import { Avatar } from '../../../shared/components/avatar/avatar';
 import { AuthShell } from '../components/auth-shell/auth-shell';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
-/** Handles account registration and avatar selection. */
+/**
+ * Guides account creation through credentials and avatar selection.
+ *
+ * The reactive form, step state, and submission status coordinate Firebase
+ * registration with the profile data required by the workspace.
+ */
 @Component({
   selector: 'app-register',
   host: { '[class.register-leaving]': 'leaving()' },
@@ -22,12 +27,19 @@ export class Register {
   private readonly formBuilder = inject(FormBuilder);
   private readonly router = inject(Router);
 
+  /** Built-in avatar IDs offered during profile setup. */
   readonly avatarIds = AVATAR_IDS;
+  /** Active step in the multi-stage registration or creation flow. */
   readonly step = signal<'details' | 'avatar'>('details');
+  /** Human-readable error currently shown in the form. */
   readonly errorMessage = signal('');
+  /** True while an asynchronous form submission is in progress. */
   readonly submitting = signal(false);
+  /** Progress marker for account creation and profile persistence. */
   readonly registrationStatus = signal<'creating' | 'success' | null>(null);
+  /** True while navigating away from a completed auth flow. */
   readonly leaving = signal(false);
+  /** Non-nullable reactive form holding the fields and validation state. */
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
