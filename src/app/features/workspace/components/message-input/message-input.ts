@@ -85,6 +85,12 @@ export class MessageInput implements AfterViewInit {
     this.closeSuggestions();
   }
 
+  /** Recalculates the draft height after viewport changes affect text wrapping. */
+  @HostListener('window:resize')
+  onViewportResize(): void {
+    this.resizeTextarea();
+  }
+
   /**
    * Applies initial focus to the message field when autofocus is enabled.
    */
