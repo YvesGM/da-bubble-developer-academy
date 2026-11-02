@@ -4,38 +4,198 @@
 .legal-page {
   min-height: 100dvh;
   padding: 56px 24px;
+  color: tokens.$text;
   background: tokens.$background;
 
+  &--imprint {
+    display: grid;
+    place-items: center;
+  }
+
   &-card {
-    width: min(760px, 100%);
-    margin: 0 auto;
-    padding: 40px;
+    width: min(725px, 100%);
+    min-height: 500px;
+    padding: 52px 60px 60px;
     background: tokens.$white;
     border-radius: 30px;
     box-shadow: 0 2px 10px #0000000a;
   }
 
-  h1 {
-    margin-top: 0;
+  &-back {
+    position: static;
+    width: 40px;
+    height: 40px;
+    margin: 0 0 28px -8px;
+  }
+
+  h1,
+  h2 {
+    font-weight: 700;
     color: tokens.$purple-1;
   }
 
-  a {
+  h1 {
+    margin: 0 0 14px;
+    font-size: 48px;
+    line-height: 1.2;
+  }
+
+  h2 {
+    margin: 0 0 12px;
+    font-size: 32px;
+    line-height: 1.25;
+  }
+
+  p,
+  &-address {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.35;
+  }
+
+  &-address {
+    display: flex;
+    flex-direction: column;
+    font-style: normal;
+    overflow-wrap: anywhere;
+  }
+
+  &-section {
+    margin-top: 56px;
+  }
+
+  &-section p + p {
+    margin-top: 8px;
+  }
+
+  &-note {
+    margin-top: 38px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: tokens.$text-gray;
+  }
+
+  &-placeholder {
+    overflow-wrap: anywhere;
+    text-decoration: underline dotted tokens.$purple-2;
+    text-underline-offset: 3px;
+  }
+
+  a:not(.legal-page-back) {
     color: tokens.$purple-2;
-    text-decoration: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 
     &:hover {
       color: tokens.$purple-1;
-      text-decoration: underline;
+    }
+  }
+
+  &--privacy {
+    padding: 72px clamp(24px, 10vw, 192px) 100px;
+
+    .legal-page-content {
+      position: relative;
+      width: 100%;
+      max-width: 1530px;
+      margin: 0 auto;
+    }
+
+    .legal-page-back {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 26px;
+    }
+
+    h2 {
+      margin-bottom: 12px;
+      font-size: 26px;
+    }
+
+    p,
+    li {
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    .legal-page-section {
+      margin-top: 36px;
+    }
+
+    .legal-page-section p + p {
+      margin-top: 14px;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 26px;
+    }
+
+    li + li {
+      margin-top: 8px;
+    }
+
+    .legal-page-note {
+      font-size: 16px;
     }
   }
 
   @include bp.mobile {
-    padding: 20px 16px;
+    padding: 24px 16px;
 
     &-card {
-      padding: 28px 22px;
+      min-height: 0;
+      padding: 28px 24px 36px;
       border-radius: 24px;
+    }
+
+    &-back {
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      font-size: 34px;
+    }
+
+    h2 {
+      font-size: 26px;
+    }
+
+    p,
+    &-address {
+      font-size: 17px;
+    }
+
+    &-section {
+      margin-top: 36px;
+    }
+
+    &--privacy {
+      padding: 38px 20px 64px;
+
+      h1 {
+        margin-bottom: 24px;
+        padding-right: 44px;
+        font-size: 36px;
+      }
+
+      h2 {
+        font-size: 23px;
+      }
+
+      p,
+      li {
+        font-size: 17px;
+      }
+
+      .legal-page-section {
+        margin-top: 30px;
+      }
     }
   }
 }

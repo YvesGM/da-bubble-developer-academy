@@ -1,10 +1,199 @@
-<main class="legal-page">
-  <section class="legal-page-card">
-    <a routerLink="/login">← Zurück zur Anmeldung</a>
-    <h1>Datenschutz</h1>
-    <p>
-      Die vollständige Datenschutzerklärung muss vor der Veröffentlichung mit den
-      tatsächlich eingesetzten Diensten und Betreiberangaben ergänzt und rechtlich geprüft werden.
+<main class="legal-page legal-page--privacy">
+  <article class="legal-page-content" aria-labelledby="privacy-title">
+    <a class="auth-back legal-page-back" routerLink="/login" aria-label="Zurück zur Anmeldung">
+      <span class="auth-back-icon" aria-hidden="true"></span>
+    </a>
+    <h1 id="privacy-title">Datenschutz</h1>
+
+    <section class="legal-page-section">
+      <h2>1. Verantwortliche Stelle</h2>
+      <p>
+        Verantwortlich für die Verarbeitung personenbezogener Daten im Zusammenhang
+        mit DABubble ist <span class="legal-page-placeholder">[Vor- und Nachname des Betreibers]</span>,
+        <span class="legal-page-placeholder">[Straße, Hausnummer, PLZ und Ort]</span>.
+        Kontakt: <span class="legal-page-placeholder">[Datenschutz-Kontakt-E-Mail]</span>.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>2. Worum es bei der Datenverarbeitung geht</h2>
+      <p>
+        DABubble ist eine webbasierte Kommunikationsanwendung mit Benutzerkonten,
+        Channels, Direktnachrichten und Online-Status. Wir verarbeiten personenbezogene
+        Daten, soweit dies für die Bereitstellung dieser Funktionen, die Kommunikation
+        zwischen Nutzenden und die Sicherheit der Anwendung erforderlich ist.
+      </p>
+      <p>
+        Rechtsgrundlagen sind je nach Verarbeitung insbesondere Art. 6 Abs. 1 lit. b
+        DSGVO (Bereitstellung der angeforderten Funktionen) und Art. 6 Abs. 1 lit. f
+        DSGVO (Betrieb, Stabilität und Schutz vor Missbrauch). Soweit eine Verarbeitung
+        auf einer Einwilligung beruht, gilt Art. 6 Abs. 1 lit. a DSGVO.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>3. Hosting und technische Zugriffsdaten</h2>
+      <p>
+        Die Website und das Backend für den Passwort-Reset werden über
+        ALL-INKL.COM bereitgestellt. Bei einem Seitenaufruf können technisch
+        erforderliche Verbindungsdaten anfallen, etwa IP-Adresse, Zeitpunkt,
+        angeforderte Adresse, Browserinformationen und Antwortstatus.
+        Diese Daten dienen der Auslieferung der Website, Fehleranalyse und Sicherheit.
+      </p>
+      <p>
+        Die konkrete Aufbewahrungsdauer der Hosting-Protokolle:
+        <span class="legal-page-placeholder">[Angaben des Hosting-Vertrags prüfen und ergänzen]</span>.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>4. Registrierung und Anmeldung</h2>
+      <p>
+        Für E-Mail-/Passwort-Anmeldungen, den optionalen Google-Login und den
+        Gastzugang verwenden wir Firebase Authentication von Google.
+        Dabei werden je nach Anmeldeart unter anderem E-Mail-Adresse,
+        Nutzerkennung, Authentifizierungsdaten und sicherheitsrelevante
+        Verbindungsinformationen verarbeitet. Die App speichert zusätzlich
+        Profilangaben wie Anzeigename, Avatar-Auswahl und Workspace-Name.
+      </p>
+      <p>
+        Die Verarbeitung erfolgt zur Verwaltung der Benutzerkonten und
+        zur Bereitstellung des geschützten Kommunikationsbereichs.
+        Ein Gastzugang erstellt eine anonyme Authentifizierungssitzung.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>5. Nachrichten, Channels und Profile</h2>
+      <p>
+        DABubble speichert über Cloud Firestore Nachrichten, Antworten,
+        Reaktionen, Channel-Informationen, Mitgliedschaften sowie zugehörige
+        Nutzerkennungen und Zeitstempel. Anzeigenamen und Avatare können
+        anderen Teilnehmenden angezeigt werden. Nachrichten sind für die
+        jeweiligen berechtigten Gesprächs- oder Channel-Mitglieder sichtbar.
+      </p>
+      <p>
+        Wenn eine Nachricht in der App gelöscht wird, wird ihr Text entfernt
+        und der Datensatz als gelöscht markiert. Technische Metadaten können
+        dabei erhalten bleiben. Einzelheiten zur endgültigen Löschung finden
+        sich unter „Speicherdauer und Löschung“.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>6. Online-Status</h2>
+      <p>
+        Über Firebase Realtime Database verarbeitet DABubble Verbindungskennungen,
+        den Online-Status und den Zeitpunkt der letzten Statusänderung.
+        Andere berechtigte Nutzende können daraus erkennen, ob ein Profil
+        gerade online ist. Diese Funktion dient der unmittelbaren Kommunikation.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>7. Anmeldung über Google</h2>
+      <p>
+        Wenn du dich freiwillig mit Google anmeldest, wird die Anmeldung über
+        deinen Google-Account abgewickelt. Dabei können Kontoinformationen
+        wie E-Mail-Adresse und Anzeigename an Firebase Authentication
+        übermittelt werden. Für die Datenverarbeitung durch Google im Rahmen
+        des Google-Kontos gelten ergänzend die Hinweise von Google.
+      </p>
+      <p>
+        Weitere Informationen findest du in den
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+          Datenschutzhinweisen von Google
+        </a>.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>8. Passwort-Zurücksetzen und E-Mail-Versand</h2>
+      <p>
+        Beim Anfordern eines neuen Passworts wird die eingegebene E-Mail-Adresse
+        an das Passwort-Reset-Backend übertragen. Dieses erstellt über Firebase
+        einen einmaligen Link und versendet ihn gegebenenfalls per SMTP-E-Mail.
+        Zum Schutz vor Missbrauch werden technische Prüf- und Rate-Limit-Daten
+        sowie pseudonyme Anfragenkennungen verarbeitet. Aus der Antwort des
+        Formulars lässt sich nicht erkennen, ob ein Konto zu einer Adresse existiert.
+      </p>
+      <p>
+        Für den Versand verwendeter Maildienst und die zugehörigen Löschfristen:
+        <span class="legal-page-placeholder">[SMTP-Anbieter und Fristen bestätigen]</span>.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>9. Technisch notwendige Speicherung im Browser</h2>
+      <p>
+        Für Anmeldung und Sitzungsverwaltung können Firebase und der Browser
+        technisch erforderliche Informationen lokal speichern. Diese dienen
+        insbesondere dazu, die Anmeldung zwischen Seitenaufrufen aufrechtzuerhalten.
+        Für unbedingt erforderliche Zugriffe auf Endgeräte gilt die Ausnahme
+        des § 25 Abs. 2 TDDDG. Etwaige zusätzliche, nicht erforderliche
+        Tracking-Technologien müssten gesondert bewertet werden.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>10. Dienstleister und Datenübermittlungen</h2>
+      <p>
+        Zu den eingesetzten Dienstleistern zählen der Hosting-Anbieter
+        ALL-INKL.COM und Google als Anbieter von Firebase Authentication,
+        Cloud Firestore und Realtime Database. Firebase Authentication
+        verarbeitet nach Angaben von Google Daten in den USA.
+        Für andere Firebase-Dienste hängt der Speicherort von der
+        Projektkonfiguration ab.
+      </p>
+      <p>
+        Die für DABubble eingestellten Datenbankregionen:
+        <span class="legal-page-placeholder">[Firestore- und Realtime-Database-Regionen eintragen]</span>.
+        Informationen zu den Datenschutz- und Übermittlungsbedingungen
+        veröffentlicht
+        <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer">
+          Firebase
+        </a>.
+        Die eingesetzten Auftragsverarbeitungsvereinbarungen und
+        Drittlandgarantien sind vor der finalen Veröffentlichung zu prüfen.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>11. Speicherdauer und Löschung</h2>
+      <p>
+        Personenbezogene Daten werden grundsätzlich nur so lange verarbeitet,
+        wie sie für den jeweiligen Zweck benötigt werden oder gesetzliche
+        Aufbewahrungspflichten bestehen. Das Entfernen eines Benutzerkontos
+        führt nicht zwangsläufig zur sofortigen Löschung bereits geteilter
+        Nachrichten und technischer Metadaten.
+      </p>
+      <p>
+        Das konkrete Konzept für Konto-, Nachrichten-, Status-, Sicherheits-
+        und Backup-Daten ist vor der finalen Veröffentlichung zu ergänzen:
+        <span class="legal-page-placeholder">[Löschwege und Aufbewahrungsfristen festlegen]</span>.
+      </p>
+    </section>
+
+    <section class="legal-page-section">
+      <h2>12. Deine Rechte</h2>
+      <p>
+        Du hast im Rahmen der gesetzlichen Voraussetzungen Rechte auf
+        Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17),
+        Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit
+        (Art. 20) sowie Widerspruch (Art. 21). Eine erteilte Einwilligung
+        kannst du jederzeit mit Wirkung für die Zukunft widerrufen.
+      </p>
+      <p>
+        Außerdem kannst du dich bei einer zuständigen Datenschutzaufsichtsbehörde
+        beschweren (Art. 77 DSGVO). Für Anfragen zu deinen Daten wende dich an
+        <span class="legal-page-placeholder">[Datenschutz-Kontakt-E-Mail]</span>.
+      </p>
+    </section>
+
+    <p class="legal-page-note">
+      Stand: <span class="legal-page-placeholder">[Datum der letzten Prüfung]</span>.
+      Diese Erklärung muss vor ihrer endgültigen Verwendung mit den tatsächlichen
+      Betreiberangaben, Dienstleisterverträgen und Löschfristen abgeglichen werden.
     </p>
-  </section>
+  </article>
 </main>

@@ -1,10 +1,28 @@
-<main class="legal-page">
-  <section class="legal-page-card">
-    <a routerLink="/login">← Zurück zur Anmeldung</a>
-    <h1>Impressum</h1>
-    <p>
-      Die tatsächlichen Betreiberangaben müssen vor der Veröffentlichung des Projekts
-      ergänzt und rechtlich geprüft werden.
+<main class="legal-page legal-page--imprint">
+  <section class="legal-page-card" aria-labelledby="imprint-title">
+    <a class="auth-back legal-page-back" routerLink="/login" aria-label="Zurück zur Anmeldung">
+      <span class="auth-back-icon" aria-hidden="true"></span>
+    </a>
+
+    <h1 id="imprint-title">Impressum</h1>
+    <address class="legal-page-address">
+      <span class="legal-page-placeholder">[Vor- und Nachname des Betreibers]</span>
+      <span class="legal-page-placeholder">[Straße und Hausnummer]</span>
+      <span class="legal-page-placeholder">[PLZ und Ort]</span>
+      <span>Deutschland</span>
+    </address>
+
+    <section class="legal-page-section" aria-labelledby="imprint-contact">
+      <h2 id="imprint-contact">Kontakt</h2>
+      <p>E-Mail: <span class="legal-page-placeholder">[Kontakt-E-Mail-Adresse]</span></p>
+      <p>Weitere Kontaktmöglichkeit:
+        <span class="legal-page-placeholder">[Telefon oder anderer unmittelbarer Kontaktweg, falls erforderlich]</span>
+      </p>
+    </section>
+    <p class="legal-page-note">
+      Angaben gemäß § 5 DDG, soweit auf den Betrieb dieses Angebots anwendbar.
+      Weitere Pflichtangaben (z. B. Register- oder Umsatzsteuerdaten) sind
+      nur zu ergänzen, wenn sie auf den Betreiber zutreffen.
     </p>
   </section>
 </main>
