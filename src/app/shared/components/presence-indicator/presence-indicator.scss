@@ -19,6 +19,8 @@
 
     gap: var(--presence-gap, 8px);
 
-    &.is-online { color: tokens.$success; }
+    &.is-online {
+      color: tokens.$success;
+    }
   }
 }
