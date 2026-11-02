@@ -11,7 +11,12 @@ import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
-/** Provides workspace-wide search input and result selection. */
+/**
+ * Provides workspace-wide search with suggestions for people, channels, and messages.
+ *
+ * The component manages query focus and responsive presentation while
+ * navigation and user selection are exposed to the surrounding workspace.
+ */
 @Component({
   selector: 'app-search-box',
   imports: [InputCaretDirective, Avatar, PresenceIndicator],
@@ -22,12 +27,18 @@ export class SearchBox {
   private readonly router = inject(Router);
   private readonly searchService = inject(SearchService);
 
+  /** Hint shown when the search or text field is empty. */
   @Input() placeholder = 'Workspace durchsuchen';
+  /** Emits a member profile selected in the list or dialog. */
   @Output() readonly userSelected = new EventEmitter<UserProfile>();
 
+  /** Current search or mention query typed by the user. */
   readonly query = signal('');
+  /** Whether the search input has keyboard focus. */
   readonly focused = signal(false);
+  /** Whether the mobile search surface is expanded. */
   readonly mobileOpen = signal(false);
+  /** Reactive search suggestions derived from the entered query. */
   readonly results = toSignal(
     toObservable(this.query).pipe(
       debounceTime(150),
