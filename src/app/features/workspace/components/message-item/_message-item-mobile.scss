@@ -57,13 +57,5 @@
     .meta { gap: 10px; }
     .meta span { font-size: 13px; }
     .message-text { padding: 15px; }
-    .reaction-picker {
-      top: 44px;
-      right: auto;
-      left: 50px;
-      width: min(244px, calc(100% - 50px));
-    }
-    &.own-message .reaction-picker { right: 50px; left: auto; }
-
   }
 }

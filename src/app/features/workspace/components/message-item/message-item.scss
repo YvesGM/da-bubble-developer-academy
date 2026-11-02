@@ -9,11 +9,11 @@
   position: relative;
   min-height: 0;
   margin-inline: 0;
-  padding: 10px var(--ws-message-inset, 45px);
+  padding: 10px calc(var(--ws-message-inset, 45px) + var(--ws-message-bleed, 0px));
   gap: var(--ws-message-gap, 30px);
   transition: background-color tokens.$motion-base;
   &:hover,
-  &:focus-within,
+  &:has(:focus-visible),
   &:has(.options-menu:popover-open) {
     background: tokens.$background;
     .actions {
@@ -33,7 +33,7 @@
     .reactions { justify-content: flex-end; }
     .actions {
       right: auto;
-      left: var(--ws-message-inset, 45px);
+      left: calc(var(--ws-message-inset, 45px) + var(--ws-message-bleed, 0px));
       border-radius: 30px 30px 0 30px;
     }
   }
@@ -55,7 +55,7 @@
   &.thread-message {
     grid-template-columns: var(--ws-avatar, 70px) minmax(0, 1fr);
     min-height: 150px;
-    padding: 27px 0 10px;
+    padding: 27px var(--ws-message-bleed, 0px) 10px;
     gap: 20px;
     &.own-message {
       grid-template-columns: minmax(0, 1fr) var(--ws-avatar, 70px);
@@ -146,7 +146,7 @@
     transition:
       opacity tokens.$motion-fast,
       transform tokens.$motion-base;
-    &:focus-within {
+    &:has(:focus-visible) {
       opacity: 1;
       transform: translateX(0) scale(1);
       pointer-events: auto;

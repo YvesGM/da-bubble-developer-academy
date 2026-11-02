@@ -27,6 +27,16 @@ export class WorkspaceHeader {
 
   readonly menuOpen = signal(false);
 
+  /** Returns the account button bounds for its anchored profile card. */
+  profileAnchor(): DOMRect | null {
+    return this.element.nativeElement.querySelector('.profile-button')?.getBoundingClientRect() ?? null;
+  }
+
+  /** Restores the account menu after a successful profile edit. */
+  reopenMenu(): void {
+    this.menuOpen.set(true);
+  }
+
   /**
    * Closes the account menu when the user clicks outside the header.
    *

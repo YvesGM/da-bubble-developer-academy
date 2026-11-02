@@ -27,12 +27,13 @@ import { splitMessageMentions } from '../../../../core/utils/message-mention.uti
 import { messageTime } from '../../../../core/utils/timestamp.util';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
+import { ReactionPopover } from '../../../../shared/components/reaction-popover/reaction-popover';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 /** Renders and manages the interactions of one message or thread reply. */
 @Component({
   selector: 'app-message-item',
-  imports: [InputCaretDirective, FormsModule, Avatar, EmojiPicker],
+  imports: [InputCaretDirective, FormsModule, Avatar, EmojiPicker, ReactionPopover],
   templateUrl: './message-item.html',
   styleUrl: './message-item.scss',
 })
@@ -41,6 +42,7 @@ export class MessageItem {
   @ViewChild('editField') private editField?: ElementRef<HTMLTextAreaElement>;
   @ViewChild('optionsButton') private optionsButton?: ElementRef<HTMLButtonElement>;
   @ViewChild('optionsMenu') private optionsMenu?: ElementRef<HTMLDivElement>;
+  @ViewChild('reactionPicker') private reactionPicker?: ReactionPopover;
   private readonly auth = inject(Auth);
   private readonly messages = inject(MessageService);
   private readonly reactionsService = inject(ReactionService);
@@ -68,7 +70,6 @@ export class MessageItem {
   readonly mobileActionsOpen = signal(false);
   /** Recomputes display spans whenever the message or available profiles change. */
   readonly messageParts = computed(() => splitMessageMentions(this.message().text, this.users()));
-
   /**
    * Opens the existing profile card for a recognized mention.
    *
@@ -102,7 +103,6 @@ export class MessageItem {
     ),
     { initialValue: [] as Message[] },
   );
-
   /**
    * Closes reaction/edit pickers when interacting outside their own controls.
    *
@@ -112,23 +112,24 @@ export class MessageItem {
   closePickersOnOutsideClick(event: MouseEvent): void {
     const target = event.target as Element;
     if (this.host.nativeElement.contains(target) &&
-        target.closest('.reaction-picker, .edit-emoji-picker, .reaction-trigger, .edit-emoji-button')) return;
-    this.showEmojiPicker.set(false);
+        target.closest('.reaction-popover, .edit-emoji-picker, .reaction-trigger, .edit-emoji-button')) return;
+    this.reactionPicker?.close();
     this.editEmojiPickerOpen.set(false);
   }
-
-  /** Dismisses both existing emoji pickers using the Escape key. */
+  /** Closes emoji pickers with Escape. */
   @HostListener('document:keydown.escape')
   closePickersOnEscape(): void {
-    this.showEmojiPicker.set(false);
+    this.reactionPicker?.close();
     this.editEmojiPickerOpen.set(false);
   }
-
+  /** Never leave a reaction palette open after leaving its message. */
+  closeReactionOnLeave(): void {
+    if (!this.mobileViewport()) this.reactionPicker?.close();
+  }
   /** Opens message actions on tap without showing desktop hover controls by default. */
   toggleMobileActions(): void {
     if (this.mobileViewport()) this.mobileActionsOpen.update((value) => !value);
   }
-
   /**
    * Dismisses mobile message actions when another item is selected.
    *
@@ -140,19 +141,17 @@ export class MessageItem {
       this.mobileActionsOpen.set(false);
     }
   }
-
-  /** Toggles the reaction picker without keeping a second picker open. */
-  toggleReactionPicker(): void {
+  /** Toggles a top-layer reaction palette anchored to the clicked button. */
+  toggleReactionPicker(event: MouseEvent): void {
     this.editEmojiPickerOpen.set(false);
-    this.showEmojiPicker.update((value) => !value);
+    if (this.showEmojiPicker()) this.reactionPicker?.close();
+    else this.reactionPicker?.openAt(event.currentTarget as HTMLElement);
   }
-
   /** Toggles the editor picker without keeping a reaction picker open. */
   toggleEditPicker(): void {
-    this.showEmojiPicker.set(false);
+    this.reactionPicker?.close();
     this.editEmojiPickerOpen.update((value) => !value);
   }
-
   /**
    * Updates mobile interaction state when the browser viewport changes.
    */
@@ -161,7 +160,6 @@ export class MessageItem {
     this.mobileViewport.set(window.innerWidth <= 800);
     if (!this.mobileViewport()) this.mobileActionsOpen.set(false);
   }
-
   /**
    * Syncs the existing menu state with native popover dismissal.
    *
@@ -170,7 +168,6 @@ export class MessageItem {
   syncOptionsState(event: Event): void {
     this.optionsOpen.set((event.target as HTMLElement).matches(':popover-open'));
   }
-
   /** Displays the contextual menu in the top layer, beyond message-list clipping. */
   toggleOptions(): void {
     const menu = this.optionsMenu?.nativeElement;
@@ -179,7 +176,6 @@ export class MessageItem {
     menu.showPopover();
     this.positionOptions(menu);
   }
-
   /**
    * Positions the existing menu next to its toggle within the visible viewport.
    *
@@ -196,26 +192,22 @@ export class MessageItem {
     menu.style.left = `${left}px`;
     menu.style.top = `${top}px`;
   }
-
   /** Closes the menu before editing, deleting or navigating away. */
   private closeOptions(): void {
     const menu = this.optionsMenu?.nativeElement;
     if (menu?.matches(':popover-open')) menu.hidePopover();
     this.optionsOpen.set(false);
   }
-
   /** Opens the existing inline editor from the contextual options menu. */
   editFromOptions(): void {
     this.closeOptions();
     this.startEditing();
   }
-
   /** Uses the existing soft-delete method from the contextual options menu. */
   async deleteFromOptions(): Promise<void> {
     this.closeOptions();
     await this.removeMessage();
   }
-
   /**
    * Checks whether the rendered message was authored by the current user.
    *
@@ -224,14 +216,12 @@ export class MessageItem {
   isOwnMessage(): boolean {
     return this.auth.currentUser?.uid === this.message().authorId;
   }
-
   /**
    * Requests the author's profile card when the message was not written by a guest.
    */
   openAuthor(): void {
     if (!this.message().authorIsGuest) this.userRequested.emit(this.message().authorId);
   }
-
   /**
    * Formats the message creation timestamp for display.
    *
@@ -240,7 +230,6 @@ export class MessageItem {
   timeLabel(): string {
     return messageTime(this.message().createdAt);
   }
-
   /**
    * Returns the time of the most recent thread reply, if available.
    *
@@ -250,7 +239,6 @@ export class MessageItem {
     const replies = this.replies();
     return replies.length ? messageTime(replies[replies.length - 1].createdAt) : '';
   }
-
   /**
    * Resolves the avatar identifier for the message author.
    *
@@ -259,7 +247,6 @@ export class MessageItem {
   authorAvatarId(): string {
     return this.users().find((user) => user.uid === this.message().authorId)?.avatarId ?? this.message().authorAvatarId ?? '';
   }
-
   /**
    * Determines whether message actions are available for the current message.
    *
@@ -268,7 +255,6 @@ export class MessageItem {
   canInteract(): boolean {
     return !this.message().deleted;
   }
-
   /**
    * Copies the current message text into edit state and opens inline editing.
    */
@@ -278,7 +264,6 @@ export class MessageItem {
     this.editing.set(true);
     requestAnimationFrame(() => this.editField?.nativeElement.focus());
   }
-
   /**
    * Persists the edited message text when the message is editable.
    *
@@ -290,13 +275,11 @@ export class MessageItem {
     await this.messages.updateMessage(this.target(), this.message().id, value);
     this.cancelEditing();
   }
-
   /** Cancels editing without persisting the current draft. */
   cancelEditing(): void {
     this.editing.set(false);
     this.editEmojiPickerOpen.set(false);
   }
-
   /**
    * Inserts an emoji at the active selection in the editing textarea.
    *
@@ -310,7 +293,6 @@ export class MessageItem {
     this.editEmojiPickerOpen.set(false);
     requestAnimationFrame(() => { field?.focus(); field?.setSelectionRange(start + emoji.length, start + emoji.length); });
   }
-
   /**
    * Soft-deletes the current user's top-level message.
    *
@@ -320,7 +302,6 @@ export class MessageItem {
     if (!this.isOwnMessage() || this.parentMessageId()) return;
     await this.messages.deleteMessage(this.target(), this.message().id);
   }
-
   /**
    * Adds or removes the current user's reaction and stores the emoji as recently used.
    *
@@ -336,9 +317,8 @@ export class MessageItem {
       context.replyId,
     );
     await this.usersService.rememberEmoji(emoji);
-    this.showEmojiPicker.set(false);
+    this.reactionPicker?.close();
   }
-
   /**
    * Resolves the display names of users contained in a reaction group.
    *
@@ -348,7 +328,6 @@ export class MessageItem {
   reactionNames(group: ReactionGroup): string {
     return group.userIds.map((uid) => this.userName(uid)).join(', ');
   }
-
   /**
    * Describes a persisted reaction without creating a separate chat message.
    *
@@ -359,7 +338,6 @@ export class MessageItem {
     const names = this.reactionNames(group);
     return `${names} ${group.userIds.length === 1 ? 'hat' : 'haben'} mit ${group.emoji} reagiert`;
   }
-
   /**
    * Calculates how many reactions are currently hidden by the responsive limit.
    *
@@ -369,14 +347,12 @@ export class MessageItem {
     if (this.showAllReactions()) return 0;
     return Math.max(0, this.reactions().length - this.visibleReactions().length);
   }
-
   /**
    * Toggles between the limited and fully expanded reaction list.
    */
   toggleReactionExpansion(): void {
     this.showAllReactions.update((value) => !value);
   }
-
   /**
    * Resolves the maximum visible reaction count for the current rendering context.
    *
@@ -385,7 +361,6 @@ export class MessageItem {
   reactionLimit(): number {
     return this.compactReactions() || this.mobileViewport() ? 7 : 20;
   }
-
   /**
    * Resolves a display name for a reaction user identifier.
    *

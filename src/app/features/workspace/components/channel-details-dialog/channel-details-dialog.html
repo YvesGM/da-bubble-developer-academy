@@ -1,5 +1,8 @@
 <div class="backdrop" (click)="closeRequested.emit()">
-  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+  <section class="dialog" role="dialog" aria-modal="true"
+    [style.top.px]="position.top" [style.left.px]="position.left"
+    [style.max-height]="'calc(100dvh - ' + (position.top + 16) + 'px)'"
+    (click)="$event.stopPropagation()">
     <header>
       <h2># {{ form.controls.name.value }}</h2>
       <button type="button" aria-label="Channel-Details schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>

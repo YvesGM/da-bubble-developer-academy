@@ -40,6 +40,8 @@ import { ChatPanel } from '../components/chat-panel/chat-panel';
 })
 export class ChannelView {
   private readonly addMemberButton = viewChild<ElementRef<HTMLButtonElement>>('addMemberButton');
+  private readonly memberStack = viewChild<ElementRef<HTMLButtonElement>>('memberStack');
+  private readonly channelTitle = viewChild<ElementRef<HTMLButtonElement>>('channelTitle');
   private readonly auth = inject(Auth);
   private readonly channels = inject(ChannelService);
   private readonly directMessages = inject(DirectMessageService);
@@ -59,7 +61,7 @@ export class ChannelView {
   );
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
   readonly members = computed(() => this.users().filter((user) => this.isChannelMember(user.uid)));
-  readonly availableUsers = computed(() => this.users().filter((user) => !this.isChannelMember(user.uid)));
+  readonly availableUsers = computed(() => this.users().filter((user) => !user.isGuest && !this.isChannelMember(user.uid)));
   readonly visibleMembers = computed(() => this.members().slice(0, 5));
   readonly creatorName = computed(() => this.findUser(this.channel()?.creatorId)?.displayName ?? 'Unbekannter Benutzer');
   readonly memberCount = computed(() => this.members().length + (this.channel()?.guestAccess ? 1 : 0));
@@ -77,6 +79,8 @@ export class ChannelView {
   readonly showMembers = signal(false);
   readonly showAddMembers = signal(false);
   readonly addMembersPosition = signal({ top: 100, right: 24 });
+  readonly membersPosition = signal({ top: 100, right: 24 });
+  readonly detailsPosition = signal({ top: 100, left: 24 });
   readonly selectedUser = signal<UserProfile | null>(null);
   readonly showProfileEditor = signal(false);
   readonly channelError = signal('');
@@ -104,6 +108,7 @@ export class ChannelView {
    */
   openDetails(): void {
     this.channelError.set('');
+    this.positionDetails();
     this.showDetails.set(true);
   }
 
@@ -168,6 +173,7 @@ export class ChannelView {
    * Opens the dialog that lists members of the current channel.
    */
   openMembers(): void {
+    this.positionMembers();
     this.showMembers.set(true);
   }
 
@@ -180,10 +186,31 @@ export class ChannelView {
     this.showAddMembers.set(true);
   }
 
-  /** Keeps the member popover attached to its trigger when the viewport resizes. */
+  /** Keeps open dialogs attached to their respective header controls. */
   @HostListener('window:resize')
-  repositionAddMembers(): void {
+  repositionDialogs(): void {
     if (this.showAddMembers()) this.positionAddMembers();
+    if (this.showMembers()) this.positionMembers();
+    if (this.showDetails()) this.positionDetails();
+  }
+
+  /** Anchors the member list below its avatar stack, aligned at the right edge. */
+  private positionMembers(): void {
+    const anchor = this.memberStack()?.nativeElement.getBoundingClientRect();
+    if (!anchor) return;
+    this.membersPosition.set({
+      top: Math.round(anchor.bottom + 12),
+      right: Math.max(16, Math.round(window.innerWidth - anchor.right)),
+    });
+  }
+
+  /** Aligns channel details with the channel title while keeping it onscreen. */
+  private positionDetails(): void {
+    const anchor = this.channelTitle()?.nativeElement.getBoundingClientRect();
+    if (!anchor) return;
+    const width = Math.min(932, window.innerWidth - 32);
+    const left = Math.max(16, Math.min(anchor.left - 12, window.innerWidth - width - 16));
+    this.detailsPosition.set({ top: Math.round(anchor.bottom + 8), left: Math.round(left) });
   }
 
   /** Reads the add-member button's viewport position for its anchored popover. */

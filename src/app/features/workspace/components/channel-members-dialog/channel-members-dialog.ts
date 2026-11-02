@@ -19,6 +19,7 @@ export class ChannelMembersDialog {
   }
 
   @Input() members: UserProfile[] = [];
+  @Input() position: { top: number; right: number } = { top: 100, right: 24 };
   @Input() guestAccess = false;
   @Input() currentUserId = '';
   @Input() canAdd = true;

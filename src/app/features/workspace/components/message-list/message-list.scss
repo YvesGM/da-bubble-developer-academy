@@ -16,6 +16,8 @@
   overflow-y: auto;
   overscroll-behavior: contain;
 
+  &:not(:has(.empty-state)) { padding-bottom: 24px; }
+
   &:has(.empty-state) {
     display: flex;
     align-items: flex-end;
@@ -62,6 +64,7 @@
   }
 
   .date-separator {
+    margin-inline: var(--ws-message-bleed, 0px);
     display: flex;
     align-items: center;
     justify-content: center;

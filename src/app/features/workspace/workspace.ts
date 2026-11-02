@@ -1,4 +1,4 @@
-import { Component, HostListener, effect, inject, signal } from '@angular/core';
+import { Component, HostListener, effect, inject, signal, viewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { Router, RouterOutlet } from '@angular/router';
@@ -33,6 +33,7 @@ import { WorkspaceSidebar } from './components/workspace-sidebar/workspace-sideb
   styleUrl: './workspace.scss',
 })
 export class Workspace {
+  private readonly header = viewChild(WorkspaceHeader);
   readonly auth = inject(Auth);
   private readonly authService = inject(AuthService);
   private readonly channelsService = inject(ChannelService);
@@ -53,6 +54,8 @@ export class Workspace {
   private compactDesktop = window.innerWidth > 800 && window.innerWidth <= 1100;
   readonly sidebarCollapsed = signal(this.compactDesktop);
   readonly mobileViewport = signal(window.innerWidth <= 800);
+  readonly ownHeaderProfile = signal(false);
+  readonly ownProfilePosition = signal<{ top: number; right: number } | null>(null);
 
   /**
    * Starts realtime presence tracking when the workspace shell is created.
@@ -71,6 +74,7 @@ export class Workspace {
   @HostListener('window:resize')
   updateViewport(): void {
     this.mobileViewport.set(window.innerWidth <= 800);
+    if (this.ownHeaderProfile()) this.positionOwnProfile();
     const compact = window.innerWidth > 800 && window.innerWidth <= 1100;
     if (compact !== this.compactDesktop) this.sidebarCollapsed.set(compact);
     this.compactDesktop = compact;
@@ -141,7 +145,27 @@ export class Workspace {
    * Opens the current registered user's profile card when a profile is available.
    */
   openOwnProfile(): void {
-    if (this.profile()) this.selectedUser.set(this.profile()!);
+    if (!this.profile()) return;
+    this.ownHeaderProfile.set(true);
+    this.positionOwnProfile();
+    this.selectedUser.set(this.profile()!);
+  }
+
+  /** Anchors the current user's profile card to the top-right account button. */
+  private positionOwnProfile(): void {
+    const bounds = this.header()?.profileAnchor();
+    if (!bounds) return;
+    this.ownProfilePosition.set({
+      top: Math.round(bounds.bottom + 8),
+      right: Math.max(16, Math.round(window.innerWidth - bounds.right)),
+    });
+  }
+
+  /** Returns to the account dropdown only after a successful profile save. */
+  afterOwnProfileSaved(): void {
+    this.showProfileEditor.set(false);
+    this.ownHeaderProfile.set(false);
+    this.header()?.reopenMenu();
   }
 
   /**

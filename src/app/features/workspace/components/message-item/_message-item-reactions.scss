@@ -2,18 +2,6 @@
 
 // Message reaction, reply, and deletion indicators.
 @mixin styles {
-  .reaction-picker {
-    position: absolute;
-    z-index: 5;
-    top: 44px;
-    bottom: auto;
-    left: 90px;
-    width: min(244px, calc(100% - 90px));
-  }
-  &.own-message .reaction-picker {
-    right: 90px;
-    left: auto;
-  }
   // The sender's bubble stays violet; incoming bubbles turn white on hover.
   &:not(.own-message):is(:hover, :focus-within) .message-text {
     background: tokens.$white;

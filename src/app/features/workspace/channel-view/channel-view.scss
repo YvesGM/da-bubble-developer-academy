@@ -97,10 +97,7 @@
   font-weight: 700;
   transition: background-color tokens.$motion-base, color tokens.$motion-fast;
 
-  &:hover:not(:disabled) {
-    color: tokens.$purple-1;
-    background: tokens.$background;
-  }
+  &:focus-visible { outline: 2px solid tokens.$purple-1; }
 
   &:disabled { cursor: default; }
 

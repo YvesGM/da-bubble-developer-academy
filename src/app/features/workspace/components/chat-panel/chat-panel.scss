@@ -35,6 +35,11 @@
       padding-top: var(--conversation-header-height, var(--ws-channel-header, 96px));
       background: tokens.$white;
       border-radius: 30px;
+
+      > app-message-list {
+        margin-inline: calc(-1 * var(--ws-inset, 35px));
+        --ws-message-bleed: var(--ws-inset, 35px);
+      }
     }
   }
 

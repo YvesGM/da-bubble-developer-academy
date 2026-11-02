@@ -7,7 +7,7 @@
     [userId]="currentUserId"
     [profileEnabled]="!isGuest"
     (profileRequested)="openOwnProfile()"
-    (userSelected)="selectedUser.set($event)"
+    (userSelected)="ownHeaderProfile.set(false); selectedUser.set($event)"
     (logoutRequested)="logout()"
   />
 
@@ -60,15 +60,19 @@
     <app-profile-card
       [user]="user"
       [ownProfile]="user.uid === currentUserId"
+      [position]="ownHeaderProfile() ? ownProfilePosition() : null"
       [messageEnabled]="!isGuest"
-      (closeRequested)="selectedUser.set(null)"
+      (closeRequested)="selectedUser.set(null); ownHeaderProfile.set(false)"
       (editRequested)="openProfileEditor()"
       (messageRequested)="startDirectMessage($event)"
     />
   }
 
   @if (showProfileEditor() && !isGuest) {
-    <app-profile-dialog (closeRequested)="showProfileEditor.set(false)" />
+    <app-profile-dialog
+      (saved)="afterOwnProfileSaved()"
+      (closeRequested)="showProfileEditor.set(false)"
+    />
   }
 
   @if (showWorkspaceEditor() && !isGuest) {

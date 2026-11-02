@@ -18,6 +18,7 @@ export class ProfileDialog {
   private readonly users = inject(UserService);
 
   @Output() readonly closeRequested = new EventEmitter<void>();
+  @Output() readonly saved = new EventEmitter<void>();
 
   readonly avatarId = signal('avatar-1');
   readonly errorMessage = signal('');
@@ -65,6 +66,7 @@ export class ProfileDialog {
   private async runSave(): Promise<void> {
     try {
       await this.users.updateCurrentDisplayName(this.form.controls.displayName.value.trim());
+      this.saved.emit();
       this.closeRequested.emit();
     } catch {
       this.errorMessage.set('Das Profil konnte nicht aktualisiert werden.');

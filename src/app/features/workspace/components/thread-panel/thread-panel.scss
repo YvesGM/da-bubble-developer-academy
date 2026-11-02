@@ -79,7 +79,9 @@
   .thread-conversation {
     min-height: 0;
     min-width: 0;
-    padding: 3px 20px 0;
+    margin-inline: -20px;
+    padding: 24px 0;
+    --ws-message-bleed: 40px;
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -91,7 +93,7 @@
     display: flex;
     align-items: center;
     min-height: 25px;
-    margin: 8px -7px 10px;
+    margin: 8px 33px 10px;
     gap: 20px;
     color: tokens.$purple-2;
     font-size: 16px;
@@ -135,7 +137,9 @@
     }
 
     .thread-conversation {
+      margin-inline: 0;
       padding: 0;
+      --ws-message-bleed: 0px;
       overscroll-behavior: contain;
     }
     .divider { margin: 12px 5px; gap: 10px; }

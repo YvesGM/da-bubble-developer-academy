@@ -1,5 +1,5 @@
 <article class="message" [class.own-message]="isOwnMessage()" [class.thread-message]="compactReactions()" [class.is-editing]="editing()"
-  [class.mobile-actions-open]="mobileActionsOpen()">
+  [class.mobile-actions-open]="mobileActionsOpen()" (mouseleave)="closeReactionOnLeave()">
   <button
     type="button"
     class="message-avatar"
@@ -100,7 +100,7 @@
           type="button"
           class="icon-action reaction-trigger"
           aria-label="Weitere Reaktionen"
-          (click)="toggleReactionPicker()"
+          (click)="toggleReactionPicker($event)"
         >
           <img src="/assets/reaction-add.svg" alt="" />
         </button>
@@ -134,6 +134,12 @@
           </div>
         }
       </div>
+      <app-reaction-popover
+        #reactionPicker
+        [recent]="recentEmojis()"
+        (openedChange)="showEmojiPicker.set($event)"
+        (emojiSelected)="toggleReaction($event)"
+      />
     }
 
     @if (canInteract() && !editing()) {
@@ -179,15 +185,10 @@
             class="footer-reaction-button reaction-trigger"
             aria-label="Emoji-Reaktion hinzufügen"
             [attr.aria-expanded]="showEmojiPicker()"
-            (click)="toggleReactionPicker()"
+            (click)="toggleReactionPicker($event)"
           >
             <img src="/assets/reaction-add.svg" alt="" />
           </button>
-        }
-        @if (showEmojiPicker()) {
-          <div class="reaction-picker">
-            <app-emoji-picker [recent]="recentEmojis()" (emojiSelected)="toggleReaction($event)" />
-          </div>
         }
       </div>
     }

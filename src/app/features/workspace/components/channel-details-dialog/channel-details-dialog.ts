@@ -24,6 +24,7 @@ export class ChannelDetailsDialog {
     this.editingName.set(false);
     this.editingDescription.set(false);
   }
+  @Input() position = { top: 120, left: 24 };
   @Input() creatorName = 'Unbekannter Benutzer';
   @Input() errorMessage = '';
   @Output() readonly closeRequested = new EventEmitter<void>();

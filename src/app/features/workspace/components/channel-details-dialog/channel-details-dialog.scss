@@ -3,27 +3,25 @@
 
 .backdrop {
   animation: dialog-backdrop-in tokens.$motion-fast both;
-  display: grid;
-
   position: fixed;
   z-index: 55;
   inset: 0;
-  place-items: center;
 
   padding: 24px;
 
   background: #00000052;
 
-  @include bp.mobile { padding: 0; }
+  @include bp.mobile { display: grid; place-items: center; padding: 0; }
 }
 
 .dialog {
   animation: dialog-surface-in tokens.$motion-base both;
   display: flex;
   flex-direction: column;
+  position: absolute;
   padding: 44px;
 
-  width: min(932px, 100%);
+  width: min(932px, calc(100vw - 32px));
 
   min-height: min(660px, calc(100dvh - 48px));
   max-height: calc(100dvh - 48px);
@@ -208,6 +206,7 @@
   }
 
   @include bp.mobile {
+    position: static;
     width: 100%;
     height: 100dvh;
     min-height: 0;

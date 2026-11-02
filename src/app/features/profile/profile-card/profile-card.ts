@@ -20,6 +20,8 @@ export class ProfileCard {
 
   @Input({ required: true }) user!: UserProfile;
   @Input() ownProfile = false;
+  /** Optional header anchor; other users' cards remain centered. */
+  @Input() position: { top: number; right: number } | null = null;
   @Input() messageEnabled = true;
   @Output() readonly closeRequested = new EventEmitter<void>();
   @Output() readonly editRequested = new EventEmitter<void>();

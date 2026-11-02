@@ -1,5 +1,8 @@
-<div class="backdrop" (click)="closeRequested.emit()">
-  <section class="card" [class.own-profile]="ownProfile" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+<div class="backdrop" [class.anchored]="!!position" (click)="closeRequested.emit()">
+  <section class="card" [class.own-profile]="ownProfile" [class.anchored]="position"
+    [style.top.px]="position?.top" [style.right.px]="position?.right"
+    [style.max-height]="position ? 'calc(100dvh - ' + (position.top + 16) + 'px)' : null"
+    role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
     <header>
       <h2>Profil</h2>
       <button type="button" aria-label="Profil schließen" (click)="closeRequested.emit()">×</button>

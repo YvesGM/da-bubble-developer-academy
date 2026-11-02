@@ -1,5 +1,8 @@
 <div class="backdrop" (click)="closeRequested.emit()">
-  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+  <section class="dialog" role="dialog" aria-modal="true"
+    [style.top.px]="position.top" [style.right.px]="position.right"
+    [style.max-height]="'calc(100dvh - ' + (position.top + 16) + 'px)'"
+    (click)="$event.stopPropagation()">
     <header>
       <h2>Mitglieder</h2>
       <button type="button" aria-label="Mitglieder schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
@@ -8,9 +11,11 @@
     <div class="members">
       @for (member of members; track member.uid) {
         <button type="button" class="member" (click)="userSelected.emit(member)">
-          <app-avatar [avatarId]="member.avatarId" [name]="member.displayName" size="medium" />
+          <span class="avatar-with-presence">
+            <app-avatar [avatarId]="member.avatarId" [name]="member.displayName" size="medium" />
+            <app-presence-indicator [userId]="member.uid" />
+          </span>
           <span>{{ member.displayName }}{{ member.uid === currentUserId ? ' (Du)' : '' }}</span>
-          <app-presence-indicator [userId]="member.uid" />
         </button>
       }
 
@@ -23,7 +28,10 @@
     </div>
 
     @if (canAdd) {
-      <button type="button" class="add" (click)="addRequested.emit()">＋ Mitglieder hinzufügen</button>
+      <button type="button" class="add" (click)="addRequested.emit()">
+        <span class="add-icon" aria-hidden="true"></span>
+        Mitglieder hinzufügen
+      </button>
     }
   </section>
 </div>
