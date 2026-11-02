@@ -15,19 +15,25 @@ import { Observable, map } from 'rxjs';
 
 import { DirectMessage } from '../models/direct-message.model';
 
-/** Reads and creates private conversations for registered Firebase users. */
+/**
+ * Creates and observes private conversations for registered Firebase accounts.
+ *
+ * Conversation membership is defined by participant UIDs, and Firestore reads
+ * are scoped to the signed-in user's allowed conversations.
+ */
 @Injectable({ providedIn: 'root' })
 export class DirectMessageService {
+  /** Firebase Auth instance supplying the active account for permission checks. */
   private readonly auth = inject(Auth);
+  /** Cloud Firestore client for the service's persisted data. */
   private readonly firestore = inject(Firestore);
+  /** Angular injector used to run AngularFire calls inside injection context. */
   private readonly injector = inject(EnvironmentInjector);
-
 
   /**
    * Observes direct-message conversations that contain the current registered user.
    *
    * @returns An observable of conversations sorted by their deterministic identifier.
-
    */
   observeCurrentUserConversations(): Observable<DirectMessage[]> {
     const uid = this.currentRegisteredUserId();
@@ -41,14 +47,12 @@ export class DirectMessageService {
     return (items as Observable<DirectMessage[]>).pipe(map((dms) => this.sortById(dms)));
   }
 
-
   /**
    * Returns an existing deterministic conversation or creates it for the selected participant.
    *
    * @param otherUserId - Identifier of the participant to message.
    * @returns The deterministic direct-message conversation identifier.
    * @throws If the current session is anonymous or Firestore access fails.
-
    */
   async openConversation(otherUserId: string): Promise<string> {
     const currentUserId = this.currentRegisteredUserId();
@@ -79,7 +83,6 @@ export class DirectMessageService {
    *
    * @param id - Deterministic conversation identifier.
    * @returns Whether the conversation already exists.
-
    */
   private async conversationExists(id: string): Promise<boolean> {
     const reference = this.runSync(() => doc(this.firestore, 'directMessages', id));
@@ -94,7 +97,6 @@ export class DirectMessageService {
    * @param otherUserId - Identifier of the other participant.
    * @returns The deterministic conversation identifier.
    * @throws If Firestore rejects the write.
-
    */
   private async createConversation(currentUserId: string, otherUserId: string): Promise<string> {
     const id = this.conversationId(currentUserId, otherUserId);
@@ -103,13 +105,11 @@ export class DirectMessageService {
     return id;
   }
 
-
   /**
    * Resolves the other participant of a direct-message conversation.
    *
    * @param dm - Conversation whose partner should be resolved.
    * @returns The other participant identifier, or the current identifier for a self conversation.
-
    */
   conversationPartner(dm: DirectMessage): string {
     const current = this.currentRegisteredUserId();
@@ -122,7 +122,6 @@ export class DirectMessageService {
    * @param first - First participant identifier.
    * @param second - Second participant identifier.
    * @returns The conversation document payload.
-
    */
   private directMessageData(first: string, second: string) {
     return {
@@ -138,7 +137,6 @@ export class DirectMessageService {
    * @param first - First participant identifier.
    * @param second - Second participant identifier.
    * @returns The stable sorted conversation identifier.
-
    */
   private conversationId(first: string, second: string): string {
     return [first, second].sort().join('__');
