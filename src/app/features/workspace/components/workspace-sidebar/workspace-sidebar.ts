@@ -20,6 +20,7 @@ import { PresenceIndicator } from '../../../../shared/components/presence-indica
   styleUrl: './workspace-sidebar.scss',
 })
 export class WorkspaceSidebar {
+  /** Router dependency used for navigation after the current action completes. */
   private readonly router = inject(Router);
 
   /** Channels accessible to the current account in this workspace. */
