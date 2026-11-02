@@ -13,7 +13,12 @@ import { Avatar } from '../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../shared/components/presence-indicator/presence-indicator';
 import { ChatPanel } from '../components/chat-panel/chat-panel';
 
-/** Connects a direct-message route to its conversation panel. */
+/**
+ * Loads a direct conversation from the route and resolves its participants.
+ *
+ * The chat panel receives the selected target while profile selection stays
+ * local to the direct-message view.
+ */
 @Component({
   selector: 'app-direct-message-view',
   imports: [ChatPanel, RouterLink, ProfileCard, ProfileDialog, Avatar, PresenceIndicator],
@@ -25,20 +30,27 @@ export class DirectMessageView {
   private readonly route = inject(ActivatedRoute);
   private readonly usersService = inject(UserService);
 
+  /** Workspace user profiles used to resolve visible names and avatar data. */
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
+  /** Direct-message identifier derived from the active route. */
   readonly dmId = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('dmId') ?? '')),
     { initialValue: this.route.snapshot.paramMap.get('dmId') ?? '' },
   );
+  /** Profiles of all participants in the selected private conversation. */
   readonly participantUsers = computed(() =>
     this.users().filter((user) => this.dmId().split('__').includes(user.uid)),
   );
+  /** Other participant in the direct conversation, when resolvable. */
   readonly partner = computed(() => this.findPartner());
+  /** Conversation target passed to messaging, reactions, and navigation. */
   readonly target = computed<ConversationTarget>(() => ({
     type: 'directMessage',
     id: this.dmId(),
   }));
+  /** Profile currently selected for contextual actions. */
   readonly selectedUser = signal<UserProfile | null>(null);
+  /** Whether the current user's profile editing dialog is open. */
   readonly showProfileEditor = signal(false);
 
   /**
