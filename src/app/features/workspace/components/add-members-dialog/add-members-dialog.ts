@@ -49,7 +49,7 @@ export class AddMembersDialog {
    * @returns Matching profiles not already selected, after three typed characters.
    */
   filteredUsers(): UserProfile[] {
-    const value = this.query().trim().toLowerCase();
+    const value = this.searchTerm();
     if (value.length < 3) return [];
     return this.users.filter((user) =>
       !this.selectedIds().has(user.uid) && user.displayName.toLowerCase().includes(value),
@@ -58,13 +58,18 @@ export class AddMembersDialog {
 
   /** @returns Whether a sufficiently specific query can display suggestions. */
   showSuggestions(): boolean {
-    return this.query().trim().length >= 3;
+    return this.searchTerm().length >= 3;
   }
 
   /** @returns Whether the optional guest suggestion matches the current query. */
   matchesGuest(): boolean {
     return this.guestAvailable && !this.guestSelected()
-      && 'gast'.includes(this.query().trim().toLowerCase());
+      && 'gast'.includes(this.searchTerm());
+  }
+
+  /** @returns Lowercase search text without an optional mention marker. */
+  private searchTerm(): string {
+    return this.query().trim().replace(/^@/, '').toLowerCase();
   }
 
   /**
