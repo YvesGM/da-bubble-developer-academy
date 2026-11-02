@@ -128,7 +128,7 @@
 
         min-width: 282px;
         min-height: 181px;
-        padding: 20px 30px;
+        padding: 20px 24px;
         gap: 10px;
         align-content: center;
 
@@ -139,7 +139,7 @@
         animation: account-menu-enter tokens.$motion-base both;
 
         button {
-          font-size: 18px;
+          font-size: var(--ws-heading, 24px);
           text-align: center;
 
           width: 100%;
@@ -154,9 +154,14 @@
             background-color tokens.$motion-base,
             color tokens.$motion-fast;
 
-          &:hover {
+          &.logout-action:is(:hover, :focus-visible) {
             color: tokens.$purple-1;
             background: tokens.$background;
+          }
+
+          &.profile-action:focus-visible {
+            outline: 2px solid tokens.$purple-1;
+            outline-offset: 2px;
           }
         }
       }
@@ -231,6 +236,7 @@
       &:has(.mobile-conversation-name) .brand { display: none; }
       .user-area { grid-column: 2; grid-row: 1; }
       .user-menu {
+        button { font-size: 20px; }
         position: fixed;
         top: 80px;
         right: 16px;
@@ -278,7 +284,6 @@
       .user-menu {
         min-width: clamp(282px, 14.69vw, 450px);
         min-height: clamp(181px, 9.43vw, 290px);
-        button { font-size: var(--ws-text); }
       }
     }
   }

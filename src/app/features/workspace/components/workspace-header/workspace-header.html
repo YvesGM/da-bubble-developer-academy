@@ -29,9 +29,9 @@
     @if (menuOpen()) {
       <div class="user-menu">
         @if (profileEnabled) {
-          <button type="button" (click)="openProfile()">Profil</button>
+          <button type="button" class="profile-action" (click)="openProfile()">Profil</button>
         }
-        <button type="button" (click)="logout()">Abmelden</button>
+        <button type="button" class="logout-action" (click)="logout()">Abmelden</button>
       </div>
     }
   </div>
