@@ -128,6 +128,21 @@
         margin-top: 29px;
       }
 
+      // Errors take part in the layout so subsequent fields and the
+      // privacy checkbox cannot overlap them on narrow screens.
+      .auth-field-error {
+        position: static;
+        margin-top: 5px;
+      }
+
+      .auth-field:has(.auth-field-error) + .auth-field {
+        margin-top: 8px;
+      }
+
+      .auth-field:has(.auth-field-error) + .auth-privacy {
+        margin-top: 14px;
+      }
+
       .auth-field-icon {
         top: 25px;
       }
@@ -274,7 +289,7 @@
   @include bp.mobile {
     &-content {
       --avatar-hero-size: 120px;
-      --avatar-option-size: 48px;
+      --avatar-option-size: clamp(32px, 12vw, 48px);
 
       width: 100%;
       margin-top: 24px;
@@ -290,13 +305,15 @@
     }
 
     &-grid {
-      grid-template-columns: repeat(6, 56px);
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      width: 100%;
       gap: 4px;
     }
 
     &-choice {
-      width: 56px;
-      height: 56px;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
       padding: 0;
     }
 
@@ -313,13 +330,6 @@
     }
   }
 
-  @media (max-width: 429px) {
-    &-grid {
-      grid-template-columns: repeat(3, 56px);
-      justify-content: center;
-      gap: 8px;
-    }
-  }
 }
 
 :host {
