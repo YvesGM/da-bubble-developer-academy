@@ -1,5 +1,5 @@
 <div class="backdrop" (click)="closeRequested.emit()">
-  <section class="card" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+  <section class="card" [class.own-profile]="ownProfile" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
     <header>
       <h2>Profil</h2>
       <button type="button" aria-label="Profil schließen" (click)="closeRequested.emit()">×</button>
@@ -21,7 +21,10 @@
     </div>
 
     <div class="email">
-      <strong>E-Mail-Adresse</strong>
+      <div class="email-heading">
+        <img src="/assets/email-icon.svg" alt="" />
+        <strong>E-Mail-Adresse</strong>
+      </div>
       <a [href]="'mailto:' + user.email">{{ user.email }}</a>
     </div>
 

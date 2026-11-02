@@ -16,15 +16,20 @@
 
 .card {
   animation: dialog-surface-in tokens.$motion-base both;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   width: min(500px, 100%);
+  min-height: min(705px, calc(100dvh - 48px));
   max-height: calc(100dvh - 48px);
   overflow-y: auto;
   padding: 40px;
-  gap: 24px;
   border-radius: 30px;
   background: tokens.$white;
   box-shadow: 0 8px 28px #00000024;
+
+  &.own-profile {
+    min-height: min(600px, calc(100dvh - 48px));
+  }
 
   .name {
     &-row {
@@ -33,14 +38,19 @@
       justify-content: space-between;
       flex-wrap: wrap;
       min-width: 0;
+      min-height: 44px;
+      margin-top: 45px;
       gap: 10px;
     }
   }
+
+  &.own-profile .name-row { margin-top: 36px; }
 
   header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 40px;
 
     h2 {
       margin: 0;
@@ -53,8 +63,8 @@
       display: grid;
       place-items: center;
 
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
 
       border: 0;
       border-radius: 50%;
@@ -75,13 +85,13 @@
     &-avatar {
       display: grid;
       place-items: center;
-
-      padding: 8px 0 10px;
+      margin-top: 45px;
+      --avatar-hero-size: 200px;
     }
   }
 
   h3 {
-    font-size: 30px;
+    font-size: 32px;
 
     min-width: 0;
     margin: 0;
@@ -90,7 +100,7 @@
 
   .link {
     &-button {
-      font-size: 17px;
+      font-size: 18px;
 
       color: tokens.$purple-1;
       background: transparent;
@@ -107,22 +117,36 @@
   .status {
     display: flex;
     align-items: center;
-
+    margin-top: 15px;
+    font-size: 20px;
     color: tokens.$text-gray;
+    --presence-size: 16px;
+    --presence-gap: 15px;
   }
 
   .email {
     display: grid;
-
-    gap: 8px;
+    margin-top: 38px;
+    gap: 15px;
 
     strong {
-      font-size: 18px;
+      font-size: 20px;
+    }
+
+    &-heading {
+      display: flex;
+      align-items: center;
+      min-height: 30px;
+      gap: 20px;
+
+      img { width: 30px; height: 30px; filter: brightness(0); }
     }
 
     a {
+      margin-left: 50px;
       overflow-wrap: anywhere;
       text-decoration: none;
+      font-size: 18px;
 
       color: #1381ff;
 
@@ -134,9 +158,10 @@
 
   .primary {
     font-weight: 700;
-
-    justify-self: center;
-
+    align-self: center;
+    min-width: 164px;
+    min-height: 49px;
+    margin-top: auto;
     padding: 12px 24px;
 
     color: tokens.$white;
@@ -157,6 +182,7 @@
 
   @include bp.mobile {
     width: 100%;
+    min-height: 0;
     max-height: calc(100dvh - 32px);
     overflow-y: auto;
 
@@ -164,8 +190,31 @@
 
     border-radius: 28px;
 
-    h3 {
-      font-size: 26px;
+    &.own-profile { min-height: 0; }
+    .profile-avatar {
+      margin-top: 24px;
+      --avatar-hero-size: clamp(128px, 42vw, 180px);
     }
+    .name-row,
+    &.own-profile .name-row { margin-top: 24px; }
+    h3 {
+      font-size: clamp(24px, 6vw, 30px);
+    }
+    .status {
+      margin-top: 12px;
+      font-size: 18px;
+      --presence-size: 14px;
+      --presence-gap: 10px;
+    }
+    .email {
+      margin-top: 24px;
+      strong { font-size: 18px; }
+      &-heading {
+        gap: 14px;
+        img { width: 26px; height: 26px; }
+      }
+      a { margin-left: 40px; font-size: 16px; }
+    }
+    .primary { margin-top: 28px; }
   }
 }

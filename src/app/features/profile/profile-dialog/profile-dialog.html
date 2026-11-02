@@ -8,33 +8,19 @@
     <form [formGroup]="form" (ngSubmit)="save()" novalidate>
       <div class="profile-preview">
         <app-avatar
-          [avatarId]="form.controls.avatarId.value"
+          [avatarId]="avatarId()"
           [name]="form.controls.displayName.value || 'Profil'"
           size="hero"
         />
       </div>
 
       <label>
-        Vollständiger Name
+        <span class="field-label">
+          <img src="/assets/person-icon.svg" alt="" />
+          Vollständiger Name
+        </span>
         <input appInputCaret type="text" formControlName="displayName" />
       </label>
-
-      <fieldset>
-        <legend>Avatar auswählen</legend>
-        <div class="avatar-grid">
-          @for (avatarId of avatarIds; track avatarId; let index = $index) {
-            <button
-              type="button"
-              class="avatar-option"
-              [class.selected]="form.controls.avatarId.value === avatarId"
-              (click)="selectAvatar(avatarId)"
-              [attr.aria-label]="'Avatar ' + (index + 1) + ' auswählen'"
-            >
-              <app-avatar [avatarId]="avatarId" [name]="'Avatar ' + (index + 1)" size="option" />
-            </button>
-          }
-        </div>
-      </fieldset>
 
       @if (errorMessage()) {
         <p class="error">{{ errorMessage() }}</p>

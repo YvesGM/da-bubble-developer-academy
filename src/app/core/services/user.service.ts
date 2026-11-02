@@ -78,21 +78,22 @@ export class UserService {
   }
 
   /**
-   * Updates the current registered user's display name and avatar.
+   * Updates the current registered user's display name without changing the avatar.
    *
    * The display name is written to Firebase Authentication first and then the
-   * matching Firestore profile is updated with the name, avatar and timestamp.
+   * matching Firestore profile is updated with the name and timestamp.
    *
    * @param displayName - New display name for the user.
-   * @param avatarId - Identifier of the selected avatar.
    * @returns A promise that resolves after both profile stores are updated.
    * @throws If no registered user is available or either update fails.
    */
-  async updateCurrentProfile(displayName: string, avatarId: string): Promise<void> {
+  async updateCurrentDisplayName(displayName: string): Promise<void> {
     const user = this.auth.currentUser;
     if (!user || user.isAnonymous) throw new Error('profile-not-available');
     await this.run(() => updateProfile(user, { displayName }));
-    await this.run(() => updateDoc(this.userReference(user.uid), this.profileChanges(displayName, avatarId)));
+    await this.run(() => updateDoc(this.userReference(user.uid), {
+      displayName, updatedAt: serverTimestamp(),
+    }));
   }
 
   /**
@@ -146,17 +147,6 @@ export class UserService {
    */
   private nextEmojis(emoji: string, current: string[]): string[] {
     return [emoji, ...current.filter((item) => item !== emoji)].slice(0, 2);
-  }
-
-  /**
-   * Builds the Firestore payload for profile display-name and avatar changes.
-   *
-   * @param displayName - New display name.
-   * @param avatarId - New avatar identifier.
-   * @returns The profile update payload.
-   */
-  private profileChanges(displayName: string, avatarId: string) {
-    return { displayName: displayName.trim(), avatarId, updatedAt: serverTimestamp() };
   }
 
   /**

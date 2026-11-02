@@ -1,9 +1,7 @@
 import { Component, HostListener, EventEmitter, Output, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { take } from 'rxjs';
 
-import { AVATAR_IDS } from '../../../core/constants/avatar.constants';
 import { UserService } from '../../../core/services/user.service';
 import { Avatar } from '../../../shared/components/avatar/avatar';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
@@ -21,13 +19,11 @@ export class ProfileDialog {
 
   @Output() readonly closeRequested = new EventEmitter<void>();
 
-  readonly avatarIds = AVATAR_IDS;
-  readonly profile = toSignal(this.users.observeCurrentProfile());
+  readonly avatarId = signal('avatar-1');
   readonly errorMessage = signal('');
   readonly saving = signal(false);
   readonly form = this.formBuilder.nonNullable.group({
     displayName: ['', Validators.required],
-    avatarId: ['avatar-1', Validators.required],
   });
 
   /** Closes the profile editor with Escape when no save is in progress. */
@@ -45,17 +41,9 @@ export class ProfileDialog {
   constructor() {
     this.users.observeCurrentProfile().pipe(take(1)).subscribe((profile) => {
       if (!profile) return;
-      this.form.setValue({ displayName: profile.displayName, avatarId: profile.avatarId });
+      this.form.controls.displayName.setValue(profile.displayName);
+      this.avatarId.set(profile.avatarId);
     });
-  }
-
-  /**
-   * Stores the avatar selected in the profile editor.
-   *
-   * @param avatarId - Identifier of the selected avatar.
-   */
-  selectAvatar(avatarId: string): void {
-    this.form.controls.avatarId.setValue(avatarId);
   }
 
   /**
@@ -64,20 +52,19 @@ export class ProfileDialog {
    * @returns A promise that resolves after save handling completes.
    */
   async save(): Promise<void> {
-    if (this.form.invalid) return this.markInvalid();
+    if (this.form.invalid || !this.form.controls.displayName.value.trim()) return this.markInvalid();
     this.saving.set(true);
     await this.runSave();
   }
 
   /**
-   * Persists the edited profile and closes the dialog after a successful update.
+   * Persists only the edited name, leaving the existing avatar unchanged.
    *
    * @returns A promise that resolves after the profile update completes.
    */
   private async runSave(): Promise<void> {
-    const value = this.form.getRawValue();
     try {
-      await this.users.updateCurrentProfile(value.displayName, value.avatarId);
+      await this.users.updateCurrentDisplayName(this.form.controls.displayName.value.trim());
       this.closeRequested.emit();
     } catch {
       this.errorMessage.set('Das Profil konnte nicht aktualisiert werden.');

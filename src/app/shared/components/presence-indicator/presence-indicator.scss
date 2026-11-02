@@ -3,8 +3,8 @@
 .presence {
   display: inline-block;
 
-  width: 10px;
-  height: 10px;
+  width: var(--presence-size, 10px);
+  height: var(--presence-size, 10px);
 
   background: tokens.$text-gray;
   border-radius: 50%;
@@ -17,6 +17,8 @@
     display: inline-flex;
     align-items: center;
 
-    gap: 8px;
+    gap: var(--presence-gap, 8px);
+
+    &.is-online { color: tokens.$success; }
   }
 }
