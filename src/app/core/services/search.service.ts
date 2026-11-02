@@ -12,13 +12,23 @@ import { DirectMessageService } from './direct-message.service';
 import { MessageService } from './message.service';
 import { UserService } from './user.service';
 
-/** Builds search results from accessible users, channels, and messages. */
+/**
+ * Combines accessible users, channels, and messages into workspace search results.
+ *
+ * Input prefixes select a search mode, while normal queries merge the matching
+ * sources without exposing conversations outside the current user's access.
+ */
 @Injectable({ providedIn: 'root' })
 export class SearchService {
+  /** Firebase Auth instance supplying the active account for permission checks. */
   private readonly auth = inject(Auth);
+  /** Channel service exposing the conversations visible to the current user. */
   private readonly channels = inject(ChannelService);
+  /** Private-conversation service used by workspace search. */
   private readonly directMessages = inject(DirectMessageService);
+  /** Message service used to search accessible conversation history. */
   private readonly messages = inject(MessageService);
+  /** User profile service used to resolve and persist application identities. */
   private readonly users = inject(UserService);
 
   /**
@@ -224,4 +234,10 @@ interface SearchContext {
   label: string;
 }
 
+/**
+ * Limits search sources according to the optional prefix in the input.
+ *
+ * An unprefixed query searches all visible sources; @ and # narrow the
+ * results to people and channels respectively.
+ */
 type SearchMode = 'all' | 'users' | 'channels';
