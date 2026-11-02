@@ -16,7 +16,12 @@ import { ChannelCreateDialog } from './components/channel-create-dialog/channel-
 import { WorkspaceHeader } from './components/workspace-header/workspace-header';
 import { WorkspaceSidebar } from './components/workspace-sidebar/workspace-sidebar';
 
-/** Coordinates workspace navigation, search, and responsive panels. */
+/**
+ * Owns the authenticated workspace shell and top-level navigation state.
+ *
+ * It connects Firebase-backed channel, conversation, and profile streams to
+ * the responsive sidebar, header, creation dialogs, and account controls.
+ */
 @Component({
   selector: 'app-workspace',
   imports: [
@@ -32,6 +37,7 @@ import { WorkspaceSidebar } from './components/workspace-sidebar/workspace-sideb
 })
 export class Workspace {
   private readonly header = viewChild(WorkspaceHeader);
+  /** Firebase authentication state exposed to the workspace template. */
   readonly auth = inject(Auth);
   private readonly authService = inject(AuthService);
   private readonly channelsService = inject(ChannelService);
@@ -40,18 +46,30 @@ export class Workspace {
   private readonly router = inject(Router);
   private readonly usersService = inject(UserService);
 
+  /** Channels accessible to the current account in this workspace. */
   readonly channels = toSignal(this.channelsService.observeCurrentUserChannels(), { initialValue: [] });
+  /** Private conversations accessible to the signed-in account. */
   readonly directMessages = toSignal(this.directMessagesService.observeCurrentUserConversations(), { initialValue: [] });
+  /** Workspace user profiles used to resolve visible names and avatar data. */
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
+  /** Profile stream for the currently authenticated account. */
   readonly profile = toSignal(this.usersService.observeCurrentProfile());
+  /** Whether the new-channel dialog is visible. */
   readonly showCreateChannel = signal(false);
+  /** Whether the current user's profile editing dialog is open. */
   readonly showProfileEditor = signal(false);
+  /** Profile currently selected for contextual actions. */
   readonly selectedUser = signal<UserProfile | null>(null);
+  /** Error shown when opening a direct conversation fails. */
   readonly directMessageError = signal('');
   private compactDesktop = window.innerWidth > 800 && window.innerWidth <= 1100;
+  /** Whether the desktop sidebar is currently collapsed. */
   readonly sidebarCollapsed = signal(this.compactDesktop);
+  /** Whether the message is rendered in the narrow-screen layout. */
   readonly mobileViewport = signal(window.innerWidth <= 800);
+  /** Whether the user opened their own profile from the header. */
   readonly ownHeaderProfile = signal(false);
+  /** Viewport coordinates for the current-account profile card. */
   readonly ownProfilePosition = signal<{ top: number; right: number } | null>(null);
 
   /**
