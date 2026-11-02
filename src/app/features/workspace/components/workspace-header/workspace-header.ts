@@ -6,7 +6,12 @@ import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 import { SearchBox } from '../search-box/search-box';
 
-/** Displays workspace navigation and the current user's controls. */
+/**
+ * Renders workspace identity, navigation controls, and the current account menu.
+ *
+ * The account menu has responsive drag state; profile and sign-out actions
+ * are emitted to the parent rather than performed by the header.
+ */
 @Component({
   selector: 'app-workspace-header',
   imports: [Avatar, PresenceIndicator, RouterLink, SearchBox],
@@ -15,18 +20,30 @@ import { SearchBox } from '../search-box/search-box';
 })
 export class WorkspaceHeader {
   private readonly element = inject(ElementRef<HTMLElement>);
+  /** Authenticated user's name displayed in the header. */
   @Input({ required: true }) displayName = '';
+  /** Avatar selection currently active in the profile editor. */
   @Input() avatarId = 'avatar-1';
+  /** Firebase UID used to resolve the header account's presence. */
   @Input() userId = '';
+  /** Whether the account menu and profile actions are enabled. */
   @Input() profileEnabled = true;
+  /** Whether the header is displayed above an active conversation. */
   @Input() conversationOpen = false;
+  /** Workspace display name shown in headings and dialogs. */
   @Input() workspaceName = 'Workspace';
+  /** Requests display of the account's profile editor. */
   @Output() readonly profileRequested = new EventEmitter<void>();
+  /** Requests logout through the workspace auth service. */
   @Output() readonly logoutRequested = new EventEmitter<void>();
+  /** Emits a member profile selected in the list or dialog. */
   @Output() readonly userSelected = new EventEmitter<UserProfile>();
 
+  /** Whether the responsive account menu is visible. */
   readonly menuOpen = signal(false);
+  /** Current vertical drag displacement of the mobile menu sheet. */
   readonly dragOffset = signal(0);
+  /** Whether the mobile sheet handle is actively being dragged. */
   readonly dragging = signal(false);
   private dragStartY: number | null = null;
   private readonly dismissDistance = 72;
@@ -84,7 +101,13 @@ export class WorkspaceHeader {
     this.logoutRequested.emit();
   }
 
-  /** Starts the drag gesture on the mobile menu handle. */
+  /**
+   * Starts a pointer drag on the mobile account-menu handle.
+   *
+   * Pointer capture ensures the drag continues when the pointer leaves the handle.
+   *
+   * @param event - Pointer event providing the starting position and pointer ID.
+   */
   startMenuDrag(event: PointerEvent): void {
     if (!this.menuOpen()) return;
     this.dragStartY = event.clientY;
@@ -92,7 +115,11 @@ export class WorkspaceHeader {
     (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
   }
 
-  /** Moves the mobile sheet down while its handle is being dragged. */
+  /**
+   * Updates the menu's nonnegative downward displacement during a drag gesture.
+   *
+   * @param event - Pointer event providing the current vertical position.
+   */
   moveMenuDrag(event: PointerEvent): void {
     if (this.dragStartY === null) return;
     this.dragOffset.set(Math.max(0, event.clientY - this.dragStartY));
