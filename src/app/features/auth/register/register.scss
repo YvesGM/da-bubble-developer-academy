@@ -1,8 +1,7 @@
 @use '../../../../styles/tokens' as tokens;
 @use '../../../../styles/breakpoints' as bp;
 
-.register-card,
-.avatar-card {
+@mixin registration-card($heading-size, $mobile-heading-size, $mobile-back-top) {
   min-height: 669px;
   padding: 40px 53px;
 
@@ -13,7 +12,7 @@
     display: block;
 
     .auth-title {
-      font-size: 48px;
+      font-size: $heading-size;
       line-height: 1.2;
       text-align: center;
     }
@@ -49,18 +48,21 @@
     min-height: 0;
 
     .auth-card-header:has(.auth-back) .auth-title {
-      font-size: clamp(26px, 7.45vw, 32px);
+      font-size: $mobile-heading-size;
     }
 
     .auth-card-header:has(.auth-back) .auth-back {
-      top: -5px;
+      top: $mobile-back-top;
       left: 2px;
     }
   }
 }
 
+
 .register {
   &-card {
+    @include registration-card(48px, clamp(26px, 7.45vw, 32px), 0);
+
     .auth-description {
       margin-top: 32px;
       font-size: 20px;
@@ -69,10 +71,6 @@
 
     @include bp.mobile {
       padding: 20px 20px 26px;
-
-      .auth-card-header:has(.auth-back) .auth-back {
-        top: 0;
-      }
 
       .auth-description {
         margin-top: 15px;
@@ -176,18 +174,10 @@
 
 .avatar {
   &-card {
-    .auth-card-header:has(.auth-back) {
-      .auth-title {
-        font-size: 46px;
-      }
-    }
+    @include registration-card(46px, 32px, -6px);
 
     @include bp.mobile {
       padding: 26px 21px;
-
-      .auth-card-header:has(.auth-back) .auth-back {
-        top: -6px;
-      }
 
       .auth-card-header:has(.auth-back) {
         .auth-title {
@@ -195,7 +185,6 @@
           min-height: 76px;
           margin-inline: auto;
 
-          font-size: 32px;
           text-wrap: balance;
         }
       }
