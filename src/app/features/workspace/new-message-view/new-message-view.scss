@@ -99,7 +99,10 @@
       }
     }
 
-    span,
+    span {
+      color: tokens.$text-gray;
+    }
+
     p {
       color: tokens.$text-gray;
     }
