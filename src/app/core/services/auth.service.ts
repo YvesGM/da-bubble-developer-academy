@@ -20,13 +20,20 @@ import {
 
 import { UserService } from './user.service';
 
-/** Coordinates Firebase authentication and password-reset operations. */
+/**
+ * Exposes Firebase authentication operations to the application's login and account flows.
+ *
+ * New identities are synchronized with Firestore profiles, and password-reset
+ * operations run within Angular's injection context for AngularFire compatibility.
+ */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  /** Firebase Auth instance supplying the active account for permission checks. */
   private readonly auth = inject(Auth);
+  /** User profile service used to resolve and persist application identities. */
   private readonly users = inject(UserService);
+  /** Angular injector used to run AngularFire calls inside injection context. */
   private readonly injector = inject(EnvironmentInjector);
-
 
   /**
    * Authenticates a registered user with email and password and ensures that the application profile exists.
@@ -41,7 +48,6 @@ export class AuthService {
     await this.users.ensureProfile(credential.user);
     return credential;
   }
-
 
   /**
    * Creates a registered Firebase account and persists the corresponding application profile.
@@ -65,7 +71,6 @@ export class AuthService {
     return credential;
   }
 
-
   /**
    * Starts an anonymous Firebase Authentication session.
    *
@@ -75,7 +80,6 @@ export class AuthService {
   async loginAsGuest(): Promise<UserCredential> {
     return this.run(() => signInAnonymously(this.auth));
   }
-
 
   /**
    * Authenticates with Google through a popup and ensures that the application profile exists.
