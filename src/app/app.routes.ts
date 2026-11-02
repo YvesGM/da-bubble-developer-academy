@@ -6,7 +6,11 @@ import { directMessageGuard } from './core/guards/direct-message.guard';
 import { registeredUserGuard } from './core/guards/registered-user.guard';
 
 /**
- * Maps public pages and guarded workspace views to their routes.
+ * Defines the root navigation tree for public pages and authenticated workspaces.
+ *
+ * Auth and legal routes load lazily and remain available without a session;
+ * workspace children apply access guards to individual conversations.
+ * Unknown routes redirect to login instead of leaving an unusable view.
  */
 export const routes: Routes = [
   {
