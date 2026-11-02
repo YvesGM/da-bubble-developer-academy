@@ -15,13 +15,20 @@ import { Observable, map } from 'rxjs';
 import { ConversationTarget, conversationDocumentPath } from '../models/conversation.model';
 import { MessageReaction, ReactionGroup } from '../models/reaction.model';
 
-/** Persists and groups emoji reactions on messages and replies. */
+/**
+ * Persists per-user emoji reactions and aggregates them for message rendering.
+ *
+ * Reaction state is scoped to the selected conversation and message or thread,
+ * so toggling one user's choice does not change another user's reaction.
+ */
 @Injectable({ providedIn: 'root' })
 export class ReactionService {
+  /** Firebase Auth instance supplying the active account for permission checks. */
   private readonly auth = inject(Auth);
+  /** Cloud Firestore client for the service's persisted data. */
   private readonly firestore = inject(Firestore);
+  /** Angular injector used to run AngularFire calls inside injection context. */
   private readonly injector = inject(EnvironmentInjector);
-
 
   /**
    * Observes and groups emoji reactions for a message or thread reply.
@@ -30,7 +37,6 @@ export class ReactionService {
    * @param messageId - Identifier of the parent message.
    * @param replyId - Optional thread-reply identifier.
    * @returns An observable of reactions grouped by emoji.
-
    */
   observeReactions(
     target: ConversationTarget,
@@ -42,7 +48,6 @@ export class ReactionService {
     return (items as Observable<MessageReaction[]>).pipe(map((items) => this.groupReactions(items)));
   }
 
-
   /**
    * Adds the current user's reaction when absent and removes it when already present.
    *
@@ -51,7 +56,6 @@ export class ReactionService {
    * @param emoji - Emoji to toggle.
    * @param replyId - Optional thread-reply identifier.
    * @throws If no user is authenticated or Firestore access fails.
-
    */
   async toggleReaction(
     target: ConversationTarget,
@@ -70,7 +74,6 @@ export class ReactionService {
    *
    * @param reactions - Reaction documents to group.
    * @returns Grouped reactions suitable for rendering.
-
    */
   private groupReactions(reactions: MessageReaction[]): ReactionGroup[] {
     const groups = new Map<string, string[]>();
@@ -83,7 +86,6 @@ export class ReactionService {
    *
    * @param groups - Mutable map keyed by emoji.
    * @param reaction - Reaction document to append.
-
    */
   private addReaction(groups: Map<string, string[]>, reaction: MessageReaction): void {
     const users = groups.get(reaction.emoji) ?? [];
@@ -96,7 +98,6 @@ export class ReactionService {
    * @param emoji - Emoji being added.
    * @returns The reaction document payload.
    * @throws If no Firebase user is authenticated.
-
    */
   private reactionData(emoji: string) {
     return { emoji, userId: this.currentUserId(), createdAt: serverTimestamp() };
@@ -110,7 +111,6 @@ export class ReactionService {
    * @param emoji - Emoji being referenced.
    * @param replyId - Optional thread-reply identifier.
    * @returns The deterministic reaction document reference.
-
    */
   private reactionReference(
     target: ConversationTarget,
@@ -129,7 +129,6 @@ export class ReactionService {
    * @param messageId - Identifier of the parent message.
    * @param replyId - Optional thread-reply identifier.
    * @returns The Firestore reaction collection reference.
-
    */
   private reactionsCollection(target: ConversationTarget, messageId: string, replyId?: string) {
     return this.runSync(() => collection(this.firestore, this.reactionsPath(target, messageId, replyId)));
@@ -142,7 +141,6 @@ export class ReactionService {
    * @param messageId - Identifier of the parent message.
    * @param replyId - Optional thread-reply identifier.
    * @returns The reaction collection path.
-
    */
   private reactionsPath(target: ConversationTarget, messageId: string, replyId?: string): string {
     const base = `${conversationDocumentPath(target)}/messages/${messageId}`;
