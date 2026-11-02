@@ -11,7 +11,12 @@ export interface AddMembersSelection {
   guestAccess: boolean;
 }
 
-/** Selects additional members for an existing channel. */
+/**
+ * Selects registered users or guest access to add to an existing channel.
+ *
+ * Search and selection state are local to the dialog; confirmation returns a
+ * structured selection to the channel view without mutating membership itself.
+ */
 @Component({
   selector: 'app-add-members-dialog',
   imports: [InputCaretDirective, Avatar, PresenceIndicator],
@@ -20,19 +25,27 @@ export interface AddMembersSelection {
 })
 export class AddMembersDialog {
   private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('memberSearch');
+  /** Workspace user profiles used to resolve visible names and avatar data. */
   @Input() users: UserProfile[] = [];
+  /** Whether guest access can be added to this channel. */
   @Input() guestAvailable = false;
   /** Current channel name shown between the heading and member search. */
   @Input() channelName = '';
   /** Viewport offsets of the add-member button for popover placement. */
   @Input() position: { top: number; right: number } = { top: 100, right: 24 };
+  /** Asks the owning view to dismiss the current dialog or panel. */
   @Output() readonly closeRequested = new EventEmitter<void>();
+  /** Emits the add-members action to the owning channel view. */
   @Output() readonly addRequested = new EventEmitter<AddMembersSelection>();
 
+  /** Current search or mention query typed by the user. */
   readonly query = signal('');
+  /** UIDs currently selected for inclusion in the channel. */
   readonly selectedIds = signal(new Set<string>());
+  /** Whether the guest-access option is selected. */
   readonly guestSelected = signal(false);
 
+  /** Schedules focus on the member search field after the dialog renders. */
   constructor() {
     afterNextRender(() => this.searchInput()?.nativeElement.focus());
   }
