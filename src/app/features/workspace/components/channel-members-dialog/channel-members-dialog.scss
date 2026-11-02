@@ -47,7 +47,12 @@
       border-radius: 50%;
       background: transparent;
 
-      img { transition: filter tokens.$motion-fast; }
+      img {
+        display: block;
+        width: 18px;
+        height: 18px;
+        transition: filter tokens.$motion-fast;
+      }
       &:hover {
         background: tokens.$background;
         img { filter: invert(34%) sepia(81%) saturate(3435%) hue-rotate(225deg); }
@@ -63,10 +68,3 @@
   }
 }
 
-.dialog header button img,
-.card header button img,
-.dialog-heading .close img {
-  display: block;
-  width: 18px;
-  height: 18px;
-}
