@@ -19,7 +19,12 @@ import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-pi
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
-/** Composes messages with emoji and mention suggestions. */
+/**
+ * Implements the message composer with multiline text, emojis, and mention suggestions.
+ *
+ * Inputs provide available participants and the send action, while local signals
+ * track the draft, active completion trigger, and async submission feedback.
+ */
 @Component({
   selector: 'app-message-input',
   imports: [FormsModule, EmojiPicker, InputCaretDirective, Avatar, PresenceIndicator],
@@ -28,10 +33,15 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
 })
 export class MessageInput implements AfterViewInit {
   private readonly host = inject(ElementRef<HTMLElement>);
+  /** Channels accessible to the current account in this workspace. */
   @Input() channels: Channel[] = [];
+  /** Workspace user profiles used to resolve visible names and avatar data. */
   @Input() users: UserProfile[] = [];
+  /** User's recent emoji choices offered ahead of the default picker. */
   @Input() recentEmojis: string[] = [];
+  /** Hint shown when the search or text field is empty. */
   @Input() placeholder = 'Write a message';
+  /** Whether the message field receives focus when mounted or changed. */
   @Input() autoFocus = true;
   /**
    * Refocuses the message field when the containing conversation changes.
@@ -41,6 +51,7 @@ export class MessageInput implements AfterViewInit {
   @Input() set focusKey(value: string) {
     if (value && this.autoFocus) queueMicrotask(() => this.field?.nativeElement.focus());
   }
+  /** Parent-provided asynchronous callback that sends a composed message. */
   @Input() sendAction?: (text: string) => Promise<void>;
   /**
    * Prefills an otherwise empty draft, such as one carried from recipient selection.
@@ -50,15 +61,22 @@ export class MessageInput implements AfterViewInit {
   @Input() set initialText(value: string) {
     if (value && !this.text()) this.updateText(value);
   }
+  /** Emits an emoji selected from the composer to update recent choices. */
   @Output() readonly emojiUsed = new EventEmitter<string>();
 
   @ViewChild('messageField') private field?: ElementRef<HTMLTextAreaElement>;
 
+  /** Reactive contents of the current unsent message draft. */
   readonly text = signal('');
+  /** Active mention prefix, either @ or #, or null if inactive. */
   readonly trigger = signal<'@' | '#' | null>(null);
+  /** Current search or mention query typed by the user. */
   readonly query = signal('');
+  /** Whether the composer or reaction emoji palette is visible. */
   readonly showEmojiPicker = signal(false);
+  /** Whether a message is currently being submitted. */
   readonly sending = signal(false);
+  /** Message send failure displayed next to the composer. */
   readonly sendError = signal('');
 
   /**
