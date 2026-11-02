@@ -43,15 +43,25 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
   styleUrl: './message-item.scss',
 })
 export class MessageItem {
+  /** Host element used to distinguish inside and outside pointer interactions. */
   private readonly host = inject(ElementRef<HTMLElement>);
+  /** Textarea used when the current message enters inline-edit mode. */
   @ViewChild('editField') private editField?: ElementRef<HTMLTextAreaElement>;
+  /** Button used to anchor the message action menu. */
   @ViewChild('optionsButton') private optionsButton?: ElementRef<HTMLButtonElement>;
+  /** Rendered message action menu used for positioning and dismissing. */
   @ViewChild('optionsMenu') private optionsMenu?: ElementRef<HTMLDivElement>;
+  /** Reusable native popover used for emoji reactions. */
   @ViewChild('reactionPicker') private reactionPicker?: ReactionPopover;
+  /** Firebase Auth client providing the active account identity. */
   private readonly auth = inject(Auth);
+  /** Message service used to edit and remove messages from Firestore. */
   private readonly messages = inject(MessageService);
+  /** Reaction service for toggling and observing per-user emoji choices. */
   private readonly reactionsService = inject(ReactionService);
+  /** Thread service used to open or count replies to this message. */
   private readonly threadsService = inject(ThreadService);
+  /** User service used to resolve participant and profile records. */
   private readonly usersService = inject(UserService);
 
   /** Conversation target passed to messaging, reactions, and navigation. */
