@@ -52,8 +52,7 @@
       transform tokens.$motion-base;
   }
 
-  .icon-button,
-  .send-button {
+  .icon-button {
     display: grid;
     place-items: center;
     flex: 0 0 var(--ws-action, 40px);
@@ -64,7 +63,11 @@
     background: transparent;
     border-radius: 50%;
 
-    img { width: var(--ws-icon, 20px); height: var(--ws-icon, 20px); object-fit: contain; }
+    img {
+      width: var(--ws-icon, 20px);
+      height: var(--ws-icon, 20px);
+      object-fit: contain;
+    }
 
     &:hover:not(:disabled),
     &:focus-visible {
@@ -72,13 +75,38 @@
       transform: scale(1.05);
     }
 
-    &:focus-visible { outline: 2px solid tokens.$purple-2; }
+    &:focus-visible {
+      outline: 2px solid tokens.$purple-2;
+    }
   }
 
   .send-button {
+    display: grid;
+    place-items: center;
+    flex: 0 0 var(--ws-action, 40px);
+    width: var(--ws-action, 40px);
+    height: var(--ws-action, 40px);
     margin-left: auto;
+    padding: 0;
+    color: tokens.$text;
+    background: transparent;
+    border-radius: 50%;
 
-    img { width: clamp(30px, 1.563vw, 48px); height: clamp(30px, 1.563vw, 48px); }
+    img {
+      width: clamp(30px, 1.563vw, 48px);
+      height: clamp(30px, 1.563vw, 48px);
+      object-fit: contain;
+    }
+
+    &:hover:not(:disabled),
+    &:focus-visible {
+      background: tokens.$background;
+      transform: scale(1.05);
+    }
+
+    &:focus-visible {
+      outline: 2px solid tokens.$purple-2;
+    }
 
     &:disabled {
       cursor: default;
@@ -86,7 +114,6 @@
     }
   }
 
-  .picker,
   .suggestions {
     display: grid;
     align-content: start;
@@ -102,6 +129,7 @@
     background: tokens.$white;
     border-radius: 20px 20px 20px 0;
     box-shadow: tokens.$overlay-shadow;
+    border: 1px solid tokens.$border;
 
     .suggestion-option {
       display: flex;
@@ -167,13 +195,16 @@
     }
   }
 
-  .suggestions { border: 1px solid tokens.$border; }
-
-  // The shared emoji picker already draws its own white surface and shadow.
+  // The shared emoji picker supplies its own surface and shadow.
   .picker {
     display: block;
+    position: absolute;
+    z-index: 12;
+    bottom: calc(100% + 8px);
+    left: 20px;
     width: max-content;
     max-width: calc(100% - 40px);
+    max-height: min(380px, 55dvh);
     padding: 0;
     overflow: visible;
     background: transparent;
@@ -185,7 +216,12 @@
     min-height: min(145px, max(110px, 16dvh));
     padding: 19px 20px 20px;
     border-radius: 20px;
-    .icon-button,
+    .icon-button {
+      flex-basis: 40px;
+      width: 40px;
+      height: 40px;
+    }
+
     .send-button {
       flex-basis: 40px;
       width: 40px;
@@ -193,19 +229,19 @@
     }
     .icon-button img { width: 20px; height: 20px; }
   }
-}
 
-.composer-error {
-  position: absolute;
-  z-index: 16;
-  right: 0;
-  bottom: calc(100% + 8px);
-  max-width: 100%;
-  margin: 0;
-  padding: 8px 12px;
-  background: tokens.$white;
-  border-radius: 12px;
-  box-shadow: 0 4px 18px #0000001f;
-  font-size: 14px;
-  color: tokens.$error;
+  &-error {
+    position: absolute;
+    z-index: 16;
+    right: 0;
+    bottom: calc(100% + 8px);
+    max-width: 100%;
+    margin: 0;
+    padding: 8px 12px;
+    background: tokens.$white;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #0000001f;
+    font-size: 14px;
+    color: tokens.$error;
+  }
 }
