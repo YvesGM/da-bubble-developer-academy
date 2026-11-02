@@ -3,7 +3,12 @@ import { RouterOutlet } from '@angular/router';
 
 import { Splash } from './features/auth/splash/splash';
 
-/** Renders the application shell and coordinates the initial splash transition. */
+/**
+ * Owns the root application shell and the first-launch splash transition.
+ *
+ * The shell keeps the introductory animation separate from routed Angular pages
+ * so navigation starts only after the initial entry state is resolved.
+ */
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, Splash],
@@ -11,6 +16,7 @@ import { Splash } from './features/auth/splash/splash';
   styleUrl: './app.scss',
 })
 export class App {
+  /** Whether the introductory splash should be rendered before routing. */
   readonly showSplash = signal(this.isSplashEntry());
 
   /** Removes the transition layer after the destination screen is visible. */
