@@ -62,19 +62,25 @@ test('frontend rejects non-JSON responses from the password-reset endpoint', () 
 
 /** Figma's auth notices have three rounded corners and a square bottom-right tip. */
 test('all auth notices use the Figma chat-bubble corner radii', () => {
+  const globalStyles = readFileSync(new URL('../src/styles.scss', import.meta.url), 'utf8');
   const source = readFileSync(new URL('../src/styles/_auth-actions.scss', import.meta.url), 'utf8');
-  const notice = source.slice(source.indexOf('.auth-notice {'));
-  assert.match(notice, /border-radius: 30px 30px 0 30px;/);
+  assert.match(globalStyles, /@use 'styles\/auth-actions';/);
+  assert.match(source, /&-notice\s*\{[\s\S]*?border-radius:\s*30px 30px 0 30px;/);
 });
 
 /** The mobile reset logo is 56px, restoring Figma's 88px logo-to-card distance. */
 test('mobile reset header uses the Figma-specific logo dimensions', () => {
-  const source = readFileSync(new URL(
+  const shell = readFileSync(new URL(
     '../src/app/features/auth/components/auth-shell/auth-shell.scss', import.meta.url,
   ), 'utf8');
-  const reset = source.slice(source.indexOf('&--reset {'));
-  assert.match(reset, /width: 56px;/);
-  assert.match(reset, /height: 56px;/);
-  assert.ok(reset.includes('gap: 12.8px;'));
-  assert.ok(reset.includes('width: 135.29px;'));
+  const source = readFileSync(new URL(
+    '../src/app/features/auth/components/auth-shell/_auth-shell-variants.scss', import.meta.url,
+  ), 'utf8');
+  assert.match(shell, /@include variants\.styles;/);
+  const start = source.indexOf('&--reset {');
+  assert.notEqual(start, -1, 'missing mobile reset variant');
+  const reset = source.slice(start);
+  assert.match(reset, /&-mark\s*\{\s*width:\s*56px;\s*height:\s*56px;/);
+  assert.match(reset, /gap:\s*12\.8px;/);
+  assert.match(reset, /width:\s*135\.29px;/);
 });
