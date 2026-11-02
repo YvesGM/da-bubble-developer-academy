@@ -1,4 +1,9 @@
-/** Immutable identifiers of the six selectable built-in avatars. */
+/**
+ * Lists the six SVG avatar identifiers offered in registration and profile editing.
+ *
+ * IDs are persisted in user profiles; keep existing identifiers stable so saved
+ * profiles continue to resolve the corresponding image assets.
+ */
 export const AVATAR_IDS = [
   'avatar-1',
   'avatar-2',
@@ -8,5 +13,5 @@ export const AVATAR_IDS = [
   'avatar-6',
 ] as const;
 
-/** Union of the built-in avatar identifiers accepted by profile settings. */
+/** Restricts avatar selection to identifiers available in the built-in asset set. */
 export type AvatarId = (typeof AVATAR_IDS)[number];
