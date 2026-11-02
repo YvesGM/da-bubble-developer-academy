@@ -1,7 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, DestroyRef, Directive, ElementRef, Renderer2, inject } from '@angular/core';
 
-/** Draws the compact Figma caret without changing native editing or selection. */
+/**
+ * Draws a custom compact caret for supported text controls without replacing input behavior.
+ *
+ * The directive measures the native selection and restores the original cursor
+ * on blur or unsupported input modes, preserving keyboard and touch editing.
+ */
 @Directive({
   selector: 'input[appInputCaret], textarea[appInputCaret]',
   standalone: true,
