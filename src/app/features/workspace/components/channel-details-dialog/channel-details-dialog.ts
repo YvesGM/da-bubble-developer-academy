@@ -6,7 +6,12 @@ import { UserProfile } from '../../../../core/models/user-profile.model';
 import { ChannelMembersContent } from '../channel-members-content/channel-members-content';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
-/** Displays and manages channel details and settings. */
+/**
+ * Displays and edits channel metadata inside the details dialog.
+ *
+ * The component owns only the editing form and emits changes to its parent,
+ * while member rows and the leave-channel action remain accessible.
+ */
 @Component({
   selector: 'app-channel-details-dialog',
   imports: [InputCaretDirective, ReactiveFormsModule, ChannelMembersContent],
@@ -26,21 +31,36 @@ export class ChannelDetailsDialog {
     this.editingName.set(false);
     this.editingDescription.set(false);
   }
+  /** Viewport coordinates controlling the contextual dialog's placement. */
   @Input() position = { top: 120, left: 24 };
+  /** Display name of the user who created this channel. */
   @Input() creatorName = 'Unbekannter Benutzer';
+  /** Profiles currently belonging to the selected channel. */
   @Input() members: UserProfile[] = [];
+  /** UID of the current account, used to mark the user's own row. */
   @Input() currentUserId = '';
+  /** Whether this channel allows anonymous guest participation. */
   @Input() guestAccess = false;
+  /** Whether the current account may invite additional members. */
   @Input() canAdd = true;
+  /** Human-readable error currently shown in the form. */
   @Input() errorMessage = '';
+  /** Asks the owning view to dismiss the current dialog or panel. */
   @Output() readonly closeRequested = new EventEmitter<void>();
+  /** Emits changed channel name or description for persistence. */
   @Output() readonly saveRequested = new EventEmitter<UpdateChannelInput>();
+  /** Requests removal of the current user from the channel. */
   @Output() readonly leaveRequested = new EventEmitter<void>();
+  /** Emits the add-members action to the owning channel view. */
   @Output() readonly addRequested = new EventEmitter<void>();
+  /** Emits a member profile selected in the list or dialog. */
   @Output() readonly userSelected = new EventEmitter<UserProfile>();
 
+  /** Whether the channel name field is currently in edit mode. */
   readonly editingName = signal(false);
+  /** Whether the channel description is currently in edit mode. */
   readonly editingDescription = signal(false);
+  /** Non-nullable reactive form holding the fields and validation state. */
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', Validators.required],
     description: [''],
