@@ -19,12 +19,18 @@ type LogoTargets = [HTMLImageElement, HTMLImageElement];
 export class Splash implements AfterViewInit {
   /** Emits once the introductory animation has completed. */
   @Output() readonly finished = new EventEmitter<void>();
+  /** Backdrop element animated during the splash transition. */
   @ViewChild('backdrop') private backdrop!: ElementRef<HTMLElement>;
+  /** Logo symbol image participating in the splash animation. */
   @ViewChild('mark') private mark!: ElementRef<HTMLImageElement>;
+  /** Clipping element revealing the animated brand name. */
   @ViewChild('nameWindow') private nameWindow!: ElementRef<HTMLElement>;
+  /** Brand-name image animated after the symbol appears. */
   @ViewChild('name') private name!: ElementRef<HTMLImageElement>;
 
+  /** Firebase Auth client providing the active account identity. */
   private readonly auth = inject(Auth);
+  /** Router dependency used for navigation after the current action completes. */
   private readonly router = inject(Router);
 
   /** Starts only after the splash elements are available for animation. */
