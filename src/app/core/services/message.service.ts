@@ -16,27 +16,32 @@ import { Observable } from 'rxjs';
 import { ConversationTarget, conversationDocumentPath } from '../models/conversation.model';
 import { CreateMessageInput, Message } from '../models/message.model';
 
-/** Persists and observes messages in channels and private conversations. */
+/**
+ * Observes and persists channel and direct-message content in Firestore.
+ *
+ * The same service handles message creation, editing, and soft deletion while
+ * keeping conversation-specific collection paths centralized.
+ */
 @Injectable({ providedIn: 'root' })
 export class MessageService {
+  /** Firebase Auth instance supplying the active account for permission checks. */
   private readonly auth = inject(Auth);
+  /** Cloud Firestore client for the service's persisted data. */
   private readonly firestore = inject(Firestore);
+  /** Angular injector used to run AngularFire calls inside injection context. */
   private readonly injector = inject(EnvironmentInjector);
-
 
   /**
    * Observes messages for a channel or direct-message conversation in chronological order.
    *
    * @param target - Conversation whose messages should be observed.
    * @returns An observable of message documents ordered by creation time.
-
    */
   observeMessages(target: ConversationTarget): Observable<Message[]> {
     const reference = this.messagesCollection(target);
     const request = this.runSync(() => query(reference, orderBy('createdAt', 'asc')));
     return this.runSync(() => collectionData(request, { idField: 'id' })) as Observable<Message[]>;
   }
-
 
   /**
    * Creates a message in the selected conversation.
@@ -45,14 +50,12 @@ export class MessageService {
    * @param input - Message text and author presentation data.
    * @returns The Firestore identifier of the created message.
    * @throws If no user is authenticated or Firestore rejects the write.
-
    */
   async sendMessage(target: ConversationTarget, input: CreateMessageInput): Promise<string> {
     const reference = this.messagesCollection(target);
     const result = await this.run(() => addDoc(reference, this.messageData(input)));
     return result.id;
   }
-
 
   /**
    * Updates an existing message and refreshes its modification timestamp.
@@ -61,13 +64,11 @@ export class MessageService {
    * @param messageId - Identifier of the message to update.
    * @param text - Replacement message text.
    * @throws If Firestore rejects the update.
-
    */
   async updateMessage(target: ConversationTarget, messageId: string, text: string): Promise<void> {
     const reference = this.messageReference(target, messageId);
     await this.run(() => updateDoc(reference, { text: text.trim(), updatedAt: serverTimestamp() }));
   }
-
 
   /**
    * Soft-deletes a message while preserving its document and conversation history.
@@ -75,7 +76,6 @@ export class MessageService {
    * @param target - Conversation that owns the message.
    * @param messageId - Identifier of the message to delete.
    * @throws If Firestore rejects the update.
-
    */
   async deleteMessage(target: ConversationTarget, messageId: string): Promise<void> {
     const reference = this.messageReference(target, messageId);
