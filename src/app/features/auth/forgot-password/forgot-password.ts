@@ -20,9 +20,13 @@ import { InputCaretDirective } from '../../../shared/directives/input-caret.dire
   styleUrl: './forgot-password.scss',
 })
 export class ForgotPassword {
+  /** Application auth service used to execute account operations. */
   private readonly auth = inject(AuthService);
+  /** Angular form builder used to create typed and validated controls. */
   private readonly formBuilder = inject(FormBuilder);
+  /** Angular lifecycle reference used to cancel timers or subscriptions on teardown. */
   private readonly destroyRef = inject(DestroyRef);
+  /** Handle for clearing temporary password-reset feedback. */
   private noticeTimer?: ReturnType<typeof setTimeout>;
 
   /** Neutral completion notice shown after requesting the reset email. */
