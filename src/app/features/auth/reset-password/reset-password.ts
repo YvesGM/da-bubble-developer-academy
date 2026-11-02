@@ -22,9 +22,13 @@ import { AuthShell } from '../components/auth-shell/auth-shell';
   styleUrl: './reset-password.scss',
 })
 export class ResetPassword {
+  /** Application auth service used to execute account operations. */
   private readonly auth = inject(AuthService);
+  /** Angular form builder used to create typed and validated controls. */
   private readonly formBuilder = inject(FormBuilder);
+  /** Active route containing the selected conversation ID or reset parameters. */
   private readonly route = inject(ActivatedRoute);
+  /** Router dependency used for navigation after the current action completes. */
   private readonly router = inject(Router);
 
   /** Human-readable error currently shown in the form. */
