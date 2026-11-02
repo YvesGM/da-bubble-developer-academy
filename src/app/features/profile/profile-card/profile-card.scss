@@ -202,8 +202,9 @@
       margin-top: 24px;
       --avatar-hero-size: clamp(128px, 42vw, 180px);
     }
-    .name-row,
-    &.own-profile .name-row { margin-top: 24px; }
+    .name-row {
+      margin-top: 24px;
+    }
     h3 {
       font-size: clamp(24px, 6vw, 30px);
     }
