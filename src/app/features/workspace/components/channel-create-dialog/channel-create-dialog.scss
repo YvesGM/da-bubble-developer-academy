@@ -30,6 +30,12 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+
+    .close img {
+      display: block;
+      width: 18px;
+      height: 18px;
+    }
   }
 
   h2 {
@@ -37,19 +43,22 @@
     font-size: 24px;
   }
 
+  header button img {
+    display: block;
+    width: 18px;
+    height: 18px;
+  }
+
   form {
     display: grid;
-
     margin-top: 24px;
     gap: 18px;
+  }
 
-    &-error {
-      font-size: 16px;
-
-      margin: -10px 0 0;
-
-      color: tokens.$error;
-    }
+  .form-error {
+    margin: -10px 0 0;
+    color: tokens.$error;
+    font-size: 16px;
   }
 
   label {
@@ -121,9 +130,24 @@
   .actions {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-
+    justify-content: flex-end;
     gap: 16px;
+
+    button {
+      padding: 11px 20px;
+      font-size: 18px;
+      font-weight: 700;
+      border: 0;
+      border-radius: 24px;
+      transition:
+        background-color tokens.$motion-base,
+        color tokens.$motion-fast;
+
+      &:disabled {
+        cursor: default;
+        opacity: 0.55;
+      }
+    }
   }
 
   .optional {
@@ -238,29 +262,6 @@
     }
   }
 
-  .actions {
-    justify-content: flex-end;
-
-    button {
-      font-size: 18px;
-      font-weight: 700;
-
-      padding: 11px 20px;
-
-      border: 0;
-      border-radius: 24px;
-
-      transition:
-        background-color tokens.$motion-base,
-        color tokens.$motion-fast;
-
-      &:disabled {
-        cursor: default;
-        opacity: 0.55;
-      }
-    }
-  }
-
   .primary {
     color: tokens.$white;
     background: tokens.$purple-1;
@@ -291,10 +292,3 @@
   }
 }
 
-.dialog header button img,
-.card header button img,
-.dialog-heading .close img {
-  display: block;
-  width: 18px;
-  height: 18px;
-}
