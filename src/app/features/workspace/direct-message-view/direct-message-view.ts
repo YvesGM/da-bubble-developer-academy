@@ -26,8 +26,11 @@ import { ChatPanel } from '../components/chat-panel/chat-panel';
   styleUrl: './direct-message-view.scss',
 })
 export class DirectMessageView {
+  /** Firebase Auth client providing the active account identity. */
   private readonly auth = inject(Auth);
+  /** Active route containing the selected conversation ID or reset parameters. */
   private readonly route = inject(ActivatedRoute);
+  /** User service used to resolve participant and profile records. */
   private readonly usersService = inject(UserService);
 
   /** Workspace user profiles used to resolve visible names and avatar data. */
