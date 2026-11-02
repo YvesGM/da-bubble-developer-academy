@@ -28,10 +28,15 @@ import { ThreadPanel } from '../thread-panel/thread-panel';
   styleUrl: './chat-panel.scss',
 })
 export class ChatPanel {
+  /** Firebase Auth client providing the active account identity. */
   private readonly auth = inject(Auth);
+  /** Router dependency used for navigation after the current action completes. */
   private readonly router = inject(Router);
+  /** Channel service supplying accessible channel data. */
   private readonly channelsService = inject(ChannelService);
+  /** Message service supplying and sending conversation messages. */
   private readonly messagesService = inject(MessageService);
+  /** User service used to resolve participant and profile records. */
   private readonly usersService = inject(UserService);
 
   /** Conversation target passed to messaging, reactions, and navigation. */
@@ -69,6 +74,7 @@ export class ChatPanel {
   readonly threadMessage = signal<Message | null>(null);
   /** Draft text carried from recipient selection into the composer. */
   readonly initialDraft = this.router.getCurrentNavigation()?.extras.state?.['newMessageDraft'] ?? '';
+  /** Last rendered target key, used to detect conversation changes. */
   private previousTarget = '';
   /** Callback passed to the composer to persist a new message. */
   readonly submitMessage = (text: string): Promise<void> => this.sendMessage(text);
