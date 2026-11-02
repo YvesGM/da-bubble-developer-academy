@@ -11,10 +11,15 @@
 
 .new-message-view {
   display: grid;
-  grid-template-rows: clamp(80px, 4.17vw, 128px) clamp(80px, 4.17vw, 128px) minmax(0, 1fr) var(--ws-composer, 145px);
+  grid-template-rows: clamp(80px, 4.17vw, 128px) clamp(80px, 4.17vw, 128px) minmax(0, 1fr) var(
+      --ws-composer,
+      145px
+    );
+  
   height: 100%;
   min-height: 0;
   padding: 0 clamp(45px, 2.34vw, 72px) clamp(40px, 2.083vw, 64px);
+  
   background: tokens.$white;
 
   header {
@@ -22,10 +27,15 @@
     align-items: center;
     min-width: 0;
 
-    h1 { margin: 0; font-size: var(--ws-heading, 24px); }
+    h1 {
+      margin: 0;
+      font-size: var(--ws-heading, 24px);
+    }
   }
 
-  .mobile-back { display: none; }
+  .mobile-back {
+    display: none;
+  }
 
   .to-field {
     display: flex;
@@ -40,9 +50,14 @@
     border-radius: 30px;
     transition: border-color tokens.$motion-base;
 
-    &:focus-within { border-color: tokens.$purple-1; }
+    &:focus-within {
+      border-color: tokens.$purple-1;
+    }
 
-    span { flex: 0 0 auto; color: tokens.$text-gray; }
+    span {
+      flex: 0 0 auto;
+      color: tokens.$text-gray;
+    }
 
     input {
       flex: 1;
@@ -73,7 +88,9 @@
       background: transparent;
       border: 0;
       border-radius: 18px;
-      transition: background-color tokens.$motion-base, color tokens.$motion-fast;
+      transition:
+        background-color tokens.$motion-base,
+        color tokens.$motion-fast;
 
       &:hover,
       &:focus-visible {
@@ -83,26 +100,39 @@
     }
 
     span,
-    p { color: tokens.$text-gray; }
+    p {
+      color: tokens.$text-gray;
+    }
   }
 
-  .new-message-composer { min-width: 0; margin: 0 clamp(26px, 1.35vw, 42px); }
+  .new-message-composer {
+    min-width: 0;
+    margin: 0 clamp(26px, 1.35vw, 42px);
+  }
 
   @include bp.mobile {
     grid-template-rows: 60px 65px minmax(0, 1fr) min(145px, max(110px, 16dvh));
     padding: 0 16px 30px;
 
-    header h1 { font-size: 20px; }
+    header h1 {
+      font-size: 20px;
+    }
 
     .to-field {
       margin-top: 7px;
       padding-inline: 12px;
       gap: 5px;
 
-      input { height: 51px; }
+      input {
+        height: 51px;
+      }
     }
 
-    .results { padding-left: 0; }
-    .new-message-composer { margin: 0; }
+    .results {
+      padding-left: 0;
+    }
+    .new-message-composer {
+      margin: 0;
+    }
   }
 }

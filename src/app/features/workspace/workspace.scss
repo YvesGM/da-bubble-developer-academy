@@ -2,11 +2,14 @@
 @use '../../../styles/breakpoints' as bp;
 
 .workspace {
+  position: relative;
+
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
+
   height: 100dvh;
   min-height: 0;
-  position: relative;
+
   background: tokens.$background;
 
   // Scale only the workspace beyond the Figma 1920px desktop reference.
@@ -40,14 +43,14 @@
     --ws-thread-header: clamp(104px, 5.42vw, 166px);
     --ws-avatar: clamp(70px, 3.65vw, 112px);
     --ws-composer: clamp(145px, 7.55vw, 232px);
-    --ws-text: clamp(18px, .9375vw, 28px);
+    --ws-text: clamp(18px, 0.9375vw, 28px);
     --ws-heading: clamp(24px, 1.25vw, 38px);
-    --ws-meta: clamp(14px, .73vw, 22px);
+    --ws-meta: clamp(14px, 0.73vw, 22px);
     --ws-inset: clamp(35px, 1.82vw, 56px);
     --ws-message-inset: clamp(45px, 2.34vw, 72px);
     --ws-message-gap: clamp(30px, 1.56vw, 48px);
-    --ws-sidebar-item: clamp(16px, .833vw, 26px);
-    --ws-sidebar-label: clamp(18px, .9375vw, 29px);
+    --ws-sidebar-item: clamp(16px, 0.833vw, 26px);
+    --ws-sidebar-label: clamp(18px, 0.9375vw, 29px);
     --ws-sidebar-avatar: clamp(50px, 2.6vw, 80px);
     --ws-sidebar-row: clamp(58px, 3.02vw, 93px);
     --ws-icon: clamp(20px, 1.04vw, 32px);
@@ -111,7 +114,9 @@
         display: none;
       }
 
-      &:not(.conversation-open) .workspace-content { display: none; }
+      &:not(.conversation-open) .workspace-content {
+        display: none;
+      }
 
       &.conversation-open .workspace-content {
         min-height: 0;
@@ -182,7 +187,9 @@
     &.is-collapsed {
       height: 270px;
 
-      .toggle-icon img { transform: scaleX(-1); }
+      .toggle-icon img {
+        transform: scaleX(-1);
+      }
     }
 
     .toggle-label {
@@ -203,28 +210,50 @@
       padding: 20px 12px;
       border-radius: 0 30px 30px 0;
 
-      &.is-collapsed { height: 310px; }
-
-      .toggle-icon {
-        flex-basis: 32px;
-        width: 32px;
-        height: 32px;
+      &.is-collapsed {
+        height: 310px;
       }
-      .toggle-label { font-size: 20px; }
+
+      .toggle {
+        &-icon {
+          flex-basis: 32px;
+          width: 32px;
+          height: 32px;
+        }
+
+        &-label {
+          font-size: 20px;
+        }
+      }
     }
 
     @media (min-width: 1921px) {
       width: clamp(56px, 2.92vw, 90px);
       height: clamp(347px, 18.073vw, 555px);
       padding: clamp(20px, 1.04vw, 32px);
-      &.is-collapsed { height: clamp(310px, 16.146vw, 496px); }
-      .toggle-label { font-size: var(--ws-icon); }
-      .toggle-icon {
-        width: var(--ws-action);
-        height: var(--ws-action);
-        flex-basis: var(--ws-action);
+
+      &.is-collapsed {
+        height: clamp(310px, 16.146vw, 496px);
       }
-      .toggle-icon img { width: var(--ws-icon); height: var(--ws-icon); }
+
+      .toggle {
+        &-label {
+          font-size: var(--ws-icon);
+        }
+
+        &-icon {
+          width: var(--ws-action);
+          height: var(--ws-action);
+          flex-basis: var(--ws-action);
+        }
+
+        &-icon {
+          img {
+            width: var(--ws-icon);
+            height: var(--ws-icon);
+          }
+        }
+      }
     }
   }
 

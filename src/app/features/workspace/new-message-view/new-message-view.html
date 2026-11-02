@@ -6,7 +6,8 @@
 
   <label class="to-field">
     <span>An:</span>
-    <input appInputCaret
+    <input
+      appInputCaret
       type="search"
       placeholder="#channel, oder @jemand oder E-Mail Adresse"
       [value]="query()"
@@ -17,25 +18,25 @@
 
   <div class="results">
     @if (query().trim() && !recipientSelected()) {
-    @if (mode() === '#') {
-      @for (channel of filteredChannels(); track channel.id) {
-        <button type="button" (click)="selectChannel(channel.id)">
-          <strong># {{ channel.name }}</strong>
-          <span>{{ channel.description }}</span>
-        </button>
-      } @empty {
-        <p>Keine passenden Channels.</p>
+      @if (mode() === '#') {
+        @for (channel of filteredChannels(); track channel.id) {
+          <button type="button" (click)="selectChannel(channel.id)">
+            <strong># {{ channel.name }}</strong>
+            <span>{{ channel.description }}</span>
+          </button>
+        } @empty {
+          <p>Keine passenden Channels.</p>
+        }
+      } @else {
+        @for (user of filteredUsers(); track user.uid) {
+          <button type="button" (click)="selectUser(user.uid)">
+            <strong>{{ user.displayName }}{{ isCurrentUser(user.uid) ? ' (Du)' : '' }}</strong>
+            <span>{{ user.email }}</span>
+          </button>
+        } @empty {
+          <p>Keine passenden Personen.</p>
+        }
       }
-    } @else {
-      @for (user of filteredUsers(); track user.uid) {
-        <button type="button" (click)="selectUser(user.uid)">
-          <strong>{{ user.displayName }}{{ isCurrentUser(user.uid) ? ' (Du)' : '' }}</strong>
-          <span>{{ user.email }}</span>
-        </button>
-      } @empty {
-        <p>Keine passenden Personen.</p>
-      }
-    }
     }
   </div>
 
