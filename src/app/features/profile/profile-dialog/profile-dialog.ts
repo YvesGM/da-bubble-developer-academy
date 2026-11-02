@@ -7,7 +7,12 @@ import { UserService } from '../../../core/services/user.service';
 import { Avatar } from '../../../shared/components/avatar/avatar';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
-/** Edits the authenticated user's public profile information. */
+/**
+ * Edits the current user's display name and preset avatar.
+ *
+ * The form and saving state coordinate profile persistence, validation, and
+ * the close or save events consumed by the workspace.
+ */
 @Component({
   selector: 'app-profile-dialog',
   imports: [InputCaretDirective, ReactiveFormsModule, Avatar],
@@ -18,13 +23,20 @@ export class ProfileDialog {
   private readonly formBuilder = inject(FormBuilder);
   private readonly users = inject(UserService);
 
+  /** Asks the owning view to dismiss the current dialog or panel. */
   @Output() readonly closeRequested = new EventEmitter<void>();
+  /** Emits when the updated profile has been persisted successfully. */
   @Output() readonly saved = new EventEmitter<void>();
 
+  /** Built-in avatar IDs offered during profile setup. */
   readonly avatarIds = AVATAR_IDS;
+  /** Currently selected profile avatar before changes are saved. */
   readonly avatarId = signal<string>(AVATAR_IDS[0]);
+  /** Human-readable error currently shown in the form. */
   readonly errorMessage = signal('');
+  /** True while the profile update is being written. */
   readonly saving = signal(false);
+  /** Non-nullable reactive form holding the fields and validation state. */
   readonly form = this.formBuilder.nonNullable.group({
     displayName: ['', Validators.required],
   });
