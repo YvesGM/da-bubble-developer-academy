@@ -29,11 +29,19 @@ import {
   sortChannels,
 } from '../utils/channel.util';
 
-/** Manages channel queries, membership changes, and unique-name transactions. */
+/**
+ * Reads and updates channels, their membership, and unique channel-name reservations.
+ *
+ * Creation and renaming use Firestore transactions so two clients cannot reserve
+ * the same normalized channel name concurrently.
+ */
 @Injectable({ providedIn: 'root' })
 export class ChannelService {
+  /** Firebase Auth instance supplying the active account for permission checks. */
   private readonly auth = inject(Auth);
+  /** Cloud Firestore client for the service's persisted data. */
   private readonly firestore = inject(Firestore);
+  /** Angular injector used to run AngularFire calls inside injection context. */
   private readonly injector = inject(EnvironmentInjector);
 
   /**
