@@ -3,6 +3,7 @@ import { Auth, User, updateProfile } from '@angular/fire/auth';
 import { Firestore, collection, collectionData, doc, docData, getDoc, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 
+import { AVATAR_IDS } from '../constants/avatar.constants';
 import { DEFAULT_RECENT_EMOJIS } from '../constants/emoji.constants';
 import { UserProfile } from '../models/user-profile.model';
 
@@ -78,21 +79,20 @@ export class UserService {
   }
 
   /**
-   * Updates the current registered user's display name without changing the avatar.
-   *
-   * The display name is written to Firebase Authentication first and then the
-   * matching Firestore profile is updated with the name and timestamp.
+   * Updates the current registered user's name and chosen built-in avatar.
    *
    * @param displayName - New display name for the user.
-   * @returns A promise that resolves after both profile stores are updated.
-   * @throws If no registered user is available or either update fails.
+   * @param avatarId - Identifier of an available built-in avatar.
+   * @returns A promise that resolves after Auth and Firestore updates succeed.
+   * @throws If the session, avatar or persistence operation is invalid.
    */
-  async updateCurrentDisplayName(displayName: string): Promise<void> {
+  async updateCurrentProfile(displayName: string, avatarId: string): Promise<void> {
     const user = this.auth.currentUser;
     if (!user || user.isAnonymous) throw new Error('profile-not-available');
+    if (!AVATAR_IDS.some((id) => id === avatarId)) throw new Error('invalid-avatar');
     await this.run(() => updateProfile(user, { displayName }));
     await this.run(() => updateDoc(this.userReference(user.uid), {
-      displayName, updatedAt: serverTimestamp(),
+      displayName, avatarId, updatedAt: serverTimestamp(),
     }));
   }
 
