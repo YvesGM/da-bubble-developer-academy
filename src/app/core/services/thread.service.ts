@@ -6,11 +6,19 @@ import { Observable } from 'rxjs';
 import { ConversationTarget, conversationDocumentPath } from '../models/conversation.model';
 import { CreateMessageInput, Message } from '../models/message.model';
 
-/** Observes and creates replies associated with a parent message. */
+/**
+ * Reads and writes thread replies under a parent message in Firestore.
+ *
+ * The parent message and conversation target determine where replies are stored
+ * and which reply stream the thread panel observes.
+ */
 @Injectable({ providedIn: 'root' })
 export class ThreadService {
+  /** Firebase Auth instance supplying the active account for permission checks. */
   private readonly auth = inject(Auth);
+  /** Cloud Firestore client for the service's persisted data. */
   private readonly firestore = inject(Firestore);
+  /** Angular injector used to run AngularFire calls inside injection context. */
   private readonly injector = inject(EnvironmentInjector);
 
   /**
