@@ -85,13 +85,6 @@ export function sameMessageDay(first: unknown, second: unknown): boolean {
 }
 
 /**
- * Compares two dates by calendar day.
- *
- * @param first - First date.
- * @param second - Second date.
- * @returns Whether both dates share the same year, month and day.
- */
-/**
  * Compares two native dates by year, month and day.
  *
  * @param first - First date to compare.
