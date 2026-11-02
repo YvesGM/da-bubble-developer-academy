@@ -81,6 +81,23 @@
           white-space: nowrap;
         }
 
+        .profile-avatar {
+          position: relative;
+          display: inline-flex;
+          flex: 0 0 auto;
+          width: var(--avatar-large-size, 56px);
+          height: var(--avatar-large-size, 56px);
+
+          app-presence-indicator {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            display: inline-flex;
+            border: 2px solid tokens.$background;
+            border-radius: 50%;
+          }
+        }
+
         .profile-chevron {
           width: 12px;
           height: 8px;
@@ -189,7 +206,7 @@
         .profile-name,
         .profile-chevron { display: none; }
 
-        app-avatar { --avatar-large-size: 50px; }
+        .profile-avatar { --avatar-large-size: 50px; }
       }
 
       .mobile-conversation-name {

@@ -4,6 +4,7 @@
     [workspaceName]="workspaceName"
     [displayName]="displayName"
     [avatarId]="avatarId"
+    [userId]="currentUserId"
     [profileEnabled]="!isGuest"
     (profileRequested)="openOwnProfile()"
     (userSelected)="selectedUser.set($event)"

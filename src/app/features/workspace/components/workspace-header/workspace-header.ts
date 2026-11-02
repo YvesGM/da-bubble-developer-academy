@@ -3,12 +3,13 @@ import { RouterLink } from '@angular/router';
 
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
+import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 import { SearchBox } from '../search-box/search-box';
 
 /** Displays workspace navigation and the current user's controls. */
 @Component({
   selector: 'app-workspace-header',
-  imports: [Avatar, RouterLink, SearchBox],
+  imports: [Avatar, PresenceIndicator, RouterLink, SearchBox],
   templateUrl: './workspace-header.html',
   styleUrl: './workspace-header.scss',
 })
@@ -16,6 +17,7 @@ export class WorkspaceHeader {
   private readonly element = inject(ElementRef<HTMLElement>);
   @Input({ required: true }) displayName = '';
   @Input() avatarId = 'avatar-1';
+  @Input() userId = '';
   @Input() profileEnabled = true;
   @Input() conversationOpen = false;
   @Input() workspaceName = 'Workspace';

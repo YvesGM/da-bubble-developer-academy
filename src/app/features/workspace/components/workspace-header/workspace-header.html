@@ -17,7 +17,12 @@
       (click)="menuOpen.set(!menuOpen())"
     >
       <span class="profile-name">{{ displayName }}</span>
-      <app-avatar [avatarId]="avatarId" [name]="displayName" size="large" />
+      <span class="profile-avatar">
+        <app-avatar [avatarId]="avatarId" [name]="displayName" size="large" />
+        @if (profileEnabled && userId) {
+          <app-presence-indicator [userId]="userId" />
+        }
+      </span>
       <img class="profile-chevron" src="/assets/chevron-half-down.svg" alt="" aria-hidden="true" />
     </button>
 
