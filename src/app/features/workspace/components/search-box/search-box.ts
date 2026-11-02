@@ -24,7 +24,9 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
   styleUrl: './search-box.scss',
 })
 export class SearchBox {
+  /** Router dependency used for navigation after the current action completes. */
   private readonly router = inject(Router);
+  /** Workspace search service providing combined user, channel, and message matches. */
   private readonly searchService = inject(SearchService);
 
   /** Hint shown when the search or text field is empty. */
