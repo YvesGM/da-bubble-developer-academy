@@ -23,8 +23,11 @@ import { InputCaretDirective } from '../../../shared/directives/input-caret.dire
   styleUrl: './register.scss',
 })
 export class Register {
+  /** Application auth service used to execute account operations. */
   private readonly auth = inject(AuthService);
+  /** Angular form builder used to create typed and validated controls. */
   private readonly formBuilder = inject(FormBuilder);
+  /** Router dependency used for navigation after the current action completes. */
   private readonly router = inject(Router);
 
   /** Built-in avatar IDs offered during profile setup. */
