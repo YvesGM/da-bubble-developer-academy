@@ -65,7 +65,10 @@ export class MessageItem {
   readonly showAllReactions = signal(false);
   readonly optionsOpen = signal(false);
   readonly editEmojiPickerOpen = signal(false);
-  readonly quickReactions = DEFAULT_RECENT_EMOJIS;
+  /** Shows the two latest emojis, supplemented by defaults until two exist. */
+  readonly quickReactions = computed(() =>
+    [...new Set([...this.recentEmojis(), ...DEFAULT_RECENT_EMOJIS])].slice(0, 2),
+  );
   readonly mobileViewport = signal(window.innerWidth <= 800);
   readonly mobileActionsOpen = signal(false);
   /** Recomputes display spans whenever the message or available profiles change. */
