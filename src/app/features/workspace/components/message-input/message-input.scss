@@ -189,8 +189,7 @@
       font-weight: 700;
     }
 
-    .suggestion-option:first-child .suggestion-hash,
-    .suggestion-option:is(:hover, :focus-visible) .suggestion-hash {
+    .suggestion-option:is(:first-child, :hover, :focus-visible) .suggestion-hash {
       color: tokens.$purple-1;
     }
   }
