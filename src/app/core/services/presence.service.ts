@@ -11,19 +11,27 @@ import {
 } from '@angular/fire/database';
 import { Observable } from 'rxjs';
 
-/** Publishes and observes registered users' online presence. */
+/**
+ * Tracks registered users' live online presence with Firebase Realtime Database.
+ *
+ * Each browser connection writes its own node with an on-disconnect cleanup;
+ * a user remains online while at least one active connection exists.
+ */
 @Injectable({ providedIn: 'root' })
 export class PresenceService {
+  /** Firebase Auth instance supplying the active account for permission checks. */
   private readonly auth = inject(Auth);
+  /** Realtime Database client holding per-connection presence records. */
   private readonly database = inject(Database);
+  /** Angular injector used to run AngularFire calls inside injection context. */
   private readonly injector = inject(EnvironmentInjector);
+  /** Unsubscribe callback for the active connection-state listener. */
   private connectedUnsubscribe?: () => void;
+  /** Database path of this browser session's current presence node. */
   private connectionPath = '';
-
 
   /**
    * Starts realtime presence tracking for the current registered user. The service subscribes to Firebase's connection state and writes one connection node per browser session.
-
    */
   start(): void {
     if (this.connectedUnsubscribe || !this.registeredUserId()) return;
@@ -33,12 +41,10 @@ export class PresenceService {
     );
   }
 
-
   /**
    * Stops realtime presence tracking and removes the current browser connection from the Realtime Database.
    *
    * @throws If the Realtime Database update fails.
-
    */
   async stop(): Promise<void> {
     this.connectedUnsubscribe?.();
@@ -48,13 +54,11 @@ export class PresenceService {
     this.connectionPath = '';
   }
 
-
   /**
    * Observes whether a user owns at least one active presence connection.
    *
    * @param uid - Firebase user identifier whose presence should be observed.
    * @returns An observable that emits true while at least one connection exists.
-
    */
   observeOnline(uid: string): Observable<boolean> {
     return new Observable((subscriber) => {
@@ -71,7 +75,6 @@ export class PresenceService {
    *
    * @param snapshot - Realtime Database snapshot for `.info/connected`.
    * @throws If disconnect handlers or the connection write fail.
-
    */
   private async handleConnection(snapshot: DataSnapshot): Promise<void> {
     if (snapshot.val() !== true) return;
@@ -89,7 +92,6 @@ export class PresenceService {
    *
    * @param uid - Firebase user identifier for the presence owner.
    * @returns The reference for the newly generated connection node.
-
    */
   private createConnectionRef(uid: string) {
     const id = crypto.randomUUID().replaceAll('-', '');
