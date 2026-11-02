@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 
-/** Displays the initial workspace landing view. */
+/**
+ * Renders the default workspace view when no conversation is selected.
+ *
+ * This component keeps the blank dashboard route separate from channel and
+ * direct-message pages.
+ */
 @Component({
   selector: 'app-workspace-home',
   templateUrl: './workspace-home.html',
