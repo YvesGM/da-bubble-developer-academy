@@ -3,9 +3,10 @@
 
 .composer {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) var(--ws-action, 40px);
+  grid-template-rows: minmax(auto, 1fr) var(--ws-action, 40px);
   position: relative;
-  height: var(--ws-composer, 145px);
+  height: auto;
+  min-height: var(--ws-composer, 145px);
   min-width: 0;
   padding: clamp(19px, .99vw, 30px) clamp(20px, 1.04vw, 32px) clamp(20px, 1.04vw, 32px);
   gap: 15px;
@@ -19,8 +20,10 @@
   textarea {
     width: 100%;
     min-height: 0;
-    height: 100%;
+    height: auto;
+    max-height: min(320px, 35dvh);
     padding: 0;
+    overflow-y: auto;
     resize: none;
     color: tokens.$text;
     background: transparent;
@@ -179,7 +182,7 @@
   }
 
   @include bp.mobile {
-    height: min(145px, max(110px, 16dvh));
+    min-height: min(145px, max(110px, 16dvh));
     padding: 19px 20px 20px;
     border-radius: 20px;
     .icon-button,
