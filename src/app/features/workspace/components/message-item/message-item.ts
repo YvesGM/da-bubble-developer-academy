@@ -30,7 +30,12 @@ import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-pi
 import { ReactionPopover } from '../../../../shared/components/reaction-popover/reaction-popover';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
-/** Renders and manages the interactions of one message or thread reply. */
+/**
+ * Renders one message or thread reply and its available interactions.
+ *
+ * Ownership and conversation context govern editing, deletion, threads, and
+ * emoji reactions; transient popover state stays local to this message.
+ */
 @Component({
   selector: 'app-message-item',
   imports: [InputCaretDirective, FormsModule, Avatar, EmojiPicker, ReactionPopover],
@@ -49,27 +54,44 @@ export class MessageItem {
   private readonly threadsService = inject(ThreadService);
   private readonly usersService = inject(UserService);
 
+  /** Conversation target passed to messaging, reactions, and navigation. */
   readonly target = input.required<ConversationTarget>();
+  /** Required message document whose author, text, and reactions are rendered. */
   readonly message = input.required<Message>();
+  /** Parent message ID when rendering a reply inside a thread. */
   readonly parentMessageId = input('');
+  /** User's recent emoji choices offered ahead of the default picker. */
   readonly recentEmojis = input<string[]>([...DEFAULT_RECENT_EMOJIS]);
+  /** Whether reactions use the condensed thread presentation. */
   readonly compactReactions = input(false);
+  /** Whether this message may expose an open-thread control. */
   readonly showThreadAction = input(true);
+  /** Requests opening the reply thread for the selected message. */
   @Output() readonly threadRequested = new EventEmitter<Message>();
+  /** Emits the selected author's UID for profile navigation. */
   @Output() readonly userRequested = new EventEmitter<string>();
 
+  /** Workspace user profiles used to resolve visible names and avatar data. */
   readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] });
+  /** Whether this message is currently being edited. */
   readonly editing = signal(false);
+  /** Unsaved replacement text in the inline message editor. */
   readonly editText = signal('');
+  /** Whether the composer or reaction emoji palette is visible. */
   readonly showEmojiPicker = signal(false);
+  /** Whether additional reaction choices are expanded. */
   readonly showAllReactions = signal(false);
+  /** Whether the message actions menu is visible. */
   readonly optionsOpen = signal(false);
+  /** Whether the emoji picker for inline editing is open. */
   readonly editEmojiPickerOpen = signal(false);
   /** Shows the two latest emojis, supplemented by defaults until two exist. */
   readonly quickReactions = computed(() =>
     [...new Set([...this.recentEmojis(), ...DEFAULT_RECENT_EMOJIS])].slice(0, 2),
   );
+  /** Whether the message is rendered in the narrow-screen layout. */
   readonly mobileViewport = signal(window.innerWidth <= 800);
+  /** Whether touch-friendly message actions are expanded. */
   readonly mobileActionsOpen = signal(false);
   /** Recomputes display spans whenever the message or available profiles change. */
   readonly messageParts = computed(() => splitMessageMentions(this.message().text, this.users()));
@@ -82,11 +104,13 @@ export class MessageItem {
     if (userId) this.userRequested.emit(userId);
   }
 
+  /** Message or thread identifier used when reading and writing reactions. */
   readonly reactionContext = computed(() => ({
     target: this.target(),
     messageId: this.parentMessageId() || this.message().id,
     replyId: this.parentMessageId() ? this.message().id : undefined,
   }));
+  /** Reaction records observed for the current message. */
   readonly reactions = toSignal(
     toObservable(this.reactionContext).pipe(
       switchMap((context) =>
@@ -95,9 +119,11 @@ export class MessageItem {
     ),
     { initialValue: [] as ReactionGroup[] },
   );
+  /** Emoji groups shown as chips in the message footer. */
   readonly visibleReactions = computed(() =>
     this.showAllReactions() ? this.reactions() : this.reactions().slice(0, this.reactionLimit()),
   );
+  /** Thread replies observed under the selected parent message. */
   readonly replies = toSignal(
     toObservable(this.reactionContext).pipe(
       switchMap((context) =>
@@ -144,7 +170,11 @@ export class MessageItem {
       this.mobileActionsOpen.set(false);
     }
   }
-  /** Toggles a top-layer reaction palette anchored to the clicked button. */
+  /**
+   * Opens or closes the emoji palette positioned at the current reaction trigger.
+   *
+   * @param event - Click event identifying the button used as the anchor.
+   */
   toggleReactionPicker(event: MouseEvent): void {
     this.editEmojiPickerOpen.set(false);
     if (this.showEmojiPicker()) this.reactionPicker?.close();
