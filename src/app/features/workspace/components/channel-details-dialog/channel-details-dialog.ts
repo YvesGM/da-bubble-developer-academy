@@ -2,12 +2,14 @@ import { Component, HostListener, EventEmitter, Input, Output, inject, signal } 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Channel, UpdateChannelInput } from '../../../../core/models/channel.model';
+import { UserProfile } from '../../../../core/models/user-profile.model';
+import { ChannelMembersContent } from '../channel-members-content/channel-members-content';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 /** Displays and manages channel details and settings. */
 @Component({
   selector: 'app-channel-details-dialog',
-  imports: [InputCaretDirective, ReactiveFormsModule],
+  imports: [InputCaretDirective, ReactiveFormsModule, ChannelMembersContent],
   templateUrl: './channel-details-dialog.html',
   styleUrl: './channel-details-dialog.scss',
 })
@@ -26,10 +28,16 @@ export class ChannelDetailsDialog {
   }
   @Input() position = { top: 120, left: 24 };
   @Input() creatorName = 'Unbekannter Benutzer';
+  @Input() members: UserProfile[] = [];
+  @Input() currentUserId = '';
+  @Input() guestAccess = false;
+  @Input() canAdd = true;
   @Input() errorMessage = '';
   @Output() readonly closeRequested = new EventEmitter<void>();
   @Output() readonly saveRequested = new EventEmitter<UpdateChannelInput>();
   @Output() readonly leaveRequested = new EventEmitter<void>();
+  @Output() readonly addRequested = new EventEmitter<void>();
+  @Output() readonly userSelected = new EventEmitter<UserProfile>();
 
   readonly editingName = signal(false);
   readonly editingDescription = signal(false);

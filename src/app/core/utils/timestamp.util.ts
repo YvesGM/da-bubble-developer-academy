@@ -17,6 +17,25 @@ export function timestampToDate(value: unknown): Date | null {
 }
 
 /**
+ * Describes the calendar day when an item was created.
+ *
+ * @param value - Firestore or native creation timestamp.
+ * @returns "heute", "gestern", a localized date, or an empty string if unknown.
+ */
+export function creationDayLabel(value: unknown): string {
+  const date = timestampToDate(value);
+  if (!date || Number.isNaN(date.getTime())) return '';
+  if (sameDay(date, new Date())) return 'heute';
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (sameDay(date, yesterday)) return 'gestern';
+  const formatted = new Intl.DateTimeFormat('de-DE', {
+    day: 'numeric', month: 'long', year: 'numeric',
+  }).format(date);
+  return `am ${formatted}`;
+}
+
+/**
  * Formats a message timestamp using the German hour/minute representation.
  *
  * @param value - Timestamp-like value associated with a message.

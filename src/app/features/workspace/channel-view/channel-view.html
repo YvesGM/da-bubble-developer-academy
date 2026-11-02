@@ -46,6 +46,7 @@
         [inputPlaceholder]="'Nachricht an #' + currentChannel.name"
         [emptyTitle]="emptyTitle()"
         [emptyText]="emptyText()"
+        [emptyChannelName]="currentChannel.name"
         (userRequested)="openProfileById($event)"
       />
     </section>
@@ -56,8 +57,14 @@
       [position]="detailsPosition()"
       [channel]="currentChannel"
       [creatorName]="creatorName()"
+      [members]="members()"
+      [guestAccess]="currentChannel.guestAccess"
+      [currentUserId]="currentUserId()"
+      [canAdd]="canManageChannel()"
       [errorMessage]="channelError()"
       (closeRequested)="showDetails.set(false)"
+      (addRequested)="openAddMembers()"
+      (userSelected)="openProfile($event)"
       (saveRequested)="saveChannel($event)"
       (leaveRequested)="leaveChannel()"
     />

@@ -19,6 +19,10 @@
       <strong>{{ emptyTitle }}</strong>
       @if (emptyMentionUser; as user) {
         <span class="empty-description">Diese Unterhaltung findet nur zwischen <button type="button" class="empty-mention" (click)="userRequested.emit(user.uid)">&#64;{{ user.displayName }}</button> und dir statt.</span>
+      } @else if (emptyChannelName) {
+        <span class="empty-description">
+          {{ emptyText }} <span class="empty-channel-reference"># {{ emptyChannelName }}</span>.
+        </span>
       } @else {
         <span>{{ emptyText }}</span>
       }

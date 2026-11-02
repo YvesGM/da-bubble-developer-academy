@@ -278,8 +278,6 @@
 .empty { margin: 12px 14px; color: tokens.$text-gray; font-size: 16px; }
 .dm-error { margin: 10px 14px; color: tokens.$error; font-size: 14px; }
 
-.sidebar button.mobile-new-message { display: none; }
-
 @include bp.mobile {
   .sidebar {
     min-height: 0;
@@ -293,40 +291,12 @@
     &:hover { color: tokens.$purple-2; }
   }
 
-  .sidebar button.mobile-new-message { bottom: 56px; }
-
   .sidebar-top,
   .direct-messages .section-heading > button { display: none; }
 
   .sidebar-section { margin-top: 22px; }
   .sidebar > .sidebar-section:first-of-type { margin-top: 0; }
 
-  .sidebar button.mobile-new-message {
-    position: fixed;
-    right: 16px;
-    bottom: 57px;
-    z-index: 15;
-    display: grid;
-    place-items: center;
-    width: 60px;
-    height: 60px;
-    color: tokens.$white;
-    background: tokens.$purple-1;
-    border-radius: 50%;
-    box-shadow: 0 3px 10px #00000029;
-
-    &:hover,
-    &:focus-visible {
-      background: tokens.$purple-2;
-      transform: scale(1.05);
-    }
-  }
-
-  .mobile-new-message img {
-    width: 24px;
-    height: 24px;
-    filter: brightness(0) invert(1);
-  }
 }
 
 @include bp.widescreen {

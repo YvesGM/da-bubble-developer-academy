@@ -1,13 +1,12 @@
 import { Component, HostListener, EventEmitter, Input, Output } from '@angular/core';
 
 import { UserProfile } from '../../../../core/models/user-profile.model';
-import { Avatar } from '../../../../shared/components/avatar/avatar';
-import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
+import { ChannelMembersContent } from '../channel-members-content/channel-members-content';
 
 /** Displays the members of a channel. */
 @Component({
   selector: 'app-channel-members-dialog',
-  imports: [Avatar, PresenceIndicator],
+  imports: [ChannelMembersContent],
   templateUrl: './channel-members-dialog.html',
   styleUrl: './channel-members-dialog.scss',
 })

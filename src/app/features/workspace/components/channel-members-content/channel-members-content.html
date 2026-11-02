@@ -1,0 +1,25 @@
+<div class="members">
+  @for (member of members; track member.uid) {
+    <button type="button" class="member" (click)="userSelected.emit(member)">
+      <span class="avatar-with-presence">
+        <app-avatar [avatarId]="member.avatarId" [name]="member.displayName" size="medium" />
+        <app-presence-indicator [userId]="member.uid" />
+      </span>
+      <span>{{ member.displayName }}{{ member.uid === currentUserId ? ' (Du)' : '' }}</span>
+    </button>
+  }
+
+  @if (guestAccess) {
+    <div class="member guest">
+      <span class="guest-avatar">G</span>
+      <span>Gast</span>
+    </div>
+  }
+</div>
+
+@if (canAdd) {
+  <button type="button" class="add" (click)="addRequested.emit()">
+    <span class="add-icon" aria-hidden="true"></span>
+    Mitglieder hinzufügen
+  </button>
+}

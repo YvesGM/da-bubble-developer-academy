@@ -38,6 +38,7 @@
       font-size: 19px;
     }
     .empty-description { font-size: var(--ws-text, 18px); line-height: 1.4; }
+    .empty-channel-reference { color: tokens.$purple-1; }
     .empty-mention {
       padding: 0;
       color: tokens.$purple-1;

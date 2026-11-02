@@ -20,6 +20,7 @@ export class MessageList {
   @Input() recentEmojis: string[] = [];
   @Input() emptyTitle = 'Noch keine Nachrichten.';
   @Input() emptyText = 'Starte die Unterhaltung unten.';
+  @Input() emptyChannelName = '';
   @Input() emptyAvatarId = '';
   @Input() emptyAvatarName = '';
   /** Optional user mentioned in the empty-conversation introduction. */

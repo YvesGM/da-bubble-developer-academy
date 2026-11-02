@@ -34,6 +34,7 @@ export class ChatPanel {
   readonly inputPlaceholder = input('Nachricht schreiben');
   readonly emptyTitle = input('Noch keine Nachrichten.');
   readonly emptyText = input('Starte die Unterhaltung unten.');
+  readonly emptyChannelName = input('');
   readonly emptyAvatarId = input('');
   readonly emptyAvatarName = input('');
   readonly emptyMentionUser = input<UserProfile | null>(null);

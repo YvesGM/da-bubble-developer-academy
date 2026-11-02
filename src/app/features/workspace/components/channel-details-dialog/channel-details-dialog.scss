@@ -24,7 +24,7 @@
   width: min(932px, calc(100vw - 32px));
 
   min-height: min(660px, calc(100dvh - 48px));
-  max-height: calc(100dvh - 48px);
+  max-height: var(--dialog-max-height, calc(100dvh - 48px));
   overflow-y: auto;
   background: tokens.$white;
   border-radius: 0 30px 30px 30px;
@@ -100,6 +100,8 @@
       white-space: pre-wrap;
     }
   }
+
+  .mobile-members { display: none; }
 
   .edit-button {
     font-size: 18px;
@@ -224,6 +226,15 @@
       &-heading strong { font-size: 16px; }
       &-value { font-size: 18px; }
     }
+    header {
+      position: sticky;
+      z-index: 1;
+      top: 0;
+      margin: -24px -16px 22px;
+      padding: 24px 16px 16px;
+      background: tokens.$white;
+      border-bottom: 1px solid tokens.$background;
+    }
     header h2 { font-size: clamp(20px, 5vw, 24px); }
     .edit-button { font-size: 16px; }
     .creator {
@@ -232,6 +243,44 @@
       span { font-size: 16px; }
       strong { font-size: 20px; }
     }
+    .mobile-members {
+      display: grid;
+      gap: 8px;
+
+      h3 {
+        margin: 0;
+        font-size: 20px;
+      }
+    }
+
+    .edit-button {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      font-size: 0;
+      background: tokens.$background;
+      border-radius: 50%;
+
+      &::before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        background: currentColor;
+        mask: url('/assets/edit.svg') center / contain no-repeat;
+      }
+
+      &.is-editing {
+        display: inline-block;
+        width: auto;
+        padding: 0 8px;
+        font-size: 16px;
+        background: transparent;
+        &::before { display: none; }
+      }
+    }
+
     .leave-button { min-height: 48px; font-size: 16px; }
   }
 }

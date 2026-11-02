@@ -185,14 +185,7 @@
     color: inherit;
   }
 
-  @include bp.mobile {
-    min-height: 34px;
-    padding: 2px 8px;
-
-    app-avatar,
-    .guest-avatar { display: none; }
-    strong { font-size: 14px; }
-  }
+  @include bp.mobile { display: none; }
 }
 
 .guest-avatar {

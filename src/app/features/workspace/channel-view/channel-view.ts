@@ -12,6 +12,7 @@ import { ChannelService } from '../../../core/services/channel.service';
 import { DirectMessageService } from '../../../core/services/direct-message.service';
 import { UserService } from '../../../core/services/user.service';
 import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
+import { creationDayLabel } from '../../../core/utils/timestamp.util';
 import { ProfileCard } from '../../profile/profile-card/profile-card';
 import { ProfileDialog } from '../../profile/profile-dialog/profile-dialog';
 import { Avatar } from '../../../shared/components/avatar/avatar';
@@ -69,10 +70,11 @@ export class ChannelView {
   readonly target = computed<ConversationTarget>(() => ({ type: 'channel', id: this.channelId() }));
   readonly emptyTitle = computed(() => `# ${this.channel()?.name ?? ''}`);
   readonly emptyText = computed(() => {
-    const name = this.channel()?.name ?? '';
-    return this.channel()?.creatorId === this.currentUserId()
-      ? `Du hast diesen Channel erstellt. Das ist der Anfang des Channels #${name}.`
-      : `Das ist der Anfang des Channels #${name}.`;
+    const channel = this.channel();
+    const introduction = 'Das ist der Anfang des Channels';
+    if (channel?.creatorId !== this.currentUserId()) return introduction;
+    const when = creationDayLabel(channel.createdAt);
+    return `Du hast diesen Channel${when ? ' ' + when : ''} erstellt. ${introduction}`;
   });
 
   readonly showDetails = signal(false);
@@ -182,6 +184,7 @@ export class ChannelView {
    */
   openAddMembers(): void {
     this.showMembers.set(false);
+    this.showDetails.set(false);
     this.positionAddMembers();
     this.showAddMembers.set(true);
   }
@@ -230,6 +233,7 @@ export class ChannelView {
    */
   openProfile(user: UserProfile): void {
     this.showMembers.set(false);
+    this.showDetails.set(false);
     this.selectedUser.set(user);
   }
 
