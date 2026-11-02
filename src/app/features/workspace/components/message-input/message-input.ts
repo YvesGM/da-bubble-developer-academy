@@ -89,7 +89,10 @@ export class MessageInput implements AfterViewInit {
    * Applies initial focus to the message field when autofocus is enabled.
    */
   ngAfterViewInit(): void {
-    if (this.autoFocus) queueMicrotask(() => this.field?.nativeElement.focus());
+    queueMicrotask(() => {
+      this.resizeTextarea();
+      if (this.autoFocus) this.field?.nativeElement.focus();
+    });
   }
 
   /**
@@ -137,6 +140,7 @@ export class MessageInput implements AfterViewInit {
     this.text.set('');
     this.closeSuggestions();
     this.closeOverlays();
+    requestAnimationFrame(() => this.resizeTextarea());
   }
 
   /** Restores composer availability and keyboard focus after a send attempt. */
@@ -154,6 +158,7 @@ export class MessageInput implements AfterViewInit {
     this.text.set(value);
     this.sendError.set('');
     this.updateSuggestions(value, this.field?.nativeElement.selectionStart ?? value.length);
+    this.resizeTextarea();
   }
 
   /**
@@ -272,9 +277,18 @@ export class MessageInput implements AfterViewInit {
    */
   private focusAt(position: number): void {
     requestAnimationFrame(() => {
+      this.resizeTextarea();
       this.field?.nativeElement.focus();
       this.field?.nativeElement.setSelectionRange(position, position);
     });
+  }
+
+  /** Fits multiline drafts to their content until the CSS max-height is reached. */
+  private resizeTextarea(): void {
+    const field = this.field?.nativeElement;
+    if (!field) return;
+    field.style.height = 'auto';
+    field.style.height = `${field.scrollHeight}px`;
   }
 
   /** Applies the first available mention/channel suggestion on Enter. */
