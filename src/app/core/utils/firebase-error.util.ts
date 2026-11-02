@@ -1,5 +1,11 @@
 import { FirebaseError } from 'firebase/app';
 
+/**
+ * Localized descriptions for Firebase error codes explicitly handled by the UI.
+ *
+ * Unknown codes are handled by the caller's fallback rather than exposing
+ * internal Firebase error strings to end users.
+ */
 const FIREBASE_MESSAGES: Record<string, string> = {
   'auth/email-already-in-use': 'Diese E-Mail-Adresse wird bereits verwendet.',
   'auth/invalid-credential': 'Die E-Mail-Adresse oder das Passwort ist falsch.',
