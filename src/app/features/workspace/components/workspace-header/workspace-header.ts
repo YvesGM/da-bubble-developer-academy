@@ -19,6 +19,7 @@ import { SearchBox } from '../search-box/search-box';
   styleUrl: './workspace-header.scss',
 })
 export class WorkspaceHeader {
+  /** Header host element used to locate the profile button anchor. */
   private readonly element = inject(ElementRef<HTMLElement>);
   /** Authenticated user's name displayed in the header. */
   @Input({ required: true }) displayName = '';
@@ -45,10 +46,16 @@ export class WorkspaceHeader {
   readonly dragOffset = signal(0);
   /** Whether the mobile sheet handle is actively being dragged. */
   readonly dragging = signal(false);
+  /** Initial vertical pointer coordinate of the current mobile-menu drag. */
   private dragStartY: number | null = null;
+  /** Minimum downward drag in pixels required to dismiss the mobile menu. */
   private readonly dismissDistance = 72;
 
-  /** Returns the account button bounds for its anchored profile card. */
+  /**
+   * Finds the account button used to anchor the profile card.
+   *
+   * @returns Viewport bounds of the button, or null when it is not rendered.
+   */
   profileAnchor(): DOMRect | null {
     return this.element.nativeElement.querySelector('.profile-button')?.getBoundingClientRect() ?? null;
   }
