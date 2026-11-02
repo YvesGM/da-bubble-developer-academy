@@ -14,7 +14,7 @@
       type="button"
       class="profile-button"
       [attr.aria-expanded]="menuOpen()"
-      (click)="menuOpen.set(!menuOpen())"
+      (click)="toggleMenu()"
     >
       <span class="profile-name">{{ displayName }}</span>
       <span class="profile-avatar">
@@ -26,13 +26,28 @@
       <span class="profile-chevron" aria-hidden="true"></span>
     </button>
 
-    @if (menuOpen()) {
-      <div class="user-menu">
-        @if (profileEnabled) {
-          <button type="button" class="profile-action" (click)="openProfile()">Profil</button>
-        }
-        <button type="button" class="logout-action" (click)="logout()">Abmelden</button>
-      </div>
-    }
+    <div class="user-menu-backdrop" [class.is-open]="menuOpen()"
+      aria-hidden="true" (click)="closeMenu()"></div>
+    <div class="user-menu" [class.is-open]="menuOpen()"
+      [class.is-dragging]="dragging()"
+      [style.--sheet-drag]="dragOffset() + 'px'"
+      [attr.aria-hidden]="!menuOpen()"
+      [attr.inert]="menuOpen() ? null : ''">
+      <div class="user-menu-handle" aria-hidden="true"
+        (pointerdown)="startMenuDrag($event)"
+        (pointermove)="moveMenuDrag($event)"
+        (pointerup)="finishMenuDrag()"
+        (pointercancel)="cancelMenuDrag()"></div>
+      @if (profileEnabled) {
+        <button type="button" class="profile-action" (click)="openProfile()">
+          <span class="menu-action-icon menu-action-icon--profile" aria-hidden="true"></span>
+          Profil
+        </button>
+      }
+      <button type="button" class="logout-action" (click)="logout()">
+        <span class="menu-action-icon menu-action-icon--logout" aria-hidden="true"></span>
+        Abmelden
+      </button>
+    </div>
   </div>
 </header>

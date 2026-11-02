@@ -118,6 +118,8 @@
     }
 
     .user {
+      &-menu-backdrop { display: none; }
+
       &-menu {
         display: grid;
 
@@ -132,11 +134,28 @@
         gap: 10px;
         align-content: center;
 
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
         background: tokens.$white;
         border-radius: 30px 0 30px 30px;
         box-shadow: tokens.$overlay-shadow;
+        transform: translateY(-6px) scale(0.98);
         transform-origin: top right;
-        animation: account-menu-enter tokens.$motion-base both;
+        transition:
+          transform tokens.$motion-base,
+          opacity tokens.$motion-base,
+          visibility tokens.$motion-base;
+
+        &.is-open {
+          visibility: visible;
+          opacity: 1;
+          pointer-events: auto;
+          transform: none;
+        }
+
+        .user-menu-handle,
+        .menu-action-icon { display: none; }
 
         button {
           font-size: var(--ws-heading, 24px);
@@ -212,7 +231,10 @@
         .profile-name,
         .profile-chevron { display: none; }
 
-        .profile-avatar { --avatar-large-size: 50px; }
+        .profile-avatar {
+          --avatar-large-size: 50px;
+          app-presence-indicator { display: none; }
+        }
       }
 
       .mobile-conversation-name {
@@ -235,16 +257,91 @@
 
       &:has(.mobile-conversation-name) .brand { display: none; }
       .user-area { grid-column: 2; grid-row: 1; }
-      .user-menu {
-        button { font-size: 20px; }
+      .user-menu-backdrop {
+        display: block;
         position: fixed;
-        top: 80px;
-        right: 16px;
-        left: 16px;
-        width: auto;
+        z-index: 49;
+        inset: 0;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: #00000052;
+        transition: opacity 280ms ease, visibility 280ms;
+
+        &.is-open {
+          visibility: visible;
+          opacity: 1;
+          pointer-events: auto;
+        }
+      }
+
+      .user-menu {
+        position: fixed;
+        z-index: 50;
+        top: auto;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
         min-width: 0;
-        min-height: 206px;
-        border-radius: 0 0 30px 30px;
+        min-height: 228px;
+        padding: 10px 30px max(24px, env(safe-area-inset-bottom));
+        gap: 0;
+        align-content: start;
+        border-radius: 30px 30px 0 0;
+        box-shadow: 0 -4px 16px #00000026;
+        transform: translateY(100%);
+        transform-origin: bottom;
+        transition: transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1), visibility 280ms;
+
+        &.is-open { transform: translateY(var(--sheet-drag, 0px)); }
+        &.is-dragging { transition: none; }
+
+        .user-menu-handle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 44px;
+          margin-bottom: 4px;
+          touch-action: none;
+          user-select: none;
+          cursor: grab;
+
+          &::before {
+            content: '';
+            width: 66px;
+            height: 6px;
+            background: #d9d9d9;
+            border-radius: 999px;
+          }
+        }
+
+        .menu-action-icon {
+          display: inline-block;
+          flex: 0 0 26px;
+          width: 26px;
+          height: 26px;
+          background: currentColor;
+        }
+
+        .menu-action-icon--profile {
+          mask: url('/assets/profile-menu.svg') center / contain no-repeat;
+        }
+
+        .menu-action-icon--logout {
+          mask: url('/assets/logout-menu.svg') center / contain no-repeat;
+        }
+
+        button {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          min-height: 70px;
+          padding: 12px 28px;
+          gap: 20px;
+          font-size: 20px;
+          text-align: left;
+        }
       }
     }
 
@@ -286,15 +383,5 @@
         min-height: clamp(181px, 9.43vw, 290px);
       }
     }
-  }
-}
-@keyframes account-menu-enter {
-  from {
-    opacity: 0;
-    transform: translateY(-6px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
   }
 }
