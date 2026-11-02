@@ -46,7 +46,7 @@ export class InputCaretDirective implements AfterViewInit {
     if (this.document.activeElement === this.input) this.show();
   }
 
-  /** Keeps native carets for touch keyboards, unsupported inputs and IME. */
+  /** Keeps native carets for touch textareas, unsupported inputs and IME. */
   show(): void {
     if (!this.canMeasure() || !this.view) return;
     this.ensureCaret();
@@ -94,7 +94,7 @@ export class InputCaretDirective implements AfterViewInit {
    * @returns Whether a custom caret can be measured reliably.
    */
   private canMeasure(): boolean {
-    if (this.view?.matchMedia?.('(pointer: coarse)').matches) return false;
+    if (this.input.tagName === 'TEXTAREA' && this.view?.matchMedia?.('(pointer: coarse)').matches) return false;
     return (this.input.tagName === 'TEXTAREA'
       || ['text', 'search', 'tel', 'url', 'password'].includes(this.input.type))
       && this.input.selectionStart !== null;
