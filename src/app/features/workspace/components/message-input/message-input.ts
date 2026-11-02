@@ -32,6 +32,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
   styleUrl: './message-input.scss',
 })
 export class MessageInput implements AfterViewInit {
+  /** Host element used to distinguish inside and outside pointer interactions. */
   private readonly host = inject(ElementRef<HTMLElement>);
   /** Channels accessible to the current account in this workspace. */
   @Input() channels: Channel[] = [];
@@ -64,6 +65,7 @@ export class MessageInput implements AfterViewInit {
   /** Emits an emoji selected from the composer to update recent choices. */
   @Output() readonly emojiUsed = new EventEmitter<string>();
 
+  /** Textarea element used for draft resizing and focus restoration. */
   @ViewChild('messageField') private field?: ElementRef<HTMLTextAreaElement>;
 
   /** Reactive contents of the current unsent message draft. */
