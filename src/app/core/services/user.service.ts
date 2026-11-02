@@ -7,11 +7,19 @@ import { AVATAR_IDS } from '../constants/avatar.constants';
 import { DEFAULT_RECENT_EMOJIS } from '../constants/emoji.constants';
 import { UserProfile } from '../models/user-profile.model';
 
-/** Synchronizes Firebase user identities with application profiles. */
+/**
+ * Synchronizes Firebase Authentication identities with editable Firestore profiles.
+ *
+ * The service creates missing profiles, exposes current-user and workspace-user
+ * streams, and persists profile changes such as names, avatars, and preferences.
+ */
 @Injectable({ providedIn: 'root' })
 export class UserService {
+  /** Firebase Auth instance supplying the active account for permission checks. */
   private readonly auth = inject(Auth);
+  /** Cloud Firestore client for the service's persisted data. */
   private readonly firestore = inject(Firestore);
+  /** Angular injector used to run AngularFire calls inside injection context. */
   private readonly injector = inject(EnvironmentInjector);
 
   /**
