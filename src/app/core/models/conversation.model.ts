@@ -1,9 +1,19 @@
-/** Supported conversation kinds and their Firestore collection mapping. */
+/**
+ * Discriminates between a shared channel and a private direct conversation.
+ *
+ * The value selects both the Firestore collection and Angular route segment.
+ */
 export type ConversationType = 'channel' | 'directMessage';
 
-/** Identifies an existing channel or direct-message conversation. */
+/**
+ * Identifies the conversation that owns a message, reaction, or thread.
+ *
+ * The type determines how consumers interpret the document ID.
+ */
 export interface ConversationTarget {
+  /** Conversation kind used for collection and route selection. */
   type: ConversationType;
+  /** Firestore document ID in the collection selected by `type`. */
   id: string;
 }
 
