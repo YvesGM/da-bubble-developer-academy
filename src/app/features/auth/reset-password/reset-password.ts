@@ -8,7 +8,12 @@ import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { AuthShell } from '../components/auth-shell/auth-shell';
 
-/** Validates and completes Firebase password-reset actions. */
+/**
+ * Validates a Firebase reset action code and saves the replacement password.
+ *
+ * The view distinguishes invalid or expired reset links from local form
+ * validation errors, and reports completion before leaving the reset page.
+ */
 @Component({
   selector: 'app-reset-password',
   host: { '[class.reset-leaving]': 'leaving()' },
@@ -22,12 +27,19 @@ export class ResetPassword {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
+  /** Human-readable error currently shown in the form. */
   readonly errorMessage = signal('');
+  /** Whether the two entered replacement passwords differ. */
   readonly passwordMismatch = signal(false);
+  /** Whether the reset action code is valid and can be used. */
   readonly ready = signal(false);
+  /** True while an asynchronous form submission is in progress. */
   readonly submitting = signal(false);
+  /** Whether Firebase confirmed the password change. */
   readonly completed = signal(false);
+  /** True while navigating away from a completed auth flow. */
   readonly leaving = signal(false);
+  /** Non-nullable reactive form holding the fields and validation state. */
   readonly form = this.formBuilder.nonNullable.group({
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', Validators.required],
