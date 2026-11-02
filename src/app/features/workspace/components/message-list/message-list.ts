@@ -7,7 +7,12 @@ import { messageDateLabel, sameMessageDay } from '../../../../core/utils/timesta
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { MessageItem } from '../message-item/message-item';
 
-/** Renders the message stream and forwards message-level actions. */
+/**
+ * Displays ordered messages and the appropriate empty-conversation introduction.
+ *
+ * Each message receives the current conversation context; user and thread
+ * actions bubble up to the owning chat panel.
+ */
 @Component({
   selector: 'app-message-list',
   imports: [MessageItem, Avatar],
@@ -15,17 +20,27 @@ import { MessageItem } from '../message-item/message-item';
   styleUrl: './message-list.scss',
 })
 export class MessageList {
+  /** Conversation target passed to messaging, reactions, and navigation. */
   @Input({ required: true }) target!: ConversationTarget;
+  /** Conversation messages observed for the selected target. */
   @Input({ required: true }) messages: Message[] = [];
+  /** User's recent emoji choices offered ahead of the default picker. */
   @Input() recentEmojis: string[] = [];
+  /** Heading shown when the conversation has no messages. */
   @Input() emptyTitle = 'Noch keine Nachrichten.';
+  /** Explanatory copy for a newly created or empty conversation. */
   @Input() emptyText = 'Starte die Unterhaltung unten.';
+  /** Channel name appended to the introduction when history is empty. */
   @Input() emptyChannelName = '';
+  /** Avatar preset shown in the empty direct-message introduction. */
   @Input() emptyAvatarId = '';
+  /** Name used for the accessible empty-state avatar. */
   @Input() emptyAvatarName = '';
   /** Optional user mentioned in the empty-conversation introduction. */
   @Input() emptyMentionUser: UserProfile | null = null;
+  /** Requests opening the reply thread for the selected message. */
   @Output() readonly threadRequested = new EventEmitter<Message>();
+  /** Forwards user profile requests from a message to the chat panel. */
   @Output() readonly userRequested = new EventEmitter<string>();
 
   /**
