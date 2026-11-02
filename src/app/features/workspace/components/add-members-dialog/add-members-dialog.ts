@@ -24,6 +24,7 @@ export interface AddMembersSelection {
   styleUrl: './add-members-dialog.scss',
 })
 export class AddMembersDialog {
+  /** Member search field that receives focus when the dialog opens. */
   private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('memberSearch');
   /** Workspace user profiles used to resolve visible names and avatar data. */
   @Input() users: UserProfile[] = [];
