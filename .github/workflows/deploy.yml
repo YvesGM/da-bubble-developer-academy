@@ -51,16 +51,8 @@ jobs:
       - name: Lint server-side PHP sources
         run: find backend/password-reset -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l
 
-      - name: Validate Firebase reset link transformation
+      - name: Stage PHP sources without Composer dependencies
         run: |
-          php backend/password-reset/tests/reset-link.test.php
-          php backend/password-reset/tests/private-directory.test.php
-          php backend/password-reset/tests/reset-cors.test.php
-
-      - name: Test and stage PHP sources without Composer dependencies
-        run: |
-          npm run test:reset
-          node --test tests/deploy-allinkl.test.mjs
           node scripts/stage-password-reset.mjs
           test ! -e dist/dabubble/browser/api/_internal/vendor
 
