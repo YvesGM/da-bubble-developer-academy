@@ -20,7 +20,9 @@ import { InputCaretDirective } from '../../../shared/directives/input-caret.dire
   styleUrl: './profile-dialog.scss',
 })
 export class ProfileDialog {
+  /** Angular form builder used to create typed and validated controls. */
   private readonly formBuilder = inject(FormBuilder);
+  /** User service used to retrieve and persist profile information. */
   private readonly users = inject(UserService);
 
   /** Asks the owning view to dismiss the current dialog or panel. */
