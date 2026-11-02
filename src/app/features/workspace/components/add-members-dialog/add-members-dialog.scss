@@ -105,8 +105,7 @@
     &:hover { background: #dfe2ff; }
   }
 
-  .guest-avatar,
-  .guest-chip-avatar {
+  .guest-avatar {
     display: grid;
     place-items: center;
     width: 42px;
@@ -117,7 +116,16 @@
     font-weight: 700;
   }
 
-  .guest-chip-avatar { width: 34px; height: 34px; }
+  .guest-chip-avatar {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    color: tokens.$purple-1;
+    background: tokens.$background;
+    border-radius: 50%;
+    font-weight: 700;
+  }
 
   .suggestions {
     position: absolute;
