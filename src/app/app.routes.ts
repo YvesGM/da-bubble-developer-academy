@@ -5,6 +5,9 @@ import { channelAccessGuard } from './core/guards/channel-access.guard';
 import { directMessageGuard } from './core/guards/direct-message.guard';
 import { registeredUserGuard } from './core/guards/registered-user.guard';
 
+/**
+ * Maps public pages and guarded workspace views to their routes.
+ */
 export const routes: Routes = [
   {
     path: 'login',
