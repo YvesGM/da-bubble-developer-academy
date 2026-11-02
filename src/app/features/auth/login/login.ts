@@ -8,7 +8,12 @@ import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { AuthShell } from '../components/auth-shell/auth-shell';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
-/** Authenticates users through the supported Firebase sign-in options. */
+/**
+ * Handles the email, Google, and guest sign-in flows for DABubble.
+ *
+ * Reactive form and submission signals drive validation and feedback before a
+ * successful authentication hands navigation to the workspace.
+ */
 @Component({
   selector: 'app-login',
   imports: [InputCaretDirective, ReactiveFormsModule, RouterLink, AuthShell],
@@ -20,9 +25,13 @@ export class Login {
   private readonly formBuilder = inject(FormBuilder);
   private readonly router = inject(Router);
 
+  /** Human-readable error currently shown in the form. */
   readonly errorMessage = signal('');
+  /** Error associated specifically with the entered login credentials. */
   readonly credentialError = signal('');
+  /** True while an asynchronous form submission is in progress. */
   readonly submitting = signal(false);
+  /** Non-nullable reactive form holding the fields and validation state. */
   readonly form = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
