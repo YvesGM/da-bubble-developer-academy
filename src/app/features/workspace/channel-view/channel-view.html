@@ -26,12 +26,13 @@
 
         @if (canManageChannel()) {
           <button
+            #addMemberButton
             type="button"
             class="add-member"
             aria-label="Mitglieder hinzufügen"
-            (click)="showAddMembers.set(true)"
+            (click)="openAddMembers()"
           >
-            <img src="/assets/add-member.svg" alt="" />
+            <span class="add-member-icon" aria-hidden="true"></span>
           </button>
         }
       </div>
@@ -76,6 +77,8 @@
     <app-add-members-dialog
       [users]="availableUsers()"
       [guestAvailable]="!currentChannel.guestAccess"
+      [channelName]="currentChannel.name"
+      [position]="addMembersPosition()"
       (closeRequested)="showAddMembers.set(false)"
       (addRequested)="addMembers($event)"
     />

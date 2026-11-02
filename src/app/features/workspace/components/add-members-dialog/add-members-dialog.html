@@ -1,55 +1,70 @@
 <div class="backdrop" (click)="closeRequested.emit()">
-  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+  <section
+    class="dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="add-members-title"
+    [style.top.px]="position.top"
+    [style.right.px]="position.right"
+    (click)="$event.stopPropagation()"
+  >
     <header>
-      <h2>Leute hinzufügen</h2>
+      <h2 id="add-members-title">Leute hinzufügen</h2>
       <button type="button" aria-label="Dialog schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
     </header>
 
-    <div class="selection-field">
-      @for (user of selectedUsers(); track user.uid) {
-        <button type="button" class="chip" (click)="toggleUser(user.uid)">
-          <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="small" />
-          <span>{{ user.displayName }}</span>
-          <span aria-hidden="true">×</span>
-        </button>
-      }
+    <p class="channel-label"><span aria-hidden="true">#</span>{{ channelName }}</p>
 
-      @if (guestSelected()) {
-        <button type="button" class="chip" (click)="guestSelected.set(false)">
-          <span class="guest-chip-avatar">G</span>
-          <span>Gast</span>
-          <span aria-hidden="true">×</span>
-        </button>
-      }
+    <div class="search-area">
+      <div class="selection-field">
+        @for (user of selectedUsers(); track user.uid) {
+          <button type="button" class="chip" [attr.aria-label]="user.displayName + ' entfernen'" (click)="toggleUser(user.uid)">
+            <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="small" />
+            <span>{{ user.displayName }}</span>
+            <span aria-hidden="true">×</span>
+          </button>
+        }
 
-      <input appInputCaret
-        type="search"
-        placeholder="Name eingeben"
-        [value]="query()"
-        (input)="query.set($any($event.target).value)"
-      />
-    </div>
+        @if (guestSelected()) {
+          <button type="button" class="chip" aria-label="Gast entfernen" (click)="toggleGuest()">
+            <span class="guest-chip-avatar">G</span>
+            <span>Gast</span>
+            <span aria-hidden="true">×</span>
+          </button>
+        }
 
-    <div class="users">
-      @if (guestAvailable) {
-        <button type="button" class="user-option" (click)="guestSelected.set(!guestSelected())">
-          <span class="guest-avatar">G</span>
-          <span>Gast</span>
-        </button>
-      }
+        <input #memberSearch appInputCaret
+          type="text"
+          aria-label="Mitglieder suchen"
+          placeholder="Name eingeben"
+          [value]="query()"
+          (input)="query.set($any($event.target).value)"
+        />
+      </div>
 
-      @for (user of filteredUsers(); track user.uid) {
-        <button
-          type="button"
-          class="user-option"
-          [class.selected]="selectedIds().has(user.uid)"
-          (click)="toggleUser(user.uid)"
-        >
-          <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
-          <span>{{ user.displayName }}</span>
-        </button>
-      } @empty {
-        <p>Keine passenden Benutzer.</p>
+      @if (showSuggestions()) {
+        <div class="suggestions" aria-label="Passende Nutzer">
+          @for (user of filteredUsers(); track user.uid) {
+            <button type="button" class="user-option" (click)="toggleUser(user.uid)">
+              <span class="avatar-with-presence">
+                <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
+                <app-presence-indicator [userId]="user.uid" />
+              </span>
+              <span>{{ user.displayName }}</span>
+            </button>
+          }
+
+          @if (matchesGuest()) {
+            <button type="button" class="user-option" (click)="toggleGuest()">
+              <span class="guest-avatar">G</span>
+              <span>Gast</span>
+            </button>
+          }
+
+          @if (!filteredUsers().length && !matchesGuest()) {
+            <p class="empty-search">Keine passenden Benutzer.</p>
+          }
+        </div>
       }
     </div>
 

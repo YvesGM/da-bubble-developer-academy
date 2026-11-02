@@ -3,30 +3,23 @@
 
 .backdrop {
   animation: dialog-backdrop-in tokens.$motion-fast both;
-  display: grid;
-  place-items: center;
-
   position: fixed;
   z-index: 60;
   inset: 0;
-
-  padding: 24px;
-
   background: #00000052;
-
-  @include bp.mobile { padding: 16px; }
 }
 
 .dialog {
   animation: dialog-surface-in tokens.$motion-base both;
   display: grid;
-
-  width: min(710px, 100%);
-  padding: 40px;
-  gap: 18px;
-
+  position: absolute;
+  width: min(550px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 40px 44px 42px;
+  gap: 20px;
+  overflow: visible;
   background: tokens.$white;
-  border-radius: 30px;
+  border-radius: 30px 0 30px 30px;
   box-shadow: 0 8px 28px #00000024;
 
   header {
@@ -36,19 +29,15 @@
 
     h2 {
       font-size: 24px;
-
       margin: 0;
     }
 
     button {
       font-size: 26px;
-
       display: grid;
       place-items: center;
-
       width: 36px;
       height: 36px;
-
       background: transparent;
       border: 0;
       border-radius: 50%;
@@ -60,136 +49,139 @@
     }
   }
 
-  .selection {
-    &-field {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+  .channel-label {
+    display: flex;
+    align-items: center;
+    margin: -14px 0 0;
+    gap: 18px;
+    font-size: 18px;
+    color: tokens.$purple-2;
 
-      min-height: 54px;
-      padding: 5px 10px;
-      gap: 6px;
+    span { font-size: 27px; font-weight: 700; }
+  }
 
-      border: 1px solid tokens.$border;
-      border-radius: 20px;
+  .search-area { position: relative; min-width: 0; }
 
-      &:focus-within {
-        border-color: tokens.$purple-1;
-      }
+  .selection-field {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 60px;
+    padding: 6px 18px;
+    gap: 7px;
+    border: 1px solid tokens.$border;
+    border-radius: 32px;
 
-      input {
-        flex: 1;
+    &:focus-within { border-color: tokens.$purple-1; }
 
-        min-width: 140px;
-        height: 40px;
-        padding: 0 8px;
-
-        border: 0;
-
-        outline: 0;
-      }
+    input {
+      flex: 1;
+      min-width: 95px;
+      height: 38px;
+      padding: 0 2px;
+      font-size: 18px;
+      border: 0;
+      outline: 0;
+      background: transparent;
     }
   }
 
   .chip {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     max-width: 100%;
-
-    height: 40px;
-    padding: 4px 10px 4px 4px;
-    gap: 7px;
-
+    min-height: 42px;
+    padding: 3px 17px 3px 20px;
+    gap: 12px;
+    font-size: 18px;
     color: tokens.$text;
     background: tokens.$background;
     border: 0;
-    border-radius: 20px;
+    border-radius: 24px;
+    transition: background-color tokens.$motion-fast;
 
+    app-avatar { --avatar-small-size: 34px; }
     span { overflow-wrap: anywhere; }
+    &:hover { background: #dfe2ff; }
   }
 
-  .guest {
-    &-avatar {
-      font-weight: 700;
-
-      display: grid;
-      place-items: center;
-
-      width: 42px;
-      height: 42px;
-
-      color: tokens.$purple-1;
-      background: tokens.$background;
-      border-radius: 50%;
-    }
-
-    &-chip-avatar {
-      font-weight: 700;
-
-      display: grid;
-      place-items: center;
-
-      width: 30px;
-      height: 30px;
-
-      color: tokens.$purple-1;
-      background: tokens.$background;
-      border-radius: 50%;
-    }
-  }
-
-  .users {
+  .guest-avatar,
+  .guest-chip-avatar {
     display: grid;
-
-    max-height: min(280px, 35dvh);
-    gap: 5px;
-
-    overflow: auto;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    color: tokens.$purple-1;
+    background: tokens.$background;
+    border-radius: 50%;
+    font-weight: 700;
   }
 
-  .user {
-    &-option {
-      text-align: left;
+  .guest-chip-avatar { width: 34px; height: 34px; }
 
-      display: flex;
-      align-items: center;
+  .suggestions {
+    position: absolute;
+    z-index: 2;
+    top: calc(100% - 9px);
+    left: 20px;
+    display: grid;
+    width: min(360px, calc(100% - 20px));
+    max-height: min(290px, 35dvh);
+    padding: 10px;
+    gap: 2px;
+    overflow: auto;
+    background: tokens.$white;
+    border: 1px solid tokens.$border;
+    border-radius: 0 22px 22px 22px;
+    box-shadow: 0 4px 8px #00000025;
+  }
 
-      min-height: 54px;
-      padding: 6px 10px;
-      gap: 12px;
+  .user-option {
+    display: flex;
+    align-items: center;
+    min-height: 76px;
+    padding: 8px 20px;
+    gap: 18px;
+    color: tokens.$text;
+    background: transparent;
+    border: 0;
+    border-radius: 22px;
+    font-size: 18px;
+    text-align: left;
+    transition: background-color tokens.$motion-base, color tokens.$motion-fast;
 
-      color: tokens.$text;
-      background: transparent;
-      border: 0;
-      border-radius: 24px;
+    &:hover,
+    &:focus-visible { color: tokens.$purple-1; background: tokens.$background; }
+  }
 
-      transition:
-        background-color tokens.$motion-base,
-        color tokens.$motion-fast;
+  .avatar-with-presence {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
 
-      &:hover,
-      &.selected {
-        color: tokens.$purple-1;
-        background: tokens.$background;
-      }
+    app-avatar { --avatar-medium-size: 52px; }
+    app-presence-indicator {
+      --presence-size: 12px;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      line-height: 0;
     }
   }
+
+  .empty-search { padding: 8px 16px; color: tokens.$text-gray; }
 
   .primary {
     font-weight: 700;
-
     justify-self: end;
-
-    padding: 11px 20px;
-
+    min-height: 52px;
+    padding: 10px 26px;
+    font-size: 18px;
     color: tokens.$white;
     background: tokens.$purple-1;
     border: 0;
-    border-radius: 24px;
-
-    transition:
-      background-color tokens.$motion-base,
-      opacity tokens.$motion-fast;
+    border-radius: 28px;
+    transition: background-color tokens.$motion-base;
 
     &:hover:not(:disabled) {
       background: tokens.$purple-2;
@@ -197,21 +189,24 @@
 
     &:disabled {
       cursor: default;
-      opacity: 0.55;
+      background: tokens.$disabled;
     }
   }
 
   @include bp.mobile {
-    width: 100%;
-    max-height: calc(100dvh - 32px);
-    overflow-y: auto;
-    padding: 26px 22px;
+    padding: 26px 22px 30px;
+    gap: 16px;
+    header h2 { font-size: 21px; }
+    .channel-label { font-size: 16px; }
+    .selection-field input { font-size: 16px; }
+    .chip { padding: 3px 9px; font-size: 15px; }
+    .suggestions { max-height: min(230px, 34dvh); }
   }
+
+  @media (max-height: 460px) { overflow-y: auto; }
 }
 
-.dialog header button img,
-.card header button img,
-.dialog-heading .close img {
+.dialog header button img {
   display: block;
   width: 18px;
   height: 18px;

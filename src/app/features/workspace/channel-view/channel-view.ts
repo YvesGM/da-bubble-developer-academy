@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, computed, inject, signal, viewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -39,6 +39,7 @@ import { ChatPanel } from '../components/chat-panel/chat-panel';
   styleUrl: './channel-view.scss',
 })
 export class ChannelView {
+  private readonly addMemberButton = viewChild<ElementRef<HTMLButtonElement>>('addMemberButton');
   private readonly auth = inject(Auth);
   private readonly channels = inject(ChannelService);
   private readonly directMessages = inject(DirectMessageService);
@@ -75,6 +76,7 @@ export class ChannelView {
   readonly showDetails = signal(false);
   readonly showMembers = signal(false);
   readonly showAddMembers = signal(false);
+  readonly addMembersPosition = signal({ top: 100, right: 24 });
   readonly selectedUser = signal<UserProfile | null>(null);
   readonly showProfileEditor = signal(false);
   readonly channelError = signal('');
@@ -174,7 +176,24 @@ export class ChannelView {
    */
   openAddMembers(): void {
     this.showMembers.set(false);
+    this.positionAddMembers();
     this.showAddMembers.set(true);
+  }
+
+  /** Keeps the member popover attached to its trigger when the viewport resizes. */
+  @HostListener('window:resize')
+  repositionAddMembers(): void {
+    if (this.showAddMembers()) this.positionAddMembers();
+  }
+
+  /** Reads the add-member button's viewport position for its anchored popover. */
+  private positionAddMembers(): void {
+    const anchor = this.addMemberButton()?.nativeElement.getBoundingClientRect();
+    if (!anchor) return;
+    this.addMembersPosition.set({
+      top: Math.round(anchor.bottom + 16),
+      right: Math.max(16, Math.round(window.innerWidth - anchor.right)),
+    });
   }
 
   /**

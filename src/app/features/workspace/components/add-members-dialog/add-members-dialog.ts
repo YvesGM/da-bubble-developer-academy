@@ -1,7 +1,8 @@
-import { Component, HostListener, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, EventEmitter, Input, Output, afterNextRender, signal, viewChild } from '@angular/core';
 
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
+import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 /** Members and guest-access preference submitted when changing channel access. */
@@ -13,19 +14,28 @@ export interface AddMembersSelection {
 /** Selects additional members for an existing channel. */
 @Component({
   selector: 'app-add-members-dialog',
-  imports: [InputCaretDirective, Avatar],
+  imports: [InputCaretDirective, Avatar, PresenceIndicator],
   templateUrl: './add-members-dialog.html',
   styleUrl: './add-members-dialog.scss',
 })
 export class AddMembersDialog {
+  private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('memberSearch');
   @Input() users: UserProfile[] = [];
   @Input() guestAvailable = false;
+  /** Current channel name shown between the heading and member search. */
+  @Input() channelName = '';
+  /** Viewport offsets of the add-member button for popover placement. */
+  @Input() position: { top: number; right: number } = { top: 100, right: 24 };
   @Output() readonly closeRequested = new EventEmitter<void>();
   @Output() readonly addRequested = new EventEmitter<AddMembersSelection>();
 
   readonly query = signal('');
   readonly selectedIds = signal(new Set<string>());
   readonly guestSelected = signal(false);
+
+  constructor() {
+    afterNextRender(() => this.searchInput()?.nativeElement.focus());
+  }
 
   /** Closes the member selection dialog via Escape. */
   @HostListener('document:keydown.escape')
@@ -36,12 +46,25 @@ export class AddMembersDialog {
   /**
    * Filters available users by the current search query.
    *
-   * @returns Users whose display name or email matches the query.
+   * @returns Matching profiles not already selected, after three typed characters.
    */
   filteredUsers(): UserProfile[] {
     const value = this.query().trim().toLowerCase();
-    if (!value) return this.users;
-    return this.users.filter((user) => user.displayName.toLowerCase().includes(value));
+    if (value.length < 3) return [];
+    return this.users.filter((user) =>
+      !this.selectedIds().has(user.uid) && user.displayName.toLowerCase().includes(value),
+    );
+  }
+
+  /** @returns Whether a sufficiently specific query can display suggestions. */
+  showSuggestions(): boolean {
+    return this.query().trim().length >= 3;
+  }
+
+  /** @returns Whether the optional guest suggestion matches the current query. */
+  matchesGuest(): boolean {
+    return this.guestAvailable && !this.guestSelected()
+      && 'gast'.includes(this.query().trim().toLowerCase());
   }
 
   /**
@@ -62,6 +85,13 @@ export class AddMembersDialog {
     const selected = new Set(this.selectedIds());
     selected.has(uid) ? selected.delete(uid) : selected.add(uid);
     this.selectedIds.set(selected);
+    this.query.set('');
+  }
+
+  /** Toggles optional guest access and clears the completed search. */
+  toggleGuest(): void {
+    this.guestSelected.update((selected) => !selected);
+    this.query.set('');
   }
 
   /**
