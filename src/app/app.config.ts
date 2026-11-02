@@ -12,6 +12,9 @@ import { provideRouter } from '@angular/router';
 import { firebaseConfig } from '../environments/environment.generated';
 import { routes } from './app.routes';
 
+/**
+ * Configures global routing, error handling, and Firebase services.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
