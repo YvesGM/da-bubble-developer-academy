@@ -36,14 +36,21 @@ import { WorkspaceSidebar } from './components/workspace-sidebar/workspace-sideb
   styleUrl: './workspace.scss',
 })
 export class Workspace {
+  /** Header component reference used for contextual account actions. */
   private readonly header = viewChild(WorkspaceHeader);
   /** Firebase authentication state exposed to the workspace template. */
   readonly auth = inject(Auth);
+  /** Application authentication service used for sign-out and account flows. */
   private readonly authService = inject(AuthService);
+  /** Channel service supplying accessible channel data. */
   private readonly channelsService = inject(ChannelService);
+  /** Direct-message service supplying this user's private conversations. */
   private readonly directMessagesService = inject(DirectMessageService);
+  /** Presence service tracking this account's active browser session. */
   private readonly presence = inject(PresenceService);
+  /** Router dependency used for navigation after the current action completes. */
   private readonly router = inject(Router);
+  /** User service used to resolve participant and profile records. */
   private readonly usersService = inject(UserService);
 
   /** Channels accessible to the current account in this workspace. */
@@ -62,6 +69,7 @@ export class Workspace {
   readonly selectedUser = signal<UserProfile | null>(null);
   /** Error shown when opening a direct conversation fails. */
   readonly directMessageError = signal('');
+  /** Initial viewport classification used to decide sidebar collapse state. */
   private compactDesktop = window.innerWidth > 800 && window.innerWidth <= 1100;
   /** Whether the desktop sidebar is currently collapsed. */
   readonly sidebarCollapsed = signal(this.compactDesktop);
