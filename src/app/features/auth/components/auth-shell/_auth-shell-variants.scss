@@ -132,7 +132,7 @@
       }
       @include bp.mobile {
         gap: 32px;
-        padding-top: clamp(40px, calc(100dvh - 844px), 88px);
+        padding-top: clamp(24px, calc(100dvh - 860px), 72px);
 
         .auth-brand {
           gap: 12.8px;
@@ -206,7 +206,7 @@
     }
     &--register-details {
       @include bp.mobile {
-        padding-top: clamp(40px, calc(100dvh - 717px), 215px);
+        padding-top: clamp(24px, calc(100dvh - 733px), 199px);
       }
     }
     &--register-avatar {

@@ -135,14 +135,6 @@
         margin-top: 5px;
       }
 
-      .auth-field:has(.auth-field-error) + .auth-field {
-        margin-top: 8px;
-      }
-
-      .auth-field:has(.auth-field-error) + .auth-privacy {
-        margin-top: 14px;
-      }
-
       .auth-field-icon {
         top: 25px;
       }
