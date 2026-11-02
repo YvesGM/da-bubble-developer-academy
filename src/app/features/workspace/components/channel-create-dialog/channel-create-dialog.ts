@@ -11,7 +11,12 @@ import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { firebaseErrorMessage } from '../../../../core/utils/firebase-error.util';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
-/** Collects and validates the data required to create a channel. */
+/**
+ * Collects channel details and selects the initial membership before creation.
+ *
+ * Form validation, user search, and async submission are coordinated in stages;
+ * the resulting channel ID is returned to the owning workspace.
+ */
 @Component({
   selector: 'app-channel-create-dialog',
   imports: [InputCaretDirective, ReactiveFormsModule, Avatar],
@@ -19,24 +24,38 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
   styleUrl: './channel-create-dialog.scss',
 })
 export class ChannelCreateDialog {
+  /** Firebase auth context used to identify the current channel creator. */
   readonly auth = inject(Auth);
   private readonly channels = inject(ChannelService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly userService = inject(UserService);
 
+  /** Workspace display name shown in headings and dialogs. */
   @Input() workspaceName = 'Workspace';
+  /** Asks the owning view to dismiss the current dialog or panel. */
   @Output() readonly closeRequested = new EventEmitter<void>();
+  /** Emits the ID of a newly persisted channel. */
   @Output() readonly channelCreated = new EventEmitter<string>();
 
+  /** Workspace user profiles used to resolve visible names and avatar data. */
   readonly users = toSignal(this.userService.observeUsers(), { initialValue: [] });
+  /** Active step in the multi-stage registration or creation flow. */
   readonly step = signal<'details' | 'members'>('details');
+  /** Whether channel creation includes all members or selected users. */
   readonly memberMode = signal<'all' | 'selected'>('all');
+  /** UIDs invited in the channel-creation member step. */
   readonly selectedMemberIds = signal(new Set<string>());
+  /** Whether this channel allows anonymous guest participation. */
   readonly guestAccess = signal(false);
+  /** Current search or mention query typed by the user. */
   readonly query = signal('');
+  /** ID returned by channel creation for subsequent navigation. */
   readonly createdChannelId = signal('');
+  /** Human-readable error currently shown in the form. */
   readonly errorMessage = signal('');
+  /** True while an asynchronous form submission is in progress. */
   readonly submitting = signal(false);
+  /** Non-nullable reactive form holding the fields and validation state. */
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', Validators.required],
     description: [''],
