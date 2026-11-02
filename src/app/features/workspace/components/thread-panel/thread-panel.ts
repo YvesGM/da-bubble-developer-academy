@@ -25,8 +25,11 @@ import { MessageItem } from '../message-item/message-item';
   styleUrl: './thread-panel.scss',
 })
 export class ThreadPanel {
+  /** Firebase Auth client providing the active account identity. */
   private readonly auth = inject(Auth);
+  /** Thread service used to observe and post replies to the selected message. */
   private readonly threads = inject(ThreadService);
+  /** User service used to resolve participant and profile records. */
   private readonly usersService = inject(UserService);
 
   /** Conversation target passed to messaging, reactions, and navigation. */
