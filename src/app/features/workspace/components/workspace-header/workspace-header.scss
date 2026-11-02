@@ -38,14 +38,6 @@
       width: min(100%, 740px);
     }
 
-    .user {
-      &-area {
-        justify-self: end;
-
-        position: relative;
-      }
-    }
-
     .profile {
       &-button {
         font-weight: 700;
@@ -118,7 +110,14 @@
     }
 
     .user {
-      &-menu-backdrop { display: none; }
+      &-area {
+        justify-self: end;
+        position: relative;
+      }
+
+      &-menu-backdrop {
+        display: none;
+      }
 
       &-menu {
         display: grid;
@@ -154,8 +153,13 @@
           transform: none;
         }
 
-        .user-menu-handle,
-        .menu-action-icon { display: none; }
+        .user-menu-handle {
+          display: none;
+        }
+
+        .menu-action-icon {
+          display: none;
+        }
 
         button {
           font-size: var(--ws-heading, 24px);
@@ -228,8 +232,13 @@
         min-height: 50px;
         padding: 0;
 
-        .profile-name,
-        .profile-chevron { display: none; }
+        .profile-name {
+          display: none;
+        }
+
+        .profile-chevron {
+          display: none;
+        }
 
         .profile-avatar {
           --avatar-large-size: 50px;
@@ -328,14 +337,14 @@
           width: 26px;
           height: 26px;
           background: currentColor;
-        }
 
-        .menu-action-icon--profile {
-          mask: url('/assets/profile-menu.svg') center / contain no-repeat;
-        }
+          &--profile {
+            mask: url('/assets/profile-menu.svg') center / contain no-repeat;
+          }
 
-        .menu-action-icon--logout {
-          mask: url('/assets/logout-menu.svg') center / contain no-repeat;
+          &--logout {
+            mask: url('/assets/logout-menu.svg') center / contain no-repeat;
+          }
         }
 
         button {
