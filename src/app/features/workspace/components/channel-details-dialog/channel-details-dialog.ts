@@ -19,6 +19,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
   styleUrl: './channel-details-dialog.scss',
 })
 export class ChannelDetailsDialog {
+  /** Angular form builder used to create typed and validated controls. */
   private readonly formBuilder = inject(FormBuilder);
 
   /**
