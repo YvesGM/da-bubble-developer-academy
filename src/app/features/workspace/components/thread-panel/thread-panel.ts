@@ -12,7 +12,12 @@ import { UserService } from '../../../../core/services/user.service';
 import { MessageInput } from '../message-input/message-input';
 import { MessageItem } from '../message-item/message-item';
 
-/** Renders the selected thread and its reply composer. */
+/**
+ * Displays replies associated with one parent message.
+ *
+ * The panel derives its thread context from the conversation and parent ID,
+ * and submits new replies without changing the main conversation composer.
+ */
 @Component({
   selector: 'app-thread-panel',
   imports: [MessageInput, MessageItem],
@@ -24,18 +29,30 @@ export class ThreadPanel {
   private readonly threads = inject(ThreadService);
   private readonly usersService = inject(UserService);
 
+  /** Conversation target passed to messaging, reactions, and navigation. */
   readonly target = input.required<ConversationTarget>();
+  /** Parent message whose reply thread is displayed. */
   readonly parent = input.required<Message>();
+  /** Label identifying the conversation in the thread header. */
   readonly contextLabel = input('');
+  /** Workspace user profiles used to resolve visible names and avatar data. */
   readonly users = input<UserProfile[]>([]);
+  /** Channels accessible to the current account in this workspace. */
   readonly channels = input<Channel[]>([]);
+  /** User's recent emoji choices offered ahead of the default picker. */
   readonly recentEmojis = input<string[]>([]);
+  /** Profile stream for the currently authenticated account. */
   readonly profile = toSignal(this.usersService.observeCurrentProfile());
+  /** Asks the owning view to dismiss the current dialog or panel. */
   @Output() readonly closeRequested = new EventEmitter<void>();
+  /** Forwards profile requests from a reply to the parent chat view. */
   @Output() readonly userRequested = new EventEmitter<string>();
 
+  /** Target and parent-message ID used by the thread service. */
   readonly context = computed(() => ({ target: this.target(), messageId: this.parent().id }));
+  /** Callback passed to the reply composer to persist thread text. */
   readonly submitReply = (text: string): Promise<void> => this.sendReply(text);
+  /** Thread replies observed under the selected parent message. */
   readonly replies = toSignal(
     toObservable(this.context).pipe(
       switchMap((context) => this.threads.observeReplies(context.target, context.messageId)),
