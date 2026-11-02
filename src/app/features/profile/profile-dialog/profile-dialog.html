@@ -14,6 +14,21 @@
         />
       </div>
 
+      <fieldset class="avatar-picker">
+        <legend>Profilbild wählen</legend>
+        <div class="avatar-options">
+          @for (option of avatarIds; track option; let index = $index) {
+            <button type="button" class="avatar-choice"
+              [class.selected]="avatarId() === option"
+              [attr.aria-pressed]="avatarId() === option"
+              [attr.aria-label]="'Avatar ' + (index + 1) + ' auswählen'"
+              (click)="selectAvatar(option)">
+              <app-avatar [avatarId]="option" [name]="'Avatar ' + (index + 1)" size="option" />
+            </button>
+          }
+        </div>
+      </fieldset>
+
       <label>
         <span class="field-label">
           <img src="/assets/person-icon.svg" alt="" />
