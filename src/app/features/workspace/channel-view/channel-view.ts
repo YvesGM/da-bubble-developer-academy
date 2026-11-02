@@ -45,14 +45,23 @@ import { ChatPanel } from '../components/chat-panel/chat-panel';
   styleUrl: './channel-view.scss',
 })
 export class ChannelView {
+  /** Reference to the add-member button for popover positioning. */
   private readonly addMemberButton = viewChild<ElementRef<HTMLButtonElement>>('addMemberButton');
+  /** Reference to the compact member row for popover anchoring. */
   private readonly memberStack = viewChild<ElementRef<HTMLButtonElement>>('memberStack');
+  /** Reference to the channel heading button for the details editor. */
   private readonly channelTitle = viewChild<ElementRef<HTMLButtonElement>>('channelTitle');
+  /** Firebase Auth client providing the active account identity. */
   private readonly auth = inject(Auth);
+  /** Channel service used to load membership and update the current channel. */
   private readonly channels = inject(ChannelService);
+  /** Direct-message service used to look up or create private conversations. */
   private readonly directMessages = inject(DirectMessageService);
+  /** Active route containing the selected conversation ID or reset parameters. */
   private readonly route = inject(ActivatedRoute);
+  /** Router dependency used for navigation after the current action completes. */
   private readonly router = inject(Router);
+  /** User service used to resolve participant and profile records. */
   private readonly usersService = inject(UserService);
 
   /** Channel identifier derived reactively from the current route. */
