@@ -26,11 +26,17 @@ import { MessageInput } from '../components/message-input/message-input';
   styleUrl: './new-message-view.scss',
 })
 export class NewMessageView {
+  /** Firebase Auth client providing the active account identity. */
   private readonly auth = inject(Auth);
+  /** Channel service supplying accessible channel data. */
   private readonly channelsService = inject(ChannelService);
+  /** Direct-message service used to look up or create private conversations. */
   private readonly directMessages = inject(DirectMessageService);
+  /** Message service used to edit and remove messages from Firestore. */
   private readonly messages = inject(MessageService);
+  /** Router dependency used for navigation after the current action completes. */
   private readonly router = inject(Router);
+  /** User service used to resolve participant and profile records. */
   private readonly usersService = inject(UserService);
 
   /** Current search or mention query typed by the user. */
