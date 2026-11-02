@@ -7,7 +7,12 @@ import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 
-/** Navigates channels and direct-message conversations. */
+/**
+ * Lists accessible channels and direct-message conversations in the workspace.
+ *
+ * Inputs supply the navigation data and account permissions; creation and
+ * recipient selection events are forwarded to the parent workspace.
+ */
 @Component({
   selector: 'app-workspace-sidebar',
   imports: [RouterLink, RouterLinkActive, Avatar, PresenceIndicator],
@@ -17,18 +22,30 @@ import { PresenceIndicator } from '../../../../shared/components/presence-indica
 export class WorkspaceSidebar {
   private readonly router = inject(Router);
 
+  /** Channels accessible to the current account in this workspace. */
   @Input({ required: true }) channels: Channel[] = [];
+  /** Private conversations accessible to the signed-in account. */
   @Input() directMessages: DirectMessage[] = [];
+  /** Workspace user profiles used to resolve visible names and avatar data. */
   @Input() users: UserProfile[] = [];
+  /** UID of the current account, used to mark the user's own row. */
   @Input() currentUserId = '';
+  /** Workspace display name shown in headings and dialogs. */
   @Input() workspaceName = 'Workspace';
+  /** Whether the workspace session uses anonymous guest access. */
   @Input() guest = false;
+  /** Error shown when opening a direct conversation fails. */
   @Input() directMessageError = '';
+  /** Requests opening the channel creation flow. */
   @Output() readonly createRequested = new EventEmitter<void>();
+  /** Requests navigation to the new-message recipient picker. */
   @Output() readonly newMessageRequested = new EventEmitter<void>();
+  /** Emits a user UID selected from the private-conversation navigation. */
   @Output() readonly userRequested = new EventEmitter<string>();
 
+  /** Whether the channel navigation section is expanded. */
   readonly channelsExpanded = signal(true);
+  /** Whether the private conversation list is expanded. */
   readonly directMessagesExpanded = signal(true);
 
   /** Toggles the visibility of the channel list. */
