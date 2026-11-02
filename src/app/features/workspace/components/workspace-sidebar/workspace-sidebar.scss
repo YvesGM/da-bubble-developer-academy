@@ -32,6 +32,7 @@
 .section-heading h2 { margin: 0; font-size: 18px; }
 
 .section-chevron {
+  --chevron-angle: 0deg;
   display: inline-block;
   flex: 0 0 12px;
   width: 12px;
@@ -39,10 +40,11 @@
   margin-right: 5px;
   background: currentColor;
   mask: url('/assets/chevron-down.svg') center / contain no-repeat;
+  transform: rotate(var(--chevron-angle));
   transition: transform tokens.$motion-base;
 }
 
-.section-chevron.is-closed { transform: rotate(-90deg); }
+.section-chevron.is-closed { --chevron-angle: -90deg; }
 
 .section-icon,
 .sidebar-action-icon {
@@ -137,6 +139,10 @@
     background: transparent;
     transform: none;
   }
+
+  &:is(:hover, :focus-visible) .section-chevron {
+    transform: rotate(var(--chevron-angle)) scale(1.14);
+  }
 }
 
 .sidebar .section-heading > button[aria-label='Channel erstellen'] {
@@ -175,6 +181,8 @@
     background: transparent;
     transform: none;
   }
+
+  &:is(:hover, :focus-visible) .add-channel-icon { transform: scale(1.12); }
 }
 
 .add-channel-icon {
@@ -184,6 +192,7 @@
   height: 20px;
   background: currentColor;
   mask: url('/assets/add-channel.svg') center / contain no-repeat;
+  transition: transform tokens.$motion-base;
 }
 
 .channel-link,
@@ -226,8 +235,9 @@
 .sidebar button.dm-link.active {
   color: tokens.$purple-1;
   background: tokens.$background;
-  transform: none;
 }
+
+.sidebar button.dm-link:is(:hover, :focus-visible) { transform: translateX(3px); }
 
 .dm-name {
   min-width: 0;
@@ -257,8 +267,8 @@
 
 .dm-avatar app-presence-indicator {
   position: absolute;
-  right: -2px;
-  bottom: -1px;
+  right: 4px;
+  bottom: 2px;
   display: grid;
   border: 2px solid tokens.$white;
   border-radius: 50%;

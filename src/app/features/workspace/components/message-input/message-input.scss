@@ -164,6 +164,8 @@
     }
   }
 
+  .suggestions { border: 1px solid tokens.$border; }
+
   // The shared emoji picker already draws its own white surface and shadow.
   .picker {
     display: block;

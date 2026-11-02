@@ -63,12 +63,11 @@
         border-radius: 32px;
 
         transition:
-          background-color tokens.$motion-base,
           color tokens.$motion-fast;
 
-        &:hover {
-          color: tokens.$purple-1;
-          background: #ffffff80;
+        &:hover,
+        &:focus-visible {
+          color: tokens.$purple-2;
         }
 
         .profile-name {
@@ -89,22 +88,24 @@
           height: var(--avatar-large-size, 56px);
 
           app-presence-indicator {
+            --presence-size: 12px;
             position: absolute;
-            right: 0;
-            bottom: 0;
+            right: 4px;
+            bottom: 1px;
             display: inline-flex;
-            border: 2px solid tokens.$background;
+            border: 2px solid tokens.$white;
             border-radius: 50%;
           }
         }
 
         .profile-chevron {
-          width: 12px;
-          height: 8px;
-          object-fit: contain;
-
+          display: inline-block;
+          flex: 0 0 auto;
+          width: 16px;
+          height: 10px;
           margin-right: 4px;
-
+          background: currentColor;
+          mask: url('/assets/chevron-half-down.svg') center / contain no-repeat;
           transition: transform tokens.$motion-base;
         }
 

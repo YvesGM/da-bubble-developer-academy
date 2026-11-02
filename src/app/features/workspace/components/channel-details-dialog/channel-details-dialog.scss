@@ -98,7 +98,7 @@
 
     &-value {
       margin: 0;
-      font-size: 18px;
+      font-size: 24px;
       white-space: pre-wrap;
     }
   }
@@ -222,8 +222,8 @@
         padding: 16px;
         gap: 16px;
       }
-      &-heading strong,
-      &-value { font-size: 16px; }
+      &-heading strong { font-size: 16px; }
+      &-value { font-size: 18px; }
     }
     header h2 { font-size: clamp(20px, 5vw, 24px); }
     .edit-button { font-size: 16px; }
