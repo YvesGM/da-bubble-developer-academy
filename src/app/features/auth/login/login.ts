@@ -21,8 +21,11 @@ import { InputCaretDirective } from '../../../shared/directives/input-caret.dire
   styleUrl: './login.scss',
 })
 export class Login {
+  /** Application auth service used to execute account operations. */
   private readonly auth = inject(AuthService);
+  /** Angular form builder used to create typed and validated controls. */
   private readonly formBuilder = inject(FormBuilder);
+  /** Router dependency used for navigation after the current action completes. */
   private readonly router = inject(Router);
 
   /** Human-readable error currently shown in the form. */
