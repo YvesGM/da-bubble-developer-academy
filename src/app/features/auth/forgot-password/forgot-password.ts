@@ -7,7 +7,12 @@ import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { AuthShell } from '../components/auth-shell/auth-shell';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
-/** Submits password-reset requests and displays neutral delivery feedback. */
+/**
+ * Collects an email address and requests a password-reset message from the backend.
+ *
+ * Submission state and feedback are exposed as signals; the response shown to
+ * users does not reveal whether a particular account exists.
+ */
 @Component({
   selector: 'app-forgot-password',
   imports: [InputCaretDirective, ReactiveFormsModule, RouterLink, AuthShell],
@@ -20,9 +25,13 @@ export class ForgotPassword {
   private readonly destroyRef = inject(DestroyRef);
   private noticeTimer?: ReturnType<typeof setTimeout>;
 
+  /** Neutral completion notice shown after requesting the reset email. */
   readonly message = signal('');
+  /** Human-readable error currently shown in the form. */
   readonly errorMessage = signal('');
+  /** True while an asynchronous form submission is in progress. */
   readonly submitting = signal(false);
+  /** Non-nullable reactive form holding the fields and validation state. */
   readonly form = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
   });
