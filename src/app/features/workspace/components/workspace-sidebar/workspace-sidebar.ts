@@ -26,7 +26,6 @@ export class WorkspaceSidebar {
   @Input() directMessageError = '';
   @Output() readonly createRequested = new EventEmitter<void>();
   @Output() readonly newMessageRequested = new EventEmitter<void>();
-  @Output() readonly workspaceEditRequested = new EventEmitter<void>();
   @Output() readonly userRequested = new EventEmitter<string>();
 
   readonly channelsExpanded = signal(true);

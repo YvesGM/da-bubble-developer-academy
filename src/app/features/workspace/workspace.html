@@ -40,7 +40,6 @@
       (createRequested)="showCreateChannel.set(true)"
       (newMessageRequested)="openNewMessage()"
       (userRequested)="startDirectMessage($event)"
-      (workspaceEditRequested)="showWorkspaceEditor.set(true)"
     />
 
     <section class="workspace-content">
@@ -75,11 +74,4 @@
     />
   }
 
-  @if (showWorkspaceEditor() && !isGuest) {
-    <app-workspace-name-dialog
-      [workspaceName]="workspaceName"
-      (closeRequested)="showWorkspaceEditor.set(false)"
-      (saveRequested)="saveWorkspaceName($event)"
-    />
-  }
 </main>

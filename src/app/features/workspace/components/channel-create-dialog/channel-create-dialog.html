@@ -22,7 +22,7 @@
 
     @if (step() === 'details') {
       <p class="intro">
-        Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein.
+        Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein, #marketing zum Beispiel.
       </p>
 
       <form [formGroup]="form" (ngSubmit)="submitDetails()" novalidate>
@@ -30,7 +30,7 @@
           Channel-Name
           <div class="channel-name-field">
             <span>#</span>
-            <input appInputCaret type="text" formControlName="name" placeholder="z. B. Entwicklerteam" />
+            <input appInputCaret type="text" formControlName="name" placeholder="z.B. Kooperationsprojekte" />
           </div>
         </label>
         @if (form.controls.name.touched && form.controls.name.hasError('required')) {
@@ -38,11 +38,11 @@
         }
 
         <label>
-          Beschreibung <span class="optional">(optional)</span>
+          <span class="label-heading">Beschreibung <span class="optional">(optional)</span></span>
           <textarea
             formControlName="description"
-            rows="3"
-            placeholder="Worum geht es in diesem Channel?"
+            rows="1"
+            placeholder="Dein Text hier"
           ></textarea>
         </label>
 

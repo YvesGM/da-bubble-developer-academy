@@ -14,7 +14,6 @@ import { ProfileCard } from '../profile/profile-card/profile-card';
 import { ProfileDialog } from '../profile/profile-dialog/profile-dialog';
 import { ChannelCreateDialog } from './components/channel-create-dialog/channel-create-dialog';
 import { WorkspaceHeader } from './components/workspace-header/workspace-header';
-import { WorkspaceNameDialog } from './components/workspace-name-dialog/workspace-name-dialog';
 import { WorkspaceSidebar } from './components/workspace-sidebar/workspace-sidebar';
 
 /** Coordinates workspace navigation, search, and responsive panels. */
@@ -26,7 +25,6 @@ import { WorkspaceSidebar } from './components/workspace-sidebar/workspace-sideb
     ProfileCard,
     ProfileDialog,
     WorkspaceHeader,
-    WorkspaceNameDialog,
     WorkspaceSidebar,
   ],
   templateUrl: './workspace.html',
@@ -48,7 +46,6 @@ export class Workspace {
   readonly profile = toSignal(this.usersService.observeCurrentProfile());
   readonly showCreateChannel = signal(false);
   readonly showProfileEditor = signal(false);
-  readonly showWorkspaceEditor = signal(false);
   readonly selectedUser = signal<UserProfile | null>(null);
   readonly directMessageError = signal('');
   private compactDesktop = window.innerWidth > 800 && window.innerWidth <= 1100;
@@ -174,17 +171,6 @@ export class Workspace {
   openProfileEditor(): void {
     this.selectedUser.set(null);
     this.showProfileEditor.set(true);
-  }
-
-  /**
-   * Persists a new workspace display name for the current user.
-   *
-   * @param name - New workspace display name.
-   * @returns A promise that resolves after persistence completes.
-   */
-  async saveWorkspaceName(name: string): Promise<void> {
-    await this.usersService.updateWorkspaceName(name);
-    this.showWorkspaceEditor.set(false);
   }
 
   /**

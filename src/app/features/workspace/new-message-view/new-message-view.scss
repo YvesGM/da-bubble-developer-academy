@@ -33,21 +33,26 @@
     align-self: start;
     min-width: 0;
     margin-top: 5px;
-    gap: 12px;
-    font-weight: 700;
+    padding: 0 18px;
+    gap: 6px;
+    font-weight: 400;
+    border: 1px solid tokens.$border;
+    border-radius: 30px;
+    transition: border-color tokens.$motion-base;
+
+    &:focus-within { border-color: tokens.$purple-1; }
+
+    span { flex: 0 0 auto; color: tokens.$text-gray; }
 
     input {
       flex: 1;
       min-width: 0;
       height: clamp(55px, 2.86vw, 88px);
-      padding: 0 18px;
+      padding: 0;
       outline: 0;
-      border: 1px solid tokens.$border;
-      border-radius: 30px;
+      border: 0;
+      background: transparent;
       font: inherit;
-      transition: border-color tokens.$motion-base;
-
-      &:focus { border-color: tokens.$purple-1; }
     }
   }
 
@@ -91,7 +96,8 @@
 
     .to-field {
       margin-top: 7px;
-      gap: 10px;
+      padding-inline: 12px;
+      gap: 5px;
 
       input { height: 51px; }
     }

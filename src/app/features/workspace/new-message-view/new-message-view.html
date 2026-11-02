@@ -8,7 +8,7 @@
     <span>An:</span>
     <input appInputCaret
       type="search"
-      placeholder="@ für Personen oder # für Channels"
+      placeholder="#channel, oder @jemand oder E-Mail Adresse"
       [value]="query()"
       (input)="updateQuery($any($event.target).value)"
       autofocus
