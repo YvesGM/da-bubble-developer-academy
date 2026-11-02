@@ -49,6 +49,12 @@
     button {
       font-size: 26px;
 
+      img {
+        display: block;
+        width: 18px;
+        height: 18px;
+      }
+
       display: grid;
       place-items: center;
 
@@ -242,7 +248,6 @@
       overscroll-behavior: contain;
     }
     header h2 { font-size: clamp(20px, 5vw, 24px); }
-    .edit-button { font-size: 16px; }
     .creator {
       padding-top: 18px;
       gap: 8px;
@@ -291,10 +296,3 @@
   }
 }
 
-.dialog header button img,
-.card header button img,
-.dialog-heading .close img {
-  display: block;
-  width: 18px;
-  height: 18px;
-}
