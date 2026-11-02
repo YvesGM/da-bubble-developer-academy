@@ -44,19 +44,19 @@
 
   .results {
     display: grid;
-
+    align-content: start;
     position: absolute;
     z-index: 40;
-    top: calc(100% + 8px);
-    right: 0;
-    left: 0;
-
-    max-height: 360px;
-    padding: 10px;
-
+    top: calc(100% - 14px);
+    left: 46px;
+    width: max-content;
+    max-width: min(440px, calc(100% - 46px));
+    max-height: min(510px, 65dvh);
+    padding: 12px 56px;
     background: tokens.$white;
-    border-radius: 0 0 24px 24px;
-    box-shadow: 0 8px 28px #0000001c;
+    border: 1px solid tokens.$border;
+    border-radius: 0 24px 24px 24px;
+    box-shadow: 0 4px 12px #0000001c;
     overflow: auto;
 
     button {
@@ -65,7 +65,8 @@
       display: grid;
 
       width: 100%;
-      padding: 10px 14px;
+      min-height: 60px;
+      padding: 8px 22px;
       gap: 3px;
 
       color: tokens.$text;
@@ -107,9 +108,10 @@
   .result-avatar {
     display: inline-flex;
     position: relative;
-    width: 42px;
-    height: 42px;
-    --avatar-medium-size: 42px;
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+    --avatar-medium-size: 52px;
 
     app-presence-indicator {
       position: absolute;
@@ -121,14 +123,29 @@
   }
 
   .results .search-result:has(.result-avatar) {
-    grid-template-columns: 42px minmax(0, 1fr);
+    display: flex;
     align-items: center;
-    column-gap: 12px;
-
-    .result-avatar { grid-row: span 2; }
-    .result-email { grid-column: 2; }
+    width: max-content;
+    max-width: 100%;
+    min-height: 78px;
+    gap: 18px;
   }
 
+  .results .result-name {
+    min-width: 0;
+    overflow: hidden;
+    color: tokens.$text;
+    font-size: 18px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .results .result-description {
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   @include bp.mobile {
     input {
@@ -167,6 +184,8 @@
       right: 16px;
       bottom: 20px;
       left: 16px;
+      width: auto;
+      max-width: none;
       max-height: none;
       align-content: start;
       border-radius: 20px;
@@ -227,6 +246,7 @@
         left: 16px;
         max-height: none;
         padding: 10px 0;
+        border: 0;
         border-radius: 0;
         box-shadow: none;
 
@@ -238,10 +258,9 @@
           border-radius: 24px;
         }
         .search-result:has(.result-avatar) {
-          grid-template-columns: 50px minmax(0, 1fr);
-          .result-avatar { width: 50px; height: 50px; --avatar-medium-size: 50px; }
+          width: 100%;
+          .result-avatar { flex-basis: 50px; width: 50px; height: 50px; --avatar-medium-size: 50px; }
         }
-        .result-email,
         .result-description { display: none; }
         .result-channel { font-weight: 400; }
       }

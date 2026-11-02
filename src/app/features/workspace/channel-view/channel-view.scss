@@ -220,20 +220,22 @@
   background: tokens.$background;
   border: 0;
   border-radius: 50%;
-  transition: background-color tokens.$motion-base, color tokens.$motion-fast, transform tokens.$motion-base;
+  transition: background-color tokens.$motion-base, color tokens.$motion-fast;
 
   .add-member-icon {
     width: 22px;
     height: 22px;
     background: currentColor;
     mask: url('/assets/add-member.svg') center / contain no-repeat;
+    transition: transform tokens.$motion-base;
   }
 
   &:hover,
   &:focus-visible {
     color: tokens.$purple-1;
     background: #e1e4ff;
-    transform: scale(1.1);
+
+    .add-member-icon { transform: scale(1.15); }
   }
 
   @include bp.mobile {
