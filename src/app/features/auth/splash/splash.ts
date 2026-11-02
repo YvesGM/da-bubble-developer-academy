@@ -2,15 +2,22 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Output, Vie
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
+/** Pair of logo images animated together during the splash transition. */
 type LogoTargets = [HTMLImageElement, HTMLImageElement];
 
-/** Animates the application intro while authentication state is restored. */
+/**
+ * Runs the branded entry animation while the initial auth state settles.
+ *
+ * Element references control the logo and text reveal; completion is emitted
+ * to the parent so normal application routing can continue.
+ */
 @Component({
   selector: 'app-splash',
   templateUrl: './splash.html',
   styleUrl: './splash.scss',
 })
 export class Splash implements AfterViewInit {
+  /** Emits once the introductory animation has completed. */
   @Output() readonly finished = new EventEmitter<void>();
   @ViewChild('backdrop') private backdrop!: ElementRef<HTMLElement>;
   @ViewChild('mark') private mark!: ElementRef<HTMLImageElement>;
