@@ -245,8 +245,14 @@
         min-width: 0;
         gap: 10px;
 
-        a img { display: block; width: 25px; height: 25px; }
-        > img { width: 40px; height: 40px; }
+        a {
+          display: grid;
+          place-items: center;
+          min-width: 26px;
+          min-height: 44px;
+        }
+        a img { display: block; width: 16px; height: 16px; transform: rotate(90deg); }
+        > img { width: 52px; height: 52px; }
         strong {
           overflow: hidden;
           font-size: 18px;

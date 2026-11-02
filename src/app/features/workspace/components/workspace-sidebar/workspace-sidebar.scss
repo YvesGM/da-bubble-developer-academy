@@ -285,6 +285,8 @@
     border-radius: 0;
   }
 
+  .sidebar .channel-hash { filter: brightness(0); }
+
   .sidebar .section-heading > button[aria-label='Channel erstellen'],
   .sidebar .sidebar-add-channel {
     color: tokens.$purple-1;

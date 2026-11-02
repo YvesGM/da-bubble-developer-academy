@@ -179,6 +179,12 @@ export class ChannelView {
     this.showMembers.set(true);
   }
 
+  /** Opens the member list on mobile and the add dialog on desktop. */
+  openHeaderMemberAction(): void {
+    const stack = this.memberStack()?.nativeElement;
+    stack?.getClientRects().length ? this.openAddMembers() : this.openMembers();
+  }
+
   /**
    * Closes the member list and opens the dialog for adding more members.
    */
@@ -197,9 +203,11 @@ export class ChannelView {
     if (this.showDetails()) this.positionDetails();
   }
 
-  /** Anchors the member list below its avatar stack, aligned at the right edge. */
+  /** Anchors the popup to the visible member control at either breakpoint. */
   private positionMembers(): void {
-    const anchor = this.memberStack()?.nativeElement.getBoundingClientRect();
+    const stack = this.memberStack()?.nativeElement;
+    const control = stack?.getClientRects().length ? stack : this.addMemberButton()?.nativeElement;
+    const anchor = control?.getBoundingClientRect();
     if (!anchor) return;
     this.membersPosition.set({
       top: Math.round(anchor.bottom + 12),
