@@ -13,9 +13,11 @@ import {
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { of, switchMap } from 'rxjs';
 
 import { DEFAULT_RECENT_EMOJIS } from '../../../../core/constants/emoji.constants';
+import { Channel } from '../../../../core/models/channel.model';
 import { ConversationTarget } from '../../../../core/models/conversation.model';
 import { Message } from '../../../../core/models/message.model';
 import { ReactionGroup } from '../../../../core/models/reaction.model';
@@ -38,7 +40,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
  */
 @Component({
   selector: 'app-message-item',
-  imports: [InputCaretDirective, FormsModule, Avatar, EmojiPicker, ReactionPopover],
+  imports: [InputCaretDirective, FormsModule, RouterLink, Avatar, EmojiPicker, ReactionPopover],
   templateUrl: './message-item.html',
   styleUrl: './message-item.scss',
 })
@@ -68,6 +70,8 @@ export class MessageItem {
   readonly target = input.required<ConversationTarget>();
   /** Required message document whose author, text, and reactions are rendered. */
   readonly message = input.required<Message>();
+  /** Channels available for resolving clickable #channel mentions. */
+  readonly channels = input<Channel[]>([]);
   /** Parent message ID when rendering a reply inside a thread. */
   readonly parentMessageId = input('');
   /** User's recent emoji choices offered ahead of the default picker. */
@@ -104,7 +108,7 @@ export class MessageItem {
   /** Whether touch-friendly message actions are expanded. */
   readonly mobileActionsOpen = signal(false);
   /** Recomputes display spans whenever the message or available profiles change. */
-  readonly messageParts = computed(() => splitMessageMentions(this.message().text, this.users()));
+  readonly messageParts = computed(() => splitMessageMentions(this.message().text, this.users(), this.channels()));
   /**
    * Opens the existing profile card for a recognized mention.
    *
