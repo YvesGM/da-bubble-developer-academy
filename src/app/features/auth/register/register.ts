@@ -1,8 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
+import { FirebaseError } from 'firebase/app';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { AVATAR_IDS } from '../../../core/constants/avatar.constants';
+import { AUTH_EMAIL_VALIDATORS, AUTH_NAME_VALIDATORS } from '../../../core/constants/auth-validation.constants';
 import { AuthService } from '../../../core/services/auth.service';
 import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { Avatar } from '../../../shared/components/avatar/avatar';
@@ -44,8 +46,8 @@ export class Register {
   readonly leaving = signal(false);
   /** Non-nullable reactive form holding the fields and validation state. */
   readonly form = this.formBuilder.nonNullable.group({
-    name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+    name: ['', AUTH_NAME_VALIDATORS],
+    email: ['', AUTH_EMAIL_VALIDATORS],
     password: ['', [Validators.required, Validators.minLength(6)]],
     privacyAccepted: [false, Validators.requiredTrue],
     avatarId: ['', Validators.required],
@@ -109,7 +111,7 @@ export class Register {
   }
 
   /**
-   * Executes account creation and navigates to the workspace after success.
+   * Creates the account, ends Firebase's automatic session, and returns to login.
    *
    * @param input - Validated registration form values.
    * @returns A promise that resolves after registration and navigation complete.
@@ -117,8 +119,10 @@ export class Register {
   private async runRegistration(input: RegistrationInput): Promise<void> {
     this.startSubmit();
     try {
-      await this.auth.register(input.name, input.email, input.password, input.avatarId);
+      await this.auth.register(input.name.trim(), input.email.trim(), input.password, input.avatarId);
+      await this.auth.logout();
     } catch (error) {
+      this.showRegistrationError(error);
       this.registrationStatus.set(null);
       this.errorMessage.set(firebaseErrorMessage(error, 'Registrierung fehlgeschlagen.'));
       this.submitting.set(false);
@@ -127,40 +131,53 @@ export class Register {
     await this.finishRegistration();
   }
 
+  /**
+   * Returns Firebase email errors to their input so users can correct them immediately.
+   *
+   * @param error - Failure from registration or automatic-session cleanup.
+   */
+  private showRegistrationError(error: unknown): void {
+    if (error instanceof FirebaseError && ['auth/invalid-email', 'auth/email-already-in-use'].includes(error.code)) {
+      this.step.set('details');
+      this.form.controls.email.setErrors({ server: true });
+      this.form.controls.email.markAsTouched();
+    }
+  }
+
   /** Presents Figma's success notice before leaving the registration screen. */
   private async finishRegistration(): Promise<void> {
     this.registrationStatus.set('success');
     await this.delay(1600);
     try {
-      await this.openWorkspace();
+      await this.openLogin();
     } catch {
       this.registrationStatus.set(null);
-      this.errorMessage.set('Konto erstellt. Weiterleitung fehlgeschlagen. Bitte neu laden.');
+      this.errorMessage.set('Konto erstellt. Bitte melde dich über die Anmeldeseite an.');
     } finally {
       this.submitting.set(false);
     }
   }
 
   /** Uses a native view transition where supported and a fade fallback elsewhere. */
-  private async openWorkspace(): Promise<void> {
-    if (this.reducedMotion()) return this.navigateWorkspace();
+  private async openLogin(): Promise<void> {
+    if (this.reducedMotion()) return this.navigateLogin();
     const page = document as TransitionDocument;
     if (page.startViewTransition) {
-      await page.startViewTransition(() => this.navigateWorkspace()).finished;
+      await page.startViewTransition(() => this.navigateLogin()).finished;
       return;
     }
     this.leaving.set(true);
     await this.delay(300);
-    await this.navigateWorkspace();
+    await this.navigateLogin();
     document.documentElement.animate([{ opacity: 0 }, { opacity: 1 }], {
       duration: 400, easing: 'ease-out',
     });
   }
 
   /** Guards against cancelled navigation after account creation. */
-  private async navigateWorkspace(): Promise<void> {
-    if (!await this.router.navigateByUrl('/workspace')) {
-      throw new Error('Workspace navigation was cancelled');
+  private async navigateLogin(): Promise<void> {
+    if (!await this.router.navigateByUrl('/login')) {
+      throw new Error('Login navigation was cancelled');
     }
   }
 
