@@ -25,12 +25,13 @@ export class App {
   }
 
   /**
-   * Only the initial app entry and the legacy splash URL trigger the intro.
+   * Only an entry without a hash route or the explicit splash URL triggers the intro.
    *
    * @returns Whether the splash overlay should be displayed.
    */
   private isSplashEntry(): boolean {
     const path = window.location.pathname.replace(/\/+$/, '');
-    return path === '' || path === '/splash';
+    const hashPath = window.location.hash.split('?')[0].replace(/^#/, '').replace(/\/+$/, '');
+    return (path === '' && (!hashPath || hashPath === '/splash')) || path === '/splash';
   }
 }
