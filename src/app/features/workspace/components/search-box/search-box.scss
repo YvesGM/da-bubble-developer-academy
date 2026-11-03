@@ -250,7 +250,7 @@
         &::placeholder { opacity: 1; }
       }
 
-      .search-icon { top: 84px; transform: none; }
+      .search-icon { top: 84px; transform: translateY(-50%); }
       .mobile-search-placeholder { display: none; }
 
       .results {
