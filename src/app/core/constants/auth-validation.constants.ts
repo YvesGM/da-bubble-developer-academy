@@ -36,3 +36,23 @@ function trimmedNameLength(control: AbstractControl): ValidationErrors | null {
     ? (control.value.match(/\p{L}/gu)?.length ?? 0) : 0;
   return length >= 3 ? null : { minlength: { requiredLength: 3, actualLength: length } };
 }
+
+/**
+ * Registration passwords need six non-padding characters and may not consist
+ * solely of whitespace. Significant internal spaces remain unchanged.
+ */
+export const AUTH_PASSWORD_VALIDATORS = [Validators.required, validPasswordContent];
+
+/**
+ * Validates meaningful password length without silently changing credentials.
+ *
+ * @param control - Password control supplied by the registration form.
+ * @returns An actionable password error or null when the input is valid.
+ */
+function validPasswordContent(control: AbstractControl): ValidationErrors | null {
+  const value = typeof control.value === 'string' ? control.value : '';
+  if (!value) return null;
+  const trimmedLength = value.trim().length;
+  if (!trimmedLength) return { whitespaceOnly: true };
+  return trimmedLength >= 6 ? null : { minlength: { requiredLength: 6, actualLength: trimmedLength } };
+}
