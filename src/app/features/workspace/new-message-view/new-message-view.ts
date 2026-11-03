@@ -10,6 +10,7 @@ import { ChannelService } from '../../../core/services/channel.service';
 import { DirectMessageService } from '../../../core/services/direct-message.service';
 import { MessageService } from '../../../core/services/message.service';
 import { UserService } from '../../../core/services/user.service';
+import { createMessageInput } from '../../../core/utils/message-author.util';
 import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { MessageInput } from '../components/message-input/message-input';
 
@@ -122,9 +123,10 @@ export class NewMessageView {
    * @returns Promise that resolves after delivery and navigation.
    */
   async sendNewMessage(text: string): Promise<void> {
+    const message = createMessageInput(text, this.auth.currentUser, this.profile());
     const target = await this.selectedTarget();
     if (!target) throw new Error('recipient-required');
-    await this.messages.sendMessage(target, this.messageInput(text));
+    await this.messages.sendMessage(target, message);
     await this.router.navigate(conversationRoute(target));
   }
 
@@ -142,20 +144,6 @@ export class NewMessageView {
     return { type: 'directMessage', id };
   }
 
-  /**
-   * Builds the payload from the current authenticated user's existing profile.
-   *
-   * @param text - Content of the new message.
-   * @returns Message payload with an author name and avatar.
-   */
-  private messageInput(text: string) {
-    const user = this.auth.currentUser;
-    return {
-      text,
-      authorName: this.profile()?.displayName || user?.displayName || 'Benutzer',
-      authorAvatarId: this.profile()?.avatarId ?? 'avatar-1',
-    };
-  }
 
   /**
    * Normalizes a search query without the optional channel or user prefix.
