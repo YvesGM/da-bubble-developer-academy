@@ -16,7 +16,7 @@ import { routes } from './app.routes';
  * Uses fragment-based routes on the Akademie FTP host so nested URLs refresh
  * without requiring Apache rewrite access. Other deployments keep clean URLs.
  */
-const academyHashRouting = window.location.hostname === 'yves-gildemeister.developerakademie.net';
+const academyHashRouting = window.location.hostname.endsWith('.developerakademie.net');
 
 /**
  * Provides the application-wide services required by the Angular root.
