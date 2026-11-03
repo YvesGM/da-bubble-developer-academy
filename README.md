@@ -20,6 +20,10 @@ Install dependencies:
 npm ci
 ```
 
+`npm ci` is intentional: it performs a clean, reproducible installation from
+`package-lock.json` (particularly useful in CI). `npm install` is also valid
+for local development but can update the lockfile.
+
 Start the local development server:
 
 ```bash
@@ -79,11 +83,34 @@ does **not** prove that the FTP account supports SFTP. First test FTP with
 explicit TLS on port 21 using the credentials copied from the Akademie portal,
 if the guide permits it.
 
-Deploy the static Angular files from local `dist/dabubble/browser/` after
-`npm run build` to the Akademie webroot once its file-transfer access works;
-**do not upload `api/` or private credentials there**. The GitHub Actions
+Deploy the **contents** of local `dist/dabubble/browser/` after
+`npm run build` directly into the Akademie domain's actual document root;
+**do not upload the `dist/`, `dabubble/`, or `browser/` directory as a nested
+folder**, and **do not upload `api/` or private credentials there**.
+Ensure `index.html`, the JavaScript/CSS bundles, `assets/` and the hidden
+`.htaccess` file sit side by side in that webroot. In FileZilla, enable
+**Server → Versteckte Dateien anzeigen erzwingen** when necessary; otherwise
+`.htaccess` is easy to miss. The Angular build includes it explicitly via
+`angular.json`.
+
+The `.htaccess` performs the Apache SPA fallback: direct requests to
+`/workspace/channel/...`, `/register`, or `/forgot-password` load `index.html`
+so Angular can resolve the route. Without the file, an Apache reload returns
+**404 Not Found** although navigation inside the app works. No special Angular
+subfolder is required. If the file is present but the reload still gives 404,
+check that the host permits `.htaccess` overrides and `mod_rewrite`. Do not
+replace an unrelated `.htaccess` without checking its existing directives.
+
+After uploading, open a deep link directly and refresh it (`Ctrl+R`) to verify
+both navigation and the server fallback. The GitHub Actions
 workflow currently publishes the combined Angular + PHP output only to
 ALL-INKL, independently of the separate Akademie upload.
+
+For Google sign-in on the Akademie domain, also add
+`yves-gildemeister.developerakademie.net` to **Firebase Console →
+Authentication → Settings → Authorized domains** and confirm the Google provider
+is enabled under **Authentication → Sign-in method**. Angular cannot authorize
+this deployment domain on its own.
 
 The Akademie form sends requests from
 `https://yves-gildemeister.developerakademie.net` directly to
