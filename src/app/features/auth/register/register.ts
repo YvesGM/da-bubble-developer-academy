@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { AVATAR_IDS } from '../../../core/constants/avatar.constants';
-import { AUTH_EMAIL_VALIDATORS, AUTH_NAME_VALIDATORS } from '../../../core/constants/auth-validation.constants';
+import { AUTH_EMAIL_VALIDATORS, AUTH_NAME_VALIDATORS, AUTH_PASSWORD_VALIDATORS } from '../../../core/constants/auth-validation.constants';
 import { AuthService } from '../../../core/services/auth.service';
 import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { Avatar } from '../../../shared/components/avatar/avatar';
@@ -48,7 +48,7 @@ export class Register {
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', AUTH_NAME_VALIDATORS],
     email: ['', AUTH_EMAIL_VALIDATORS],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', AUTH_PASSWORD_VALIDATORS],
     privacyAccepted: [false, Validators.requiredTrue],
     avatarId: ['', Validators.required],
   });
@@ -66,9 +66,36 @@ export class Register {
    * Validates account details and advances registration to avatar selection.
    */
   continueToAvatar(): void {
+    this.normalizeDetails();
     if (!this.detailsValid()) return this.markDetailsInvalid();
     this.errorMessage.set('');
     this.step.set('avatar');
+  }
+
+  /** Trims surrounding whitespace from identity fields before validation. */
+  private normalizeDetails(): void {
+    this.form.controls.name.setValue(this.form.controls.name.value.trim());
+    this.form.controls.email.setValue(this.form.controls.email.value.trim());
+  }
+
+  /**
+   * Hides validation feedback while the account field is being edited.
+   *
+   * @param field - Registration control whose next blur will reveal errors.
+   */
+  editingField(field: 'name' | 'email' | 'password'): void {
+    this.form.controls[field].markAsUntouched();
+    this.errorMessage.set('');
+  }
+
+  /**
+   * Removes padding spaces from a completed identity field.
+   *
+   * @param field - Display name or e-mail control that lost focus.
+   */
+  normalizeField(field: 'name' | 'email'): void {
+    const control = this.form.controls[field];
+    control.setValue(control.value.trim());
   }
 
   /**
