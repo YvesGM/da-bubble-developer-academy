@@ -27,6 +27,7 @@ import { ThreadService } from '../../../../core/services/thread.service';
 import { UserService } from '../../../../core/services/user.service';
 import { splitMessageMentions } from '../../../../core/utils/message-mention.util';
 import { messageTime } from '../../../../core/utils/timestamp.util';
+import { resolveMessageAuthorName } from '../../../../core/utils/message-author.util';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
 import { ReactionPopover } from '../../../../shared/components/reaction-popover/reaction-popover';
@@ -286,6 +287,15 @@ export class MessageItem {
     const replies = this.replies();
     return replies.length ? messageTime(replies[replies.length - 1].createdAt) : '';
   }
+  /**
+   * Resolves a registered author's live profile name, including renamed users.
+   *
+   * @returns Current display name or the stored author snapshot when unavailable.
+   */
+  authorName(): string {
+    return resolveMessageAuthorName(this.message(), this.users());
+  }
+
   /**
    * Resolves the avatar identifier for the message author.
    *
