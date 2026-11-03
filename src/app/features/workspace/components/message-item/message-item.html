@@ -77,6 +77,9 @@
           @if (part.userId) {
             <button type="button" class="message-mention"
               (click)="$event.stopPropagation(); openMention(part.userId)">{{ part.text }}</button>
+          } @else if (part.channelId) {
+            <a class="message-mention" [routerLink]="['/workspace/channel', part.channelId]"
+              (click)="$event.stopPropagation()">{{ part.text }}</a>
           } @else {
             <span>{{ part.text }}</span>
           }
