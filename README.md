@@ -84,27 +84,35 @@ explicit TLS on port 21 using the credentials copied from the Akademie portal,
 if the guide permits it.
 
 Deploy the **contents** of local `dist/dabubble/browser/` after
-`npm run build` directly into the Akademie domain's actual document root;
-**do not upload the `dist/`, `dabubble/`, or `browser/` directory as a nested
-folder**, and **do not upload `api/` or private credentials there**.
-Ensure `index.html`, the JavaScript/CSS bundles, `assets/` and the hidden
-`.htaccess` file sit side by side in that webroot. In FileZilla, enable
-**Server → Versteckte Dateien anzeigen erzwingen** when necessary; otherwise
-`.htaccess` is easy to miss. The Angular build includes it explicitly via
-`angular.json`.
+`npm run build` directly into the Akademie domain's actual document root.
+The deployed `index.html`, JavaScript/CSS bundles and `assets/` must live
+together. **Do not upload the `dist/`, `dabubble/`, or `browser/` folder
+as a second directory level**, and do not upload `api/` or private credentials.
 
-The `.htaccess` performs the Apache SPA fallback: direct requests to
-`/workspace/channel/...`, `/register`, or `/forgot-password` load `index.html`
-so Angular can resolve the route. Without the file, an Apache reload returns
-**404 Not Found** although navigation inside the app works. No special Angular
-subfolder is required. If the file is present but the reload still gives 404,
-check that the host permits `.htaccess` overrides and `mod_rewrite`. Do not
-replace an unrelated `.htaccess` without checking its existing directives.
+### Akademie FTP: Deep links without server rewrites
 
-After uploading, open a deep link directly and refresh it (`Ctrl+R`) to verify
-both navigation and the server fallback. The GitHub Actions
-workflow currently publishes the combined Angular + PHP output only to
-ALL-INKL, independently of the separate Akademie upload.
+The Akademie version activates Angular's official `withHashLocation()`
+strategy at runtime in `app.config.ts`. Its URLs look like
+`https://yves-gildemeister.developerakademie.net/#/workspace/channel/ID`.
+The Apache server always receives only `/`, while Angular resolves the route
+after `#`. Refreshing or directly opening one of these **hash URLs** therefore
+works independently of `.htaccess` and `mod_rewrite`.
+
+The same bundle keeps normal URLs (for example `/reset-password`) on the
+ALL-INKL domain, so the existing password-reset email links remain valid.
+Previous Akademie bookmarks without `#` such as `/workspace/channel/ID`
+cannot work on a server that lacks a rewrite fallback; open the home page
+and navigate to generate a new hash URL. Existing `public/.htaccess` is still
+included in the build as an optional Apache fallback, but **it is not required
+for the Akademie hash routes**.
+
+Check the FTP account's *Webverzeichnis/DocumentRoot* in its hosting guide.
+Some hosts use `htdocs/` or `public_html/`, while others serve the FTP
+starting directory directly. These names are hosting settings, **not Angular
+requirements**; never guess the destination folder or overwrite unrelated
+site data. Upload to the folder from which the current site already serves
+`index.html`. Finally, navigate to a channel and refresh its `/#/...` URL.
+The GitHub Actions workflow deploys the separate ALL-INKL instance only.
 
 For Google sign-in on the Akademie domain, also add
 `yves-gildemeister.developerakademie.net` to **Firebase Console →
