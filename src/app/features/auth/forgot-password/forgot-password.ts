@@ -1,7 +1,8 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import { AUTH_EMAIL_VALIDATORS } from '../../../core/constants/auth-validation.constants';
 import { AuthService } from '../../../core/services/auth.service';
 import { firebaseErrorMessage } from '../../../core/utils/firebase-error.util';
 import { AuthShell } from '../components/auth-shell/auth-shell';
@@ -37,7 +38,7 @@ export class ForgotPassword {
   readonly submitting = signal(false);
   /** Non-nullable reactive form holding the fields and validation state. */
   readonly form = this.formBuilder.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', AUTH_EMAIL_VALIDATORS],
   });
 
   /** Clears pending notice timers if the user navigates away. */
