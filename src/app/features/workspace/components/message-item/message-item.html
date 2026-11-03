@@ -5,11 +5,11 @@
     class="message-avatar"
     [disabled]="message().authorIsGuest"
     (click)="openAuthor()"
-    [attr.aria-label]="message().authorName + ' Profil öffnen'"
+    [attr.aria-label]="authorName() + ' Profil öffnen'"
   >
     <app-avatar
       [avatarId]="authorAvatarId()"
-      [name]="message().authorName"
+      [name]="authorName()"
       size="medium"
     />
   </button>
@@ -26,7 +26,7 @@
         [disabled]="message().authorIsGuest"
         (click)="openAuthor()"
       >
-        {{ message().authorName }}
+        {{ authorName() }}
       </button>
       @if (message().authorIsGuest) {
         <span>Gast</span>
