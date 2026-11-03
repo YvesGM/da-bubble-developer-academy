@@ -91,9 +91,9 @@ as a second directory level**, and do not upload `api/` or private credentials.
 
 ### Akademie FTP: Deep links without server rewrites
 
-The Akademie version activates Angular's official `withHashLocation()`
+Every `*.developerakademie.net` host activates Angular's official `withHashLocation()`
 strategy at runtime in `app.config.ts`. Its URLs look like
-`https://yves-gildemeister.developerakademie.net/#/workspace/channel/ID`.
+`https://dabubble-3281.developerakademie.net/#/workspace/channel/ID`.
 The Apache server always receives only `/`, while Angular resolves the route
 after `#`. Refreshing or directly opening one of these **hash URLs** therefore
 works independently of `.htaccess` and `mod_rewrite`.
@@ -115,10 +115,11 @@ site data. Upload to the folder from which the current site already serves
 The GitHub Actions workflow deploys the separate ALL-INKL instance only.
 
 For Google sign-in on the Akademie domain, also add
-`yves-gildemeister.developerakademie.net` to **Firebase Console →
+`dabubble-3281.developerakademie.net` to **Firebase Console →
 Authentication → Settings → Authorized domains** and confirm the Google provider
 is enabled under **Authentication → Sign-in method**. Angular cannot authorize
-this deployment domain on its own.
+this deployment domain on its own. If the Akademie subdomain changes, add
+that new hostname in Firebase Authentication before testing Google sign-in.
 
 The Akademie form sends requests from
 `https://yves-gildemeister.developerakademie.net` directly to
