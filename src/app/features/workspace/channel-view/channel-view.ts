@@ -130,12 +130,18 @@ export class ChannelView {
    */
   canManageChannel(): boolean {
     const user = this.auth.currentUser;
-    return !!user && (!user.isAnonymous || this.channel()?.creatorId === user.uid);
+    const channel = this.channel();
+    if (!user || !channel) return false;
+    return user.isAnonymous ? channel.creatorId === user.uid
+      : channel.memberIds.includes(user.uid);
   }
 
   /** Only registered users can change channel membership. */
   canInviteMembers(): boolean {
-    return !!this.auth.currentUser && !this.auth.currentUser.isAnonymous;
+    const user = this.auth.currentUser;
+    const channel = this.channel();
+    return !!user && !user.isAnonymous && !!channel
+      && !channel.autoJoin && channel.memberIds.includes(user.uid);
   }
 
   /**
@@ -188,7 +194,7 @@ export class ChannelView {
    * @returns A promise that resolves after the leave action and navigation complete.
    */
   async leaveChannel(): Promise<void> {
-    if (!this.canManageChannel()) return;
+    if (!this.canManageChannel() || this.channel()?.autoJoin) return;
     await this.channels.leaveChannel(this.channelId());
     await this.router.navigateByUrl('/workspace');
   }
@@ -316,7 +322,8 @@ export class ChannelView {
    * @returns Whether the user is a channel member.
    */
   private isChannelMember(uid: string): boolean {
-    return this.channel()?.memberIds.includes(uid) ?? false;
+    const channel = this.channel();
+    return !!channel && (channel.autoJoin || channel.memberIds.includes(uid));
   }
 
   /**

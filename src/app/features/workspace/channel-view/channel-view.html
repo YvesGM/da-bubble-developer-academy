@@ -61,7 +61,7 @@
       [guestAccess]="currentChannel.guestAccess"
       [currentUserId]="currentUserId()"
       [canAdd]="canInviteMembers()"
-      [canLeave]="canInviteMembers()"
+      [canLeave]="canInviteMembers() && !currentChannel.autoJoin"
       [errorMessage]="channelError()"
       (closeRequested)="showDetails.set(false)"
       (addRequested)="openAddMembers()"

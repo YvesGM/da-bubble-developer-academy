@@ -21,6 +21,8 @@ export interface Channel {
   memberIds: string[];
   /** Whether anonymous guests may access the channel. */
   guestAccess: boolean;
+  /** Whether every registered user automatically belongs to this public channel. */
+  autoJoin?: boolean;
   /** Timestamp-like Firestore values are normalized by the timestamp utilities. */
   createdAt?: unknown;
   /** Timestamp-like value of the most recent channel metadata change. */
@@ -37,6 +39,8 @@ export interface CreateChannelInput {
   memberIds: string[];
   /** Whether anonymous guests are included in the new channel. */
   guestAccess: boolean;
+  /** Whether the channel is shared automatically with all registered users. */
+  autoJoin: boolean;
 }
 
 /** Metadata editable after creation; membership changes follow a separate flow. */

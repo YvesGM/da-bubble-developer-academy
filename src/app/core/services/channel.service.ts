@@ -16,7 +16,7 @@ import {
   updateDoc,
   where,
 } from '@angular/fire/firestore';
-import { Observable, map } from 'rxjs';
+import { Observable, combineLatest, map } from 'rxjs';
 
 import { ChannelNameTakenError } from '../errors/channel-name-taken.error';
 import { Channel, CreateChannelInput, UpdateChannelInput } from '../models/channel.model';
@@ -50,9 +50,13 @@ export class ChannelService {
    * @returns An observable that emits the accessible channels sorted by creation time and name.
    */
   observeCurrentUserChannels(): Observable<Channel[]> {
-    const request = this.currentUserChannelQuery();
-    const channels = this.runSync(() => collectionData(request, { idField: 'id' }));
-    return (channels as Observable<Channel[]>).pipe(map((items) => sortChannels(items)));
+    const requests = this.currentUserChannelQueries();
+    const streams = requests.map((request) =>
+      this.runSync(() => collectionData(request, { idField: 'id' })) as Observable<Channel[]>,
+    );
+    return combineLatest(streams).pipe(
+      map((groups) => sortChannels(this.uniqueChannels(groups.flat()))),
+    );
   }
 
   /**
@@ -125,18 +129,29 @@ export class ChannelService {
   }
 
   /**
-   * Builds the Firestore query used to load channels visible to the current session.
+   * Builds the queries for invited and automatically included public channels.
    *
-   * @returns A query filtered either by membership or guest access.
+   * @returns Guest-access query or registered-user membership and auto-join queries.
    */
-  private currentUserChannelQuery() {
+  private currentUserChannelQueries() {
     const reference = this.channelsCollection();
     if (this.auth.currentUser?.isAnonymous) {
-      return this.runSync(() => query(reference, where('guestAccess', '==', true)));
+      return [this.runSync(() => query(reference, where('guestAccess', '==', true)))];
     }
-    return this.runSync(() =>
+    return this.runSync(() => [
       query(reference, where('memberIds', 'array-contains', this.currentUserId())),
-    );
+      query(reference, where('autoJoin', '==', true)),
+    ]);
+  }
+
+  /**
+   * De-duplicates public channels also explicitly present in a user's member list.
+   *
+   * @param channels - Results combined from both live Firestore queries.
+   * @returns One channel per Firestore document ID.
+   */
+  private uniqueChannels(channels: Channel[]): Channel[] {
+    return [...new Map(channels.map((channel) => [channel.id, channel])).values()];
   }
 
   /**
@@ -277,6 +292,7 @@ export class ChannelService {
       creatorId,
       memberIds: registeredChannelMembers(creatorId, input.memberIds, this.auth.currentUser?.isAnonymous ?? false),
       guestAccess: this.auth.currentUser?.isAnonymous ? true : input.guestAccess,
+      autoJoin: !this.auth.currentUser?.isAnonymous && input.autoJoin,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };

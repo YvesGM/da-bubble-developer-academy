@@ -14,7 +14,8 @@ service cloud.firestore {
     function channelAccessData(data) {
       return signedIn()
         && (request.auth.uid in data.memberIds
-          || (anonymousUser() && data.guestAccess == true));
+          || (anonymousUser() && data.guestAccess == true)
+          || (!anonymousUser() && data.get('autoJoin', false) == true));
     }
 
     function channelAccess(channelId) {
@@ -40,7 +41,7 @@ service cloud.firestore {
     function validChannel() {
       return request.resource.data.keys().hasOnly([
           'name', 'normalizedName', 'nameKey', 'description', 'creatorId',
-          'memberIds', 'guestAccess', 'createdAt', 'updatedAt'
+          'memberIds', 'guestAccess', 'autoJoin', 'createdAt', 'updatedAt'
         ])
         && request.resource.data.name is string
         && request.resource.data.normalizedName is string
@@ -48,7 +49,10 @@ service cloud.firestore {
         && request.resource.data.description is string
         && request.resource.data.creatorId is string
         && request.resource.data.memberIds is list
-        && request.resource.data.guestAccess is bool;
+        && request.resource.data.guestAccess is bool
+        && request.resource.data.get('autoJoin', false) is bool
+        && (!request.resource.data.get('autoJoin', false)
+          || (request.resource.data.guestAccess == true && !anonymousUser()));
     }
 
     function validChannelName(nameKey) {
@@ -160,7 +164,9 @@ service cloud.firestore {
             && request.resource.data.guestAccess == resource.data.guestAccess))
         && validChannel()
         && request.resource.data.creatorId == resource.data.creatorId
-        && request.resource.data.createdAt == resource.data.createdAt;
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.get('autoJoin', false)
+          == resource.data.get('autoJoin', false);
       allow delete: if false;
 
       match /messages/{messageId} {

@@ -216,6 +216,27 @@
     }
   }
 
+  .auto-join-option {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+    font-weight: 400;
+    cursor: pointer;
+
+    input {
+      width: 20px;
+      height: 20px;
+      margin: 3px 0 0;
+      padding: 0;
+      outline: 0;
+      accent-color: tokens.$purple-1;
+    }
+
+    span { display: grid; gap: 4px; }
+    strong { font-size: 16px; }
+    small { font-size: 14px; line-height: 1.4; color: tokens.$text-gray; }
+  }
+
   .mode {
     &-option {
       font-weight: 400;

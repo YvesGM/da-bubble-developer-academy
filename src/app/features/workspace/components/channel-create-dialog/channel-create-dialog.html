@@ -46,6 +46,18 @@
           ></textarea>
         </label>
 
+        @if (!auth.currentUser?.isAnonymous) {
+          <label class="auto-join-option">
+            <input type="checkbox" [checked]="autoJoin()"
+              (change)="autoJoin.set(!autoJoin())" />
+            <span>
+              <strong>Öffentlicher Einstiegschannel</strong>
+              <small>Alle registrierten Nutzer und Gäste automatisch aufnehmen –
+                auch neue Nutzer in Zukunft.</small>
+            </span>
+          </label>
+        }
+
         @if (errorMessage()) {
           <p class="form-error">{{ errorMessage() }}</p>
         }

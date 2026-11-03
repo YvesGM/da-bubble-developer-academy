@@ -49,6 +49,8 @@ export class ChannelCreateDialog {
   readonly selectedMemberIds = signal(new Set<string>());
   /** Whether this channel allows anonymous guest participation. */
   readonly guestAccess = signal(false);
+  /** Whether the channel automatically includes registered users and guests. */
+  readonly autoJoin = signal(false);
   /** Current search or mention query typed by the user. */
   readonly query = signal('');
   /** ID returned by channel creation for subsequent navigation. */
@@ -163,7 +165,8 @@ export class ChannelCreateDialog {
     try {
       const id = await this.channels.createChannel({ ...this.channelInput(), memberIds });
       this.createdChannelId.set(id);
-      this.isGuestCurrentUser() ? this.channelCreated.emit(id) : this.step.set('members');
+      this.isGuestCurrentUser() || this.autoJoin()
+        ? this.channelCreated.emit(id) : this.step.set('members');
     } catch (error) {
       this.errorMessage.set(this.channelError(error));
     } finally {
@@ -204,7 +207,11 @@ export class ChannelCreateDialog {
    * @returns The channel name, description and initial access settings.
    */
   private channelInput() {
-    return { ...this.form.getRawValue(), memberIds: [], guestAccess: this.isGuestCurrentUser() };
+    return {
+      ...this.form.getRawValue(), memberIds: [],
+      guestAccess: this.isGuestCurrentUser() || this.autoJoin(),
+      autoJoin: this.autoJoin(),
+    };
   }
 
   /**
