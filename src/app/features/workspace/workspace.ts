@@ -69,10 +69,8 @@ export class Workspace {
   readonly selectedUser = signal<UserProfile | null>(null);
   /** Error shown when opening a direct conversation fails. */
   readonly directMessageError = signal('');
-  /** Initial viewport classification used to decide sidebar collapse state. */
-  private compactDesktop = window.innerWidth > 800 && window.innerWidth <= 1100;
-  /** Whether the desktop sidebar is currently collapsed. */
-  readonly sidebarCollapsed = signal(this.compactDesktop);
+  /** Sidebar starts open and remains under the user's manual control. */
+  readonly sidebarCollapsed = signal(false);
   /** Whether the message is rendered in the narrow-screen layout. */
   readonly mobileViewport = signal(window.innerWidth <= 800);
   /** Whether the user opened their own profile from the header. */
@@ -98,9 +96,6 @@ export class Workspace {
   updateViewport(): void {
     this.mobileViewport.set(window.innerWidth <= 800);
     if (this.ownHeaderProfile()) this.positionOwnProfile();
-    const compact = window.innerWidth > 800 && window.innerWidth <= 1100;
-    if (compact !== this.compactDesktop) this.sidebarCollapsed.set(compact);
-    this.compactDesktop = compact;
   }
 
   /**
