@@ -16,8 +16,8 @@ export const AUTH_EMAIL_VALIDATORS = [
 /**
  * Name rules shared by account forms.
  *
- * Whitespace is excluded from the length check so a single-letter name padded
- * with spaces cannot pass the minimum of three visible characters.
+ * Unicode letters are counted separately so spaces or digits cannot satisfy
+ * the minimum of three letters in a display name.
  */
 export const AUTH_NAME_VALIDATORS = [
   Validators.required,
@@ -26,12 +26,13 @@ export const AUTH_NAME_VALIDATORS = [
 ];
 
 /**
- * Validates the length of a name after surrounding whitespace is removed.
+ * Validates the number of Unicode letters in a display name.
  *
  * @param control - Angular form control containing the entered display name.
- * @returns A minlength validation error below three characters, otherwise null.
+ * @returns A minlength validation error below three letters, otherwise null.
  */
 function trimmedNameLength(control: AbstractControl): ValidationErrors | null {
-  const length = typeof control.value === 'string' ? control.value.trim().length : 0;
+  const length = typeof control.value === 'string'
+    ? (control.value.match(/\p{L}/gu)?.length ?? 0) : 0;
   return length >= 3 ? null : { minlength: { requiredLength: 3, actualLength: length } };
 }
