@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { Channel } from '../../../../core/models/channel.model';
 import { ConversationTarget } from '../../../../core/models/conversation.model';
 import { Message } from '../../../../core/models/message.model';
 import { UserProfile } from '../../../../core/models/user-profile.model';
@@ -24,6 +25,8 @@ export class MessageList {
   @Input({ required: true }) target!: ConversationTarget;
   /** Conversation messages observed for the selected target. */
   @Input({ required: true }) messages: Message[] = [];
+  /** Channels accessible to the viewer for resolving message references. */
+  @Input() channels: Channel[] = [];
   /** User's recent emoji choices offered ahead of the default picker. */
   @Input() recentEmojis: string[] = [];
   /** Heading shown when the conversation has no messages. */
