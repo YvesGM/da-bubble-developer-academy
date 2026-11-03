@@ -68,7 +68,7 @@ export class ChannelCreateDialog {
   @HostListener('document:keydown.escape')
   closeOnEscape(): void {
     if (this.submitting()) return;
-    this.step() === 'details' ? this.closeRequested.emit() : this.finishWithoutMembers();
+    this.cancelCreation();
   }
 
   /**
@@ -78,6 +78,7 @@ export class ChannelCreateDialog {
    */
   async submitDetails(): Promise<void> {
     if (this.form.invalid) return this.markInvalid();
+    if (this.isGuestCurrentUser()) return this.step.set('members');
     this.startSubmit();
     await this.createChannel();
   }
@@ -89,9 +90,9 @@ export class ChannelCreateDialog {
    */
   async finishMembers(): Promise<void> {
     const channelId = this.createdChannelId();
-    if (!channelId) return;
     this.startSubmit();
-    await this.addSelectedMembers(channelId);
+    if (!channelId && this.isGuestCurrentUser()) return this.createChannel(this.memberIds());
+    if (channelId) await this.addSelectedMembers(channelId);
   }
 
   /**
@@ -138,19 +139,30 @@ export class ChannelCreateDialog {
   /**
    * Completes channel creation without adding additional members.
    */
-  finishWithoutMembers(): void {
+  async finishWithoutMembers(): Promise<void> {
     const id = this.createdChannelId();
-    if (id) this.channelCreated.emit(id);
+    if (id) return void this.channelCreated.emit(id);
+    if (!this.isGuestCurrentUser()) return;
+    this.startSubmit();
+    await this.createChannel();
+  }
+
+  /** Dismisses an unpersisted guest channel or completes an already created channel. */
+  cancelCreation(): void {
+    if (this.submitting()) return;
+    if (!this.createdChannelId()) return void this.closeRequested.emit();
+    void this.finishWithoutMembers();
   }
 
   /**
-   * Creates the channel from the validated form state and advances to the next step.
+   * Persists the channel, including selected members when the creator is a guest.
    *
+   * @param memberIds - Registered users included in the initial transaction.
    * @returns A promise that resolves after channel creation handling completes.
    */
-  private async createChannel(): Promise<void> {
+  private async createChannel(memberIds: string[] = []): Promise<void> {
     try {
-      const id = await this.channels.createChannel(this.channelInput());
+      const id = await this.channels.createChannel({ ...this.channelInput(), memberIds });
       this.createdChannelId.set(id);
       this.isGuestCurrentUser() ? this.channelCreated.emit(id) : this.step.set('members');
     } catch (error) {
