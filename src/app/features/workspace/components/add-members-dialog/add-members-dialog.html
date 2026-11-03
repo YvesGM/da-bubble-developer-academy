@@ -6,6 +6,7 @@
     aria-labelledby="add-members-title"
     [style.top.px]="position.top"
     [style.right.px]="position.right"
+    [style.--dialog-max-height]="'calc(100dvh - ' + (position.top + 16) + 'px)'"
     (click)="$event.stopPropagation()"
   >
     <header>
