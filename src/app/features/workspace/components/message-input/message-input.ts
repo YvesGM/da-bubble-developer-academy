@@ -17,7 +17,6 @@ import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
-import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 /**
  * Implements the message composer with multiline text, emojis, and mention suggestions.
@@ -27,7 +26,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
  */
 @Component({
   selector: 'app-message-input',
-  imports: [FormsModule, EmojiPicker, InputCaretDirective, Avatar, PresenceIndicator],
+  imports: [FormsModule, EmojiPicker, Avatar, PresenceIndicator],
   templateUrl: './message-input.html',
   styleUrl: './message-input.scss',
 })
