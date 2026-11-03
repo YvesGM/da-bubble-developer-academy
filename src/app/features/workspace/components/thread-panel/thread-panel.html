@@ -20,6 +20,7 @@
     <app-message-item
       [target]="target()"
       [message]="parent()"
+      [channels]="channels()"
       [recentEmojis]="recentEmojis()"
       [compactReactions]="true"
       [showThreadAction]="false"
@@ -35,6 +36,7 @@
         <app-message-item
           [target]="target()"
           [message]="reply"
+          [channels]="channels()"
           [parentMessageId]="parent().id"
           [recentEmojis]="recentEmojis()"
           [compactReactions]="true"
