@@ -1,59 +1,82 @@
+import { Channel } from '../models/channel.model';
 import { UserProfile } from '../models/user-profile.model';
 
-/** Represents a plain-text span or a recognized user mention inside a message. */
+/** Represents a plain-text span, a user mention, or a linked channel reference. */
 export interface MessageTextPart {
   text: string;
   userId?: string;
+  channelId?: string;
+}
+
+/** Searchable text and destination for one resolvable message reference. */
+interface MessageReference {
+  token: string;
+  userId?: string;
+  channelId?: string;
 }
 
 /**
- * Splits message text into displayable spans while preserving the original content.
+ * Splits message text into plain spans, user mentions, and channel links.
  *
- * @param source - Stored message text to examine.
- * @param users - Profiles whose display names can be recognized as mentions.
- * @returns Text spans with user identifiers for recognized mentions.
+ * Only channels available to the current viewer are linked; unknown references
+ * remain literal message text. Longest names take precedence to avoid partial
+ * matches such as #Team in #Team Updates.
+ *
+ * @param source - Original persisted message text.
+ * @param users - Profiles whose @displayName mentions can be opened.
+ * @param channels - Channels whose #name references can be navigated to.
+ * @returns Ordered spans preserving every character of the original message.
  */
-export function splitMessageMentions(source: string, users: UserProfile[]): MessageTextPart[] {
-  const names = [...users].sort((a, b) => b.displayName.length - a.displayName.length);
+export function splitMessageMentions(
+  source: string,
+  users: UserProfile[],
+  channels: Channel[] = [],
+): MessageTextPart[] {
+  const references = buildReferences(users, channels);
   const parts: MessageTextPart[] = [];
   let cursor = 0;
   let plainStart = 0;
   while (cursor < source.length) {
-    const user = names.find((item) => isMentionAt(source, cursor, item.displayName));
-    if (!user) { cursor++; continue; }
+    const found = references.find((reference) => isReferenceAt(source, cursor, reference.token));
+    if (!found) { cursor++; continue; }
     if (cursor > plainStart) parts.push({ text: source.slice(plainStart, cursor) });
-    plainStart = cursor = appendMention(parts, source, cursor, user);
+    const end = cursor + found.token.length;
+    parts.push({ text: source.slice(cursor, end), userId: found.userId, channelId: found.channelId });
+    plainStart = cursor = end;
   }
   if (plainStart < source.length) parts.push({ text: source.slice(plainStart) });
   return parts.length ? parts : [{ text: source }];
 }
 
 /**
- * Adds the matched mention to the display spans.
+ * Builds a longest-first catalog of references that the viewer can resolve.
  *
- * @param parts - Accumulated text and mention spans.
- * @param source - Original message text.
- * @param at - Index of the leading @ character.
- * @param user - Profile matched by the mention.
- * @returns Index immediately after the mention.
+ * @param users - Visible registered profiles.
+ * @param channels - Accessible channels.
+ * @returns Ordered reference tokens and their destination identifiers.
  */
-function appendMention(parts: MessageTextPart[], source: string, at: number, user: UserProfile): number {
-  const end = at + user.displayName.length + 1;
-  parts.push({ text: source.slice(at, end), userId: user.uid });
-  return end;
+function buildReferences(users: UserProfile[], channels: Channel[]): MessageReference[] {
+  const userRefs = users.filter((user) => user.displayName).map((user) => ({
+    token: '@' + user.displayName, userId: user.uid,
+  }));
+  const channelRefs = channels.filter((channel) => channel.name).map((channel) => ({
+    token: '#' + channel.name, channelId: channel.id,
+  }));
+  return [...userRefs, ...channelRefs].sort((a, b) => b.token.length - a.token.length);
 }
 
 /**
- * Checks mention boundaries so substrings inside words remain plain text.
+ * Matches a complete mention at a word boundary, regardless of letter case.
  *
- * @param text - Original message text.
- * @param index - Candidate position of the @ character.
- * @param name - Display name to match, case-insensitively.
- * @returns Whether this position starts a complete mention.
+ * @param source - Original message text.
+ * @param index - Index to inspect for a reference token.
+ * @param token - User or channel reference, including its @ or # prefix.
+ * @returns Whether a complete recognized reference begins at the index.
  */
-function isMentionAt(text: string, index: number, name: string): boolean {
-  const token = '@' + name;
-  if (!name || text.slice(index, index + token.length).toLowerCase() !== token.toLowerCase()) return false;
-  return (index === 0 || /\s/.test(text[index - 1]))
-    && (index + token.length === text.length || /[\s.,!?;:]/.test(text[index + token.length]));
+function isReferenceAt(source: string, index: number, token: string): boolean {
+  if (source.slice(index, index + token.length).toLowerCase() !== token.toLowerCase()) return false;
+  const before = index === 0 || /\s/.test(source[index - 1]);
+  const after = index + token.length === source.length
+    || /[\s.,!?;:]/.test(source[index + token.length]);
+  return before && after;
 }
