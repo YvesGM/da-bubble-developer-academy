@@ -39,7 +39,7 @@
             <span class="result-description">Channel</span>
           } @else {
             <strong>{{ result.label }}</strong>
-            <span class="result-description">{{ result.message.authorName }}: {{ result.message.text }}</span>
+            <span class="result-description">{{ authorName(result.message) }}: {{ result.message.text }}</span>
           }
         </button>
       } @empty {
