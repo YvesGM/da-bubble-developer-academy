@@ -14,7 +14,7 @@
   display: grid;
   position: absolute;
   width: min(550px, calc(100vw - 32px));
-  max-height: calc(100dvh - 32px);
+  max-height: var(--dialog-max-height, calc(100dvh - 32px));
   padding: 40px 44px 42px;
   gap: 20px;
   overflow: visible;
@@ -213,7 +213,17 @@
     .suggestions { max-height: min(230px, 34dvh); }
   }
 
-  @media (max-height: 460px) { overflow-y: auto; }
+  // On short laptops, keep selected chips and the submit action reachable.
+  @media (max-height: 800px) {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    .suggestions {
+      position: static;
+      width: 100%;
+      max-height: min(220px, 26dvh);
+      margin-top: 8px;
+    }
+  }
 }
 
 .dialog header button img {
