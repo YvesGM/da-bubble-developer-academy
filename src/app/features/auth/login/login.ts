@@ -49,7 +49,23 @@ export class Login {
   async submit(): Promise<void> {
     if (this.form.invalid) return this.markInvalid();
     const { email, password } = this.form.getRawValue();
-    await this.runLogin(() => this.auth.login(email, password), true);
+    await this.runLogin(() => this.auth.login(email.trim(), password), true);
+  }
+
+  /**
+   * Hides prior login feedback while a field is being corrected.
+   *
+   * @param field - Login control that the user started editing again.
+   */
+  editingField(field: 'email' | 'password'): void {
+    this.form.controls[field].markAsUntouched();
+    this.credentialError.set('');
+  }
+
+  /** Trims e-mail surrounding whitespace but never changes the password. */
+  normalizeEmail(): void {
+    const control = this.form.controls.email;
+    control.setValue(control.value.trim());
   }
 
   /**
