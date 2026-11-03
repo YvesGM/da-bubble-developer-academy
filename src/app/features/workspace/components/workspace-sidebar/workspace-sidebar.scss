@@ -409,6 +409,14 @@
 }
 
 .dm {
+  &-guest-member {
+    display: flex;
+    align-items: center;
+    min-height: 58px;
+    padding: 4px 14px 4px 0;
+    gap: 12px;
+  }
+
   &-name {
     min-width: 0;
     overflow: hidden;
