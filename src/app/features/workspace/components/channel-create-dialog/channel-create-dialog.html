@@ -1,4 +1,4 @@
-<div class="backdrop" (click)="step() === 'details' ? closeRequested.emit() : finishWithoutMembers()">
+<div class="backdrop" (click)="cancelCreation()">
   <section
     class="dialog"
     role="dialog"
@@ -14,7 +14,7 @@
         class="close"
         type="button"
         aria-label="Dialog schließen"
-        (click)="step() === 'details' ? closeRequested.emit() : finishWithoutMembers()"
+        (click)="cancelCreation()"
       >
         ×
       </button>
@@ -102,14 +102,16 @@
             }
           </div>
 
-          <label class="mode-option">
-            <input
-              type="checkbox"
-              [checked]="guestAccess()"
-              (change)="guestAccess.set(!guestAccess())"
-            />
-            Gast
-          </label>
+          @if (!auth.currentUser?.isAnonymous) {
+            <label class="mode-option">
+              <input
+                type="checkbox"
+                [checked]="guestAccess()"
+                (change)="guestAccess.set(!guestAccess())"
+              />
+              Gast
+            </label>
+          }
         }
 
         @if (errorMessage()) {
