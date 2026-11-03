@@ -11,6 +11,7 @@ import { UserProfile } from '../../../../core/models/user-profile.model';
 import { ChannelService } from '../../../../core/services/channel.service';
 import { MessageService } from '../../../../core/services/message.service';
 import { UserService } from '../../../../core/services/user.service';
+import { createMessageInput } from '../../../../core/utils/message-author.util';
 import { MessageInput } from '../message-input/message-input';
 import { MessageList } from '../message-list/message-list';
 import { ThreadPanel } from '../thread-panel/thread-panel';
@@ -112,7 +113,7 @@ export class ChatPanel {
    * @returns A promise that resolves after the message has been persisted.
    */
   async sendMessage(text: string): Promise<void> {
-    await this.messagesService.sendMessage(this.target(), this.messageInput(text));
+    await this.messagesService.sendMessage(this.target(), createMessageInput(text, this.auth.currentUser, this.profile()));
   }
 
   /**
@@ -125,18 +126,4 @@ export class ChatPanel {
     await this.usersService.rememberEmoji(emoji);
   }
 
-  /**
-   * Builds the message payload from the current authentication and profile state.
-   *
-   * @param text - Message text to persist.
-   * @returns The normalized message creation payload.
-   */
-  private messageInput(text: string) {
-    const user = this.auth.currentUser;
-    return {
-      text,
-      authorName: user?.displayName || (user?.isAnonymous ? 'Guest' : 'Benutzer'),
-      authorAvatarId: this.profile()?.avatarId ?? 'avatar-1',
-    };
-  }
 }
