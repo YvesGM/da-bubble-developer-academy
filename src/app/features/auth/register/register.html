@@ -23,6 +23,8 @@
             class="auth-control"
             type="text"
             formControlName="name"
+            (input)="editingField('name')"
+            (blur)="normalizeField('name')"
             autocomplete="name"
             placeholder="Name und Nachname"
             aria-label="Name und Nachname"
@@ -41,6 +43,8 @@
             autocapitalize="off"
             spellcheck="false"
             formControlName="email"
+            (input)="editingField('email')"
+            (blur)="normalizeField('email')"
             autocomplete="email"
             placeholder="beispielname@email.com"
             aria-label="E-Mail-Adresse"
@@ -56,6 +60,7 @@
             class="auth-control"
             type="password"
             formControlName="password"
+            (input)="editingField('password')"
             autocomplete="new-password"
             placeholder="Passwort"
             aria-label="Passwort"
@@ -63,8 +68,10 @@
           @if (form.controls.password.touched && form.controls.password.invalid) {
             @if (form.controls.password.hasError('required')) {
               <p class="auth-field-error">Bitte geben Sie ein Passwort ein.</p>
+            } @else if (form.controls.password.hasError('whitespaceOnly')) {
+              <p class="auth-field-error">Das Passwort darf nicht nur aus Leerzeichen bestehen.</p>
             } @else {
-              <p class="auth-field-error">Das Passwort muss mindestens 6 Zeichen lang sein.</p>
+              <p class="auth-field-error">Das Passwort muss mindestens 6 Zeichen ohne Rand-Leerzeichen lang sein.</p>
             }
           }
         </div>
