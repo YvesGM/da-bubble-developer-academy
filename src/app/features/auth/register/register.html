@@ -28,7 +28,7 @@
             aria-label="Name und Nachname"
           />
           @if (form.controls.name.touched && form.controls.name.invalid) {
-            <p class="auth-field-error">Bitte schreiben Sie einen Namen.</p>
+            <p class="auth-field-error">Bitte geben Sie einen Namen mit mindestens 3 Zeichen ein.</p>
           }
         </div>
 
@@ -76,6 +76,10 @@
               target="_blank">Datenschutzerklärung</a><label for="register-privacy"> zu.</label>
           </span>
         </div>
+
+        @if (errorMessage()) {
+          <p class="auth-form-error" role="alert">{{ errorMessage() }}</p>
+        }
 
         <div class="auth-action-row">
           <button
@@ -147,6 +151,6 @@
 
 @if (registrationStatus()) {
   <div class="auth-notice auth-notice--account" role="status" aria-live="polite">
-    {{ registrationStatus() === 'success' ? 'Konto erfolgreich erstellt!' : 'Konto wird erstellt…' }}
+    {{ registrationStatus() === 'success' ? 'Konto erstellt! Bitte melde dich an.' : 'Konto wird erstellt…' }}
   </div>
 }
