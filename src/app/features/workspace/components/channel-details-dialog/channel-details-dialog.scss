@@ -23,8 +23,9 @@
 
   width: min(932px, calc(100vw - 32px));
 
-  min-height: min(660px, calc(100dvh - 48px));
+  min-height: min(660px, var(--dialog-max-height, calc(100dvh - 48px)));
   max-height: var(--dialog-max-height, calc(100dvh - 48px));
+  overscroll-behavior: contain;
   overflow-y: auto;
   background: tokens.$white;
   border-radius: 0 30px 30px 30px;
