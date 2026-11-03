@@ -106,10 +106,11 @@ export class Workspace {
   /**
    * Resolves the display name shown in the workspace header.
    *
-   * @returns Firebase display name, or the appropriate registered/guest fallback.
+   * @returns Current Firestore profile name, or the authentication/guest fallback.
    */
   get displayName(): string {
-    return this.auth.currentUser?.displayName || (this.auth.currentUser?.isAnonymous ? 'Guest' : 'User');
+    return this.profile()?.displayName
+      || (this.auth.currentUser?.isAnonymous ? 'Guest' : this.auth.currentUser?.displayName || 'User');
   }
 
   /**
