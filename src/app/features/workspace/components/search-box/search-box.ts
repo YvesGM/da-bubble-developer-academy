@@ -4,9 +4,12 @@ import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 import { conversationRoute } from '../../../../core/models/conversation.model';
+import { Message } from '../../../../core/models/message.model';
+import { resolveMessageAuthorName } from '../../../../core/utils/message-author.util';
 import { SearchResult } from '../../../../core/models/search-result.model';
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { SearchService } from '../../../../core/services/search.service';
+import { UserService } from '../../../../core/services/user.service';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
@@ -28,6 +31,8 @@ export class SearchBox {
   private readonly router = inject(Router);
   /** Workspace search service providing combined user, channel, and message matches. */
   private readonly searchService = inject(SearchService);
+  /** User service supplying live names for message search results. */
+  private readonly usersService = inject(UserService);
 
   /** Hint shown when the search or text field is empty. */
   @Input() placeholder = 'Workspace durchsuchen';
@@ -40,6 +45,8 @@ export class SearchBox {
   readonly focused = signal(false);
   /** Whether the mobile search surface is expanded. */
   readonly mobileOpen = signal(false);
+  /** Current user profiles used to resolve message authors after profile renaming. */
+  readonly users = toSignal(this.usersService.observeUsers(), { initialValue: [] as UserProfile[] });
   /** Reactive search suggestions derived from the entered query. */
   readonly results = toSignal(
     toObservable(this.query).pipe(
@@ -49,6 +56,16 @@ export class SearchBox {
     ),
     { initialValue: [] as SearchResult[] },
   );
+
+  /**
+   * Resolves a message author's current name in search suggestions.
+   *
+   * @param message - Message whose author should be displayed.
+   * @returns Current profile name, or the saved message author snapshot.
+   */
+  authorName(message: Message): string {
+    return resolveMessageAuthorName(message, this.users());
+  }
 
   /** Keeps the existing desktop dropdown and opens Figma's mobile search page. */
   activateSearch(): void {
