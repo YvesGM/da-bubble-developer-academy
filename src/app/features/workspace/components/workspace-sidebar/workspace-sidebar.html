@@ -63,7 +63,19 @@
       <div id="dm-section-content" class="section-body" [class.is-closed]="!directMessagesExpanded()"
         [attr.inert]="directMessagesExpanded() ? null : ''"><div class="section-content">
       @if (guest) {
-        <p class="empty">Direktnachrichten sind nur mit einem Konto verfügbar.</p>
+        <p class="empty">Direktnachrichten erfordern ein Konto. Diese Mitglieder sind im Workspace:</p>
+        <div aria-label="Registrierte Workspace-Mitglieder">
+          @for (user of visibleUsers(); track user.uid) {
+            <div class="dm-guest-member">
+              <span class="dm-avatar">
+                <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
+              </span>
+              <span class="dm-name">{{ user.displayName }}</span>
+            </div>
+          } @empty {
+            <p class="empty">Noch keine registrierten Mitglieder.</p>
+          }
+        </div>
       } @else {
         <nav aria-label="Direktnachrichten">
           @for (user of visibleUsers(); track user.uid) {
