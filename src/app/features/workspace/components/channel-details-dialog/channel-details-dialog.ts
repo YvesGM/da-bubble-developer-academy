@@ -4,7 +4,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Channel, UpdateChannelInput } from '../../../../core/models/channel.model';
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { ChannelMembersContent } from '../channel-members-content/channel-members-content';
-import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 /**
  * Displays and edits channel metadata inside the details dialog.
@@ -14,7 +13,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
  */
 @Component({
   selector: 'app-channel-details-dialog',
-  imports: [InputCaretDirective, ReactiveFormsModule, ChannelMembersContent],
+  imports: [ReactiveFormsModule, ChannelMembersContent],
   templateUrl: './channel-details-dialog.html',
   styleUrl: './channel-details-dialog.scss',
 })
@@ -44,6 +43,8 @@ export class ChannelDetailsDialog {
   @Input() guestAccess = false;
   /** Whether the current account may invite additional members. */
   @Input() canAdd = true;
+  /** Whether the account may leave this channel. */
+  @Input() canLeave = true;
   /** Human-readable error currently shown in the form. */
   @Input() errorMessage = '';
   /** Asks the owning view to dismiss the current dialog or panel. */

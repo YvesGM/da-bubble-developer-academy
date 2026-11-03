@@ -16,7 +16,7 @@ import { Observable, map } from 'rxjs';
 import { DirectMessage } from '../models/direct-message.model';
 
 /**
- * Creates and observes private conversations for registered Firebase accounts.
+ * Creates and observes private conversations for authenticated Firebase accounts.
  *
  * Conversation membership is defined by participant UIDs, and Firestore reads
  * are scoped to the signed-in user's allowed conversations.
@@ -31,12 +31,12 @@ export class DirectMessageService {
   private readonly injector = inject(EnvironmentInjector);
 
   /**
-   * Observes direct-message conversations that contain the current registered user.
+   * Observes direct-message conversations that contain the current signed-in user.
    *
    * @returns An observable of conversations sorted by their deterministic identifier.
    */
   observeCurrentUserConversations(): Observable<DirectMessage[]> {
-    const uid = this.currentRegisteredUserId();
+    const uid = this.currentUserId();
     if (!uid) return new Observable((subscriber) => {
       subscriber.next([]);
       subscriber.complete();
@@ -52,11 +52,11 @@ export class DirectMessageService {
    *
    * @param otherUserId - Identifier of the participant to message.
    * @returns The deterministic direct-message conversation identifier.
-   * @throws If the current session is anonymous or Firestore access fails.
+   * @throws If there is no authenticated session or Firestore access fails.
    */
   async openConversation(otherUserId: string): Promise<string> {
-    const currentUserId = this.currentRegisteredUserId();
-    if (!currentUserId) throw new Error('guest-direct-message-not-available');
+    const currentUserId = this.currentUserId();
+    if (!currentUserId) throw new Error('direct-message-auth-required');
     const id = this.conversationId(currentUserId, otherUserId);
     try {
       if (await this.conversationExists(id)) return id;
@@ -112,7 +112,7 @@ export class DirectMessageService {
    * @returns The other participant identifier, or the current identifier for a self conversation.
    */
   conversationPartner(dm: DirectMessage): string {
-    const current = this.currentRegisteredUserId();
+    const current = this.currentUserId();
     return dm.participantIds.find((uid) => uid !== current) ?? current;
   }
 
@@ -143,13 +143,13 @@ export class DirectMessageService {
   }
 
   /**
-   * Returns the current registered user identifier and excludes anonymous sessions.
+   * Returns the current signed-in user identifier including anonymous guests.
    *
-   * @returns The user identifier, or an empty string for guests and unauthenticated sessions.
+   * @returns The user identifier, or empty string when signed out.
    */
-  private currentRegisteredUserId(): string {
+  private currentUserId(): string {
     const user = this.auth.currentUser;
-    return !user || user.isAnonymous ? '' : user.uid;
+    return user?.uid ?? '';
   }
 
   /**

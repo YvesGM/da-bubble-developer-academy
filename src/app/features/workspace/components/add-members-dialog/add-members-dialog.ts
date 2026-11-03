@@ -3,7 +3,6 @@ import { Component, ElementRef, HostListener, EventEmitter, Input, Output, after
 import { UserProfile } from '../../../../core/models/user-profile.model';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
-import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 /** Members and guest-access preference submitted when changing channel access. */
 export interface AddMembersSelection {
@@ -19,7 +18,7 @@ export interface AddMembersSelection {
  */
 @Component({
   selector: 'app-add-members-dialog',
-  imports: [InputCaretDirective, Avatar, PresenceIndicator],
+  imports: [Avatar, PresenceIndicator],
   templateUrl: './add-members-dialog.html',
   styleUrl: './add-members-dialog.scss',
 })

@@ -11,7 +11,6 @@ import { DirectMessageService } from '../../../core/services/direct-message.serv
 import { MessageService } from '../../../core/services/message.service';
 import { UserService } from '../../../core/services/user.service';
 import { createMessageInput } from '../../../core/utils/message-author.util';
-import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 import { MessageInput } from '../components/message-input/message-input';
 
 /**
@@ -22,7 +21,7 @@ import { MessageInput } from '../components/message-input/message-input';
  */
 @Component({
   selector: 'app-new-message-view',
-  imports: [InputCaretDirective, RouterLink, MessageInput],
+  imports: [RouterLink, MessageInput],
   templateUrl: './new-message-view.html',
   styleUrl: './new-message-view.scss',
 })

@@ -13,7 +13,7 @@
         </span>
       </button>
     } @else {
-      <h1>Direktnachricht</h1>
+      <h1>{{ partnerName() }}</h1>
     }
   </header>
 
@@ -21,9 +21,9 @@
     <app-chat-panel
       [target]="target()"
       [mentionUsers]="participantUsers()"
-      [inputPlaceholder]="isSelfConversation() ? 'Notiz an dich selbst' : 'Nachricht an ' + (partner()?.displayName ?? '')"
-      [emptyTitle]="isSelfConversation() ? 'Dein persönlicher Bereich' : (partner()?.displayName ?? 'Direktnachricht')"
-      [emptyText]="isSelfConversation() ? 'Hier kannst du Notizen, Links und To-dos für dich festhalten.' : 'Diese Unterhaltung findet nur zwischen @' + (partner()?.displayName ?? 'einem Mitglied') + ' und dir statt.'"
+      [inputPlaceholder]="isSelfConversation() ? 'Notiz an dich selbst' : 'Nachricht an ' + partnerName()"
+      [emptyTitle]="isSelfConversation() ? 'Dein persönlicher Bereich' : partnerName()"
+      [emptyText]="isSelfConversation() ? 'Hier kannst du Notizen, Links und To-dos für dich festhalten.' : 'Diese Unterhaltung findet nur zwischen @' + partnerName() + ' und dir statt.'"
       [emptyAvatarId]="partner()?.avatarId ?? ''"
       [emptyAvatarName]="partner()?.displayName ?? ''"
       [emptyMentionUser]="isSelfConversation() ? null : (partner() ?? null)"

@@ -3,7 +3,6 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { channelAccessGuard } from './core/guards/channel-access.guard';
 import { directMessageGuard } from './core/guards/direct-message.guard';
-import { registeredUserGuard } from './core/guards/registered-user.guard';
 
 /**
  * Defines the root navigation tree for public pages and authenticated workspaces.
@@ -62,7 +61,6 @@ export const routes: Routes = [
       },
       {
         path: 'new-message',
-        canActivate: [registeredUserGuard],
         loadComponent: () =>
           import('./features/workspace/new-message-view/new-message-view').then(
             (module) => module.NewMessageView,
@@ -70,7 +68,7 @@ export const routes: Routes = [
       },
       {
         path: 'dm/:dmId',
-        canActivate: [registeredUserGuard, directMessageGuard],
+        canActivate: [directMessageGuard],
         loadComponent: () =>
           import('./features/workspace/direct-message-view/direct-message-view').then(
             (module) => module.DirectMessageView,

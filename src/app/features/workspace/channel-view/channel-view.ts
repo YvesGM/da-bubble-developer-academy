@@ -85,7 +85,8 @@ export class ChannelView {
   /** Subset of members displayed in the compact header avatar stack. */
   readonly visibleMembers = computed(() => this.members().slice(0, 5));
   /** Display name of the user who created this channel. */
-  readonly creatorName = computed(() => this.findUser(this.channel()?.creatorId)?.displayName ?? 'Unbekannter Benutzer');
+  readonly creatorName = computed(() => this.findUser(this.channel()?.creatorId)?.displayName
+    ?? (this.channel()?.creatorId === this.currentUserId() ? 'Gast' : 'Unbekannter Benutzer'));
   /** Total number of visible members, including enabled guest access. */
   readonly memberCount = computed(() => this.members().length + (this.channel()?.guestAccess ? 1 : 0));
   /** Count of members beyond the compact avatar-stack limit. */
@@ -128,7 +129,13 @@ export class ChannelView {
    * @returns Whether channel management is available for the current user.
    */
   canManageChannel(): boolean {
-    return !this.auth.currentUser?.isAnonymous;
+    const user = this.auth.currentUser;
+    return !!user && (!user.isAnonymous || this.channel()?.creatorId === user.uid);
+  }
+
+  /** Only registered users can change channel membership. */
+  canInviteMembers(): boolean {
+    return !!this.auth.currentUser && !this.auth.currentUser.isAnonymous;
   }
 
   /**
@@ -245,7 +252,7 @@ export class ChannelView {
     const anchor = control?.getBoundingClientRect();
     if (!anchor) return;
     this.membersPosition.set({
-      top: Math.round(anchor.bottom + 12),
+      top: Math.max(16, Math.round(Math.min(anchor.bottom + 12, window.innerHeight - 320))),
       right: Math.max(16, Math.round(window.innerWidth - anchor.right)),
     });
   }
@@ -256,7 +263,8 @@ export class ChannelView {
     if (!anchor) return;
     const width = Math.min(932, window.innerWidth - 32);
     const left = Math.max(16, Math.min(anchor.left - 12, window.innerWidth - width - 16));
-    this.detailsPosition.set({ top: Math.round(anchor.bottom + 8), left: Math.round(left) });
+    const top = Math.min(anchor.bottom + 8, Math.max(16, window.innerHeight - 280));
+    this.detailsPosition.set({ top: Math.max(16, Math.round(top)), left: Math.round(left) });
   }
 
   /** Reads the add-member button's viewport position for its anchored popover. */
@@ -264,7 +272,7 @@ export class ChannelView {
     const anchor = this.addMemberButton()?.nativeElement.getBoundingClientRect();
     if (!anchor) return;
     this.addMembersPosition.set({
-      top: Math.round(anchor.bottom + 16),
+      top: Math.max(16, Math.round(Math.min(anchor.bottom + 16, window.innerHeight - 430))),
       right: Math.max(16, Math.round(window.innerWidth - anchor.right)),
     });
   }

@@ -101,21 +101,28 @@
     padding: 72px clamp(24px, 10vw, 192px) 100px;
 
     .legal-page-content {
-      position: relative;
       width: 100%;
       max-width: 1530px;
       margin: 0 auto;
     }
 
-    .legal-page-back {
-      position: absolute;
-      top: 0;
-      right: 0;
-      margin: 0;
+    .legal-page-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+
+      h1 {
+        min-width: 0;
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
     }
 
-    h1 {
-      margin-bottom: 26px;
+    .legal-page-back {
+      position: static;
+      flex: 0 0 40px;
+      margin: 0;
     }
 
     h2 {
@@ -191,10 +198,9 @@
     &--privacy {
       padding: 38px 20px 64px;
 
-      h1 {
-        margin-bottom: 24px;
-        padding-right: 44px;
-        font-size: 36px;
+      .legal-page-heading {
+        gap: 12px;
+        h1 { font-size: clamp(26px, 8vw, 36px); }
       }
 
       h2 {

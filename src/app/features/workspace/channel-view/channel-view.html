@@ -25,7 +25,7 @@
           <strong>{{ memberCount() > 5 ? '5+' : memberCount() }}</strong>
         </button>
 
-        @if (canManageChannel()) {
+        @if (canInviteMembers()) {
           <button
             #addMemberButton
             type="button"
@@ -60,7 +60,8 @@
       [members]="members()"
       [guestAccess]="currentChannel.guestAccess"
       [currentUserId]="currentUserId()"
-      [canAdd]="canManageChannel()"
+      [canAdd]="canInviteMembers()"
+      [canLeave]="canInviteMembers()"
       [errorMessage]="channelError()"
       (closeRequested)="showDetails.set(false)"
       (addRequested)="openAddMembers()"
@@ -76,14 +77,14 @@
       [members]="members()"
       [guestAccess]="currentChannel.guestAccess"
       [currentUserId]="currentUserId()"
-      [canAdd]="canManageChannel()"
+      [canAdd]="canInviteMembers()"
       (closeRequested)="showMembers.set(false)"
       (addRequested)="openAddMembers()"
       (userSelected)="openProfile($event)"
     />
   }
 
-  @if (showAddMembers() && canManageChannel()) {
+  @if (showAddMembers() && canInviteMembers()) {
     <app-add-members-dialog
       [users]="availableUsers()"
       [guestAvailable]="false"
@@ -98,7 +99,7 @@
     <app-profile-card
       [user]="user"
       [ownProfile]="user.uid === currentUserId()"
-      [messageEnabled]="canManageChannel()"
+      [messageEnabled]="true"
       (closeRequested)="selectedUser.set(null)"
       (editRequested)="openProfileEditor()"
       (messageRequested)="startDirectMessage($event)"

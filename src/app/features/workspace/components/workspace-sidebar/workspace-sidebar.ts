@@ -33,8 +33,6 @@ export class WorkspaceSidebar {
   @Input() currentUserId = '';
   /** Workspace display name shown in headings and dialogs. */
   @Input() workspaceName = 'Workspace';
-  /** Whether the workspace session uses anonymous guest access. */
-  @Input() guest = false;
   /** Error shown when opening a direct conversation fails. */
   @Input() directMessageError = '';
   /** Requests opening the channel creation flow. */
@@ -68,6 +66,18 @@ export class WorkspaceSidebar {
     const self = this.users.find((user) => user.uid === this.currentUserId);
     const others = this.users.filter((user) => user.uid !== this.currentUserId);
     return self ? [self, ...others] : others;
+  }
+
+  /**
+   * Resolves conversations with guests who have no registered profile.
+   *
+   * @returns Guest conversations with their anonymous participant identifier.
+   */
+  guestConversations(): { uid: string; id: string }[] {
+    return this.directMessages.flatMap((dm) => {
+      const uid = dm.participantIds.find((id) => id !== this.currentUserId);
+      return uid && !this.users.some((user) => user.uid === uid) ? [{ uid, id: dm.id }] : [];
+    });
   }
 
   /**

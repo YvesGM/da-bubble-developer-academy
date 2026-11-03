@@ -1,31 +1,41 @@
 @use '../../../../styles/tokens' as tokens;
 
-.presence {
-  display: inline-block;
+// Avatar borders are attached to this host, so it must remain square.
+:host {
+  display: inline-flex;
   flex: 0 0 auto;
-  aspect-ratio: 1;
-  min-width: var(--presence-size, 10px);
-  min-height: var(--presence-size, 10px);
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  box-sizing: content-box;
+}
 
+:host:not(.presence-labeled) {
   width: var(--presence-size, 10px);
   height: var(--presence-size, 10px);
+  min-width: var(--presence-size, 10px);
+  min-height: var(--presence-size, 10px);
+  aspect-ratio: 1;
+  line-height: 0;
+}
 
+.presence {
+  display: inline-block;
+  flex: 0 0 var(--presence-size, 10px);
+  width: var(--presence-size, 10px);
+  height: var(--presence-size, 10px);
+  aspect-ratio: 1;
   background: tokens.$text-gray;
   border-radius: 50%;
 
-  &.online {
-    background: tokens.$success;
-  }
+  &.online { background: tokens.$success; }
 
   &-wrap {
     display: inline-flex;
     flex: 0 0 auto;
     align-items: center;
-
     gap: var(--presence-gap, 8px);
 
-    &.is-online {
-      color: tokens.$success;
-    }
+    &.is-online { color: tokens.$success; }
   }
 }

@@ -64,7 +64,6 @@ service cloud.firestore {
 
     function directMessageAccess(dmId) {
       return signedIn()
-        && !anonymousUser()
         && request.auth.uid in get(
           /databases/$(database)/documents/directMessages/$(dmId)
         ).data.participantIds;
@@ -141,7 +140,10 @@ service cloud.firestore {
       allow create: if signedIn() && validChannelName(nameKey);
       allow update: if false;
       allow delete: if signedIn()
-        && registeredChannelMemberAfter(resource.data.channelId);
+        && (registeredChannelMemberAfter(resource.data.channelId)
+          || (anonymousUser() && request.auth.uid == getAfter(
+            /databases/$(database)/documents/channels/$(resource.data.channelId)
+          ).data.creatorId));
     }
 
     match /channels/{channelId} {
@@ -150,7 +152,12 @@ service cloud.firestore {
         && validChannel()
         && request.auth.uid == request.resource.data.creatorId
         && channelAccessData(request.resource.data);
-      allow update: if registeredChannelMember(channelId)
+      allow update: if (registeredChannelMember(channelId)
+          || (anonymousUser()
+            && request.auth.uid == resource.data.creatorId
+            && resource.data.guestAccess == true
+            && request.resource.data.memberIds == resource.data.memberIds
+            && request.resource.data.guestAccess == resource.data.guestAccess))
         && validChannel()
         && request.resource.data.creatorId == resource.data.creatorId
         && request.resource.data.createdAt == resource.data.createdAt;
@@ -197,10 +204,8 @@ service cloud.firestore {
 
     match /directMessages/{dmId} {
       allow read: if signedIn()
-        && !anonymousUser()
         && request.auth.uid in resource.data.participantIds;
       allow create: if signedIn()
-        && !anonymousUser()
         && validDirectMessage();
       allow update: if directMessageAccess(dmId)
         && validDirectMessage()

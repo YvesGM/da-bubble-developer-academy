@@ -14,6 +14,7 @@ import { PresenceService } from '../../../core/services/presence.service';
   selector: 'app-presence-indicator',
   templateUrl: './presence-indicator.html',
   styleUrl: './presence-indicator.scss',
+  host: { '[class.presence-labeled]': 'showLabel()' },
 })
 export class PresenceIndicator {
   /** Shared service that observes live per-user presence changes. */

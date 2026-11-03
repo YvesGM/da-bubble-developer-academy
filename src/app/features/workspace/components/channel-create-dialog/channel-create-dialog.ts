@@ -9,7 +9,6 @@ import { UserProfile } from '../../../../core/models/user-profile.model';
 import { UserService } from '../../../../core/services/user.service';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { firebaseErrorMessage } from '../../../../core/utils/firebase-error.util';
-import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 /**
  * Collects channel details and selects the initial membership before creation.
@@ -19,7 +18,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
  */
 @Component({
   selector: 'app-channel-create-dialog',
-  imports: [InputCaretDirective, ReactiveFormsModule, Avatar],
+  imports: [ReactiveFormsModule, Avatar],
   templateUrl: './channel-create-dialog.html',
   styleUrl: './channel-create-dialog.scss',
 })

@@ -12,7 +12,6 @@ import { SearchService } from '../../../../core/services/search.service';
 import { UserService } from '../../../../core/services/user.service';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
 import { PresenceIndicator } from '../../../../shared/components/presence-indicator/presence-indicator';
-import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
 /**
  * Provides workspace-wide search with suggestions for people, channels, and messages.
@@ -22,7 +21,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
  */
 @Component({
   selector: 'app-search-box',
-  imports: [InputCaretDirective, Avatar, PresenceIndicator],
+  imports: [Avatar, PresenceIndicator],
   templateUrl: './search-box.html',
   styleUrl: './search-box.scss',
 })

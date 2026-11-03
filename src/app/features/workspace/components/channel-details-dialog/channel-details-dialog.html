@@ -25,7 +25,7 @@
         @if (editingName()) {
           <div class="field-row">
             <span>#</span>
-            <input appInputCaret type="text" formControlName="name" />
+            <input type="text" formControlName="name" />
           </div>
           @if (form.controls.name.touched && form.controls.name.invalid) {
             <p class="error">Bitte gib einen Channelnamen ein.</p>
@@ -76,11 +76,13 @@
         <p class="error">{{ errorMessage }}</p>
       }
 
-      <div class="actions">
-        <button type="button" class="leave-button" (click)="leaveRequested.emit()">
-          Channel verlassen
-        </button>
-      </div>
+      @if (canLeave) {
+        <div class="actions">
+          <button type="button" class="leave-button" (click)="leaveRequested.emit()">
+            Channel verlassen
+          </button>
+        </div>
+      }
     </form>
   </section>
 </div>

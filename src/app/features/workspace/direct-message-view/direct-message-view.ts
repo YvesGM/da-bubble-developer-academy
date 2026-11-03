@@ -46,6 +46,8 @@ export class DirectMessageView {
   );
   /** Other participant in the direct conversation, when resolvable. */
   readonly partner = computed(() => this.findPartner());
+  /** Guest sessions do not have persistent user profile documents. */
+  readonly partnerName = computed(() => this.partner()?.displayName ?? 'Gast');
   /** Conversation target passed to messaging, reactions, and navigation. */
   readonly target = computed<ConversationTarget>(() => ({
     type: 'directMessage',

@@ -5,7 +5,6 @@ import { take } from 'rxjs';
 import { AVATAR_IDS } from '../../../core/constants/avatar.constants';
 import { UserService } from '../../../core/services/user.service';
 import { Avatar } from '../../../shared/components/avatar/avatar';
-import { InputCaretDirective } from '../../../shared/directives/input-caret.directive';
 
 /**
  * Edits the current user's display name and preset avatar.
@@ -15,7 +14,7 @@ import { InputCaretDirective } from '../../../shared/directives/input-caret.dire
  */
 @Component({
   selector: 'app-profile-dialog',
-  imports: [InputCaretDirective, ReactiveFormsModule, Avatar],
+  imports: [ReactiveFormsModule, Avatar],
   templateUrl: './profile-dialog.html',
   styleUrl: './profile-dialog.scss',
 })

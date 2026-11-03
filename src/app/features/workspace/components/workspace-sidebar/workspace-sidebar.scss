@@ -84,6 +84,9 @@
 
     &.dm-link {
       display: flex;
+      cursor: pointer;
+
+      app-avatar, app-presence-indicator { pointer-events: none; }
       align-items: center;
       justify-content: flex-start;
       width: fit-content;
@@ -170,7 +173,7 @@
 
   @include bp.mobile {
     min-height: 0;
-    padding: 91px 20px 20px;
+    padding: 16px 20px 20px;
     border-radius: 0;
 
     .channel-hash {

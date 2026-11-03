@@ -58,6 +58,7 @@
   }
 
   @include bp.mobile {
+    overflow: hidden;
     background: tokens.$white;
   }
 

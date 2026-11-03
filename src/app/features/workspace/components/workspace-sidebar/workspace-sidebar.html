@@ -4,16 +4,14 @@
       <img class="workspace-identity-mark" src="/assets/workspace-icon.svg" alt="" />
       <span class="workspace-name">{{ workspaceName }}</span>
     </div>
-    @if (!guest) {
-      <button
-        type="button"
-        class="workspace-edit-button"
-        aria-label="Neue Nachricht"
-        (click)="newMessageRequested.emit()"
-      >
-        <span class="sidebar-action-icon icon-edit" aria-hidden="true"></span>
-      </button>
-    }
+    <button
+      type="button"
+      class="workspace-edit-button"
+      aria-label="Neue Nachricht"
+      (click)="newMessageRequested.emit()"
+    >
+      <span class="sidebar-action-icon icon-edit" aria-hidden="true"></span>
+    </button>
   </div>
 
     <section class="sidebar-section">
@@ -62,22 +60,7 @@
 
       <div id="dm-section-content" class="section-body" [class.is-closed]="!directMessagesExpanded()"
         [attr.inert]="directMessagesExpanded() ? null : ''"><div class="section-content">
-      @if (guest) {
-        <p class="empty">Direktnachrichten erfordern ein Konto. Diese Mitglieder sind im Workspace:</p>
-        <div aria-label="Registrierte Workspace-Mitglieder">
-          @for (user of visibleUsers(); track user.uid) {
-            <div class="dm-guest-member">
-              <span class="dm-avatar">
-                <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
-              </span>
-              <span class="dm-name">{{ user.displayName }}</span>
-            </div>
-          } @empty {
-            <p class="empty">Noch keine registrierten Mitglieder.</p>
-          }
-        </div>
-      } @else {
-        <nav aria-label="Direktnachrichten">
+      <nav aria-label="Direktnachrichten">
           @for (user of visibleUsers(); track user.uid) {
             <button
               type="button"
@@ -94,12 +77,25 @@
               <span class="dm-name">{{ userLabel(user) }}</span>
             </button>
           } @empty {
-            <p class="empty">Noch keine registrierten Benutzer.</p>
+            @if (!guestConversations().length) {
+              <p class="empty">Noch keine Direktnachrichten.</p>
+            }
+          }
+          @for (conversation of guestConversations(); track conversation.id) {
+            <button type="button" class="dm-link"
+              [class.active]="isActiveUser(conversation.uid)"
+              [attr.aria-label]="'Direktnachricht mit Gast öffnen'"
+              (click)="userRequested.emit(conversation.uid)">
+              <span class="dm-avatar">
+                <app-avatar avatarId="avatar-1" name="Gast" size="medium" />
+                <app-presence-indicator [userId]="conversation.uid" />
+              </span>
+              <span class="dm-name">Gast</span>
+            </button>
           }
         </nav>
-        @if (directMessageError) {
-          <p class="dm-error" role="alert">{{ directMessageError }}</p>
-        }
+      @if (directMessageError) {
+        <p class="dm-error" role="alert">{{ directMessageError }}</p>
       }
       </div></div>
     </section>

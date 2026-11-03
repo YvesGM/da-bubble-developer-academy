@@ -22,7 +22,7 @@ function hasAccess(data: unknown, uid: string): boolean {
  * @param firestore - Firebase Firestore instance.
  * @param injector - Angular environment injector.
  * @param dmId - Requested conversation identifier.
- * @param uid - Current registered user's identifier.
+ * @param uid - Current authenticated user's identifier.
  * @returns Whether the user is a participant in this conversation.
  */
 async function canReadConversation(
@@ -41,7 +41,7 @@ async function canReadConversation(
 }
 
 /**
- * Allows registered users to open only their own direct-message conversations.
+ * Allows authenticated users, including guests, to open only their own conversations.
  *
  * @param route - Route snapshot containing the direct-message identifier.
  * @returns True for members; otherwise a redirect to the workspace.
@@ -54,7 +54,7 @@ export const directMessageGuard: CanActivateFn = async (route): Promise<boolean 
   await auth.authStateReady();
   const user = auth.currentUser;
   const dmId = route.paramMap.get('dmId');
-  if (!user || user.isAnonymous || !dmId) return router.createUrlTree(['/workspace']);
+  if (!user || !dmId) return router.createUrlTree(['/workspace']);
   const allowed = await canReadConversation(firestore, injector, dmId, user.uid);
   return allowed ? true : router.createUrlTree(['/workspace']);
 };
