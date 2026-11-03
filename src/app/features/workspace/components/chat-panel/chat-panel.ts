@@ -135,7 +135,7 @@ export class ChatPanel {
     const user = this.auth.currentUser;
     return {
       text,
-      authorName: user?.displayName || (user?.isAnonymous ? 'Gast' : 'Benutzer'),
+      authorName: user?.displayName || (user?.isAnonymous ? 'Guest' : 'Benutzer'),
       authorAvatarId: this.profile()?.avatarId ?? 'avatar-1',
     };
   }
