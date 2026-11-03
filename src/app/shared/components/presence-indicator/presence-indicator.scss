@@ -2,6 +2,10 @@
 
 .presence {
   display: inline-block;
+  flex: 0 0 auto;
+  aspect-ratio: 1;
+  min-width: var(--presence-size, 10px);
+  min-height: var(--presence-size, 10px);
 
   width: var(--presence-size, 10px);
   height: var(--presence-size, 10px);
@@ -15,6 +19,7 @@
 
   &-wrap {
     display: inline-flex;
+    flex: 0 0 auto;
     align-items: center;
 
     gap: var(--presence-gap, 8px);
