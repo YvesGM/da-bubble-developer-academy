@@ -39,6 +39,8 @@
       right: 12px;
       padding: 3px 6px;
     }
+    &:hover .actions,
+    &:focus-within .actions,
     &.mobile-actions-open .actions {
       display: flex;
       opacity: 1;

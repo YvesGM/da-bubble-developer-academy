@@ -103,11 +103,6 @@
       .auth-divider {
         font-size: 17px;
         margin-top: 20px;
-
-        &::before,
-        &::after {
-          transform: none;
-        }
       }
 
       .auth-google-button {

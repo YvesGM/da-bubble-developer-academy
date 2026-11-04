@@ -7,6 +7,12 @@
     .message-body { width: min(678px, 100%); }
     .actions { display: none; }
   }
+  &.thread-message.is-editing {
+    grid-template-columns: minmax(0, 1fr);
+    .message-avatar { display: none; }
+    .edit-composer { height: auto; min-height: 180px; grid-template-rows: minmax(85px, 1fr) auto; }
+    .edit-controls { flex-wrap: wrap; }
+  }
   .edit-composer {
     display: grid;
     grid-template-rows: minmax(0, 1fr) 45px;
