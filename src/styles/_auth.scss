@@ -295,19 +295,19 @@
   &-divider {
     font-size: 18px;
 
-    display: grid;
-    grid-template-columns: minmax(12px, 1fr) auto minmax(12px, 1fr);
+    display: flex;
     align-items: center;
     width: 100%;
     min-width: 0;
 
     gap: 16px;
 
-    &::before,
-    &::after {
-      content: '';
+    &-line {
+      display: block;
+      flex: 1 1 0;
+      min-width: 12px;
       height: 2px;
-      background: tokens.$border;
+      background-color: tokens.$border;
     }
   }
 }

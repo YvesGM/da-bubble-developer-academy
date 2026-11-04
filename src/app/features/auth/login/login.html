@@ -50,7 +50,11 @@
         <a class="auth-link forgot-link" routerLink="/forgot-password">Passwort vergessen?</a>
       </div>
 
-      <div class="auth-divider"><span>ODER</span></div>
+      <div class="auth-divider">
+        <span class="auth-divider-line" aria-hidden="true"></span>
+        <span>ODER</span>
+        <span class="auth-divider-line" aria-hidden="true"></span>
+      </div>
 
       <button class="auth-google-button" type="button" (click)="loginWithGoogle()">
         <img src="/assets/google-icon.svg" alt="" />

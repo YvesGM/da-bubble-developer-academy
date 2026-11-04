@@ -44,9 +44,11 @@
 
   .direct-messages {
     display: flex;
-    flex: 1 0 auto;
+    // Do not use the full user list as the flex basis: on short screens
+    // that pushes the entire section below the clipped sidebar.
+    flex: 1 1 0;
     flex-direction: column;
-    min-height: min(210px, 45%);
+    min-height: min(210px, 48%);
 
     &:has(.section-body.is-closed) { flex: 0 0 auto; min-height: 0; }
 
@@ -259,6 +261,20 @@
     &-top { margin-bottom: 8px; }
     &-section { margin-top: 12px; }
     nav { margin-top: 12px; gap: 8px; }
+  }
+
+  @media (min-width: 801px) and (max-height: 600px) {
+    padding-block: 12px;
+
+    &-top { min-height: 34px; margin-bottom: 0; }
+    .workspace-identity-mark { width: 34px; height: 34px; }
+    button.workspace-edit-button { width: 34px; height: 34px; }
+    &-section { margin-top: 6px; }
+    .section-heading { min-height: 34px; }
+    .section-toggle { min-height: 34px; }
+    nav { margin-top: 6px; gap: 6px; }
+    button.dm-link { height: 48px; min-height: 48px; }
+    .dm-avatar { flex-basis: 40px; width: 40px; height: 40px; --avatar-medium-size: 40px; }
   }
 
   @include bp.widescreen {
