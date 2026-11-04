@@ -165,7 +165,8 @@ service cloud.firestore {
       allow create: if signedIn()
         && validChannel()
         && request.auth.uid == request.resource.data.creatorId
-        && request.resource.data.get('creatorIsGuest', false) == anonymousUser()
+        && (!request.resource.data.keys().hasAny(['creatorIsGuest'])
+          || request.resource.data.creatorIsGuest == anonymousUser())
         && channelAccessData(request.resource.data);
       allow update: if (registeredChannelMember(channelId)
           || (guestChannelEditor(resource.data)
