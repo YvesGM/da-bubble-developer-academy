@@ -134,6 +134,14 @@
     display: grid;
     min-width: 0;
 
+    &-error-slot {
+      display: grid;
+      place-items: center;
+      height: 36px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
     &-error {
       font-size: 16px;
       line-height: normal;

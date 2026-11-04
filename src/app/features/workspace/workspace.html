@@ -58,7 +58,7 @@
     <app-profile-card
       [user]="user"
       [ownProfile]="user.uid === currentUserId"
-      [position]="ownHeaderProfile() ? ownProfilePosition() : null"
+      [position]="ownHeaderProfile() && !mobileViewport() ? ownProfilePosition() : null"
       [messageEnabled]="true"
       (closeRequested)="selectedUser.set(null); ownHeaderProfile.set(false)"
       (editRequested)="openProfileEditor()"

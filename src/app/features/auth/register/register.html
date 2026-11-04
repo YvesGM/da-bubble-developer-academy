@@ -30,7 +30,7 @@
             aria-label="Name und Nachname"
           />
           @if (form.controls.name.touched && form.controls.name.invalid) {
-            <p class="auth-field-error">Bitte geben Sie einen Namen mit mindestens 3 Buchstaben ein.</p>
+            <p class="auth-field-error">{{ form.controls.name.hasError('invalidCharacters') ? 'Keine Zahlen oder Symbole.' : 'Mindestens 3 Buchstaben.' }}</p>
           }
         </div>
 
@@ -50,7 +50,7 @@
             aria-label="E-Mail-Adresse"
           />
           @if (form.controls.email.touched && form.controls.email.invalid) {
-            <p class="auth-field-error">*Diese E-Mail-Adresse ist leider ungültig.</p>
+            <p class="auth-field-error">E-Mail-Adresse ungültig.</p>
           }
         </div>
 
@@ -67,11 +67,11 @@
           />
           @if (form.controls.password.touched && form.controls.password.invalid) {
             @if (form.controls.password.hasError('required')) {
-              <p class="auth-field-error">Bitte geben Sie ein Passwort ein.</p>
+              <p class="auth-field-error">Bitte Passwort eingeben.</p>
             } @else if (form.controls.password.hasError('whitespaceOnly')) {
-              <p class="auth-field-error">Das Passwort darf nicht nur aus Leerzeichen bestehen.</p>
+              <p class="auth-field-error">Keine reinen Leerzeichen.</p>
             } @else {
-              <p class="auth-field-error">Das Passwort muss mindestens 6 Zeichen ohne Rand-Leerzeichen lang sein.</p>
+              <p class="auth-field-error">Mindestens 6 Zeichen nötig.</p>
             }
           }
         </div>
@@ -84,9 +84,11 @@
           </span>
         </div>
 
-        @if (errorMessage()) {
-          <p class="auth-form-error" role="alert">{{ errorMessage() }}</p>
-        }
+        <div class="auth-form-error-slot" aria-live="polite">
+          @if (errorMessage()) {
+            <p class="auth-form-error" role="alert">{{ errorMessage() }}</p>
+          }
+        </div>
 
         <div class="auth-action-row">
           <button
@@ -137,9 +139,11 @@
           }
         </div>
 
-        @if (errorMessage()) {
-          <p class="auth-form-error">{{ errorMessage() }}</p>
-        }
+        <div class="auth-form-error-slot" aria-live="polite">
+          @if (errorMessage()) {
+            <p class="auth-form-error">{{ errorMessage() }}</p>
+          }
+        </div>
 
         <div class="auth-action-row avatar-action">
           <button

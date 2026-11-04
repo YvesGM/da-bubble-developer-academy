@@ -193,6 +193,9 @@
 
   .error {
     margin: 0;
+    height: 20px;
+    font-size: 14px;
+    line-height: 20px;
     color: tokens.$error;
   }
 
@@ -204,13 +207,18 @@
 
     header h2 { font-size: clamp(19px, 5vw, 24px); }
 
-    form { margin-top: 24px; }
+    form { margin-top: 16px; }
     .profile-preview {
-      margin-bottom: 16px;
-      --avatar-hero-size: clamp(128px, 42vw, 180px);
+      margin-bottom: 12px;
+      --avatar-hero-size: 112px;
     }
-    .avatar-picker { margin-bottom: 20px; legend { font-size: 16px; } }
-    .avatar-options { gap: 4px; --avatar-option-size: clamp(26px, 9vw, 40px); }
+    .avatar-picker { margin-bottom: 16px; legend { font-size: 16px; } }
+    .avatar-options {
+      grid-template-columns: repeat(6, minmax(44px, 1fr));
+      gap: 2px;
+      --avatar-option-size: 44px;
+    }
+    .avatar-choice { min-width: 44px; min-height: 44px; }
     label { font-size: 18px; }
     .field-label {
       gap: 12px;
@@ -218,9 +226,17 @@
     }
     .actions {
       flex-wrap: wrap;
-      padding-top: 30px;
+      padding-top: 12px;
       gap: 12px;
       button { flex: 1 1 120px; }
     }
+  }
+}
+
+@media (max-width: 370px) {
+  .backdrop { padding: 8px; }
+  .dialog .dialog-scroll {
+    margin-right: 4px;
+    padding: 16px 4px 16px 8px;
   }
 }

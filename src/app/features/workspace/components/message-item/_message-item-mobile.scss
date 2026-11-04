@@ -47,10 +47,30 @@
     }
     &.own-message .actions { right: auto; left: 12px; }
     &:not(.own-message) .actions { right: 12px; left: auto; }
-    .edit-composer { height: 180px; padding: 15px; }
+    &.is-editing {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+
+      .message-avatar { display: none; }
+      .message-body {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        width: 100%;
+        align-items: stretch;
+      }
+    }
+    .edit-composer {
+      display: flex;
+      flex-direction: column;
+      min-height: 160px;
+      height: auto;
+      padding: 12px;
+    }
+    .edit-composer textarea { flex: 1 1 85px; min-height: 85px; }
     .edit-composer textarea { font-size: 16px; }
-    .edit-controls { gap: 6px; }
-    .edit-controls button { padding: 8px 12px; font-size: 14px; }
+    .edit-controls { flex-wrap: wrap; gap: 6px; }
+    .edit-controls button { min-height: 44px; padding: 8px 12px; font-size: 14px; }
+    .edit-controls .edit-emoji-button { width: 44px; }
     .actions .options-menu { width: min(265px, calc(100vw - 32px)); }
     .options-menu button { font-size: 18px; }
     .author-button { font-size: 16px; }

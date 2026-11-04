@@ -25,7 +25,7 @@
             aria-label="E-Mail-Adresse"
           />
           @if (form.controls.email.touched && form.controls.email.invalid) {
-            <p class="auth-field-error">*Diese E-Mail-Adresse ist leider ungültig.</p>
+            <p class="auth-field-error">E-Mail-Adresse ungültig.</p>
           }
         </div>
 
@@ -40,11 +40,10 @@
             placeholder="Passwort"
             aria-label="Passwort"
           />
-          @if (form.controls.password.touched && form.controls.password.invalid) {
-            <p class="auth-field-error">Bitte geben Sie ein Passwort ein.</p>
-          }
           @if (credentialError()) {
             <p class="auth-field-error">{{ credentialError() }}</p>
+          } @else if (form.controls.password.touched && form.controls.password.invalid) {
+            <p class="auth-field-error">Bitte Passwort eingeben.</p>
           }
         </div>
 
@@ -61,9 +60,11 @@
         </span>
       </button>
 
-      @if (errorMessage()) {
-        <p class="auth-form-error">{{ errorMessage() }}</p>
-      }
+      <div class="auth-form-error-slot" aria-live="polite">
+        @if (errorMessage()) {
+          <p class="auth-form-error">{{ errorMessage() }}</p>
+        }
+      </div>
 
       <div class="auth-button-row">
         <button class="auth-button auth-button--primary" type="submit" [disabled]="submitting()">

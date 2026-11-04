@@ -29,7 +29,6 @@ import { splitMessageMentions } from '../../../../core/utils/message-mention.uti
 import { messageTime } from '../../../../core/utils/timestamp.util';
 import { resolveMessageAuthorName } from '../../../../core/utils/message-author.util';
 import { Avatar } from '../../../../shared/components/avatar/avatar';
-import { EmojiPicker } from '../../../../shared/components/emoji-picker/emoji-picker';
 import { ReactionPopover } from '../../../../shared/components/reaction-popover/reaction-popover';
 import { InputCaretDirective } from '../../../../shared/directives/input-caret.directive';
 
@@ -41,7 +40,7 @@ import { InputCaretDirective } from '../../../../shared/directives/input-caret.d
  */
 @Component({
   selector: 'app-message-item',
-  imports: [InputCaretDirective, FormsModule, RouterLink, Avatar, EmojiPicker, ReactionPopover],
+  imports: [InputCaretDirective, FormsModule, RouterLink, Avatar, ReactionPopover],
   templateUrl: './message-item.html',
   styleUrl: './message-item.scss',
 })
@@ -56,6 +55,8 @@ export class MessageItem {
   @ViewChild('optionsMenu') private optionsMenu?: ElementRef<HTMLDivElement>;
   /** Reusable native popover used for emoji reactions. */
   @ViewChild('reactionPicker') private reactionPicker?: ReactionPopover;
+  /** Viewport-aware palette used for inserting emojis while editing a message. */
+  @ViewChild('editPicker') private editPicker?: ReactionPopover;
   /** Firebase Auth client providing the active account identity. */
   private readonly auth = inject(Auth);
   /** Message service used to edit and remove messages from Firestore. */
@@ -156,15 +157,15 @@ export class MessageItem {
   closePickersOnOutsideClick(event: MouseEvent): void {
     const target = event.target as Element;
     if (this.host.nativeElement.contains(target) &&
-        target.closest('.reaction-popover, .edit-emoji-picker, .reaction-trigger, .edit-emoji-button')) return;
+        target.closest('.reaction-popover, .reaction-trigger, .edit-emoji-button')) return;
     this.reactionPicker?.close();
-    this.editEmojiPickerOpen.set(false);
+    this.editPicker?.close();
   }
   /** Closes emoji pickers with Escape. */
   @HostListener('document:keydown.escape')
   closePickersOnEscape(): void {
     this.reactionPicker?.close();
-    this.editEmojiPickerOpen.set(false);
+    this.editPicker?.close();
   }
   /** Never leave a reaction palette open after leaving its message. */
   closeReactionOnLeave(): void {
@@ -191,14 +192,15 @@ export class MessageItem {
    * @param event - Click event identifying the button used as the anchor.
    */
   toggleReactionPicker(event: MouseEvent): void {
-    this.editEmojiPickerOpen.set(false);
+    this.editPicker?.close();
     if (this.showEmojiPicker()) this.reactionPicker?.close();
     else this.reactionPicker?.openAt(event.currentTarget as HTMLElement);
   }
   /** Toggles the editor picker without keeping a reaction picker open. */
-  toggleEditPicker(): void {
+  toggleEditPicker(event: MouseEvent): void {
     this.reactionPicker?.close();
-    this.editEmojiPickerOpen.update((value) => !value);
+    if (this.editEmojiPickerOpen()) this.editPicker?.close();
+    else this.editPicker?.openAt(event.currentTarget as HTMLElement);
   }
   /**
    * Updates mobile interaction state when the browser viewport changes.
@@ -335,6 +337,7 @@ export class MessageItem {
   /** Cancels editing without persisting the current draft. */
   cancelEditing(): void {
     this.editing.set(false);
+    this.editPicker?.close();
     this.editEmojiPickerOpen.set(false);
   }
   /**
@@ -347,7 +350,7 @@ export class MessageItem {
     const start = field?.selectionStart ?? this.editText().length;
     const end = field?.selectionEnd ?? start;
     this.editText.set(this.editText().slice(0, start) + emoji + this.editText().slice(end));
-    this.editEmojiPickerOpen.set(false);
+    this.editPicker?.close();
     requestAnimationFrame(() => { field?.focus(); field?.setSelectionRange(start + emoji.length, start + emoji.length); });
   }
   /**

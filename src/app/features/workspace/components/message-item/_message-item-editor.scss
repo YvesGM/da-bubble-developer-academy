@@ -62,12 +62,6 @@
     &:hover,
     &:focus-visible { background: tokens.$background; }
   }
-  .edit-emoji-picker {
-    position: absolute;
-    z-index: 8;
-    bottom: calc(100% + 8px);
-    left: 0;
-  }
   .edit-controls .edit-cancel {
     color: tokens.$purple-1;
     background: tokens.$white;

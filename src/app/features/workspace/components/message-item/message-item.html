@@ -57,20 +57,21 @@
               class="edit-emoji-button"
               aria-label="Emoji zur Nachricht hinzufügen"
               [attr.aria-expanded]="editEmojiPickerOpen()"
-              (click)="toggleEditPicker()"
+              (click)="toggleEditPicker($event)"
             >
               <img src="/assets/emoji.svg" alt="" />
             </button>
-            @if (editEmojiPickerOpen()) {
-              <div class="edit-emoji-picker">
-                <app-emoji-picker [recent]="recentEmojis()" (emojiSelected)="insertEditEmoji($event)" />
-              </div>
-            }
           </div>
           <button type="button" class="edit-cancel" (click)="cancelEditing()">Abbrechen</button>
           <button type="button" class="edit-save" [disabled]="!editText().trim()" (click)="saveEdit()">Speichern</button>
         </div>
       </div>
+      <app-reaction-popover
+        #editPicker
+        [recent]="recentEmojis()"
+        (openedChange)="editEmojiPickerOpen.set($event)"
+        (emojiSelected)="insertEditEmoji($event)"
+      />
     } @else {
       <p class="message-text" (click)="toggleMobileActions()">
         @for (part of messageParts(); track $index) {

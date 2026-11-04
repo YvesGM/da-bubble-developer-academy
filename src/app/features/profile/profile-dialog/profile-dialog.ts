@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { take } from 'rxjs';
 
 import { AVATAR_IDS } from '../../../core/constants/avatar.constants';
+import { validDisplayNameCharacters } from '../../../core/constants/auth-validation.constants';
 import { UserService } from '../../../core/services/user.service';
 import { Avatar } from '../../../shared/components/avatar/avatar';
 
@@ -39,8 +40,13 @@ export class ProfileDialog {
   readonly saving = signal(false);
   /** Non-nullable reactive form holding the fields and validation state. */
   readonly form = this.formBuilder.nonNullable.group({
-    displayName: ['', Validators.required],
+    displayName: ['', [Validators.required, validDisplayNameCharacters]],
   });
+
+  /** Clears inline feedback as soon as the profile name is corrected. */
+  clearNameError(): void {
+    this.errorMessage.set('');
+  }
 
   /** Closes the profile editor with Escape when no save is in progress. */
   @HostListener('document:keydown.escape')
@@ -93,7 +99,7 @@ export class ProfileDialog {
       this.saved.emit();
       this.closeRequested.emit();
     } catch {
-      this.errorMessage.set('Das Profil konnte nicht aktualisiert werden.');
+      this.errorMessage.set('Speichern fehlgeschlagen.');
     } finally {
       this.saving.set(false);
     }
@@ -104,6 +110,7 @@ export class ProfileDialog {
    */
   private markInvalid(): void {
     this.form.markAllAsTouched();
-    this.errorMessage.set('Bitte gib deinen Namen ein.');
+    this.errorMessage.set(this.form.controls.displayName.hasError('invalidCharacters')
+      ? 'Keine Zahlen oder Symbole.' : 'Bitte Namen eingeben.');
   }
 }

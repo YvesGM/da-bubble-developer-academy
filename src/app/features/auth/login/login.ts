@@ -125,9 +125,10 @@ export class Login {
       'auth/invalid-credential', 'auth/wrong-password', 'auth/user-not-found',
     ].includes(error.code);
     const visibleMessage = invalidCredentials
-      ? 'Falsches Passwort oder E-Mail.. Bitte noch einmal versuchen.'
+      ? 'E-Mail oder Passwort falsch.'
       : message;
-    credentialFlow ? this.credentialError.set(visibleMessage) : this.errorMessage.set(message);
+    if (credentialFlow && invalidCredentials) this.credentialError.set(visibleMessage);
+    else this.errorMessage.set(message);
   }
 
   /**

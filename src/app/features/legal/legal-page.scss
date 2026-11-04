@@ -107,9 +107,9 @@
     }
 
     .legal-page-heading {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      align-items: center;
       gap: 16px;
 
       h1 {
@@ -117,6 +117,13 @@
         margin: 0;
         overflow-wrap: anywhere;
       }
+    }
+
+    .legal-page-privacy-back {
+      width: 44px;
+      height: 44px;
+      margin: 0;
+      position: static;
     }
 
     h2 {

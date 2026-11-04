@@ -23,7 +23,22 @@ export const AUTH_NAME_VALIDATORS = [
   Validators.required,
   Validators.minLength(3),
   trimmedNameLength,
+  validDisplayNameCharacters,
 ];
+
+/**
+ * Accepts natural names (including Unicode letters, spaces, hyphens and apostrophes)
+ * without allowing digits, emoji or unrelated symbols in public display names.
+ *
+ * @param control - Form control holding an account or profile display name.
+ * @returns An invalidCharacters error when the nonempty name contains other characters.
+ */
+export function validDisplayNameCharacters(control: AbstractControl): ValidationErrors | null {
+  const value = typeof control.value === 'string' ? control.value.trim() : '';
+  if (!value) return null;
+  return /^[\p{L}\p{M}]+(?:[ '\u2019-][\p{L}\p{M}]+)*$/u.test(value)
+    ? null : { invalidCharacters: true };
+}
 
 /**
  * Validates the number of Unicode letters in a display name.

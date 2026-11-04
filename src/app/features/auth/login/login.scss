@@ -60,7 +60,7 @@
     }
 
     .auth-button-row {
-      margin-top: 43px;
+      margin-top: 7px;
     }
 
     .auth-form-error {
@@ -90,10 +90,9 @@
       }
 
       .auth-field-error {
-        position: static;
         margin-top: 5px;
-        font-size: 14px;
-        overflow-wrap: anywhere;
+        font-size: 13px;
+        line-height: 1.2;
       }
 
       .forgot-link {
@@ -124,7 +123,7 @@
       }
 
       .auth-button-row {
-        margin-top: 20px;
+        margin-top: 0;
         gap: 20px;
 
         .auth-button {

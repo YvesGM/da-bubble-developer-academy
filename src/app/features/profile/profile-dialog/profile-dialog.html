@@ -35,12 +35,10 @@
             <img src="/assets/person-icon.svg" alt="" />
             Vollständiger Name
           </span>
-          <input type="text" formControlName="displayName" />
+          <input type="text" formControlName="displayName" (input)="clearNameError()" />
         </label>
 
-        @if (errorMessage()) {
-          <p class="error">{{ errorMessage() }}</p>
-        }
+        <p class="error" aria-live="polite">{{ errorMessage() }}</p>
 
         <div class="actions">
           <button type="button" class="secondary" (click)="closeRequested.emit()">Abbrechen</button>

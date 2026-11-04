@@ -235,8 +235,24 @@
         gap: 14px;
         img { width: 26px; height: 26px; }
       }
-      a { margin-left: 40px; font-size: 16px; }
+      a {
+        margin-left: 0;
+        font-size: 16px;
+        overflow-wrap: break-word;
+        word-break: normal;
+      }
     }
     .primary { margin-top: 28px; }
+  }
+}
+
+@media (max-width: 370px) {
+  .backdrop { padding: 8px; }
+  .card {
+    .card-scroll {
+      margin-right: 4px;
+      padding: 16px 8px 20px 12px;
+    }
+    .email a { font-size: 15px; }
   }
 }

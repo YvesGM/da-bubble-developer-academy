@@ -1,7 +1,7 @@
 @use '../../../../styles/tokens' as tokens;
 @use '../../../../styles/breakpoints' as bp;
 
-@mixin registration-card($heading-size, $mobile-heading-size, $mobile-back-top) {
+@mixin registration-card($heading-size, $mobile-heading-size) {
   min-height: 669px;
   padding: 40px 53px;
 
@@ -47,13 +47,27 @@
   @include bp.mobile {
     min-height: 0;
 
+    .auth-card-header:has(.auth-back) {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr) 40px;
+      align-items: center;
+      column-gap: 0;
+
+      .auth-title { grid-column: 2; grid-row: 1; }
+      .auth-description { grid-column: 1 / -1; }
+    }
+
     .auth-card-header:has(.auth-back) .auth-title {
       font-size: $mobile-heading-size;
     }
 
     .auth-card-header:has(.auth-back) .auth-back {
-      top: $mobile-back-top;
-      left: 2px;
+      position: static;
+      grid-column: 1;
+      grid-row: 1;
+      width: 40px;
+      height: 40px;
+      margin: 0;
     }
   }
 }
@@ -61,7 +75,7 @@
 
 .register {
   &-card {
-    @include registration-card(48px, clamp(26px, 7.45vw, 32px), 0);
+    @include registration-card(48px, clamp(26px, 7.45vw, 32px));
 
     .auth-description {
       margin-top: 32px;
@@ -77,6 +91,10 @@
         font-size: 17px;
         line-height: 1.2;
       }
+    }
+
+    @media (max-width: 370px) {
+      .auth-card-header:has(.auth-back) .auth-title { font-size: 24px; }
     }
   }
 
@@ -116,7 +134,7 @@
     }
 
     .auth-action-row {
-      margin-top: 40px;
+      margin-top: 10px;
     }
 
     @include bp.mobile {
@@ -126,11 +144,10 @@
         margin-top: 29px;
       }
 
-      // Errors take part in the layout so subsequent fields and the
-      // privacy checkbox cannot overlap them on narrow screens.
       .auth-field-error {
-        position: static;
         margin-top: 5px;
+        font-size: 13px;
+        line-height: 1.2;
       }
 
       .auth-field-icon {
@@ -148,7 +165,7 @@
       }
 
       .auth-action-row {
-        margin-top: 15px;
+        margin-top: 0;
 
         .auth-button {
           min-height: 49px;
@@ -174,7 +191,7 @@
 
 .avatar {
   &-card {
-    @include registration-card(46px, 32px, -6px);
+    @include registration-card(46px, 32px);
 
     @include bp.mobile {
       padding: 26px 21px;
@@ -263,7 +280,7 @@
     justify-content: flex-end;
 
     width: calc(100% + 14px);
-    margin-top: 62px;
+    margin-top: 26px;
     margin-right: -14px;
   }
 
@@ -300,7 +317,7 @@
 
     &-action {
       width: 100%;
-      margin-top: 24px;
+      margin-top: 0;
       margin-right: 0;
 
       .auth-button {
@@ -309,6 +326,12 @@
         font-size: 18px;
       }
     }
+  }
+
+  &-content .auth-form-error-slot {
+    width: 100%;
+    margin-top: 0;
+    @include bp.mobile { height: 24px; }
   }
 
 }
