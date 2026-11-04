@@ -9,6 +9,7 @@
 
   height: 100dvh;
   min-height: 0;
+  overflow: hidden;
 
   background: tokens.$background;
 
@@ -65,7 +66,9 @@
   &-body {
     display: grid;
     grid-template-columns: 280px minmax(0, 1fr);
+    min-width: 0;
     min-height: 0;
+    overflow: hidden;
     padding: 0 20px 20px;
     gap: 16px;
     transition:
@@ -74,6 +77,9 @@
 
     app-workspace-sidebar {
       min-width: 0;
+      min-height: 0;
+      height: 100%;
+      overflow: hidden;
       opacity: 1;
       transition: opacity tokens.$motion-fast;
     }
@@ -105,7 +111,7 @@
 
         app-workspace-sidebar {
           visibility: visible;
-          overflow: visible;
+          overflow: hidden;
           opacity: 1;
           pointer-events: auto;
         }

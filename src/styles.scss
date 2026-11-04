@@ -19,6 +19,13 @@ body:has(app-workspace .backdrop) {
   overscroll-behavior: none;
 }
 
+// Workspace panels own their scrolling; the document itself stays fixed.
+html:has(app-workspace),
+body:has(app-workspace) {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   font-family: 'Nunito', Arial, sans-serif;
 

@@ -78,11 +78,14 @@
     max-width: 760px;
     padding-left: 42px;
     gap: 5px;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
 
     button {
       display: grid;
       text-align: left;
+      min-width: 0;
       padding: 11px 16px;
       gap: 3px;
       background: transparent;
