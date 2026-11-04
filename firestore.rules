@@ -83,6 +83,12 @@ service cloud.firestore {
         ).data.participantIds;
     }
 
+    // A user may check their own not-yet-created notes conversation.
+    function selfDirectMessage(dmId) {
+      return signedIn()
+        && dmId == request.auth.uid + '__' + request.auth.uid;
+    }
+
     function validDirectMessage() {
       return request.resource.data.keys().hasOnly([
           'participantIds', 'createdAt', 'updatedAt'
@@ -221,10 +227,15 @@ service cloud.firestore {
     }
 
     match /directMessages/{dmId} {
-      allow read: if signedIn()
+      allow get: if signedIn()
+        && ((resource == null && selfDirectMessage(dmId))
+          || (resource != null && request.auth.uid in resource.data.participantIds));
+      allow list: if signedIn()
         && request.auth.uid in resource.data.participantIds;
       allow create: if signedIn()
-        && validDirectMessage();
+        && validDirectMessage()
+        && (request.resource.data.participantIds.size() == 2
+          || selfDirectMessage(dmId));
       allow update: if directMessageAccess(dmId)
         && validDirectMessage()
         && request.resource.data.participantIds == resource.data.participantIds
