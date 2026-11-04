@@ -12,6 +12,13 @@ html {
   margin: 0;
 }
 
+// Open workspace dialogs lock the page; their inner containers remain scrollable.
+html:has(app-workspace .backdrop),
+body:has(app-workspace .backdrop) {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   font-family: 'Nunito', Arial, sans-serif;
 
