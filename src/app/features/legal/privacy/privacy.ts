@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 /**
  * Renders the public privacy notice and its structured processing disclosures.
@@ -9,7 +8,6 @@ import { RouterLink } from '@angular/router';
  */
 @Component({
   selector: 'app-privacy',
-  imports: [RouterLink],
   templateUrl: './privacy.html',
   styleUrl: '../legal-page.scss',
 })

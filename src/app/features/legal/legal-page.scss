@@ -119,12 +119,6 @@
       }
     }
 
-    .legal-page-back {
-      position: static;
-      flex: 0 0 40px;
-      margin: 0;
-    }
-
     h2 {
       margin-bottom: 12px;
       font-size: 26px;
@@ -197,6 +191,7 @@
 
     &--privacy {
       padding: 38px 20px 64px;
+      background: tokens.$white;
 
       .legal-page-heading {
         gap: 12px;
