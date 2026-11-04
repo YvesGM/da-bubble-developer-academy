@@ -86,7 +86,8 @@ export class ChannelView {
   readonly visibleMembers = computed(() => this.members().slice(0, 5));
   /** Display name of the user who created this channel. */
   readonly creatorName = computed(() => this.findUser(this.channel()?.creatorId)?.displayName
-    ?? (this.channel()?.creatorId === this.currentUserId() ? 'Gast' : 'Unbekannter Benutzer'));
+    ?? (this.channel()?.creatorIsGuest || this.channel()?.creatorId === this.currentUserId()
+      ? 'Gast' : 'Unbekannter Benutzer'));
   /** Total number of visible members, including enabled guest access. */
   readonly memberCount = computed(() => this.members().length + (this.channel()?.guestAccess ? 1 : 0));
   /** Count of members beyond the compact avatar-stack limit. */
@@ -132,7 +133,8 @@ export class ChannelView {
     const user = this.auth.currentUser;
     const channel = this.channel();
     if (!user || !channel) return false;
-    return user.isAnonymous ? channel.creatorId === user.uid
+    return user.isAnonymous
+      ? channel.creatorIsGuest === true || channel.creatorId === user.uid
       : channel.memberIds.includes(user.uid);
   }
 

@@ -290,6 +290,7 @@ export class ChannelService {
       nameKey: channelNameKey(name),
       description: input.description.trim(),
       creatorId,
+      creatorIsGuest: this.auth.currentUser?.isAnonymous ?? false,
       memberIds: registeredChannelMembers(creatorId, input.memberIds, this.auth.currentUser?.isAnonymous ?? false),
       guestAccess: this.auth.currentUser?.isAnonymous ? true : input.guestAccess,
       autoJoin: !this.auth.currentUser?.isAnonymous && input.autoJoin,

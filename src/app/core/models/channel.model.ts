@@ -17,6 +17,8 @@ export interface Channel {
   description: string;
   /** Firebase UID of the account that created the channel. */
   creatorId: string;
+  /** True when an anonymous guest created this channel; absent on legacy channels. */
+  creatorIsGuest?: boolean;
   /** Firebase UIDs of registered users granted channel access. */
   memberIds: string[];
   /** Whether anonymous guests may access the channel. */
