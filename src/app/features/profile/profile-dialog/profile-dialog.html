@@ -1,50 +1,52 @@
 <div class="backdrop" (click)="closeRequested.emit()">
   <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
-    <header>
-      <h2>Dein Profil bearbeiten</h2>
-      <button type="button" aria-label="Profil schließen" (click)="closeRequested.emit()">×</button>
-    </header>
+    <div class="dialog-scroll">
+      <header>
+        <h2>Dein Profil bearbeiten</h2>
+        <button type="button" aria-label="Profil schließen" (click)="closeRequested.emit()">×</button>
+      </header>
 
-    <form [formGroup]="form" (ngSubmit)="save()" novalidate>
-      <div class="profile-preview">
-        <app-avatar
-          [avatarId]="avatarId()"
-          [name]="form.controls.displayName.value || 'Profil'"
-          size="hero"
-        />
-      </div>
-
-      <fieldset class="avatar-picker">
-        <legend>Profilbild wählen</legend>
-        <div class="avatar-options">
-          @for (option of avatarIds; track option; let index = $index) {
-            <button type="button" class="avatar-choice"
-              [class.selected]="avatarId() === option"
-              [attr.aria-pressed]="avatarId() === option"
-              [attr.aria-label]="'Avatar ' + (index + 1) + ' auswählen'"
-              (click)="selectAvatar(option)">
-              <app-avatar [avatarId]="option" [name]="'Avatar ' + (index + 1)" size="option" />
-            </button>
-          }
+      <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+        <div class="profile-preview">
+          <app-avatar
+            [avatarId]="avatarId()"
+            [name]="form.controls.displayName.value || 'Profil'"
+            size="hero"
+          />
         </div>
-      </fieldset>
 
-      <label>
-        <span class="field-label">
-          <img src="/assets/person-icon.svg" alt="" />
-          Vollständiger Name
-        </span>
-        <input type="text" formControlName="displayName" />
-      </label>
+        <fieldset class="avatar-picker">
+          <legend>Profilbild wählen</legend>
+          <div class="avatar-options">
+            @for (option of avatarIds; track option; let index = $index) {
+              <button type="button" class="avatar-choice"
+                [class.selected]="avatarId() === option"
+                [attr.aria-pressed]="avatarId() === option"
+                [attr.aria-label]="'Avatar ' + (index + 1) + ' auswählen'"
+                (click)="selectAvatar(option)">
+                <app-avatar [avatarId]="option" [name]="'Avatar ' + (index + 1)" size="option" />
+              </button>
+            }
+          </div>
+        </fieldset>
 
-      @if (errorMessage()) {
-        <p class="error">{{ errorMessage() }}</p>
-      }
+        <label>
+          <span class="field-label">
+            <img src="/assets/person-icon.svg" alt="" />
+            Vollständiger Name
+          </span>
+          <input type="text" formControlName="displayName" />
+        </label>
 
-      <div class="actions">
-        <button type="button" class="secondary" (click)="closeRequested.emit()">Abbrechen</button>
-        <button type="submit" class="primary" [disabled]="saving()">Speichern</button>
-      </div>
-    </form>
+        @if (errorMessage()) {
+          <p class="error">{{ errorMessage() }}</p>
+        }
+
+        <div class="actions">
+          <button type="button" class="secondary" (click)="closeRequested.emit()">Abbrechen</button>
+          <button type="submit" class="primary" [disabled]="saving()">Speichern</button>
+        </div>
+      </form>
+    </div>
   </section>
 </div>

@@ -3,18 +3,20 @@
     [style.top.px]="position.top" [style.right.px]="position.right"
     [style.max-height]="'calc(100dvh - ' + (position.top + 16) + 'px)'"
     (click)="$event.stopPropagation()">
-    <header>
-      <h2>Mitglieder</h2>
-      <button type="button" aria-label="Mitglieder schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
-    </header>
+    <div class="dialog-scroll">
+      <header>
+        <h2>Mitglieder</h2>
+        <button type="button" aria-label="Mitglieder schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
+      </header>
 
-    <app-channel-members-content
-      [members]="members"
-      [guestAccess]="guestAccess"
-      [currentUserId]="currentUserId"
-      [canAdd]="canAdd"
-      (userSelected)="userSelected.emit($event)"
-      (addRequested)="addRequested.emit()"
-    />
+      <app-channel-members-content
+        [members]="members"
+        [guestAccess]="guestAccess"
+        [currentUserId]="currentUserId"
+        [canAdd]="canAdd"
+        (userSelected)="userSelected.emit($event)"
+        (addRequested)="addRequested.emit()"
+      />
+    </div>
   </section>
 </div>

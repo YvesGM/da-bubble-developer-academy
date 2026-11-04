@@ -9,68 +9,70 @@
     [style.--dialog-max-height]="'calc(100dvh - ' + (position.top + 16) + 'px)'"
     (click)="$event.stopPropagation()"
   >
-    <header>
-      <h2 id="add-members-title">Leute hinzufügen</h2>
-      <button type="button" aria-label="Dialog schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
-    </header>
+    <div class="dialog-scroll">
+      <header>
+        <h2 id="add-members-title">Leute hinzufügen</h2>
+        <button type="button" aria-label="Dialog schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
+      </header>
 
-    <p class="channel-label"><span aria-hidden="true">#</span>{{ channelName }}</p>
+      <p class="channel-label"><span aria-hidden="true">#</span>{{ channelName }}</p>
 
-    <div class="search-area">
-      <div class="selection-field">
-        @for (user of selectedUsers(); track user.uid) {
-          <button type="button" class="chip" [attr.aria-label]="user.displayName + ' entfernen'" (click)="toggleUser(user.uid)">
-            <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="small" />
-            <span>{{ user.displayName }}</span>
-            <span aria-hidden="true">×</span>
-          </button>
+      <div class="search-area">
+        <div class="selection-field">
+          @for (user of selectedUsers(); track user.uid) {
+            <button type="button" class="chip" [attr.aria-label]="user.displayName + ' entfernen'" (click)="toggleUser(user.uid)">
+              <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="small" />
+              <span>{{ user.displayName }}</span>
+              <span aria-hidden="true">×</span>
+            </button>
+          }
+
+          @if (guestSelected()) {
+            <button type="button" class="chip" aria-label="Gast entfernen" (click)="toggleGuest()">
+              <span class="guest-chip-avatar">G</span>
+              <span>Gast</span>
+              <span aria-hidden="true">×</span>
+            </button>
+          }
+
+          <input #memberSearch
+            type="text"
+            aria-label="Mitglieder suchen"
+            placeholder="Name eingeben"
+            [value]="query()"
+            (input)="query.set($any($event.target).value)"
+          />
+        </div>
+
+        @if (showSuggestions()) {
+          <div class="suggestions" aria-label="Passende Nutzer">
+            @for (user of filteredUsers(); track user.uid) {
+              <button type="button" class="user-option" (click)="toggleUser(user.uid)">
+                <span class="avatar-with-presence">
+                  <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
+                  <app-presence-indicator [userId]="user.uid" />
+                </span>
+                <span>{{ user.displayName }}</span>
+              </button>
+            }
+
+            @if (matchesGuest()) {
+              <button type="button" class="user-option" (click)="toggleGuest()">
+                <span class="guest-avatar">G</span>
+                <span>Gast</span>
+              </button>
+            }
+
+            @if (!filteredUsers().length && !matchesGuest()) {
+              <p class="empty-search">Keine passenden Benutzer.</p>
+            }
+          </div>
         }
-
-        @if (guestSelected()) {
-          <button type="button" class="chip" aria-label="Gast entfernen" (click)="toggleGuest()">
-            <span class="guest-chip-avatar">G</span>
-            <span>Gast</span>
-            <span aria-hidden="true">×</span>
-          </button>
-        }
-
-        <input #memberSearch
-          type="text"
-          aria-label="Mitglieder suchen"
-          placeholder="Name eingeben"
-          [value]="query()"
-          (input)="query.set($any($event.target).value)"
-        />
       </div>
 
-      @if (showSuggestions()) {
-        <div class="suggestions" aria-label="Passende Nutzer">
-          @for (user of filteredUsers(); track user.uid) {
-            <button type="button" class="user-option" (click)="toggleUser(user.uid)">
-              <span class="avatar-with-presence">
-                <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="medium" />
-                <app-presence-indicator [userId]="user.uid" />
-              </span>
-              <span>{{ user.displayName }}</span>
-            </button>
-          }
-
-          @if (matchesGuest()) {
-            <button type="button" class="user-option" (click)="toggleGuest()">
-              <span class="guest-avatar">G</span>
-              <span>Gast</span>
-            </button>
-          }
-
-          @if (!filteredUsers().length && !matchesGuest()) {
-            <p class="empty-search">Keine passenden Benutzer.</p>
-          }
-        </div>
-      }
+      <button type="button" class="primary" [disabled]="!canSubmit()" (click)="submit()">
+        Hinzufügen
+      </button>
     </div>
-
-    <button type="button" class="primary" [disabled]="!canSubmit()" (click)="submit()">
-      Hinzufügen
-    </button>
   </section>
 </div>

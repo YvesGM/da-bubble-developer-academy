@@ -15,12 +15,18 @@
   position: absolute;
   width: min(550px, calc(100vw - 32px));
   max-height: var(--dialog-max-height, calc(100dvh - 32px));
-  padding: 40px 44px 42px;
-  gap: 20px;
   overflow: visible;
   background: tokens.$white;
   border-radius: 30px 0 30px 30px;
   box-shadow: 0 8px 28px #00000024;
+
+  .dialog-scroll {
+    display: grid;
+    min-width: 0;
+    min-height: 0;
+    padding: 40px 44px 42px;
+    gap: 20px;
+  }
 
   header {
     display: flex;
@@ -204,8 +210,10 @@
   }
 
   @include bp.mobile {
-    padding: 26px 22px 30px;
-    gap: 16px;
+    .dialog-scroll {
+      padding: 26px 22px 30px;
+      gap: 16px;
+    }
     header h2 { font-size: 21px; }
     .channel-label { font-size: 16px; }
     .selection-field input { font-size: 16px; }
@@ -215,13 +223,25 @@
 
   // On short laptops, keep selected chips and the submit action reachable.
   @media (max-height: 800px) {
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    overflow: hidden;
+
+    .dialog-scroll {
+      margin: 8px 8px 8px 0;
+      padding: 32px 36px 34px 44px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+
     .suggestions {
       position: static;
       width: 100%;
       max-height: min(220px, 26dvh);
       margin-top: 8px;
+    }
+
+    @include bp.mobile {
+      .dialog-scroll { padding: 18px 14px 22px 22px; }
     }
   }
 }

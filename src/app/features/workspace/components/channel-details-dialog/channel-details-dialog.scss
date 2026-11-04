@@ -19,19 +19,29 @@
   display: flex;
   flex-direction: column;
   position: absolute;
-  padding: 44px;
 
   width: min(932px, calc(100vw - 32px));
 
   min-height: min(660px, max(180px, var(--dialog-max-height, calc(100dvh - 48px))));
   max-height: max(180px, var(--dialog-max-height, calc(100dvh - 48px)));
-  overscroll-behavior: contain;
-  overflow-y: auto;
+  overflow: hidden;
   background: tokens.$white;
   border-radius: 0 30px 30px 30px;
   box-shadow: 0 8px 28px #00000024;
   font-size: 18px;
   line-height: 1.4;
+
+  .dialog-scroll {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    margin: 8px 8px 8px 0;
+    padding: 36px 36px 36px 44px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
 
   header {
     display: flex;
@@ -221,8 +231,13 @@
     min-height: 0;
     max-height: 100dvh;
     overflow: hidden;
-    padding: 0 16px;
     border-radius: 0;
+
+    .dialog-scroll {
+      margin: 0;
+      padding: 0 16px;
+      overflow: hidden;
+    }
     font-size: 16px;
 
     .detail {

@@ -3,38 +3,40 @@
     [style.top.px]="position?.top" [style.right.px]="position?.right"
     [style.max-height]="position ? 'calc(100dvh - ' + (position.top + 16) + 'px)' : null"
     role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
-    <header>
-      <h2>Profil</h2>
-      <button type="button" aria-label="Profil schließen" (click)="closeRequested.emit()">×</button>
-    </header>
+    <div class="card-scroll">
+      <header>
+        <h2>Profil</h2>
+        <button type="button" aria-label="Profil schließen" (click)="closeRequested.emit()">×</button>
+      </header>
 
-    <div class="profile-avatar">
-      <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="hero" />
-    </div>
+      <div class="profile-avatar">
+        <app-avatar [avatarId]="user.avatarId" [name]="user.displayName" size="hero" />
+      </div>
 
-    <div class="name-row">
-      <h3>{{ user.displayName }}</h3>
-      @if (ownProfile) {
-        <button type="button" class="link-button" (click)="editRequested.emit()">Bearbeiten</button>
+      <div class="name-row">
+        <h3>{{ user.displayName }}</h3>
+        @if (ownProfile) {
+          <button type="button" class="link-button" (click)="editRequested.emit()">Bearbeiten</button>
+        }
+      </div>
+
+      <div class="status">
+        <app-presence-indicator [userId]="user.uid" [showLabel]="true" />
+      </div>
+
+      <div class="email">
+        <div class="email-heading">
+          <img src="/assets/email-icon.svg" alt="" />
+          <strong>E-Mail-Adresse</strong>
+        </div>
+        <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+      </div>
+
+      @if (!ownProfile && messageEnabled) {
+        <button type="button" class="primary" (click)="messageRequested.emit(user.uid)">
+          Nachricht
+        </button>
       }
     </div>
-
-    <div class="status">
-      <app-presence-indicator [userId]="user.uid" [showLabel]="true" />
-    </div>
-
-    <div class="email">
-      <div class="email-heading">
-        <img src="/assets/email-icon.svg" alt="" />
-        <strong>E-Mail-Adresse</strong>
-      </div>
-      <a [href]="'mailto:' + user.email">{{ user.email }}</a>
-    </div>
-
-    @if (!ownProfile && messageEnabled) {
-      <button type="button" class="primary" (click)="messageRequested.emit(user.uid)">
-        Nachricht
-      </button>
-    }
   </section>
 </div>

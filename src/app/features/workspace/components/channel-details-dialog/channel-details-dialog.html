@@ -3,86 +3,88 @@
     [style.top.px]="position.top" [style.left.px]="position.left"
     [style.--dialog-max-height]="'calc(100dvh - ' + (position.top + 16) + 'px)'"
     (click)="$event.stopPropagation()">
-    <header>
-      <h2># {{ form.controls.name.value }}</h2>
-      <button type="button" aria-label="Channel-Details schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
-    </header>
+    <div class="dialog-scroll">
+      <header>
+        <h2># {{ form.controls.name.value }}</h2>
+        <button type="button" aria-label="Channel-Details schließen" (click)="closeRequested.emit()"><img src="/assets/close.svg" alt="" /></button>
+      </header>
 
-    <form [formGroup]="form" novalidate>
-      <section class="detail-card">
-        <div class="detail-heading">
-          <strong>Channel-Name</strong>
-          <button
-            type="button"
-            class="edit-button"
-            [class.is-editing]="editingName()"
-            (click)="editingName() ? saveName() : editingName.set(true)"
-          >
-            {{ editingName() ? 'Speichern' : 'Bearbeiten' }}
-          </button>
-        </div>
-
-        @if (editingName()) {
-          <div class="field-row">
-            <span>#</span>
-            <input type="text" formControlName="name" />
+      <form [formGroup]="form" novalidate>
+        <section class="detail-card">
+          <div class="detail-heading">
+            <strong>Channel-Name</strong>
+            <button
+              type="button"
+              class="edit-button"
+              [class.is-editing]="editingName()"
+              (click)="editingName() ? saveName() : editingName.set(true)"
+            >
+              {{ editingName() ? 'Speichern' : 'Bearbeiten' }}
+            </button>
           </div>
-          @if (form.controls.name.touched && form.controls.name.invalid) {
-            <p class="error">Bitte gib einen Channelnamen ein.</p>
+
+          @if (editingName()) {
+            <div class="field-row">
+              <span>#</span>
+              <input type="text" formControlName="name" />
+            </div>
+            @if (form.controls.name.touched && form.controls.name.invalid) {
+              <p class="error">Bitte gib einen Channelnamen ein.</p>
+            }
+          } @else {
+            <p class="detail-value"># {{ form.controls.name.value }}</p>
           }
-        } @else {
-          <p class="detail-value"># {{ form.controls.name.value }}</p>
+        </section>
+
+        <section class="detail-card">
+          <div class="detail-heading">
+            <strong>Beschreibung</strong>
+            <button
+              type="button"
+              class="edit-button"
+              [class.is-editing]="editingDescription()"
+              (click)="editingDescription() ? saveDescription() : editingDescription.set(true)"
+            >
+              {{ editingDescription() ? 'Speichern' : 'Bearbeiten' }}
+            </button>
+          </div>
+
+          @if (editingDescription()) {
+            <textarea rows="4" formControlName="description"></textarea>
+          } @else {
+            <p class="detail-value">{{ form.controls.description.value || 'Keine Beschreibung vorhanden.' }}</p>
+          }
+
+          <div class="creator">
+            <span>Erstellt von</span>
+            <strong>{{ creatorName }}</strong>
+          </div>
+        </section>
+
+        <section class="detail-card mobile-members">
+          <h3>Mitglieder</h3>
+          <app-channel-members-content
+            [members]="members"
+            [guestAccess]="guestAccess"
+            [currentUserId]="currentUserId"
+            [canAdd]="canAdd"
+            (userSelected)="userSelected.emit($event)"
+            (addRequested)="addRequested.emit()"
+          />
+        </section>
+
+        @if (errorMessage) {
+          <p class="error">{{ errorMessage }}</p>
         }
-      </section>
 
-      <section class="detail-card">
-        <div class="detail-heading">
-          <strong>Beschreibung</strong>
-          <button
-            type="button"
-            class="edit-button"
-            [class.is-editing]="editingDescription()"
-            (click)="editingDescription() ? saveDescription() : editingDescription.set(true)"
-          >
-            {{ editingDescription() ? 'Speichern' : 'Bearbeiten' }}
-          </button>
-        </div>
-
-        @if (editingDescription()) {
-          <textarea rows="4" formControlName="description"></textarea>
-        } @else {
-          <p class="detail-value">{{ form.controls.description.value || 'Keine Beschreibung vorhanden.' }}</p>
+        @if (canLeave) {
+          <div class="actions">
+            <button type="button" class="leave-button" (click)="leaveRequested.emit()">
+              Channel verlassen
+            </button>
+          </div>
         }
-
-        <div class="creator">
-          <span>Erstellt von</span>
-          <strong>{{ creatorName }}</strong>
-        </div>
-      </section>
-
-      <section class="detail-card mobile-members">
-        <h3>Mitglieder</h3>
-        <app-channel-members-content
-          [members]="members"
-          [guestAccess]="guestAccess"
-          [currentUserId]="currentUserId"
-          [canAdd]="canAdd"
-          (userSelected)="userSelected.emit($event)"
-          (addRequested)="addRequested.emit()"
-        />
-      </section>
-
-      @if (errorMessage) {
-        <p class="error">{{ errorMessage }}</p>
-      }
-
-      @if (canLeave) {
-        <div class="actions">
-          <button type="button" class="leave-button" (click)="leaveRequested.emit()">
-            Channel verlassen
-          </button>
-        </div>
-      }
-    </form>
+      </form>
+    </div>
   </section>
 </div>

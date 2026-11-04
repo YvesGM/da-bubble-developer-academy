@@ -17,13 +17,24 @@
 .dialog {
   animation: dialog-surface-in tokens.$motion-base both;
   width: min(912px, 100%);
+  display: flex;
+  flex-direction: column;
   max-height: calc(100dvh - 48px);
-  overflow: auto;
-  padding: 40px;
+  overflow: hidden;
   font-size: 18px;
   border-radius: 30px;
   background: tokens.$white;
   box-shadow: 0 8px 28px #00000024;
+
+  .dialog-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 8px 8px 8px 0;
+    padding: 32px 32px 32px 40px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
 
   &-heading {
     display: flex;
@@ -306,8 +317,11 @@
     width: 100%;
     height: 100dvh;
     max-height: 100dvh;
-    padding: 30px 20px;
     border-radius: 0;
+    .dialog-scroll {
+      margin: 0;
+      padding: 30px 20px;
+    }
     font-size: 16px;
     .actions button { font-size: 16px; }
   }
