@@ -295,7 +295,8 @@
   &-divider {
     font-size: 18px;
 
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(12px, 1fr) auto minmax(12px, 1fr);
     align-items: center;
     width: 100%;
     min-width: 0;
@@ -304,11 +305,9 @@
 
     &::before,
     &::after {
-      flex: 1 1 0;
-      min-width: 12px;
-      height: 0;
       content: '';
-      border-top: 1px solid tokens.$border;
+      height: 2px;
+      background: tokens.$border;
     }
   }
 }

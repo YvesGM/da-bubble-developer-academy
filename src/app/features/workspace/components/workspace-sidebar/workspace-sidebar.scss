@@ -27,11 +27,28 @@
     margin-top: 25px;
   }
 
-  .direct-messages {
+  .sidebar-section:not(.direct-messages) {
     display: flex;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     flex-direction: column;
     min-height: 0;
+
+    .section-body { flex: 1 1 auto; min-height: 0; }
+    .section-body.is-closed { flex: 0 0 auto; }
+    .section-content {
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      scrollbar-width: thin;
+    }
+  }
+
+  .direct-messages {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    min-height: min(210px, 45%);
+
+    &:has(.section-body.is-closed) { flex: 0 0 auto; min-height: 0; }
 
     .section-body { flex: 1 1 auto; min-height: 0; }
     .section-body.is-closed { flex: 0 0 auto; }
@@ -234,6 +251,14 @@
     > .sidebar-section:first-of-type {
       margin-top: 0;
     }
+  }
+
+  @media (min-width: 801px) and (max-height: 700px) {
+    padding-block: 16px;
+
+    &-top { margin-bottom: 8px; }
+    &-section { margin-top: 12px; }
+    nav { margin-top: 12px; gap: 8px; }
   }
 
   @include bp.widescreen {

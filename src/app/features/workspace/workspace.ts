@@ -207,15 +207,6 @@ export class Workspace {
   }
 
   /**
-   * Navigates to the new-message view.
-   *
-   * @returns A promise that resolves after navigation completes.
-   */
-  async openNewMessage(): Promise<void> {
-    await this.router.navigate(['/workspace/new-message']);
-  }
-
-  /**
    * Navigates to a channel from the workspace shell.
    *
    * @param channelId - Identifier of the channel to open.

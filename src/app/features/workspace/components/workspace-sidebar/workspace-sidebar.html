@@ -8,7 +8,7 @@
       type="button"
       class="workspace-edit-button"
       aria-label="Neue Nachricht"
-      (click)="newMessageRequested.emit()"
+      [routerLink]="['/workspace/new-message']"
     >
       <span class="sidebar-action-icon icon-edit" aria-hidden="true"></span>
     </button>

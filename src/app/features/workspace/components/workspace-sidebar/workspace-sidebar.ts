@@ -37,8 +37,6 @@ export class WorkspaceSidebar {
   @Input() directMessageError = '';
   /** Requests opening the channel creation flow. */
   @Output() readonly createRequested = new EventEmitter<void>();
-  /** Requests navigation to the new-message recipient picker. */
-  @Output() readonly newMessageRequested = new EventEmitter<void>();
   /** Emits a user UID selected from the private-conversation navigation. */
   @Output() readonly userRequested = new EventEmitter<string>();
 
